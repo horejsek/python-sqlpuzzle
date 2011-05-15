@@ -51,12 +51,14 @@ class SqlPuzzle:
         """
         self.__setSqlType(SELECT)
         self.__columns = columns
+        return self
     
     def from_(self, *tables):
         """
         Set table(s) to query.
         """
         self.__tables = tables
+        return self
     
     def where(self, *args, **kwargs):
         """
@@ -90,6 +92,7 @@ class SqlPuzzle:
                 'value': value,
                 'relation': EQUAL_TO,
             } for column, value in kwargs.iteritems()]
+        return self
     
     def insert(self):
         """
@@ -103,6 +106,7 @@ class SqlPuzzle:
         Set table for insert.
         """
         self.__tables = [table]
+        return self
     
     def values(self, *args, **kwargs):
         """
@@ -116,6 +120,7 @@ class SqlPuzzle:
             self.__values = kwargs.values()
         else:
             raise 'Values can be dictionary or keyworded variable arguments.'
+        return self
     
     def update(self, table):
         """
@@ -123,12 +128,14 @@ class SqlPuzzle:
         """
         self.__setSqlType(UPDATE)
         self.__tables = [table]
+        return self
     
     def set(self, *args, **kwargs):
         """
         Set columns and values.
         """
         self.values(*args, **kwargs)
+        return self
     
     def getQuery(self):
         """
