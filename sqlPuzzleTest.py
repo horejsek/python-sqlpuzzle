@@ -24,6 +24,12 @@ class SqlPuzzleTest(unittest.TestCase):
             'sex': 'female', # :)
         })
         self.assertEqual(self.sqlPuzzle.getQuery(), 'INSERT INTO `user` (`name`, `sex`) VALUES ("Harry", "female")')
+    
+    def testUpdate(self):
+        self.sqlPuzzle.update('user')
+        self.sqlPuzzle.set(sex='male')
+        self.sqlPuzzle.where(name='Harry')
+        self.assertEqual(self.sqlPuzzle.getQuery(), 'UPDATE `user` SET `sex` = "male" WHERE `name` = "Harry"')
 
 
 if __name__ == '__main__':

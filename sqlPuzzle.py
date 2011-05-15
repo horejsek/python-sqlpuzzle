@@ -38,7 +38,7 @@ class SqlPuzzle:
         self.__tables = None
         self.__columns = None
         self.__values = None
-        self.__conditions = None
+        self.__conditions = []
     
     def __setSqlType(self, type_):
         assert type_ is not None, 'You can\'t change type of query.'
@@ -58,15 +58,38 @@ class SqlPuzzle:
         """
         self.__tables = tables
     
-    def where(self, *conditions):
+    def where(self, *args, **kwargs):
         """
         Set condition(s) to query.
         """
-        if isinstance(conditions[0], (list, tuple)):
-            self.__conditions = conditions
-        elif isinstance(conditions[0], str) and len(conditions) == 3:
-            try: self.__conditions.append(tuple(conditions))
-            except: self.__conditions = [tuple(conditions)]
+        if len(args) == 1:
+            if isinstance(args[0], (list, tuple)):
+                try:
+                    self.__conditions = [{
+                        'column': condition[0],
+                        'value': condition[1],
+                        'relation': int(condition[2]),
+                    } for condition in args[0]]
+                except:
+                    raise 'Conditions must have three items - column, value and relation.'
+            elif isinstance(args[0], dict):
+                self.__conditions = [{
+                    'column': column,
+                    'value': value,
+                    'relation': EQUAL_TO,
+                } for column, value in args[0].iteritems()]
+        elif 2 <= len(args) <= 3:
+            self.__conditions.append({
+                'column': args[0],
+                'value': args[1],
+                'relation': EQUAL_TO if len(args) == 2 else int(args[2]),
+            })
+        elif kwargs is not None:
+            self.__conditions = [{
+                'column': column,
+                'value': value,
+                'relation': EQUAL_TO,
+            } for column, value in kwargs.iteritems()]
     
     def insert(self):
         """
@@ -83,7 +106,7 @@ class SqlPuzzle:
     
     def values(self, *args, **kwargs):
         """
-        Set values.
+        Set columns and values.
         """
         if len(args) == 1 and isinstance(args[0], dict):
             self.__columns = args[0].keys()
@@ -94,6 +117,19 @@ class SqlPuzzle:
         else:
             raise 'Values can be dictionary or keyworded variable arguments.'
     
+    def update(self, table):
+        """
+        Set table for update.
+        """
+        self.__setSqlType(UPDATE)
+        self.__tables = [table]
+    
+    def set(self, *args, **kwargs):
+        """
+        Set columns and values.
+        """
+        self.values(*args, **kwargs)
+    
     def getQuery(self):
         """
         Generate query.
@@ -102,6 +138,8 @@ class SqlPuzzle:
             return self.__generateSelect()
         elif self.__sqlType == INSERT:
             return self.__generateInsert()
+        elif self.__sqlType == UPDATE:
+            return self.__generateUpdate()
         raise 'Not implemented for sql type %s.' % self.__sqlType
     
     def __generateSelect(self):
@@ -125,7 +163,7 @@ class SqlPuzzle:
         Generate INSERT.
         """
         assert len(self.__tables) == 1, 'INSERT must have only one table.'
-        assert self.__conditions is None, 'INSERT does not have WHERE.'
+        assert not self.__conditions, 'INSERT does not have WHERE.'
         
         insert = "INSERT INTO `%s` (%s) VALUES (%s)" % (
             self.__tables[0],
@@ -133,12 +171,37 @@ class SqlPuzzle:
             ', '.join(('"%s"' % value for value in self.__values)),
         )
         return insert
+    
+    def __generateUpdate(self):
+        """
+        Generate UPDATE.
+        """
+        assert len(self.__tables) == 1, 'INSERT must have only one table.'
+        
+        update = "UPDATE `%s` SET %s" % (
+            self.__tables[0],
+            ', '.join(('`%s` = "%s"' % (column, value) for column, value in zip(self.__columns, self.__values)))
+        )
+        if self.__conditions is not None:
+            update = "%s WHERE %s" % (
+                update,
+                self.__generateWhere()
+            )
+        
+        return update
 
     def __generateWhere(self):
         """
         Generate WHERE.
         """
-        where = ' AND '.join(('`%s` %s "%s"' % (column, RELATIONS[relation], value) for column, value, relation in self.__conditions))
+        where = ' AND '.join((
+            '`%s` %s "%s"' % (
+                condition['column'],
+                RELATIONS[condition['relation']],
+                condition['value']
+            ) for condition in self.__conditions
+        ))
+        
         return where
 
 
