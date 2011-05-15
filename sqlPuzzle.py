@@ -143,6 +143,12 @@ class SqlPuzzle:
         self.values(*args, **kwargs)
         return self
     
+    def __str__(self):
+        """
+        Print query.
+        """
+        return self.getQuery()
+    
     def getQuery(self):
         """
         Generate query.
