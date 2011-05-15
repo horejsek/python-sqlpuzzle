@@ -108,6 +108,12 @@ class SqlPuzzle:
         self.__tables = [table]
         return self
     
+    def insertInto(self, table):
+        """
+        Set query to insert.
+        """
+        return self.insert().into(table)
+    
     def values(self, *args, **kwargs):
         """
         Set columns and values.
