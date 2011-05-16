@@ -19,7 +19,7 @@ class SqlPuzzleTest(unittest.TestCase):
     def testSelectWhere(self):
         self.sqlPuzzle.select('id', 'name')
         self.sqlPuzzle.from_('user')
-        self.sqlPuzzle.where('name', 'John', sqlPuzzle.EQUAL_TO)
+        self.sqlPuzzle.where('name', 'John', sqlPuzzle.conditions.EQUAL_TO)
         self.assertEqual(self.sqlPuzzle.getQuery(), 'SELECT `id`, `name` FROM `user` WHERE `name` = "John"')
     
     def testSelectLimit(self):
