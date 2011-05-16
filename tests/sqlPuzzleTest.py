@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import unittest
-import sqlPuzzle.sqlPuzzle as sqlPuzzle
+import sqlPuzzle
 
 
 class SqlPuzzleTest(unittest.TestCase):
