@@ -27,6 +27,12 @@ class SqlPuzzleTest(unittest.TestCase):
         self.sqlPuzzle.from_('user')
         self.sqlPuzzle.limit(10).offset(100)
         self.assertEqual(self.sqlPuzzle.getQuery(), 'SELECT `id`, `name` FROM `user` LIMIT 10 OFFSET 100')
+        
+        self.sqlPuzzle.limit(20, 40)
+        self.assertEqual(self.sqlPuzzle.getQuery(), 'SELECT `id`, `name` FROM `user` LIMIT 20 OFFSET 40')
+        
+        self.sqlPuzzle.limit(None)
+        self.assertEqual(self.sqlPuzzle.getQuery(), 'SELECT `id`, `name` FROM `user`')
     
     def testInsert(self):
         self.sqlPuzzle.insert().into('user')
@@ -35,12 +41,21 @@ class SqlPuzzleTest(unittest.TestCase):
             'sex': 'female', # :)
         })
         self.assertEqual(self.sqlPuzzle.getQuery(), 'INSERT INTO `user` (`name`, `sex`) VALUES ("Harry", "female")')
+        
+        self.sqlPuzzle.values(
+            name = 'Alan',
+            sex = 'male'
+        )
+        self.assertEqual(self.sqlPuzzle.getQuery(), 'INSERT INTO `user` (`name`, `sex`) VALUES ("Alan", "male")')
     
     def testUpdate(self):
         self.sqlPuzzle.update('user')
         self.sqlPuzzle.set(sex='male')
         self.sqlPuzzle.where(name='Harry')
         self.assertEqual(self.sqlPuzzle.getQuery(), 'UPDATE `user` SET `sex` = "male" WHERE `name` = "Harry"')
+        
+        self.sqlPuzzle.set({'sex': 'female'})
+        self.assertEqual(self.sqlPuzzle.getQuery(), 'UPDATE `user` SET `sex` = "female" WHERE `name` = "Harry"')
 
 
 if __name__ == '__main__':

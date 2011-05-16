@@ -100,11 +100,14 @@ class SqlPuzzle:
         """
         Set limit (and offset).
         """
-        if offset is None:
-            self.__limit = int(limit)
+        if limit is None:
+            self.__limit = None
+            self.__offset = None
         else:
-            self.__limit = int(offset)
-            self.offset(limit)
+            self.__limit = int(limit)
+        
+        if offset is not None:
+            self.offset(offset)
         return self
     
     def offset(self, offset):
