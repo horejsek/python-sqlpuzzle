@@ -1,6 +1,9 @@
 # -*- coding: utf-8 -*-
 
 
+import limit
+
+
 EQ = EQUAL_TO = 1
 NE = NOT_EQUAL_TO = 2
 
@@ -39,8 +42,7 @@ class SqlPuzzle:
         self.__columns = None
         self.__values = None
         self.__conditions = []
-        self.__limit = None
-        self.__offset = None
+        self.__limit = limit.Limit()
     
     def __setSqlType(self, type_):
         assert type_ is not None, 'You can\'t change type of query.'
@@ -100,21 +102,14 @@ class SqlPuzzle:
         """
         Set limit (and offset).
         """
-        if limit is None:
-            self.__limit = None
-            self.__offset = None
-        else:
-            self.__limit = int(limit)
-        
-        if offset is not None:
-            self.offset(offset)
+        self.__limit.limit(limit, offset)
         return self
     
     def offset(self, offset):
         """
         Set offset.
         """
-        self.__offset = int(offset)
+        self.__limit.offset(offset)
         return self
     
     def insert(self):
@@ -197,8 +192,7 @@ class SqlPuzzle:
                 select,
                 self.__generateWhere()
             )
-        if self.__limit: select = "%s LIMIT %s" % (select, self.__limit)
-        if self.__offset: select = "%s OFFSET %s" % (select, self.__offset)
+        if self.__limit.isSet(): select = "%s %s" % (select, self.__limit)
         
         return select
     
