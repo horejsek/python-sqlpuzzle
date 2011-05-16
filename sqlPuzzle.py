@@ -39,6 +39,8 @@ class SqlPuzzle:
         self.__columns = None
         self.__values = None
         self.__conditions = []
+        self.__limit = None
+        self.__offset = None
     
     def __setSqlType(self, type_):
         assert type_ is not None, 'You can\'t change type of query.'
@@ -92,6 +94,24 @@ class SqlPuzzle:
                 'value': value,
                 'relation': EQUAL_TO,
             } for column, value in kwargs.iteritems()]
+        return self
+    
+    def limit(self, limit, offset=None):
+        """
+        Set limit (and offset).
+        """
+        if offset is None:
+            self.__limit = int(limit)
+        else:
+            self.__limit = int(offset)
+            self.offset(limit)
+        return self
+    
+    def offset(self, offset):
+        """
+        Set offset.
+        """
+        self.__offset = int(offset)
         return self
     
     def insert(self):
@@ -174,6 +194,8 @@ class SqlPuzzle:
                 select,
                 self.__generateWhere()
             )
+        if self.__limit: select = "%s LIMIT %s" % (select, self.__limit)
+        if self.__offset: select = "%s OFFSET %s" % (select, self.__offset)
         
         return select
     

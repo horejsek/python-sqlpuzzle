@@ -25,8 +25,8 @@ class SqlPuzzleTest(unittest.TestCase):
     def testSelectLimit(self):
         self.sqlPuzzle.select('id', 'name')
         self.sqlPuzzle.from_('user')
-        self.sqlPuzzle.limit(100).offset(10)
-        self.assertEqual(self.sqlPuzzle.getQuery(), 'SELECT `id`, `name` FROM `user` LIMIT 100, 10')
+        self.sqlPuzzle.limit(10).offset(100)
+        self.assertEqual(self.sqlPuzzle.getQuery(), 'SELECT `id`, `name` FROM `user` LIMIT 10 OFFSET 100')
     
     def testInsert(self):
         self.sqlPuzzle.insert().into('user')
