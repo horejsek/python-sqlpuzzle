@@ -169,7 +169,7 @@ class SqlPuzzle:
             ', '.join(('`%s`' % column for column in self.__columns)),
             ', '.join(('`%s`' % table for table in self.__tables)),
         )
-        if self.__conditions is not None:
+        if self.__conditions:
             select = "%s WHERE %s" % (
                 select,
                 self.__generateWhere()
@@ -201,7 +201,7 @@ class SqlPuzzle:
             self.__tables[0],
             ', '.join(('`%s` = "%s"' % (column, value) for column, value in zip(self.__columns, self.__values)))
         )
-        if self.__conditions is not None:
+        if self.__conditions:
             update = "%s WHERE %s" % (
                 update,
                 self.__generateWhere()
