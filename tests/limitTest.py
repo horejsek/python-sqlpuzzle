@@ -31,6 +31,11 @@ class LimitTest(unittest.TestCase):
     def testInlineInvert(self):
         self.limit.limit(4).offset(16)
         self.assertEqual(str(self.limit), 'LIMIT 4 OFFSET 16')
+    
+    def testIsSet(self):
+        self.assertEqual(self.limit.isSet(), False)
+        self.conditions.limit(42)
+        self.assertEqual(self.limit.isSet(), True)
 
 
 if __name__ == '__main__':
