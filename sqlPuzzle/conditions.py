@@ -37,7 +37,12 @@ class Condition:
         """
         Print condition (part of WHERE).
         """
-        return '`%s` %s "%s"' % (
+        if isinstance(self.__value, int):
+            formatString = '`%s` %s %s'
+        else:
+            formatString = '`%s` %s "%s"'
+            
+        return formatString % (
             self.__column,
             RELATIONS[self.__relation],
             self.__value,
