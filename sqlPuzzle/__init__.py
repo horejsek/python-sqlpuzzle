@@ -9,6 +9,7 @@ class SqlPuzzle:
     __SELECT = 1
     __INSERT = 2
     __UPDATE = 3
+    __DELETE = 4
 
     def __init__(self):
         """
@@ -23,7 +24,7 @@ class SqlPuzzle:
     
     def __setSqlType(self, type_):
         assert type_ is not None, 'You can\'t change type of query.'
-        assert type_ in (self.__SELECT, self.__INSERT, self.__UPDATE), 'Type \'%s\' of query is undefind.' % type_
+        assert type_ in (self.__SELECT, self.__INSERT, self.__UPDATE, self.__DELETE), 'Type \'%s\' of query is undefind.' % type_
         self.__sqlType = type_
     
     # SELECT
@@ -103,6 +104,21 @@ class SqlPuzzle:
         self.values(*args, **kwargs)
         return self
     
+    # DELETE
+    
+    def delete(self):
+        """
+        Set query to delete.
+        """
+        self.__setSqlType(self.__DELETE)
+        return self
+    
+    def deleteFrom(self, table):
+        """
+        Set query to delete.
+        """
+        return self.delete().from_(table)
+    
     # GLOBAL
     
     def from_(self, *tables):
@@ -131,12 +147,14 @@ class SqlPuzzle:
         """
         Generate query.
         """
-        if self.__sqlType == SELECT:
+        if self.__sqlType == self.__SELECT:
             return self.__generateSelect()
-        elif self.__sqlType == INSERT:
+        elif self.__sqlType == self.__INSERT:
             return self.__generateInsert()
-        elif self.__sqlType == UPDATE:
+        elif self.__sqlType == self.__UPDATE:
             return self.__generateUpdate()
+        elif self.__sqlType == self.__DELETE:
+            return self.__generateDelete()
         raise 'Not implemented for sql type %s.' % self.__sqlType
     
     # GENERATE
@@ -181,5 +199,18 @@ class SqlPuzzle:
         if self.__conditions.isSet(): update = "%s %s" % (update, self.__conditions)
         
         return update
+    
+    def __generateDelete(self):
+        """
+        Generate DELETE.
+        """
+        assert len(self.__tables) == 1, 'INSERT must have only one table.'
+        
+        delete = "DELETE FROM `%s`" % (
+            self.__tables[0],
+        )
+        if self.__conditions.isSet(): delete = "%s %s" % (delete, self.__conditions)
+        
+        return delete
 
 

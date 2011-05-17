@@ -56,6 +56,11 @@ class SqlPuzzleTest(unittest.TestCase):
         
         self.sqlPuzzle.set({'sex': 'female'})
         self.assertEqual(self.sqlPuzzle.getQuery(), 'UPDATE `user` SET `sex` = "female" WHERE `name` = "Harry"')
+    
+    def testDelete(self):
+        self.sqlPuzzle.delete().from_('user')
+        self.sqlPuzzle.where(id=5)
+        self.assertEqual(self.sqlPuzzle.getQuery(), 'DELETE FROM `user` WHERE `id` = 5')
 
 
 if __name__ == '__main__':
