@@ -5,12 +5,11 @@ import conditions
 import limit
 
 
-SELECT = 1
-INSERT = 2
-UPDATE = 3
-
-
 class SqlPuzzle:
+    __SELECT = 1
+    __INSERT = 2
+    __UPDATE = 3
+
     def __init__(self):
         """
         Initialization of SqlPuzzle.
@@ -24,7 +23,7 @@ class SqlPuzzle:
     
     def __setSqlType(self, type_):
         assert type_ is not None, 'You can\'t change type of query.'
-        assert type_ in (SELECT, INSERT, UPDATE), 'Type \'%s\' of query is undefind.' % type_
+        assert type_ in (self.__SELECT, self.__INSERT, self.__UPDATE), 'Type \'%s\' of query is undefind.' % type_
         self.__sqlType = type_
     
     # SELECT
@@ -33,15 +32,8 @@ class SqlPuzzle:
         """
         Set column(s) to select.
         """
-        self.__setSqlType(SELECT)
+        self.__setSqlType(self.__SELECT)
         self.__columns = columns
-        return self
-    
-    def from_(self, *tables):
-        """
-        Set table(s) to query.
-        """
-        self.__tables = tables
         return self
     
     def limit(self, limit, offset=None):
@@ -64,7 +56,7 @@ class SqlPuzzle:
         """
         Set query to insert.
         """
-        self.__setSqlType(INSERT)
+        self.__setSqlType(self.__INSERT)
         return self
     
     def into(self, table):
@@ -100,7 +92,7 @@ class SqlPuzzle:
         """
         Set table for update.
         """
-        self.__setSqlType(UPDATE)
+        self.__setSqlType(self.__UPDATE)
         self.__tables = [table]
         return self
     
@@ -111,7 +103,14 @@ class SqlPuzzle:
         self.values(*args, **kwargs)
         return self
     
-    # WHERE
+    # GLOBAL
+    
+    def from_(self, *tables):
+        """
+        Set table(s) to query.
+        """
+        self.__tables = tables
+        return self
     
     def where(self, *args, **kwargs):
         """
