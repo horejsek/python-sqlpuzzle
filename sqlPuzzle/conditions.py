@@ -92,7 +92,7 @@ class Conditions:
         """
         Is where set?
         """
-        return True if self.__conditions else False
+        return self.__conditions != []
     
     def where(self, *args, **kwargs):
         """

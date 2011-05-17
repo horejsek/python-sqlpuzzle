@@ -3,6 +3,7 @@
 
 import conditions
 import limit
+import tables
 
 
 class SqlPuzzle:
@@ -16,7 +17,7 @@ class SqlPuzzle:
         Initialization of SqlPuzzle.
         """
         self.__sqlType = None
-        self.__tables = None
+        self.__tables = tables.Tables()
         self.__columns = None
         self.__values = None
         self.__conditions = conditions.Conditions()
@@ -64,7 +65,7 @@ class SqlPuzzle:
         """
         Set table for insert.
         """
-        self.__tables = [table]
+        self.__tables.set(table)
         return self
     
     def insertInto(self, table):
@@ -94,7 +95,7 @@ class SqlPuzzle:
         Set table for update.
         """
         self.__setSqlType(self.__UPDATE)
-        self.__tables = [table]
+        self.__tables.set(table)
         return self
     
     def set(self, *args, **kwargs):
@@ -125,7 +126,7 @@ class SqlPuzzle:
         """
         Set table(s) to query.
         """
-        self.__tables = tables
+        self.__tables.set(tables)
         return self
     
     def where(self, *args, **kwargs):
@@ -165,7 +166,7 @@ class SqlPuzzle:
         """
         select = "SELECT %s FROM %s" % (
             ', '.join(('`%s`' % column for column in self.__columns)),
-            ', '.join(('`%s`' % table for table in self.__tables)),
+            str(self.__tables),
         )
         if self.__conditions.isSet(): select = "%s %s" % (select, self.__conditions)
         if self.__limit.isSet(): select = "%s %s" % (select, self.__limit)
@@ -176,11 +177,11 @@ class SqlPuzzle:
         """
         Generate INSERT.
         """
-        assert len(self.__tables) == 1, 'INSERT must have only one table.'
+        assert self.__tables.isSimple(), 'INSERT must have only one table.'
         assert not self.__conditions.isSet(), 'INSERT does not have WHERE.'
         
-        insert = "INSERT INTO `%s` (%s) VALUES (%s)" % (
-            self.__tables[0],
+        insert = "INSERT INTO %s (%s) VALUES (%s)" % (
+            str(self.__tables),
             ', '.join(('`%s`' % column for column in self.__columns)),
             ', '.join(('"%s"' % value for value in self.__values)),
         )
@@ -190,10 +191,10 @@ class SqlPuzzle:
         """
         Generate UPDATE.
         """
-        assert len(self.__tables) == 1, 'INSERT must have only one table.'
+        assert self.__tables.isSimple(), 'INSERT must have only one table.'
         
-        update = "UPDATE `%s` SET %s" % (
-            self.__tables[0],
+        update = "UPDATE %s SET %s" % (
+            str(self.__tables),
             ', '.join(('`%s` = "%s"' % (column, value) for column, value in zip(self.__columns, self.__values)))
         )
         if self.__conditions.isSet(): update = "%s %s" % (update, self.__conditions)
@@ -204,10 +205,10 @@ class SqlPuzzle:
         """
         Generate DELETE.
         """
-        assert len(self.__tables) == 1, 'INSERT must have only one table.'
+        assert self.__tables.isSimple(), 'INSERT must have only one table.'
         
-        delete = "DELETE FROM `%s`" % (
-            self.__tables[0],
+        delete = "DELETE FROM %s" % (
+            str(self.__tables),
         )
         if self.__conditions.isSet(): delete = "%s %s" % (delete, self.__conditions)
         
