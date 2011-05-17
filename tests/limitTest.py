@@ -34,7 +34,7 @@ class LimitTest(unittest.TestCase):
     
     def testIsSet(self):
         self.assertEqual(self.limit.isSet(), False)
-        self.conditions.limit(42)
+        self.limit.limit(42)
         self.assertEqual(self.limit.isSet(), True)
 
 
