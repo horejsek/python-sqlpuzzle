@@ -36,11 +36,14 @@ class Limit:
         
         if offset is not None:
             self.offset(offset)
+        
+        return self
     
     def offset(self, offset):
         """
         Set OFFSET.
         """
         self.__offset = int(offset)
+        return self
 
 
