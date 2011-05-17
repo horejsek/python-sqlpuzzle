@@ -1,0 +1,9 @@
+- kazdy typ dotazu mit vlastni objekt
+- objekt na joiny
+- vice testu
+- clearovaci metoda
+  setovani napriklad podminek nebude predchozi mazat, ale jen pridavat
+- podpora ruznych datovych typu
+  string (str, unicode), integer, float, datetime, boolean
+- vyjimky
+- testovat chybne pouziti
