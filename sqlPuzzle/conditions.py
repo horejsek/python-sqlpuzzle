@@ -109,26 +109,28 @@ class Conditions:
         """
         Set condition(s).
         """
-        if len(args) == 1:
-            if isinstance(args[0], (list, tuple)):
-                for condition in args[0]:
-                    c = Condition()
-                    c.set(condition[0], condition[1])
-                    if len(condition) == 3: c.setRelation(condition[2])
-                    self.__conditions.append(c)
-            elif isinstance(args[0], dict):
-                for column, value in args[0].iteritems():
-                    c = Condition()
-                    c.set(column, value)
-                    self.__conditions.append(c)
+        list_ = None
+        dict_ = None
+        
+        if len(args) == 1 and isinstance(args[0], (list, tuple)):
+            list_ = args[0]
+        elif len(args) == 1 and isinstance(args[0], dict):
+            dict_ = args[0]
         elif 2 <= len(args) <= 3:
-            c = Condition()
-            c.set(args[0], args[1])
-            if len(args) == 3: c.setRelation(args[2])
-            self.__conditions.append(c)
+            list_ = (args,)
         elif kwargs is not None:
-            for column, value in kwargs.iteritems():
-                c = Condition()
-                c.set(column, value)
-                self.__conditions.append(c)
+            dict_ = kwargs
+        
+        if list_ is not None:
+            for c in list_:
+                condition = Condition()
+                condition.set(c[0], c[1])
+                if len(c) == 3:
+                    condition.setRelation(c[2])
+                self.__conditions.append(condition)
+        elif dict_ is not None:
+            for c, v in dict_.iteritems():
+                condition = Condition()
+                condition.set(c, v)
+                self.__conditions.append(condition)
 
