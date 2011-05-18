@@ -54,6 +54,11 @@ class ConditionsTest(unittest.TestCase):
         self.conditions.where(name='Alan')
         self.assertEqual(str(self.conditions), 'WHERE `name` = "Alan"')
     
+    def testSerialWhere(self):
+        self.conditions.where(name='Alan')
+        self.conditions.where(age=42)
+        self.assertEqual(str(self.conditions), 'WHERE `name` = "Alan" AND `age` = 42')
+    
     def testIsSet(self):
         self.assertEqual(self.conditions.isSet(), False)
         self.conditions.where(name='Alan')
