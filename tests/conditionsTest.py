@@ -59,6 +59,21 @@ class ConditionsTest(unittest.TestCase):
         self.conditions.where(age=42)
         self.assertEqual(str(self.conditions), 'WHERE `name` = "Alan" AND `age` = 42')
     
+    def testRemoveOneCondition(self):
+        self.conditions.where(name='Harry', age=20)
+        self.conditions.remove('age')
+        self.assertEqual(str(self.conditions), 'WHERE `name` = "Harry"')
+    
+    def testRemoveMoreCondition(self):
+        self.conditions.where(name='Harry', age=22, sex='male')
+        self.conditions.remove('name', 'sex')
+        self.assertEqual(str(self.conditions), 'WHERE `age` = 22')
+    
+    def testRemoveAllCondition(self):
+        self.conditions.where(name='Harry', age=20)
+        self.conditions.remove()
+        self.assertEqual(str(self.conditions), '')
+    
     def testIsSet(self):
         self.assertEqual(self.conditions.isSet(), False)
         self.conditions.where(name='Alan')

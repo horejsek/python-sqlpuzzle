@@ -147,6 +147,13 @@ class SqlPuzzle:
         self.__conditions.where(*args, **kwargs)
         return self
     
+    def removeWhere(self, *keys):
+        """
+        Remove conditions by keys (name of columns).
+        """
+        self.__conditions.remove(*keys)
+        return self
+    
     # PRINT
     
     def __str__(self):

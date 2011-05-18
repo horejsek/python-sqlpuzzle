@@ -84,6 +84,12 @@ class Condition:
         Set relation.
         """
         self.__relation = relation
+    
+    def getColumn(self):
+        """
+        Get column.
+        """
+        return self.__column
 
 
 class Conditions:
@@ -97,7 +103,9 @@ class Conditions:
         """
         Print limit (part of query).
         """
-        return "WHERE %s" % " AND ".join(str(condition) for condition in self.__conditions)
+        if self.isSet():
+            return "WHERE %s" % " AND ".join(str(condition) for condition in self.__conditions)
+        return ""
     
     def isSet(self):
         """
@@ -133,4 +141,20 @@ class Conditions:
                 condition = Condition()
                 condition.set(c, v)
                 self.__conditions.append(condition)
+    
+    def remove(self, *keys):
+        """
+        Remove condition(s).
+        """
+        if len(keys) == 0:
+            self.__conditions = []
+        
+        if not isinstance(keys, (list, tuple)):
+            keys = (keys,)
+        
+        conditions = []
+        for condition in self.__conditions:
+            if condition.getColumn() not in keys:
+                conditions.append(condition)
+        self.__conditions = conditions
 
