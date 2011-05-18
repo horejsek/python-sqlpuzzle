@@ -1,5 +1,16 @@
 # -*- coding: utf-8 -*-
-
+#
+# SqlPuzzle
+# Michal Horejsek <horejsekmichal@gmail.com>
+# https://github.com/horejsek/sqlPuzzle
+#
+# This application is released under the GNU General Public License
+# v3 (or, at your option, any later version). You can find the full
+# text of the license under http://www.gnu.org/licenses/gpl.txt.
+# By using, editing and/or distributing this software you agree to
+# the terms and conditions of this license.
+# Thank you for using free software!
+#
 
 EQ = EQUAL_TO = 1
 NE = NOT_EQUAL_TO = 2
@@ -120,5 +131,4 @@ class Conditions:
                 c = Condition()
                 c.set(column, value)
                 self.__conditions.append(c)
-
 
