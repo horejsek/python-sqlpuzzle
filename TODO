@@ -1,5 +1,4 @@
-- kazdy typ dotazu mit vlastni objekt
-- objekt na joiny
+- joiny
 - vice testu
 - clearovaci metoda
   setovani napriklad podminek nebude predchozi mazat, ale jen pridavat
