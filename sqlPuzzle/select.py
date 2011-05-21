@@ -14,14 +14,14 @@ class Select(query.Query):
         Initialization of Select.
         """
         query.Query.__init__(self)
-        self._columns = columns
+        self.columns(*columns)
     
     def __str__(self):
         """
         Print query.
         """
         select = "SELECT %s FROM %s" % (
-            ', '.join(('`%s`' % column for column in self._columns)),
+            ', '.join(('`%s`' % column for column in self._columns)) if self._columns else '*',
             str(self._tables),
         )
         if self._conditions.isSet(): select = "%s %s" % (select, self._conditions)
@@ -31,6 +31,12 @@ class Select(query.Query):
     
     def _typeOfQuery(self):
         return 'SELECT'
+    
+    def columns(self, *columns):
+        """
+        Set column(s) to query.
+        """
+        self._columns = columns
     
     def from_(self, *tables):
         """

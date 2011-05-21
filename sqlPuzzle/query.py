@@ -20,17 +20,21 @@ class Query:
         self._limit = limit.Limit()
     
     def __raiser(self, method):
-        raise NotSupproted(method, self._typeOfQuery())
+        raise NotSupprotedException(method, self._typeOfQuery())
     
     def _typeOfQuery(self):
         return 'undefined'
     
+    def from_(self, *args, **kwargs): self.__raiser('from')
+    def where(self, *args, **kwargs): self.__raiser('where')
     def limit(self, *args, **kwargs): self.__raiser('limit')
     def offset(self, *args, **kwargs): self.__raiser('offset')
-    def from_(self, *args, **kwargs): self.__raiser('from')
+    def into(self, *args, **kwargs): self.__raiser('into')
+    def values(self, *args, **kwargs): self.__raiser('values')
+    def set(self, *args, **kwargs): self.__raiser('values')
 
 
-class NotSupproted(Exception):
+class NotSupprotedException(Exception):
     def __init__(self, method, typeOfQuery):
         self.method = method
         self.typeOfQuery = typeOfQuery

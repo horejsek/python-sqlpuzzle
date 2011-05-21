@@ -9,12 +9,12 @@ import query
 
 
 class Update(query.Query):
-    def __init__(self, table):
+    def __init__(self, table=None):
         """
         Initialization of Update.
         """
         query.Query.__init__(self)
-        self._tables.set(table)
+        self.table(table)
         self._columns = None
         self._values = None
     
@@ -33,10 +33,14 @@ class Update(query.Query):
     def _typeOfQuery(self):
         return 'UPDATE'
     
+    def table(self, table):
+        """
+        Set table.
+        """
+        self._tables.set(table)
+        return self
+    
     def set(self, *args, **kwargs):
-        """
-        Set columns and values.
-        """
         """
         Set columns and values.
         """

@@ -1,8 +1,10 @@
 - joiny
-- vice testu
 - clearovaci metoda
   setovani napriklad podminek nebude predchozi mazat, ale jen pridavat
 - podpora ruznych datovych typu
   string (str, unicode), integer, float, datetime, boolean
 - vyjimky
 - testovat chybne pouziti
+- ochrana proti smazani vsech
+- ochrana proti updatu vsech
+- objekty pro values a columns
