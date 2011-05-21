@@ -21,7 +21,7 @@ class Select(query.Query):
         Print query.
         """
         select = "SELECT %s FROM %s" % (
-            ', '.join(('`%s`' % column for column in self._columns)) if self._columns else '*',
+            str(self._columns),
             str(self._tables),
         )
         if self._conditions.isSet(): select = "%s %s" % (select, self._conditions)
@@ -38,7 +38,7 @@ class Select(query.Query):
         """
         Set column(s) to query.
         """
-        self._columns = columns
+        self._columns.columns(*columns)
     
     def from_(self, *tables):
         """

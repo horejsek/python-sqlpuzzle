@@ -5,6 +5,7 @@
 # https://github.com/horejsek/sqlPuzzle
 #
 
+import columns
 import conditions
 import limit
 import groupBy
@@ -18,6 +19,7 @@ class Query:
         Initialization of Query.
         """
         self._tables = tables.Tables()
+        self._columns = columns.Columns()
         self._conditions = conditions.Conditions()
         self._groupBy = groupBy.GroupBy()
         self._orderBy = orderBy.OrderBy()
