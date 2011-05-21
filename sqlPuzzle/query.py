@@ -7,6 +7,7 @@
 
 import conditions
 import limit
+import orderBy
 import tables
 
 
@@ -17,6 +18,7 @@ class Query:
         """
         self._tables = tables.Tables()
         self._conditions = conditions.Conditions()
+        self._orderBy = orderBy.OrderBy()
         self._limit = limit.Limit()
     
     def __raiser(self, method):
@@ -25,13 +27,14 @@ class Query:
     def _typeOfQuery(self):
         return 'undefined'
     
-    def from_(self, *args, **kwargs): self.__raiser('from')
-    def where(self, *args, **kwargs): self.__raiser('where')
-    def limit(self, *args, **kwargs): self.__raiser('limit')
-    def offset(self, *args, **kwargs): self.__raiser('offset')
-    def into(self, *args, **kwargs): self.__raiser('into')
-    def values(self, *args, **kwargs): self.__raiser('values')
-    def set(self, *args, **kwargs): self.__raiser('values')
+    def from_(self, *args, **kwds): self.__raiser('from')
+    def where(self, *args, **kwds): self.__raiser('where')
+    def orderBy(self, *args, **kwds): self.__raiser('order by')
+    def limit(self, *args, **kwds): self.__raiser('limit')
+    def offset(self, *args, **kwds): self.__raiser('offset')
+    def into(self, *args, **kwds): self.__raiser('into')
+    def values(self, *args, **kwds): self.__raiser('values')
+    def set(self, *args, **kwds): self.__raiser('values')
 
 
 class NotSupprotedException(Exception):

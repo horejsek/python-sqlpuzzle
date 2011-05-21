@@ -25,6 +25,7 @@ class Select(query.Query):
             str(self._tables),
         )
         if self._conditions.isSet(): select = "%s %s" % (select, self._conditions)
+        if self._orderBy.isSet(): select = "%s %s" % (select, self._orderBy)
         if self._limit.isSet(): select = "%s %s" % (select, self._limit)
         
         return select
@@ -45,11 +46,18 @@ class Select(query.Query):
         self._tables.set(tables)
         return self
     
-    def where(self, *args, **kwargs):
+    def where(self, *args, **kwds):
         """
         Set condition(s) to query.
         """
-        self._conditions.where(*args, **kwargs)
+        self._conditions.where(*args, **kwds)
+        return self
+    
+    def orderBy(self, *args):
+        """
+        Set order to query.
+        """
+        self._orderBy.orderBy(*args)
         return self
     
     def limit(self, limit, offset=None):

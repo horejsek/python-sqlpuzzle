@@ -28,6 +28,11 @@ class SelectTest(unittest.TestCase):
         self.select.from_('user')
         self.assertEqual(str(self.select), 'SELECT * FROM `user`')
     
+    def testOrderBy(self):
+        self.select.from_('user')
+        self.select.orderBy('id')
+        self.assertEqual(str(self.select), 'SELECT * FROM `user` ORDER BY `id` ASC')
+    
     def testLimit(self):
         self.select.from_('user')
         self.select.limit(10)

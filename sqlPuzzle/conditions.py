@@ -52,6 +52,16 @@ class Condition:
             self.__value,
         )
     
+    def __eq__(self, other):
+        return (
+            self.getColumn() == other.getColumn() and
+            self.getValue() == other.getValue() and
+            self.getRelation() == other.getRelation()
+        )
+    
+    def __ne__(self, other):
+        return not self.__eq__(other)
+    
     def set(self, column, value, relation=None):
         """
         Set column, value and relation.
@@ -83,6 +93,18 @@ class Condition:
         Get column.
         """
         return self.__column
+    
+    def getValue(self):
+        """
+        Get value.
+        """
+        return self.__value
+    
+    def getRelation(self):
+        """
+        Get relation.
+        """
+        return self.__relation
 
 
 class Conditions:
@@ -106,7 +128,7 @@ class Conditions:
         """
         return self.__conditions != []
     
-    def where(self, *args, **kwargs):
+    def where(self, *args, **kwds):
         """
         Set condition(s).
         """
@@ -119,8 +141,8 @@ class Conditions:
             dict_ = args[0]
         elif 2 <= len(args) <= 3:
             list_ = (args,)
-        elif kwargs is not None:
-            dict_ = kwargs
+        elif kwds is not None:
+            dict_ = kwds
         
         if list_ is not None:
             for c in list_:

@@ -5,6 +5,7 @@
 # https://github.com/horejsek/sqlPuzzle
 #
 
+
 class Tables:
     def __init__(self):
         """

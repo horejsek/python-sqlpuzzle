@@ -36,10 +36,10 @@ class Delete(query.Query):
         self._tables.set(tables)
         return self
     
-    def where(self, *args, **kwargs):
+    def where(self, *args, **kwds):
         """
         Set condition(s) to query.
         """
-        self._conditions.where(*args, **kwargs)
+        self._conditions.where(*args, **kwds)
         return self
 

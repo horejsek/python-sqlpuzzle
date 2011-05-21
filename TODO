@@ -1,10 +1,35 @@
-- joiny
-- clearovaci metoda
-  setovani napriklad podminek nebude predchozi mazat, ale jen pridavat
+
+########################
+due: 25.5. | version: alfa
+
+- implementovat joiny
+- objekty pro values a columns
+- grupovani
+- `foo` as 'bar'
+
+########################
+due: 29.5. | version: beta
+
 - podpora ruznych datovych typu
   string (str, unicode), integer, float, datetime, boolean
 - vyjimky
 - testovat chybne pouziti
 - ochrana proti smazani vsech
 - ochrana proti updatu vsech
-- objekty pro values a columns
+
+########################
+due: 2.6. | version: 1.0
+
+- clearovaci metoda
+  setovani napriklad podminek nebude predchozi mazat, ale jen pridavat
+- SQL_CACHE, SQL_NO_CACHE
+- SQL_CALC_FOUND_ROWS
+- INTO OUTFILE
+- ON DUPLICATE KEY UPDATE
+
+########################
+due: ? | version: ?
+
+- HAVING
+- USING
+- AVG, SUM, ...

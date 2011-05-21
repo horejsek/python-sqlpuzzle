@@ -40,24 +40,24 @@ class Update(query.Query):
         self._tables.set(table)
         return self
     
-    def set(self, *args, **kwargs):
+    def set(self, *args, **kwds):
         """
         Set columns and values.
         """
         if len(args) == 1 and isinstance(args[0], dict):
             self._columns = args[0].keys()
             self._values = args[0].values()
-        elif kwargs is not None:
-            self._columns = kwargs.keys()
-            self._values = kwargs.values()
+        elif kwds is not None:
+            self._columns = kwds.keys()
+            self._values = kwds.values()
         else:
             raise 'Values can be dictionary or keyworded variable arguments.'
         return self
     
-    def where(self, *args, **kwargs):
+    def where(self, *args, **kwds):
         """
         Set condition(s) to query.
         """
-        self._conditions.where(*args, **kwargs)
+        self._conditions.where(*args, **kwds)
         return self
 
