@@ -7,19 +7,34 @@
 
 class Order:
     def __init__(self, column=None, sort='ASC'):
+        """
+        Initialization of Order.
+        """
         self.column(column)
         self.sort(sort)
     
     def __str__(self):
-        return '`%s` %s' % (
-            self.__column,
-            self.__sort,
-        )
+        """
+        Print part of query.
+        """
+        if self.__sort == 'ASC':
+            return '`%s`' % self.__column
+        else:
+            return '`%s` %s' % (
+                self.__column,
+                self.__sort,
+            )
     
     def column(self, column):
+        """
+        Set column.
+        """
         self.__column = column
     
     def sort(self, sort):
+        """
+        Set type of sort (ASC or DESC).
+        """
         sort = sort.upper()
         if sort in ('ASC', 'DESC'):
             self.__sort = sort
@@ -30,7 +45,7 @@ class Order:
 class OrderBy:
     def __init__(self):
         """
-        Initialization of Order.
+        Initialization of OrderBy.
         """
         self.__orderBy = []
     
@@ -43,7 +58,7 @@ class OrderBy:
     
     def isSet(self):
         """
-        Is order set?
+        Is orderBy set?
         """
         return self.__orderBy != []
     

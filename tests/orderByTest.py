@@ -19,11 +19,11 @@ class OrderByTest(unittest.TestCase):
     
     def testSimply(self):
         self.orderBy.orderBy('id')
-        self.assertEqual(str(self.orderBy), 'ORDER BY `id` ASC')
+        self.assertEqual(str(self.orderBy), 'ORDER BY `id`')
     
     def testASC(self):
         self.orderBy.orderBy(['name', 'asc'])
-        self.assertEqual(str(self.orderBy), 'ORDER BY `name` ASC')
+        self.assertEqual(str(self.orderBy), 'ORDER BY `name`')
     
     def testDESC(self):
         self.orderBy.orderBy(['name', 'desc'])
@@ -31,7 +31,7 @@ class OrderByTest(unittest.TestCase):
     
     def testMore(self):
         self.orderBy.orderBy('id', ['name', 'desc'])
-        self.assertEqual(str(self.orderBy), 'ORDER BY `id` ASC, `name` DESC')
+        self.assertEqual(str(self.orderBy), 'ORDER BY `id`, `name` DESC')
     
     def testIsSet(self):
         self.assertEqual(self.orderBy.isSet(), False)

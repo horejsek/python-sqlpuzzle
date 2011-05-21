@@ -25,6 +25,7 @@ class Select(query.Query):
             str(self._tables),
         )
         if self._conditions.isSet(): select = "%s %s" % (select, self._conditions)
+        if self._groupBy.isSet(): select = "%s %s" % (select, self._groupBy)
         if self._orderBy.isSet(): select = "%s %s" % (select, self._orderBy)
         if self._limit.isSet(): select = "%s %s" % (select, self._limit)
         
@@ -51,6 +52,13 @@ class Select(query.Query):
         Set condition(s) to query.
         """
         self._conditions.where(*args, **kwds)
+        return self
+    
+    def groupBy(self, *args):
+        """
+        Set group to query.
+        """
+        self._groupBy.groupBy(*args)
         return self
     
     def orderBy(self, *args):

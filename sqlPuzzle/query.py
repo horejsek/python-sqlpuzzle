@@ -7,6 +7,7 @@
 
 import conditions
 import limit
+import groupBy
 import orderBy
 import tables
 
@@ -18,6 +19,7 @@ class Query:
         """
         self._tables = tables.Tables()
         self._conditions = conditions.Conditions()
+        self._groupBy = groupBy.GroupBy()
         self._orderBy = orderBy.OrderBy()
         self._limit = limit.Limit()
     
@@ -29,6 +31,7 @@ class Query:
     
     def from_(self, *args, **kwds): self.__raiser('from')
     def where(self, *args, **kwds): self.__raiser('where')
+    def groupBy(self, *args, **kwds): self.__raiser('group by')
     def orderBy(self, *args, **kwds): self.__raiser('order by')
     def limit(self, *args, **kwds): self.__raiser('limit')
     def offset(self, *args, **kwds): self.__raiser('offset')

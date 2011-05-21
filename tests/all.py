@@ -7,7 +7,9 @@ import insertTest
 import selectTest
 import updateTest
 import conditionsTest
+import groupByTest
 import limitTest
+import orderByTest
 import sqlPuzzleTest
 
 
@@ -19,7 +21,9 @@ if __name__ == '__main__':
         updateTest.UpdateTest,
         
         conditionsTest.ConditionsTest,
+        groupByTest.GroupByTest,
         limitTest.LimitTest,
+        orderByTest.OrderByTest,
         
         sqlPuzzleTest.SqlPuzzleTest,
     )

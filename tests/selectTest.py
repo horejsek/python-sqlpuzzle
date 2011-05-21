@@ -31,7 +31,12 @@ class SelectTest(unittest.TestCase):
     def testOrderBy(self):
         self.select.from_('user')
         self.select.orderBy('id')
-        self.assertEqual(str(self.select), 'SELECT * FROM `user` ORDER BY `id` ASC')
+        self.assertEqual(str(self.select), 'SELECT * FROM `user` ORDER BY `id`')
+    
+    def testGroupBy(self):
+        self.select.from_('user')
+        self.select.groupBy('id')
+        self.assertEqual(str(self.select), 'SELECT * FROM `user` GROUP BY `id`')
     
     def testLimit(self):
         self.select.from_('user')
