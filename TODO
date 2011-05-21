@@ -5,6 +5,7 @@ due: 25.5. | version: alfa
 - implementovat joiny
 - objekty pro values a columns
 - `foo` as 'bar'
+- automaticke tisknuti casti dotazu
 
 ########################
 due: 29.5. | version: beta
