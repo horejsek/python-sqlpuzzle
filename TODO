@@ -3,8 +3,7 @@
 due: 25.5. | version: alfa
 
 - implementovat joiny
-- objekty pro values a columns
-- `foo` as 'bar'
+- objekt pro values
 - automaticke tisknuti casti dotazu
 
 ########################
@@ -18,7 +17,7 @@ due: 29.5. | version: beta
 - ochrana proti updatu vsech
 
 ########################
-due: 2.6. | version: 1.0
+due: 5.6. | version: 1.0
 
 - clearovaci metoda
   setovani napriklad podminek nebude predchozi mazat, ale jen pridavat
