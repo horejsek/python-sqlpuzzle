@@ -7,6 +7,7 @@
 
 import columns
 import conditions
+import exceptions
 import groupBy
 import limit
 import orderBy
@@ -28,7 +29,7 @@ class Query:
         self._limit = limit.Limit()
     
     def __raiser(self, method):
-        raise NotSupprotedException(method, self._typeOfQuery())
+        raise exceptions.NotSupprotedException(method, self._typeOfQuery())
     
     def _typeOfQuery(self):
         return 'undefined'
@@ -42,16 +43,4 @@ class Query:
     def into(self, *args, **kwds): self.__raiser('into')
     def values(self, *args, **kwds): self.__raiser('values')
     def set(self, *args, **kwds): self.__raiser('values')
-
-
-class NotSupprotedException(Exception):
-    def __init__(self, method, typeOfQuery):
-        self.method = method
-        self.typeOfQuery = typeOfQuery
-    
-    def __str__(self):
-        return "Method '%s' is not supported for type of query '%s'." % (
-            self.method,
-            self.typeOfQuery,
-        )
 

@@ -5,6 +5,7 @@
 # https://github.com/horejsek/sqlPuzzle
 #
 
+import exceptions
 import query
 
 
@@ -15,6 +16,7 @@ class Update(query.Query):
         """
         query.Query.__init__(self)
         self.table(table)
+        self.__allowUpdateAll = False
     
     def __str__(self):
         """
@@ -25,11 +27,18 @@ class Update(query.Query):
             str(self._values),
         )
         if self._conditions.isSet(): update = "%s %s" % (update, self._conditions)
+        elif not self.__allowUpdateAll: raise exceptions.ConfirmUpdateAllException()
         
         return update
     
     def _typeOfQuery(self):
         return 'UPDATE'
+    
+    def allowUpdateAll(self):
+        self.__allowUpdateAll = True
+    
+    def forbidUpdateAll(self):
+        self.__allowUpdateAll = False
     
     def table(self, table):
         """

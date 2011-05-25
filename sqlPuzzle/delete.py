@@ -5,6 +5,7 @@
 # https://github.com/horejsek/sqlPuzzle
 #
 
+import exceptions
 import query
 
 
@@ -14,6 +15,7 @@ class Delete(query.Query):
         Initialization of Delete.
         """
         query.Query.__init__(self)
+        self.__allowDeleteAll = False
     
     def __str__(self):
         """
@@ -23,8 +25,15 @@ class Delete(query.Query):
             str(self._tables),
         )
         if self._conditions.isSet(): delete = "%s %s" % (delete, self._conditions)
+        elif not self.__allowDeleteAll: raise exceptions.ConfirmDeleteAllException()
         
         return delete
+    
+    def allowDeleteAll(self):
+        self.__allowDeleteAll = True
+    
+    def forbidDeleteAll(self):
+        self.__allowDeleteAll = False
     
     def _typeOfQuery(self):
         return 'DELETE'

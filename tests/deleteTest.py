@@ -8,6 +8,7 @@
 import unittest
 
 import sqlPuzzle.delete
+import sqlPuzzle.exceptions
 import sqlPuzzle.query
 
 
@@ -20,6 +21,7 @@ class DeleteTest(unittest.TestCase):
     
     def testSimply(self):
         self.delete.from_('user')
+        self.delete.allowDeleteAll()
         self.assertEqual(str(self.delete), 'DELETE FROM `user`')
     
     def testWhere(self):
@@ -35,19 +37,19 @@ class DeleteTest(unittest.TestCase):
         self.assertEqual(str(self.delete), 'DELETE FROM `user` WHERE `age` = 42 AND `name` LIKE "Harry" AND `sex` = "male" AND `enabled` = 1')
     
     def testUnsupportLimit(self):
-        self.assertRaises(sqlPuzzle.query.NotSupprotedException, self.delete.limit, 1)
+        self.assertRaises(sqlPuzzle.exceptions.NotSupprotedException, self.delete.limit, 1)
     
     def testUnsupportOffset(self):
-        self.assertRaises(sqlPuzzle.query.NotSupprotedException, self.delete.offset, 2)
+        self.assertRaises(sqlPuzzle.exceptions.NotSupprotedException, self.delete.offset, 2)
     
     def testUnsupportInto(self):
-        self.assertRaises(sqlPuzzle.query.NotSupprotedException, self.delete.into, 'table')
+        self.assertRaises(sqlPuzzle.exceptions.NotSupprotedException, self.delete.into, 'table')
     
     def testUnsupportValues(self):
-        self.assertRaises(sqlPuzzle.query.NotSupprotedException, self.delete.values, name='Alan')
+        self.assertRaises(sqlPuzzle.exceptions.NotSupprotedException, self.delete.values, name='Alan')
     
     def testUnsupportSet(self):
-        self.assertRaises(sqlPuzzle.query.NotSupprotedException, self.delete.set, age=42)
+        self.assertRaises(sqlPuzzle.exceptions.NotSupprotedException, self.delete.set, age=42)
 
 
 if __name__ == '__main__':

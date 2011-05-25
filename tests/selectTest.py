@@ -8,6 +8,7 @@
 import unittest
 
 import sqlPuzzle.conditions
+import sqlPuzzle.exceptions
 import sqlPuzzle.select
 import sqlPuzzle.query
 
@@ -67,13 +68,13 @@ class SelectTest(unittest.TestCase):
         self.assertEqual(str(self.select), 'SELECT * FROM `user` WHERE `age` = 42 AND `name` LIKE "Harry" AND `sex` = "male" AND `enabled` = 1')
     
     def testUnsupportInto(self):
-        self.assertRaises(sqlPuzzle.query.NotSupprotedException, self.select.into, 'table')
+        self.assertRaises(sqlPuzzle.exceptions.NotSupprotedException, self.select.into, 'table')
     
     def testUnsupportValues(self):
-        self.assertRaises(sqlPuzzle.query.NotSupprotedException, self.select.values, name='Alan')
+        self.assertRaises(sqlPuzzle.exceptions.NotSupprotedException, self.select.values, name='Alan')
     
     def testUnsupportSet(self):
-        self.assertRaises(sqlPuzzle.query.NotSupprotedException, self.select.set, age=42)
+        self.assertRaises(sqlPuzzle.exceptions.NotSupprotedException, self.select.set, age=42)
 
 
 if __name__ == '__main__':

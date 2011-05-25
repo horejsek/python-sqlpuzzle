@@ -7,6 +7,7 @@
 
 import unittest
 
+import sqlPuzzle.exceptions
 import sqlPuzzle.insert
 import sqlPuzzle.query
 
@@ -24,19 +25,19 @@ class InsertTest(unittest.TestCase):
         self.assertEqual(str(self.insert), 'INSERT INTO `user` (`name`) VALUES ("Alan")')
     
     def testUnsupportFrom(self):
-        self.assertRaises(sqlPuzzle.query.NotSupprotedException, self.insert.from_, 'table')
+        self.assertRaises(sqlPuzzle.exceptions.NotSupprotedException, self.insert.from_, 'table')
     
     def testUnsupportWhere(self):
-        self.assertRaises(sqlPuzzle.query.NotSupprotedException, self.insert.where, name='Alan')
+        self.assertRaises(sqlPuzzle.exceptions.NotSupprotedException, self.insert.where, name='Alan')
     
     def testUnsupportLimit(self):
-        self.assertRaises(sqlPuzzle.query.NotSupprotedException, self.insert.limit, 1)
+        self.assertRaises(sqlPuzzle.exceptions.NotSupprotedException, self.insert.limit, 1)
     
     def testUnsupportOffset(self):
-        self.assertRaises(sqlPuzzle.query.NotSupprotedException, self.insert.offset, 2)
+        self.assertRaises(sqlPuzzle.exceptions.NotSupprotedException, self.insert.offset, 2)
     
     def testUnsupportSet(self):
-        self.assertRaises(sqlPuzzle.query.NotSupprotedException, self.insert.set, age=42)
+        self.assertRaises(sqlPuzzle.exceptions.NotSupprotedException, self.insert.set, age=42)
 
 
 if __name__ == '__main__':

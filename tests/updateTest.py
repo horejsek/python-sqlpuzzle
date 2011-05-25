@@ -7,6 +7,7 @@
 
 import unittest
 
+import sqlPuzzle.exceptions
 import sqlPuzzle.update
 import sqlPuzzle.query
 
@@ -21,6 +22,7 @@ class UpdateTest(unittest.TestCase):
     def testSimply(self):
         self.update.table('user')
         self.update.set(name='Alan')
+        self.update.allowUpdateAll()
         self.assertEqual(str(self.update), 'UPDATE `user` SET `name` = "Alan"')
     
     def testWhere(self):
@@ -37,19 +39,19 @@ class UpdateTest(unittest.TestCase):
         self.assertEqual(str(self.update), 'UPDATE `user` SET `name` = "Alan" WHERE `age` = 42 AND `name` LIKE "Harry" AND `sex` = "male" AND `enabled` = 1')
     
     def testUnsupportFrom(self):
-        self.assertRaises(sqlPuzzle.query.NotSupprotedException, self.update.from_, 'table')
+        self.assertRaises(sqlPuzzle.exceptions.NotSupprotedException, self.update.from_, 'table')
     
     def testUnsupportLimit(self):
-        self.assertRaises(sqlPuzzle.query.NotSupprotedException, self.update.limit, 1)
+        self.assertRaises(sqlPuzzle.exceptions.NotSupprotedException, self.update.limit, 1)
     
     def testUnsupportOffset(self):
-        self.assertRaises(sqlPuzzle.query.NotSupprotedException, self.update.offset, 2)
+        self.assertRaises(sqlPuzzle.exceptions.NotSupprotedException, self.update.offset, 2)
     
     def testUnsupportInto(self):
-        self.assertRaises(sqlPuzzle.query.NotSupprotedException, self.update.into, 'table')
+        self.assertRaises(sqlPuzzle.exceptions.NotSupprotedException, self.update.into, 'table')
     
     def testUnsupportValues(self):
-        self.assertRaises(sqlPuzzle.query.NotSupprotedException, self.update.values, name='Alan')
+        self.assertRaises(sqlPuzzle.exceptions.NotSupprotedException, self.update.values, name='Alan')
 
 
 if __name__ == '__main__':

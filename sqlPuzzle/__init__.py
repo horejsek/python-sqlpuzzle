@@ -138,4 +138,12 @@ class SqlPuzzle:
         Print query.
         """
         return self.__str__()
+    
+    # ALLOW
+    
+    def allowUpdateAll(self): self.query.allowUpdateAll()
+    def forbidUpdateAll(self): self.query.forbidUpdateAll()
+    
+    def allowDeleteAll(self): self.query.allowDeleteAll()
+    def forbidDeleteAll(self): self.query.forbidDeleteAll()
 
