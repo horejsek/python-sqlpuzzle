@@ -7,10 +7,11 @@
 
 import columns
 import conditions
-import limit
 import groupBy
+import limit
 import orderBy
 import tables
+import values
 
 
 class Query:
@@ -20,6 +21,7 @@ class Query:
         """
         self._tables = tables.Tables()
         self._columns = columns.Columns()
+        self._values = values.Values()
         self._conditions = conditions.Conditions()
         self._groupBy = groupBy.GroupBy()
         self._orderBy = orderBy.OrderBy()

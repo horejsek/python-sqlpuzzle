@@ -6,10 +6,14 @@ import deleteTest
 import insertTest
 import selectTest
 import updateTest
+
+import columnsTest
 import conditionsTest
 import groupByTest
 import limitTest
 import orderByTest
+import valuesTest
+
 import sqlPuzzleTest
 
 
@@ -20,10 +24,12 @@ if __name__ == '__main__':
         selectTest.SelectTest,
         updateTest.UpdateTest,
         
+        columnsTest.ColumnsTest,
         conditionsTest.ConditionsTest,
         groupByTest.GroupByTest,
         limitTest.LimitTest,
         orderByTest.OrderByTest,
+        valuesTest.ValuesTest,
         
         sqlPuzzleTest.SqlPuzzleTest,
     )

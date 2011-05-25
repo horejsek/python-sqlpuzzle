@@ -15,8 +15,6 @@ class Update(query.Query):
         """
         query.Query.__init__(self)
         self.table(table)
-        self._columns = None
-        self._values = None
     
     def __str__(self):
         """
@@ -24,7 +22,7 @@ class Update(query.Query):
         """
         update = "UPDATE %s SET %s" % (
             str(self._tables),
-            ', '.join(('`%s` = "%s"' % (column, value) for column, value in zip(self._columns, self._values)))
+            str(self._values),
         )
         if self._conditions.isSet(): update = "%s %s" % (update, self._conditions)
         
@@ -44,14 +42,7 @@ class Update(query.Query):
         """
         Set columns and values.
         """
-        if len(args) == 1 and isinstance(args[0], dict):
-            self._columns = args[0].keys()
-            self._values = args[0].values()
-        elif kwds is not None:
-            self._columns = kwds.keys()
-            self._values = kwds.values()
-        else:
-            raise 'Values can be dictionary or keyworded variable arguments.'
+        self._values.set(*args, **kwds)
         return self
     
     def where(self, *args, **kwds):
