@@ -8,6 +8,10 @@
 import exceptions
 import query
 
+import conditions
+import tables
+import values
+
 
 class Update(query.Query):
     def __init__(self, table=None):
@@ -15,21 +19,30 @@ class Update(query.Query):
         Initialization of Update.
         """
         query.Query.__init__(self)
-        self.table(table)
+        
+        self._setExtensions(
+            tables=tables.Tables(),
+            values=values.Values(),
+            conditions=conditions.Conditions(),
+        )
+        self._setPrintedExtensions('conditions')
+        
         self.__allowUpdateAll = False
+        
+        self.table(table)
     
     def __str__(self):
         """
         Print query.
         """
+        if not self._conditions.isSet() and not self.__allowUpdateAll:
+            raise exceptions.ConfirmUpdateAllException()
+        
         update = "UPDATE %s SET %s" % (
             str(self._tables),
             str(self._values),
         )
-        if self._conditions.isSet(): update = "%s %s" % (update, self._conditions)
-        elif not self.__allowUpdateAll: raise exceptions.ConfirmUpdateAllException()
-        
-        return update
+        return query.Query._appendExtensions(self, update)
     
     def _typeOfQuery(self):
         return 'UPDATE'

@@ -7,6 +7,9 @@
 
 import query
 
+import tables
+import values
+
 
 class Insert(query.Query):
     def __init__(self):
@@ -14,6 +17,11 @@ class Insert(query.Query):
         Initialization of Insert.
         """
         query.Query.__init__(self)
+        
+        self._setExtensions(
+            tables=tables.Tables(),
+            values=values.Values(),
+        )
     
     def __str__(self):
         """

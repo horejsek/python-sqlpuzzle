@@ -8,6 +8,9 @@
 import exceptions
 import query
 
+import conditions
+import tables
+
 
 class Delete(query.Query):
     def __init__(self):
@@ -15,19 +18,26 @@ class Delete(query.Query):
         Initialization of Delete.
         """
         query.Query.__init__(self)
+        
+        self._setExtensions(
+            tables=tables.Tables(),
+            conditions=conditions.Conditions(),
+        )
+        self._setPrintedExtensions('conditions')
+        
         self.__allowDeleteAll = False
     
     def __str__(self):
         """
         Print query.
         """
+        if not self._conditions.isSet() and not self.__allowDeleteAll:
+            raise exceptions.ConfirmDeleteAllException()
+        
         delete = "DELETE FROM %s" % (
             str(self._tables),
         )
-        if self._conditions.isSet(): delete = "%s %s" % (delete, self._conditions)
-        elif not self.__allowDeleteAll: raise exceptions.ConfirmDeleteAllException()
-        
-        return delete
+        return query.Query._appendExtensions(self, delete)
     
     def allowDeleteAll(self):
         self.__allowDeleteAll = True

@@ -20,19 +20,55 @@ class Query:
         """
         Initialization of Query.
         """
-        self._tables = tables.Tables()
-        self._columns = columns.Columns()
-        self._values = values.Values()
-        self._conditions = conditions.Conditions()
-        self._groupBy = groupBy.GroupBy()
-        self._orderBy = orderBy.OrderBy()
-        self._limit = limit.Limit()
+        self.__extensions = {}
+        self.__printedExtensions = ()
     
     def __raiser(self, method):
         raise exceptions.NotSupprotedException(method, self._typeOfQuery())
     
     def _typeOfQuery(self):
         return 'undefined'
+    
+    def _appendExtensions(self, query=''):
+        query = str(query)
+        for extension in self.__printedExtensions:
+            object_ = self._getExtension(extension)
+            if object_.isSet():
+                query = '%s %s' % (query, object_)
+        return query
+    
+    def _setExtensions(self, **kwds):
+        self.__extensions = kwds
+    
+    def _setPrintedExtensions(self, *args):
+        self.__printedExtensions = args
+    
+    def _getExtension(self, extension):
+        if extension in self.__extensions:
+            return self.__extensions[extension]
+        self.__raiser(extension)
+    
+    @property
+    def _tables(self): return self._getExtension('tables')
+    
+    @property
+    def _columns(self): return self._getExtension('columns')
+    
+    @property
+    def _values(self): return self._getExtension('values')
+    
+    @property
+    def _conditions(self): return self._getExtension('conditions')
+    
+    @property
+    def _groupBy(self): return self._getExtension('groupBy')
+    
+    @property
+    def _orderBy(self): return self._getExtension('orderBy')
+    
+    @property
+    def _limit(self): return self._getExtension('limit')
+    
     
     def from_(self, *args, **kwds): self.__raiser('from')
     def where(self, *args, **kwds): self.__raiser('where')

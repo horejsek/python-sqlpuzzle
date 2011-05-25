@@ -1,13 +1,8 @@
 
 ########################
-due: 25.5. | version: alfa
-
-- implementovat joiny
-- automaticke tisknuti casti dotazu
-
-########################
 due: 29.5. | version: beta
 
+- implementovat joiny
 - vyjimky
 - testovat chybne pouziti
 

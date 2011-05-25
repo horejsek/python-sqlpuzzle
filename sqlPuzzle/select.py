@@ -7,14 +7,32 @@
 
 import query
 
+import columns
+import conditions
+import groupBy
+import limit
+import orderBy
+import tables
+
 
 class Select(query.Query):
-    def __init__(self, *columns):
+    def __init__(self, *columns_):
         """
         Initialization of Select.
         """
         query.Query.__init__(self)
-        self.columns(*columns)
+        
+        self._setExtensions(
+            tables=tables.Tables(),
+            columns=columns.Columns(),
+            conditions=conditions.Conditions(),
+            groupBy=groupBy.GroupBy(),
+            orderBy=orderBy.OrderBy(),
+            limit=limit.Limit(),
+        )
+        self._setPrintedExtensions('conditions', 'groupBy', 'orderBy', 'limit')
+        
+        self.columns(*columns_)
     
     def __str__(self):
         """
@@ -24,21 +42,16 @@ class Select(query.Query):
             str(self._columns),
             str(self._tables),
         )
-        if self._conditions.isSet(): select = "%s %s" % (select, self._conditions)
-        if self._groupBy.isSet(): select = "%s %s" % (select, self._groupBy)
-        if self._orderBy.isSet(): select = "%s %s" % (select, self._orderBy)
-        if self._limit.isSet(): select = "%s %s" % (select, self._limit)
-        
-        return select
+        return query.Query._appendExtensions(self, select)
     
     def _typeOfQuery(self):
         return 'SELECT'
     
-    def columns(self, *columns):
+    def columns(self, *columns_):
         """
         Set column(s) to query.
         """
-        self._columns.columns(*columns)
+        self._columns.columns(*columns_)
     
     def from_(self, *tables):
         """
