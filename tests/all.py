@@ -12,6 +12,7 @@ import conditionsTest
 import groupByTest
 import limitTest
 import orderByTest
+import sqlValueTest
 import valuesTest
 
 import sqlPuzzleTest
@@ -29,6 +30,7 @@ if __name__ == '__main__':
         groupByTest.GroupByTest,
         limitTest.LimitTest,
         orderByTest.OrderByTest,
+        sqlValueTest.SqlValueTest,
         valuesTest.ValuesTest,
         
         sqlPuzzleTest.SqlPuzzleTest,

@@ -57,6 +57,6 @@ class ValuesTest(unittest.TestCase):
 
 
 if __name__ == '__main__':
-    suite = unittest.TestLoader().loadTestsFromTestCase(LimitTest)
+    suite = unittest.TestLoader().loadTestsFromTestCase(ValuesTest)
     unittest.TextTestRunner(verbosity=2).run(suite)
 

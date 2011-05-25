@@ -5,6 +5,9 @@
 # https://github.com/horejsek/sqlPuzzle
 #
 
+import sqlValue
+
+
 EQ = EQUAL_TO = 1
 NE = NOT_EQUAL_TO = 2
 
@@ -41,15 +44,10 @@ class Condition:
         """
         Print condition (part of WHERE).
         """
-        if isinstance(self.__value, int):
-            formatString = '`%s` %s %s'
-        else:
-            formatString = '`%s` %s "%s"'
-            
-        return formatString % (
+        return '`%s` %s %s' % (
             self.__column,
             RELATIONS[self.__relation],
-            self.__value,
+            sqlValue.SqlValue(self.__value),
         )
     
     def __eq__(self, other):

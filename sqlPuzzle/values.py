@@ -5,30 +5,7 @@
 # https://github.com/horejsek/sqlPuzzle
 #
 
-class Value:
-    def __init__(self, value=None):
-        """
-        Initialization of Value.
-        """
-        self.value(value)
-    
-    def __str__(self):
-        """
-        Print part of query.
-        """
-        if isinstance(self.__value, (str, unicode)):
-            return '"%s"' % self.__value
-        elif isinstance(self.__value, (int, long, float)):
-            return '%d' % self.__value
-        elif self.__value is None:
-            return 'NULL'
-        return 'undefined'
-    
-    def value(self, value):
-        """
-        Set value.
-        """
-        self.__value = value
+import sqlValue
 
 
 class Values:
@@ -42,7 +19,19 @@ class Values:
         """
         Print values (part of query).
         """
-        return ', '.join('`%s` = %s' % (column, str(Value(value))) for column, value in self.__values.iteritems())
+        return ', '.join('`%s` = %s' % (column, str(sqlValue.SqlValue(value))) for column, value in self.__values.iteritems())
+    
+    def columns(self):
+        """
+        Print columns of values.
+        """
+        return ', '.join('`%s`' % column for column in self.__values.keys())
+    
+    def values(self):
+        """
+        Print values of values.
+        """
+        return ', '.join('%s' % str(sqlValue.SqlValue(value)) for value in self.__values.values())
     
     def isSet(self):
         """
