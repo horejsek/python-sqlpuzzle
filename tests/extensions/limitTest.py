@@ -7,15 +7,15 @@
 
 import unittest
 
-import sqlPuzzle.limit
+import sqlPuzzle.extensions.limit
 
 
 class LimitTest(unittest.TestCase):
     def setUp(self):
-        self.limit = sqlPuzzle.limit.Limit()
+        self.limit = sqlPuzzle.extensions.limit.Limit()
 
     def tearDown(self):
-        self.limit = sqlPuzzle.limit.Limit()
+        self.limit = sqlPuzzle.extensions.limit.Limit()
     
     def testLimit(self):
         self.limit.limit(10)

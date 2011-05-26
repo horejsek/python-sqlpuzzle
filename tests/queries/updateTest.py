@@ -8,16 +8,16 @@
 import unittest
 
 import sqlPuzzle.exceptions
-import sqlPuzzle.update
-import sqlPuzzle.query
+import sqlPuzzle.queries.update
+import sqlPuzzle.relations
 
 
 class UpdateTest(unittest.TestCase):
     def setUp(self):
-        self.update = sqlPuzzle.update.Update()
+        self.update = sqlPuzzle.queries.update.Update()
 
     def tearDown(self):
-        self.update = sqlPuzzle.update.Update()
+        self.update = sqlPuzzle.queries.update.Update()
     
     def testSimply(self):
         self.update.table('user')
@@ -29,7 +29,7 @@ class UpdateTest(unittest.TestCase):
         self.update.table('user')
         self.update.set(name='Alan')
         self.update.where(age=42)
-        self.update.where('name', 'Harry', sqlPuzzle.conditions.LIKE)
+        self.update.where('name', 'Harry', sqlPuzzle.relations.LIKE)
         self.update.where({
             'sex': 'male',
         })

@@ -7,29 +7,30 @@
 
 import unittest
 
-import sqlPuzzle.conditions
+import sqlPuzzle.extensions.conditions
+import sqlPuzzle.relations
 
 
 class ConditionsTest(unittest.TestCase):
     def setUp(self):
-        self.conditions = sqlPuzzle.conditions.Conditions()
+        self.conditions = sqlPuzzle.extensions.conditions.Conditions()
 
     def tearDown(self):
-        self.conditions = sqlPuzzle.conditions.Conditions()
+        self.conditions = sqlPuzzle.extensions.conditions.Conditions()
     
     def testWhereByTuple(self):
         self.conditions.where((
             ('name', 'Harry'),
-            ('sex', 'female', sqlPuzzle.conditions.NOT_EQUAL_TO),
-            ('age', 20, sqlPuzzle.conditions.GRATHER_THAN),
+            ('sex', 'female', sqlPuzzle.relations.NOT_EQUAL_TO),
+            ('age', 20, sqlPuzzle.relations.GRATHER_THAN),
         ))
         self.assertEqual(str(self.conditions), 'WHERE `name` = "Harry" AND `sex` != "female" AND `age` > 20')
     
     def testWhereByList(self):
         self.conditions.where([
-            ['name', 'Harry', sqlPuzzle.conditions.LIKE],
-            ['sex', 'female', sqlPuzzle.conditions.NOT_EQUAL_TO],
-            ['age', 20, sqlPuzzle.conditions.LESS_TAHN_OR_EQUAL_TO],
+            ['name', 'Harry', sqlPuzzle.relations.LIKE],
+            ['sex', 'female', sqlPuzzle.relations.NOT_EQUAL_TO],
+            ['age', 20, sqlPuzzle.relations.LESS_TAHN_OR_EQUAL_TO],
         ])
         self.assertEqual(str(self.conditions), 'WHERE `name` LIKE "Harry" AND `sex` != "female" AND `age` <= 20')
     
@@ -41,7 +42,7 @@ class ConditionsTest(unittest.TestCase):
         self.assertEqual(str(self.conditions), 'WHERE `age` = 20 AND `name` = "Alan"')
     
     def testWhereByArgs(self):
-        self.conditions.where('age', 20, sqlPuzzle.conditions.LESS_THAN)
+        self.conditions.where('age', 20, sqlPuzzle.relations.LESS_THAN)
         self.assertEqual(str(self.conditions), 'WHERE `age` < 20')
     
     def testWhereByKwargs(self):

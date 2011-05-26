@@ -7,15 +7,15 @@
 
 import unittest
 
-import sqlPuzzle.groupBy
+import sqlPuzzle.extensions.groupBy
 
 
 class GroupByTest(unittest.TestCase):
     def setUp(self):
-        self.groupBy = sqlPuzzle.groupBy.GroupBy()
+        self.groupBy = sqlPuzzle.extensions.groupBy.GroupBy()
 
     def tearDown(self):
-        self.groupBy = sqlPuzzle.groupBy.GroupBy()
+        self.groupBy = sqlPuzzle.extensions.groupBy.GroupBy()
     
     def testSimply(self):
         self.groupBy.groupBy('id')

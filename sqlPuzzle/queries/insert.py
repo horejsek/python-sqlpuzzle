@@ -5,22 +5,22 @@
 # https://github.com/horejsek/sqlPuzzle
 #
 
-import query
+import sqlPuzzle.queries.query
 
-import tables
-import values
+import sqlPuzzle.extensions.tables
+import sqlPuzzle.extensions.values
 
 
-class Insert(query.Query):
+class Insert(sqlPuzzle.queries.query.Query):
     def __init__(self):
         """
         Initialization of Insert.
         """
-        query.Query.__init__(self)
+        sqlPuzzle.queries.query.Query.__init__(self)
         
         self._setExtensions(
-            tables=tables.Tables(),
-            values=values.Values(),
+            tables = sqlPuzzle.extensions.tables.Tables(),
+            values = sqlPuzzle.extensions.values.Values(),
         )
     
     def __str__(self):

@@ -7,17 +7,16 @@
 
 import unittest
 
-import sqlPuzzle.delete
 import sqlPuzzle.exceptions
-import sqlPuzzle.query
+import sqlPuzzle.queries.delete
 
 
 class DeleteTest(unittest.TestCase):
     def setUp(self):
-        self.delete = sqlPuzzle.delete.Delete()
+        self.delete = sqlPuzzle.queries.delete.Delete()
 
     def tearDown(self):
-        self.delete = sqlPuzzle.delete.Delete()
+        self.delete = sqlPuzzle.queries.delete.Delete()
     
     def testSimply(self):
         self.delete.from_('user')
@@ -27,7 +26,7 @@ class DeleteTest(unittest.TestCase):
     def testWhere(self):
         self.delete.from_('user')
         self.delete.where(age=42)
-        self.delete.where('name', 'Harry', sqlPuzzle.conditions.LIKE)
+        self.delete.where('name', 'Harry', sqlPuzzle.relations.LIKE)
         self.delete.where({
             'sex': 'male',
         })

@@ -5,14 +5,15 @@
 # https://github.com/horejsek/sqlPuzzle
 #
 
-import columns
-import conditions
-import exceptions
-import groupBy
-import limit
-import orderBy
-import tables
-import values
+import sqlPuzzle.exceptions
+
+import sqlPuzzle.extensions.columns
+import sqlPuzzle.extensions.conditions
+import sqlPuzzle.extensions.groupBy
+import sqlPuzzle.extensions.limit
+import sqlPuzzle.extensions.orderBy
+import sqlPuzzle.extensions.tables
+import sqlPuzzle.extensions.values
 
 
 class Query:
@@ -24,7 +25,7 @@ class Query:
         self.__printedExtensions = ()
     
     def __raiser(self, method):
-        raise exceptions.NotSupprotedException(method, self._typeOfQuery())
+        raise sqlPuzzle.exceptions.NotSupprotedException(method, self._typeOfQuery())
     
     def _typeOfQuery(self):
         return 'undefined'

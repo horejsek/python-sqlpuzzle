@@ -18,7 +18,7 @@ version = '0.1b'
 
 setup(
     name = 'sqlPuzzle',
-    packages = ['sqlPuzzle'],
+    packages = ['sqlPuzzle', 'sqlPuzzle/queries', 'sqlPuzzle/extensions'],
     version = version,
     url = 'https://github.com/horejsek/sqlPuzzle',
     description = 'Python module.',

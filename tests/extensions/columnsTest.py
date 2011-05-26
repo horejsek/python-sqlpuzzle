@@ -7,15 +7,15 @@
 
 import unittest
 
-import sqlPuzzle.columns
+import sqlPuzzle.extensions.columns
 
 
 class ColumnsTest(unittest.TestCase):
     def setUp(self):
-        self.columns = sqlPuzzle.columns.Columns()
+        self.columns = sqlPuzzle.extensions.columns.Columns()
 
     def tearDown(self):
-        self.columns = sqlPuzzle.columns.Columns()
+        self.columns = sqlPuzzle.extensions.columns.Columns()
     
     def testColumnsOne(self):
         self.columns.columns('id')

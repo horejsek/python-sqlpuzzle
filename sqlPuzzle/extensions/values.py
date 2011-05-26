@@ -5,7 +5,7 @@
 # https://github.com/horejsek/sqlPuzzle
 #
 
-import sqlValue
+import sqlPuzzle.sqlValue
 
 
 class Values:
@@ -19,7 +19,7 @@ class Values:
         """
         Print values (part of query).
         """
-        return ', '.join('`%s` = %s' % (column, str(sqlValue.SqlValue(value))) for column, value in self.__values.iteritems())
+        return ', '.join('`%s` = %s' % (column, str(sqlPuzzle.sqlValue.SqlValue(value))) for column, value in self.__values.iteritems())
     
     def columns(self):
         """
@@ -31,7 +31,7 @@ class Values:
         """
         Print values of values.
         """
-        return ', '.join('%s' % str(sqlValue.SqlValue(value)) for value in self.__values.values())
+        return ', '.join('%s' % str(sqlPuzzle.sqlValue.SqlValue(value)) for value in self.__values.values())
     
     def isSet(self):
         """

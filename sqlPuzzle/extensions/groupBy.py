@@ -5,10 +5,10 @@
 # https://github.com/horejsek/sqlPuzzle
 #
 
-import orderBy
+import sqlPuzzle.extensions.orderBy
 
 
-class Group(orderBy.Order):
+class Group(sqlPuzzle.extensions.orderBy.Order):
     pass
 
 
@@ -47,3 +47,4 @@ class GroupBy:
             self.__groupBy.append(group)
         
         return self
+

@@ -5,25 +5,26 @@
 # https://github.com/horejsek/sqlPuzzle
 #
 
-import exceptions
-import query
+import sqlPuzzle.exceptions
 
-import conditions
-import tables
-import values
+import sqlPuzzle.queries.query
+
+import sqlPuzzle.extensions.conditions
+import sqlPuzzle.extensions.tables
+import sqlPuzzle.extensions.values
 
 
-class Update(query.Query):
+class Update(sqlPuzzle.queries.query.Query):
     def __init__(self, table=None):
         """
         Initialization of Update.
         """
-        query.Query.__init__(self)
+        sqlPuzzle.queries.query.Query.__init__(self)
         
         self._setExtensions(
-            tables=tables.Tables(),
-            values=values.Values(),
-            conditions=conditions.Conditions(),
+            tables = sqlPuzzle.extensions.tables.Tables(),
+            values = sqlPuzzle.extensions.values.Values(),
+            conditions = sqlPuzzle.extensions.conditions.Conditions(),
         )
         self._setPrintedExtensions('conditions')
         
@@ -42,7 +43,7 @@ class Update(query.Query):
             str(self._tables),
             str(self._values),
         )
-        return query.Query._appendExtensions(self, update)
+        return sqlPuzzle.queries.query.Query._appendExtensions(self, update)
     
     def _typeOfQuery(self):
         return 'UPDATE'

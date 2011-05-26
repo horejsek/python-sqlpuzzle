@@ -7,15 +7,15 @@
 
 import unittest
 
-import sqlPuzzle.values
+import sqlPuzzle.extensions.values
 
 
 class ValuesTest(unittest.TestCase):
     def setUp(self):
-        self.values = sqlPuzzle.values.Values()
+        self.values = sqlPuzzle.extensions.values.Values()
 
     def tearDown(self):
-        self.values = sqlPuzzle.values.Values()
+        self.values = sqlPuzzle.extensions.values.Values()
     
     def testValuesByTuple(self):
         self.values.set((

@@ -5,30 +5,8 @@
 # https://github.com/horejsek/sqlPuzzle
 #
 
-import sqlValue
-
-
-EQ = EQUAL_TO = 1
-NE = NOT_EQUAL_TO = 2
-
-GT = GRATHER_THAN = 3
-GE = GRATHER_THAN_OR_EQUAL_TO = 4
-
-LT = LESS_THAN = 5
-LE = LESS_TAHN_OR_EQUAL_TO = 6
-
-LIKE = 7
-
-
-RELATIONS = {
-    EQ: '=',
-    NE: '!=',
-    GT: '>',
-    GE: '>=',
-    LT: '<',
-    LE: '<=',
-    LIKE: 'LIKE',
-}
+import sqlPuzzle.sqlValue
+import sqlPuzzle.relations
 
 
 class Condition:
@@ -46,8 +24,8 @@ class Condition:
         """
         return '`%s` %s %s' % (
             self.__column,
-            RELATIONS[self.__relation],
-            sqlValue.SqlValue(self.__value),
+            sqlPuzzle.relations.RELATIONS[self.__relation],
+            sqlPuzzle.sqlValue.SqlValue(self.__value),
         )
     
     def __eq__(self, other):
@@ -66,7 +44,7 @@ class Condition:
         """
         self.setColumn(column)
         self.setValue(value)
-        self.setRelation(relation or EQ)
+        self.setRelation(relation or sqlPuzzle.relations.EQ)
     
     def setColumn(self, column):
         """
@@ -170,4 +148,5 @@ class Conditions:
             if condition.getColumn() not in keys:
                 conditions.append(condition)
         self.__conditions = conditions
+
 

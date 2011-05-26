@@ -5,30 +5,30 @@
 # https://github.com/horejsek/sqlPuzzle
 #
 
-import query
+import sqlPuzzle.queries.query
 
-import columns
-import conditions
-import groupBy
-import limit
-import orderBy
-import tables
+import sqlPuzzle.extensions.columns
+import sqlPuzzle.extensions.conditions
+import sqlPuzzle.extensions.groupBy
+import sqlPuzzle.extensions.limit
+import sqlPuzzle.extensions.orderBy
+import sqlPuzzle.extensions.tables
 
 
-class Select(query.Query):
+class Select(sqlPuzzle.queries.query.Query):
     def __init__(self, *columns_):
         """
         Initialization of Select.
         """
-        query.Query.__init__(self)
+        sqlPuzzle.queries.query.Query.__init__(self)
         
         self._setExtensions(
-            tables=tables.Tables(),
-            columns=columns.Columns(),
-            conditions=conditions.Conditions(),
-            groupBy=groupBy.GroupBy(),
-            orderBy=orderBy.OrderBy(),
-            limit=limit.Limit(),
+            tables = sqlPuzzle.extensions.tables.Tables(),
+            columns = sqlPuzzle.extensions.columns.Columns(),
+            conditions = sqlPuzzle.extensions.conditions.Conditions(),
+            groupBy = sqlPuzzle.extensions.groupBy.GroupBy(),
+            orderBy = sqlPuzzle.extensions.orderBy.OrderBy(),
+            limit = sqlPuzzle.extensions.limit.Limit(),
         )
         self._setPrintedExtensions('conditions', 'groupBy', 'orderBy', 'limit')
         
@@ -42,7 +42,7 @@ class Select(query.Query):
             str(self._columns),
             str(self._tables),
         )
-        return query.Query._appendExtensions(self, select)
+        return sqlPuzzle.queries.query.Query._appendExtensions(self, select)
     
     def _typeOfQuery(self):
         return 'SELECT'

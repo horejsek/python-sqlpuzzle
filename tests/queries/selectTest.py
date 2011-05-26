@@ -7,18 +7,17 @@
 
 import unittest
 
-import sqlPuzzle.conditions
 import sqlPuzzle.exceptions
-import sqlPuzzle.select
-import sqlPuzzle.query
+import sqlPuzzle.queries.select
+import sqlPuzzle.relations
 
 
 class SelectTest(unittest.TestCase):
     def setUp(self):
-        self.select = sqlPuzzle.select.Select()
+        self.select = sqlPuzzle.queries.select.Select()
 
     def tearDown(self):
-        self.select = sqlPuzzle.select.Select()
+        self.select = sqlPuzzle.queries.select.Select()
     
     def testSimply(self):
         self.select.columns('id', 'name')
@@ -58,7 +57,7 @@ class SelectTest(unittest.TestCase):
     def testWhere(self):
         self.select.from_('user')
         self.select.where(age=42)
-        self.select.where('name', 'Harry', sqlPuzzle.conditions.LIKE)
+        self.select.where('name', 'Harry', sqlPuzzle.relations.LIKE)
         self.select.where({
             'sex': 'male',
         })

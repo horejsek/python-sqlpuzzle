@@ -5,11 +5,11 @@
 # https://github.com/horejsek/sqlPuzzle
 #
 
-import query
-import delete
-import insert
-import select
-import update
+import sqlPuzzle.queries.query
+import sqlPuzzle.queries.delete
+import sqlPuzzle.queries.insert
+import sqlPuzzle.queries.select
+import sqlPuzzle.queries.update
 
 
 class SqlPuzzle:
@@ -17,7 +17,7 @@ class SqlPuzzle:
         """
         Initialization of SqlPuzzle.
         """
-        self.__query = query.Query()
+        self.__query = sqlPuzzle.queries.query.Query()
     
     # SELECT
     
@@ -25,7 +25,7 @@ class SqlPuzzle:
         """
         Set column(s) to select.
         """
-        self.__query = select.Select(*columns)
+        self.__query = sqlPuzzle.queries.select.Select(*columns)
         return self
     
     def limit(self, limit, offset=None):
@@ -48,7 +48,7 @@ class SqlPuzzle:
         """
         Set query to insert.
         """
-        self.__query = insert.Insert()
+        self.__query = sqlPuzzle.queries.insert.Insert()
         return self
     
     def into(self, table):
@@ -77,7 +77,7 @@ class SqlPuzzle:
         """
         Set table for update.
         """
-        self.__query = update.Update(table)
+        self.__query = sqlPuzzle.queries.update.Update(table)
         return self
     
     def set(self, *args, **kwargs):
@@ -93,7 +93,7 @@ class SqlPuzzle:
         """
         Set query to delete.
         """
-        self.__query = delete.Delete()
+        self.__query = sqlPuzzle.queries.delete.Delete()
         return self
     
     def deleteFrom(self, table):

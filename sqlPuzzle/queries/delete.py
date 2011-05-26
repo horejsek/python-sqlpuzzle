@@ -5,23 +5,23 @@
 # https://github.com/horejsek/sqlPuzzle
 #
 
-import exceptions
-import query
+import sqlPuzzle.exceptions
+import sqlPuzzle.queries.query
 
-import conditions
-import tables
+import sqlPuzzle.extensions.conditions
+import sqlPuzzle.extensions.tables
 
 
-class Delete(query.Query):
+class Delete(sqlPuzzle.queries.query.Query):
     def __init__(self):
         """
         Initialization of Delete.
         """
-        query.Query.__init__(self)
+        sqlPuzzle.queries.query.Query.__init__(self)
         
         self._setExtensions(
-            tables=tables.Tables(),
-            conditions=conditions.Conditions(),
+            tables = sqlPuzzle.extensions.tables.Tables(),
+            conditions = sqlPuzzle.extensions.conditions.Conditions(),
         )
         self._setPrintedExtensions('conditions')
         
@@ -32,12 +32,12 @@ class Delete(query.Query):
         Print query.
         """
         if not self._conditions.isSet() and not self.__allowDeleteAll:
-            raise exceptions.ConfirmDeleteAllException()
+            raise sqlPuzzle.exceptions.ConfirmDeleteAllException()
         
         delete = "DELETE FROM %s" % (
             str(self._tables),
         )
-        return query.Query._appendExtensions(self, delete)
+        return sqlPuzzle.queries.query.Query._appendExtensions(self, delete)
     
     def allowDeleteAll(self):
         self.__allowDeleteAll = True
