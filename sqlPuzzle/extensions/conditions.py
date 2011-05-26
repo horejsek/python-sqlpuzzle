@@ -84,6 +84,8 @@ class Condition:
 
 
 class Conditions:
+    _conditionObject = Condition
+    
     def __init__(self):
         """
         Initialization of Conditions.
@@ -97,6 +99,9 @@ class Conditions:
         if self.isSet():
             return "WHERE %s" % " AND ".join(str(condition) for condition in self.__conditions)
         return ""
+    
+    def _getConditions(self):
+        return self.__conditions
     
     def isSet(self):
         """
@@ -122,14 +127,14 @@ class Conditions:
         
         if list_ is not None:
             for c in list_:
-                condition = Condition()
+                condition = self._conditionObject()
                 condition.set(c[0], c[1])
                 if len(c) == 3:
                     condition.setRelation(c[2])
                 self.__conditions.append(condition)
         elif dict_ is not None:
             for c, v in dict_.iteritems():
-                condition = Condition()
+                condition = self._conditionObject()
                 condition.set(c, v)
                 self.__conditions.append(condition)
     

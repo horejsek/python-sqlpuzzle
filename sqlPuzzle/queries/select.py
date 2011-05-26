@@ -57,7 +57,21 @@ class Select(sqlPuzzle.queries.query.Query):
         """
         Set table(s) to query.
         """
-        self._tables.set(tables)
+        self._tables.set(*tables)
+        return self
+    
+    def join(self, table):
+        """
+        Join table.
+        """
+        self._tables.join(table)
+        return self
+    
+    def on(self, *args, **kwds):
+        """
+        Join on.
+        """
+        self._tables.on(*args, **kwds)
         return self
     
     def where(self, *args, **kwds):

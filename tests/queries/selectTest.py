@@ -28,6 +28,10 @@ class SelectTest(unittest.TestCase):
         self.select.from_('user')
         self.assertEqual(str(self.select), 'SELECT * FROM `user`')
     
+    def testJoin(self):
+        self.select.from_('user').join('country').on('user.country_id', 'country.id')
+        self.assertEqual(str(self.select), 'SELECT * FROM `user` JOIN `country` ON (`user`.`country_id` = `country`.`id`)')
+    
     def testOrderBy(self):
         self.select.from_('user')
         self.select.orderBy('id')

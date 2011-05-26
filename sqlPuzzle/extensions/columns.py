@@ -6,21 +6,21 @@
 #
 
 class Column:
-    def __init__(self, column=None, columnAs=None):
+    def __init__(self, column=None, as_=None):
         """
         Initialization of Column.
         """
         self.column(column)
-        self.columnAs(columnAs)
+        self.as_(as_)
     
     def __str__(self):
         """
         Print part of query.
         """
-        if self.__columnAs:
+        if self.__as:
             return '`%s` AS "%s"' % (
                 self.__column,
-                self.__columnAs,
+                self.__as,
             )
         else:
             return '`%s`' % self.__column
@@ -31,11 +31,11 @@ class Column:
         """
         self.__column = column
     
-    def columnAs(self, columnAs):
+    def as_(self, as_):
         """
         Set as.
         """
-        self.__columnAs = columnAs
+        self.__as = as_
 
 
 class Columns:
@@ -69,7 +69,7 @@ class Columns:
             if isinstance(arg, (list, tuple)) and 1 <= len(arg) <= 2:
                 column.column(arg[0])
                 if len(arg) == 2:
-                    column.columnAs(arg[1])
+                    column.as_(arg[1])
             else:
                 column.column(arg)
             self.__columns.append(column)
