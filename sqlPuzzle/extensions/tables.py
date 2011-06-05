@@ -11,17 +11,28 @@ import sqlPuzzle.extensions.conditions
 import sqlPuzzle.joinTypes
 
 
-def _addBackQuotes(value):
-    return '.'.join('`%s`' % i for i in re.split('`([^`]+)`|\.', value) if i)
-
 
 class On(sqlPuzzle.extensions.conditions.Condition):
     def __str__(self):
+        """
+        Print part of query.
+        """
         return '%s %s %s' % (
-            _addBackQuotes(self.getColumn()),
+            self._addBackQuotes(self.getColumn()),
             sqlPuzzle.relations.RELATIONS[self.getRelation()],
-            _addBackQuotes(self.getValue()),
+            self._addBackQuotes(self.getValue()),
         )
+
+    def _addBackQuotes(value):
+        """
+        Add quotes.
+        "table" => "`table`"
+        "table.column" => "`table`.`column`"
+        "table.col.umn" => "`table`.`col`.`umn`"
+        "table.`col.umn`" => "`table`.`col.umn`"
+        "`table`.`col.umn`" => "`table`.`col.umn`"
+        """
+        return '.'.join('`%s`' % i for i in re.split('`([^`]+)`|\.', value) if i)
 
 
 
@@ -29,6 +40,9 @@ class Ons(sqlPuzzle.extensions.conditions.Conditions):
     _conditionObject = On
     
     def __str__(self):
+        """
+        Print part of query.
+        """
         if self.isSet():
             return " AND ".join(str(condition) for condition in self._getConditions())
         return ""
@@ -73,6 +87,10 @@ class Table:
         return table
     
     def __minimizeJoins(self):
+        """
+        Minimize of joins.
+        Left/right and inner join of the same join is only inner join.
+        """
         joinsGroup = {}
         for join in self.__joins:
             joinStr = '%s %s' % (str(join['table']), str(join['on']))
