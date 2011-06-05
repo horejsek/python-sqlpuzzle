@@ -18,6 +18,8 @@ def parseArgsToListOfTuples(options={}, *args, **kwds):
             items is by default set to None. (default: 1)
         bool allowDict: Flag allowing dictionary as first (and only one)
             argument or dictinary as **kwds. (default: False)
+        bool allowList: Flag allowing list as first (and only one) argument.
+            (default: False)
     }
     
     Examples:
@@ -39,6 +41,7 @@ def parseArgsToListOfTuples(options={}, *args, **kwds):
     minItems = options.get('minItems', 1)
     maxItems = options.get('maxItems', 1)
     allowDict = options.get('allowDict', False)
+    allowList = options.get('allowList', False)
     
     result = []
     
@@ -69,7 +72,11 @@ def parseArgsToListOfTuples(options={}, *args, **kwds):
             result.append(__createTuple(args, maxItems))
     
     if not result:
-        for arg in args:
+        list_ = args
+        if allowList and len(args) == 1 and isinstance(args[0], (list, tuple)):
+            list_ = args[0]
+        
+        for arg in list_:
             if isinstance(arg, (list, tuple)):
                 result.append(__createTuple(arg, maxItems))
             elif isinstance(arg, (str, unicode, int, long, bool)):

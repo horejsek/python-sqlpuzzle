@@ -5,6 +5,7 @@
 # https://github.com/horejsek/sqlPuzzle
 #
 
+import sqlPuzzle.argsParser
 import sqlPuzzle.sqlValue
 
 
@@ -43,22 +44,10 @@ class Values:
         """
         Set columns.
         """
-        list_ = None
-        dict_ = None
-        
-        if len(args) == 1 and isinstance(args[0], (list, tuple)):
-            list_ = args[0]
-        elif len(args) == 1 and isinstance(args[0], dict):
-            dict_ = args[0]
-        elif len(args) == 2:
-            list_ = (args,)
-        elif kwds is not None:
-            dict_ = kwds
-        
-        if list_ is not None:
-            self.__values.update(dict(list_))
-        elif dict_ is not None:
-            self.__values.update(dict_)
-        
+        self.__values.update(dict(
+            sqlPuzzle.argsParser.parseArgsToListOfTuples(
+                {'minItems': 2, 'maxItems': 2, 'allowDict': True, 'allowList': True}, *args, **kwds
+            )
+        ))
         return self
 

@@ -72,6 +72,10 @@ class ArgsParserTest(unittest.TestCase):
     
     def testAllowDictionaryKwds(self):
         self.assertEqual(parser({'allowDict': True, 'maxItems': 2}, key=1), [('key', 1)])
+    
+    
+    def testAllowList(self):
+        self.assertEqual(parser({'allowList': True}, (1, 2, 3)), [(1,), (2,), (3,)])
         
         
 
