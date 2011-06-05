@@ -23,7 +23,7 @@ class On(sqlPuzzle.extensions.conditions.Condition):
             self._addBackQuotes(self.getValue()),
         )
 
-    def _addBackQuotes(value):
+    def _addBackQuotes(self, value):
         """
         Add quotes.
         "table" => "`table`"
