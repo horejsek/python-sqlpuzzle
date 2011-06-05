@@ -26,3 +26,11 @@ class ConfirmDeleteAllException(Exception):
     def __str__(self):
         return "Are you sure, that you want delete all records?"
 
+
+class ArgsParserException(Exception):
+    def __init__(self, msg):
+        self.msg = msg
+    
+    def __str__(self):
+        return self.msg
+

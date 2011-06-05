@@ -15,6 +15,7 @@ import extensions.orderByTest
 import extensions.tablesTest
 import extensions.valuesTest
 
+import argsParserTest
 import sqlPuzzleTest
 import sqlValueTest
 
@@ -34,6 +35,7 @@ if __name__ == '__main__':
         extensions.tablesTest.TablesTest,
         extensions.valuesTest.ValuesTest,
         
+        argsParserTest.ArgsParserTest,
         sqlValueTest.SqlValueTest,
         sqlPuzzleTest.SqlPuzzleTest,
     )
