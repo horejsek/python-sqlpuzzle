@@ -5,6 +5,7 @@
 # https://github.com/horejsek/sqlPuzzle
 #
 
+import sqlPuzzle.argsParser
 import sqlPuzzle.sqlValue
 import sqlPuzzle.relations
 
@@ -113,30 +114,16 @@ class Conditions:
         """
         Set condition(s).
         """
-        list_ = None
-        dict_ = None
+        for arg in sqlPuzzle.argsParser.parseArgsToListOfTuples(
+            {'minItems': 2, 'maxItems': 3, 'allowDict': True, 'allowList': True},
+            *args,
+            **kwds
+        ):
+            condition = self._conditionObject()
+            condition.set(*arg)
+            self.__conditions.append(condition)
         
-        if len(args) == 1 and isinstance(args[0], (list, tuple)):
-            list_ = args[0]
-        elif len(args) == 1 and isinstance(args[0], dict):
-            dict_ = args[0]
-        elif 2 <= len(args) <= 3:
-            list_ = (args,)
-        elif kwds is not None:
-            dict_ = kwds
-        
-        if list_ is not None:
-            for c in list_:
-                condition = self._conditionObject()
-                condition.set(c[0], c[1])
-                if len(c) == 3:
-                    condition.setRelation(c[2])
-                self.__conditions.append(condition)
-        elif dict_ is not None:
-            for c, v in dict_.iteritems():
-                condition = self._conditionObject()
-                condition.set(c, v)
-                self.__conditions.append(condition)
+        return self
     
     def remove(self, *keys):
         """
