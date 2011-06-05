@@ -5,8 +5,11 @@
 # https://github.com/horejsek/sqlPuzzle
 #
 
+import sqlPuzzle.argsParser
+
+
 class Order:
-    def __init__(self, column=None, sort='ASC'):
+    def __init__(self, column=None, sort=None):
         """
         Initialization of Order.
         """
@@ -35,6 +38,9 @@ class Order:
         """
         Set type of sort (ASC or DESC).
         """
+        if sort is None:
+            sort = 'ASC'
+        
         sort = sort.upper()
         if sort in ('ASC', 'DESC'):
             self.__sort = sort
@@ -66,14 +72,8 @@ class OrderBy:
         """
         Set ORDER BY.
         """
-        for arg in args:
-            order = Order()
-            if isinstance(arg, (list, tuple)) and 1 <= len(arg) <= 2:
-                order.column(arg[0])
-                if len(arg) == 2:
-                    order.sort(arg[1])
-            else:
-                order.column(arg)
+        for arg in sqlPuzzle.argsParser.parseArgsToListOfTuples({'maxItems': 2}, *args):
+            order = Order(*arg)
             self.__orderBy.append(order)
         
         return self

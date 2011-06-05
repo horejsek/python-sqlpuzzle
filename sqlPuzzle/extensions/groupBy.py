@@ -5,6 +5,7 @@
 # https://github.com/horejsek/sqlPuzzle
 #
 
+import sqlPuzzle.argsParser
 import sqlPuzzle.extensions.orderBy
 
 
@@ -36,14 +37,8 @@ class GroupBy:
         """
         Set GROUP BY.
         """
-        for arg in args:
-            group = Group()
-            if isinstance(arg, (list, tuple)) and 1 <= len(arg) <= 2:
-                group.column(arg[0])
-                if len(arg) == 2:
-                    group.sort(arg[1])
-            else:
-                group.column(arg)
+        for arg in sqlPuzzle.argsParser.parseArgsToListOfTuples({'maxItems': 2}, *args):
+            group = Group(*arg)
             self.__groupBy.append(group)
         
         return self

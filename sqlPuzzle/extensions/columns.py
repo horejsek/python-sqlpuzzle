@@ -5,6 +5,9 @@
 # https://github.com/horejsek/sqlPuzzle
 #
 
+import sqlPuzzle.argsParser
+
+
 class Column:
     def __init__(self, column=None, as_=None):
         """
@@ -64,14 +67,8 @@ class Columns:
         """
         Set columns.
         """
-        for arg in args:
-            column = Column()
-            if isinstance(arg, (list, tuple)) and 1 <= len(arg) <= 2:
-                column.column(arg[0])
-                if len(arg) == 2:
-                    column.as_(arg[1])
-            else:
-                column.column(arg)
+        for arg in sqlPuzzle.argsParser.parseArgsToListOfTuples({'maxItems': 2}, *args):
+            column = Column(*arg)
             self.__columns.append(column)
         
         return self
