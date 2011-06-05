@@ -6,6 +6,7 @@
 #
 
 import sqlPuzzle.extensions.conditions
+import sqlPuzzle.joinTypes
 
 
 class On(sqlPuzzle.extensions.conditions.Condition):
@@ -43,7 +44,7 @@ class Table:
         Print part of query.
         """
         if self.__as:
-            table = '`%s` AS "%s"' % (
+            table = '`%s` AS `%s`' % (
                 self.__table,
                 self.__as,
             )
@@ -54,11 +55,21 @@ class Table:
             table = '%s %s' % (
                 table,
                 ' '.join([
-                    'JOIN `%s` ON (%s)' % (join[0], str(join[1])) for join in self.__join
+                    '%s %s ON (%s)' % (
+                        sqlPuzzle.joinTypes.JOIN_TYPES[join['type']],
+                        str(join['table']),
+                        str(join['on'])
+                    ) for join in self.__join
                 ])
             )
         
         return table
+    
+    def isSimple(self):
+        """
+        Is set table without join?
+        """
+        return self.__join == []
     
     def table(self, table):
         """
@@ -72,22 +83,28 @@ class Table:
         """
         self.__as = as_
     
-    def join(self, table):
+    def join(self, arg, joinType=sqlPuzzle.joinTypes.INNER_JOIN):
         """
         Join table.
         """
-        self.__join.append([
-            table, None
-        ])
+        if isinstance(arg, (list, tuple)) and len(arg) == 2:
+            table = arg[0]
+            as_ = arg[1]
+        else:
+            table = arg
+            as_ = None
+        
+        self.__join.append({
+            'type': joinType,
+            'table': Table(table, as_),
+            'on': None,
+        })
     
     def on(self, condition):
         """
         Join on.
         """
-        for join in self.__join:
-            if join[1] == None:
-                join[1] = condition
-                break
+        self.__join[-1]['on'] = condition
 
 
 class Tables:
@@ -111,9 +128,9 @@ class Tables:
     
     def isSimple(self):
         """
-        Is set only one table?
+        Is set only one table without join?
         """
-        return len(self.__tables) == 1
+        return len(self.__tables) == 1 and self.__tables[0].isSimple()
     
     def set(self, *args):
         """
@@ -134,11 +151,33 @@ class Tables:
         
         return self
     
-    def join(self, table):
+    def join(self, arg):
         """
         Join table.
         """
-        self.__tables[-1].join(table)
+        self.__tables[-1].join(arg, sqlPuzzle.joinTypes.INNER_JOIN)
+        return self
+    
+    def innerJoin(self, arg):
+        """
+        Inner join table.
+        """
+        self.__tables[-1].join(arg, sqlPuzzle.joinTypes.INNER_JOIN)
+        return self
+    
+    def leftJoin(self, arg):
+        """
+        Left join table.
+        """
+        self.__tables[-1].join(arg, sqlPuzzle.joinTypes.LEFT_JOIN)
+        return self
+    
+    def rightJoin(self, arg):
+        """
+        Right join table.
+        """
+        self.__tables[-1].join(arg, sqlPuzzle.joinTypes.RIGHT_JOIN)
+        return self
     
     def on(self, *args, **kwds):
         """
@@ -148,4 +187,5 @@ class Tables:
         condition.where(*args, **kwds)
         
         self.__tables[-1].on(condition)
+        return self
 

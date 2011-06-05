@@ -12,6 +12,7 @@ import extensions.conditionsTest
 import extensions.groupByTest
 import extensions.limitTest
 import extensions.orderByTest
+import extensions.tablesTest
 import extensions.valuesTest
 
 import sqlPuzzleTest
@@ -30,6 +31,7 @@ if __name__ == '__main__':
         extensions.groupByTest.GroupByTest,
         extensions.limitTest.LimitTest,
         extensions.orderByTest.OrderByTest,
+        extensions.tablesTest.TablesTest,
         extensions.valuesTest.ValuesTest,
         
         sqlValueTest.SqlValueTest,
