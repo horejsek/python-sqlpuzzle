@@ -1,28 +1,23 @@
 
 ########################
-due: 29.5. | version: beta
+due: 9.6. | version: beta
 
-- implementovat joiny
 - vyjimky
 - testovat chybne pouziti
-
-########################
-due: 5.6. | version: 1.0
-
 - clearovaci metoda
   setovani napriklad podminek nebude predchozi mazat, ale jen pridavat
-- SQL_CACHE, SQL_NO_CACHE
-- SQL_CALC_FOUND_ROWS
-- INTO OUTFILE
-- ON DUPLICATE KEY UPDATE
 
 ########################
-due: ? | version: ?
+due: ? | version: 1.0
 
 - vnorene podminky
 - HAVING
 - USING
 - AVG, SUM, ...
+- SQL_CACHE, SQL_NO_CACHE
+- SQL_CALC_FOUND_ROWS
+- INTO OUTFILE
+- ON DUPLICATE KEY UPDATE
 
 ########################
 due: ? | version: 2.0/3.0
