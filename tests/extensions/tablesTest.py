@@ -26,6 +26,16 @@ class TablesTest(unittest.TestCase):
         self.tables.set(('table', 't1'))
         self.assertEqual(str(self.tables), '`table` AS `t1`')
     
+    def testSimpleJoinNameWithDot1(self):
+        self.tables.set('t')
+        self.tables.join('a.b').on('t.id', '`a.b`.id')
+        self.assertEqual(str(self.tables), '`t` JOIN `a.b` ON (`t`.`id` = `a.b`.`id`)')
+    
+    def testSimpleJoinNameWithDot2(self):
+        self.tables.set('t')
+        self.tables.join('a').on('t.id', 'a.`b.id`')
+        self.assertEqual(str(self.tables), '`t` JOIN `a` ON (`t`.`id` = `a`.`b.id`)')
+    
     def testMoreTables(self):
         self.tables.set('user', 'country')
         self.assertEqual(str(self.tables), '`user`, `country`')

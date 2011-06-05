@@ -5,16 +5,22 @@
 # https://github.com/horejsek/sqlPuzzle
 #
 
+import re
+
 import sqlPuzzle.extensions.conditions
 import sqlPuzzle.joinTypes
 
 
+def _addBackQuotes(value):
+    return '.'.join('`%s`' % i for i in re.split('`([^`]+)`|\.', value) if i)
+
+
 class On(sqlPuzzle.extensions.conditions.Condition):
     def __str__(self):
-        return '`%s` %s `%s`' % (
-            self.getColumn().replace('.', '`.`', 1),
+        return '%s %s %s' % (
+            _addBackQuotes(self.getColumn()),
             sqlPuzzle.relations.RELATIONS[self.getRelation()],
-            self.getValue().replace('.', '`.`', 1),
+            _addBackQuotes(self.getValue()),
         )
 
 
@@ -37,7 +43,7 @@ class Table:
         self.table(table)
         self.as_(as_)
         
-        self.__join = []
+        self.__joins = []
     
     def __str__(self):
         """
@@ -51,7 +57,8 @@ class Table:
         else:
             table = '`%s`' % self.__table
         
-        if self.__join != []:
+        if self.__joins != []:
+            self.__minimizeJoins()
             table = '%s %s' % (
                 table,
                 ' '.join([
@@ -59,17 +66,32 @@ class Table:
                         sqlPuzzle.joinTypes.JOIN_TYPES[join['type']],
                         str(join['table']),
                         str(join['on'])
-                    ) for join in self.__join
+                    ) for join in self.__joins
                 ])
             )
         
         return table
     
+    def __minimizeJoins(self):
+        joinsGroup = {}
+        for join in self.__joins:
+            joinStr = '%s %s' % (str(join['table']), str(join['on']))
+            joinsGroup[joinStr] = joinsGroup.get(joinStr, [])
+            joinsGroup[joinStr].append(join)
+        
+        self.__joins = []
+        for joinStr, joins in joinsGroup.iteritems():
+            if len(joins) > 1 and any(bool(join['type'] == sqlPuzzle.joinTypes.INNER_JOIN) for join in joins):
+                joins[0]['type'] = sqlPuzzle.joinTypes.INNER_JOIN
+                self.__joins.append(joins[0])
+            else:
+                self.__joins.extend(joins)
+        
     def isSimple(self):
         """
         Is set table without join?
         """
-        return self.__join == []
+        return self.__joins == []
     
     def table(self, table):
         """
@@ -88,15 +110,13 @@ class Table:
         Join table.
         """
         if isinstance(arg, (list, tuple)) and len(arg) == 2:
-            table = arg[0]
-            as_ = arg[1]
+            table = Table(*arg)
         else:
-            table = arg
-            as_ = None
+            table = Table(arg)
         
-        self.__join.append({
+        self.__joins.append({
             'type': joinType,
-            'table': Table(table, as_),
+            'table': table,
             'on': None,
         })
     
@@ -104,7 +124,7 @@ class Table:
         """
         Join on.
         """
-        self.__join[-1]['on'] = condition
+        self.__joins[-1]['on'] = condition
 
 
 class Tables:
