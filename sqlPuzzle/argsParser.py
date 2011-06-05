@@ -65,7 +65,7 @@ def parseArgsToListOfTuples(options={}, *args, **kwds):
             raise sqlPuzzle.exceptions.ArgsParserException('Dictionary or kwds is disabled.')
     
     if not result:
-        if minItems == 1 and minItems <= len(args) <= maxItems and not isinstance(args[0], (list, tuple)):
+        if minItems > 1 and minItems <= len(args) <= maxItems and not isinstance(args[0], (list, tuple)):
             result.append(__createTuple(args, maxItems))
     
     if not result:

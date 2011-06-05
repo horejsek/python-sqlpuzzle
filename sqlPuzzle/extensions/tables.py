@@ -7,6 +7,7 @@
 
 import re
 
+import sqlPuzzle.argsParser
 import sqlPuzzle.extensions.conditions
 import sqlPuzzle.joinTypes
 
@@ -174,17 +175,10 @@ class Tables:
         """
         Set tables.
         """
-        for arg in args:
-            if arg is None:
-                continue
-            
-            table = Table()
-            if isinstance(arg, (list, tuple)) and 1 <= len(arg) <= 2:
-                table.table(arg[0])
-                if len(arg) == 2:
-                    table.as_(arg[1])
-            else:
-                table.table(arg)
+        args = [arg for arg in args if arg]
+        
+        for arg in sqlPuzzle.argsParser.parseArgsToListOfTuples({'maxItems': 2}, *args):
+            table = Table(*arg)
             self.__tables.append(table)
         
         return self

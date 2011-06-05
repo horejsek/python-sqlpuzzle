@@ -38,10 +38,13 @@ class ArgsParserTest(unittest.TestCase):
         self.assertEqual(parser({'maxItems': 2}, 1), [(1, None)])
     
     def testMax2Args2(self):
-        self.assertEqual(parser({'maxItems': 2}, 1, 2), [(1, 2)])
+        self.assertEqual(parser({'maxItems': 2}, 1, 2), [(1, None), (2, None)])
     
     def testMax2Args3(self):
         self.assertEqual(parser({'maxItems': 2}, 1, 2, 3), [(1, None), (2, None), (3, None)])
+    
+    def testMax2(self):
+        self.assertEqual(parser({'maxItems': 2}, (1, 2), 3), [(1, 2), (3, None)])
     
     
     def testMin2Max1Exception(self):
@@ -52,7 +55,7 @@ class ArgsParserTest(unittest.TestCase):
         self.assertRaises(sqlPuzzle.exceptions.ArgsParserException, parser, {'minItems': 2, 'maxItems': 2}, 1)
     
     def testMin2Args2Exception(self):
-        self.assertRaises(sqlPuzzle.exceptions.ArgsParserException, parser, {'minItems': 2, 'maxItems': 2}, 1, 2)
+        self.assertEqual(parser({'minItems': 2, 'maxItems': 2}, 1, 2), [(1, 2)])
     
     def testMin2Tuple(self):
         self.assertEqual(parser({'minItems': 2, 'maxItems': 2}, (1, 2)), [(1, 2)])
