@@ -25,13 +25,13 @@ class ArgsParserTest(unittest.TestCase):
         self.assertEqual(parser({}, (1,)), [(1,)])
     
     def testDefaultKwdsException(self):
-        self.assertRaises(sqlPuzzle.exceptions.ArgsParserException, parser, {}, arg=1)
+        self.assertRaises(sqlPuzzle.exceptions.SqlPuzzleException, parser, {}, arg=1)
     
     def testDefaultDictionaryException(self):
-        self.assertRaises(sqlPuzzle.exceptions.ArgsParserException, parser, {}, {'key': 1})
+        self.assertRaises(sqlPuzzle.exceptions.SqlPuzzleException, parser, {}, {'key': 1})
         
     def testDefaultTooManyException(self):
-        self.assertRaises(sqlPuzzle.exceptions.ArgsParserException, parser, {}, (1, 2))
+        self.assertRaises(sqlPuzzle.exceptions.SqlPuzzleException, parser, {}, (1, 2))
     
     
     def testMax2Args1(self):
@@ -48,11 +48,11 @@ class ArgsParserTest(unittest.TestCase):
     
     
     def testMin2Max1Exception(self):
-        self.assertRaises(sqlPuzzle.exceptions.ArgsParserException, parser, {'minItems': 2})
+        self.assertRaises(sqlPuzzle.exceptions.SqlPuzzleException, parser, {'minItems': 2})
     
     
     def testMin2Args1Exception(self):
-        self.assertRaises(sqlPuzzle.exceptions.ArgsParserException, parser, {'minItems': 2, 'maxItems': 2}, 1)
+        self.assertRaises(sqlPuzzle.exceptions.SqlPuzzleException, parser, {'minItems': 2, 'maxItems': 2}, 1)
     
     def testMin2Args2Exception(self):
         self.assertEqual(parser({'minItems': 2, 'maxItems': 2}, 1, 2), [(1, 2)])
@@ -62,10 +62,10 @@ class ArgsParserTest(unittest.TestCase):
     
     
     def testAllowDictionaryExceptionTooFew(self):
-        self.assertRaises(sqlPuzzle.exceptions.ArgsParserException, parser, {'allowDict': True}, 1)
+        self.assertRaises(sqlPuzzle.exceptions.SqlPuzzleException, parser, {'allowDict': True}, 1)
     
     def testAllowDictionaryException(self):
-        self.assertRaises(sqlPuzzle.exceptions.ArgsParserException, parser, {'allowDict': True, 'maxItems': 2}, {'key': 1}, 2)
+        self.assertRaises(sqlPuzzle.exceptions.SqlPuzzleException, parser, {'allowDict': True, 'maxItems': 2}, {'key': 1}, 2)
     
     def testAllowDictionary(self):
         self.assertEqual(parser({'allowDict': True, 'maxItems': 2}, {'key': 1}), [('key', 1)])

@@ -6,6 +6,20 @@
 #
 
 import datetime
+import re
+
+
+def addBackQuotes(value):
+    """
+    Add quotes.
+    "table" => "`table`"
+    "table.column" => "`table`.`column`"
+    "table.col.umn" => "`table`.`col`.`umn`"
+    "table.`col.umn`" => "`table`.`col.umn`"
+    "`table`.`col.umn`" => "`table`.`col.umn`"
+    """
+    return '.'.join('`%s`' % i for i in re.split('`([^`]+)`|\.', value) if i)
+
 
 
 class SqlValue:

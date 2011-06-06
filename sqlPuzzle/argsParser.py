@@ -5,7 +5,7 @@
 # https://github.com/horejsek/sqlPuzzle
 #
 
-import sqlPuzzle.exceptions
+from sqlPuzzle.exceptions import SqlPuzzleException
 
 
 def parseArgsToListOfTuples(options={}, *args, **kwds):
@@ -20,6 +20,9 @@ def parseArgsToListOfTuples(options={}, *args, **kwds):
             argument or dictinary as **kwds. (default: False)
         bool allowList: Flag allowing list as first (and only one) argument.
             (default: False)
+        tuple allowedDataTypes: Allowed data types. You can set global, e.g. (str,)
+            or for each index, e.g. ((str,), (int, long), (str, unicode)).
+            (default: (str, unicode, int, long, bool))
     }
     
     Examples:
@@ -42,14 +45,15 @@ def parseArgsToListOfTuples(options={}, *args, **kwds):
     maxItems = options.get('maxItems', 1)
     allowDict = options.get('allowDict', False)
     allowList = options.get('allowList', False)
+    allowedDataTypes = options.get('allowedDataTypes', (str, unicode, int, long, bool))
     
     result = []
     
     if minItems > maxItems:
-        raise sqlPuzzle.exceptions.ArgsParserException('maxItems must be bigger, than minItems.')
+        raise SqlPuzzleException('maxItems must be bigger, than minItems.')
     
     if allowDict and maxItems <= 1:
-        raise sqlPuzzle.exceptions.ArgsParserException('For allowDict must be maxItems bigger or equal to 2.')
+        raise SqlPuzzleException('For allowDict must be maxItems bigger or equal to 2.')
 
     if allowDict:
         dict_ = {}
@@ -57,7 +61,7 @@ def parseArgsToListOfTuples(options={}, *args, **kwds):
             if len(args) == 1:
                 dict_ = args[0]
             else:
-                raise sqlPuzzle.exceptions.ArgsParserException('Dictionary must be only one argument.')
+                raise SqlPuzzleException('Dictionary must be only one argument.')
         elif kwds != {}:
             dict_ = kwds
         
@@ -65,7 +69,7 @@ def parseArgsToListOfTuples(options={}, *args, **kwds):
             result.append(__createTuple(arg, maxItems))
     else:
         if (len(args) == 1 and isinstance(args[0], dict)) or kwds != {}:
-            raise sqlPuzzle.exceptions.ArgsParserException('Dictionary or kwds is disabled.')
+            raise SqlPuzzleException('Dictionary or kwds is disabled.')
     
     if not result:
         if minItems > 1 and minItems <= len(args) <= maxItems and not isinstance(args[0], (list, tuple)):
@@ -78,27 +82,45 @@ def parseArgsToListOfTuples(options={}, *args, **kwds):
         
         for arg in list_:
             if isinstance(arg, (list, tuple)):
-                result.append(__createTuple(arg, maxItems))
-            elif isinstance(arg, (str, unicode, int, long, bool)):
-                if minItems == 1:
-                    result.append(__createTuple((arg,), maxItems))
-                else:
-                    raise sqlPuzzle.exceptions.ArgsParserException('Too few arguments.')
+                values = __createTuple(arg, maxItems)
+            elif minItems == 1:
+                values = __createTuple((arg,), maxItems)
             else:
-                raise sqlPuzzle.exceptions.ArgsParserException('Unsupported argument.')
+                raise SqlPuzzleException('Too few arguments.')
+            
+            if __validate(values, allowedDataTypes):
+                result.append(values)
+            else:
+                raise SqlPuzzleException('Unsupported arguments.')
 
     return result
 
 
 
-def __createTuple(list_, length):
+def __createTuple(values, length):
     """
     From list/tuple create tuple with `length` items. Default value is None.
     If is in list_ more items, than say length => raise.
     """
-    if len(list_) > length:
-        raise sqlPuzzle.exceptions.ArgsParserException('Too many arguments.')
-    return tuple(list_) + (None,)*(length-len(list_))
+    if len(values) > length:
+        raise SqlPuzzleException('Too many arguments.')
+    return tuple(values) + (None,)*(length-len(values))
 
+
+
+def __validate(values, allowedDataTypes):
+    """
+    Validate tuple on data types.
+    """
+    if not isinstance(allowedDataTypes, (tuple, list)):
+        raise qlPuzzleException('Invalid options for argsParser.')
+    
+    for x, item in enumerate(values):
+        dataTypes = allowedDataTypes
+        if isinstance(allowedDataTypes[0], (tuple, list)):
+            dataTypes = allowedDataTypes[x]
+        if item is not None and not isinstance(item, dataTypes):
+            return False
+    return True
 
 

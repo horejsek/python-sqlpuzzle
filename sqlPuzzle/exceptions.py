@@ -5,6 +5,14 @@
 # https://github.com/horejsek/sqlPuzzle
 #
 
+class SqlPuzzleException(Exception):
+    def __init__(self, message):
+        self.message = message
+    
+    def __str__(self):
+        return "SqlPuzzleException: %s" % self.message
+
+
 class NotSupprotedException(Exception):
     def __init__(self, method, typeOfQuery):
         self.method = method
@@ -25,12 +33,4 @@ class ConfirmUpdateAllException(Exception):
 class ConfirmDeleteAllException(Exception):
     def __str__(self):
         return "Are you sure, that you want delete all records?"
-
-
-class ArgsParserException(Exception):
-    def __init__(self, msg):
-        self.msg = msg
-    
-    def __str__(self):
-        return self.msg
 

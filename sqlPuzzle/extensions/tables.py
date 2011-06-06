@@ -5,11 +5,10 @@
 # https://github.com/horejsek/sqlPuzzle
 #
 
-import re
-
 import sqlPuzzle.argsParser
 import sqlPuzzle.extensions.conditions
 import sqlPuzzle.joinTypes
+import sqlPuzzle.sqlValue
 
 
 
@@ -19,21 +18,10 @@ class On(sqlPuzzle.extensions.conditions.Condition):
         Print part of query.
         """
         return '%s %s %s' % (
-            self._addBackQuotes(self.getColumn()),
+            sqlPuzzle.sqlValue.addBackQuotes(self.getColumn()),
             sqlPuzzle.relations.RELATIONS[self.getRelation()],
-            self._addBackQuotes(self.getValue()),
+            sqlPuzzle.sqlValue.addBackQuotes(self.getValue()),
         )
-
-    def _addBackQuotes(self, value):
-        """
-        Add quotes.
-        "table" => "`table`"
-        "table.column" => "`table`.`column`"
-        "table.col.umn" => "`table`.`col`.`umn`"
-        "table.`col.umn`" => "`table`.`col.umn`"
-        "`table`.`col.umn`" => "`table`.`col.umn`"
-        """
-        return '.'.join('`%s`' % i for i in re.split('`([^`]+)`|\.', value) if i)
 
 
 
