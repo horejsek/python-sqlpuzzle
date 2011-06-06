@@ -20,7 +20,11 @@ class Values:
         """
         Print values (part of query).
         """
-        return ', '.join('`%s` = %s' % (column, str(sqlPuzzle.sqlValue.SqlValue(value))) for column, value in self.__values.iteritems())
+        return ', '.join(
+            '`%s` = %s' % (column, str(sqlPuzzle.sqlValue.SqlValue(value)))
+            for column, value in
+            self.__values.iteritems()
+        )
     
     def columns(self):
         """
@@ -46,7 +50,14 @@ class Values:
         """
         self.__values.update(dict(
             sqlPuzzle.argsParser.parseArgsToListOfTuples(
-                {'minItems': 2, 'maxItems': 2, 'allowDict': True, 'allowList': True}, *args, **kwds
+                {
+                    'minItems': 2,
+                    'maxItems': 2,
+                    'allowDict': True,
+                    'allowList': True,
+                    'allowedDataTypes': ((str, unicode), (str, unicode, int, long, float, bool)),
+                },
+                *args, **kwds
             )
         ))
         return self

@@ -7,6 +7,7 @@
 
 import unittest
 
+import sqlPuzzle.exceptions
 import sqlPuzzle.extensions.values
 
 
@@ -49,6 +50,27 @@ class ValuesTest(unittest.TestCase):
     def testValuesByKwargs(self):
         self.values.set(name='Alan')
         self.assertEqual(str(self.values), '`name` = "Alan"')
+    
+    def testColumnAsIntegerException(self):
+        self.assertRaises(sqlPuzzle.exceptions.SqlPuzzleException, self.values.set, 42, 'val')
+    
+    def testColumnAsFloatException(self):
+        self.assertRaises(sqlPuzzle.exceptions.SqlPuzzleException, self.values.set, 42.1, 'val')
+    
+    def testColumnAsBooleanException(self):
+        self.assertRaises(sqlPuzzle.exceptions.SqlPuzzleException, self.values.set, True, 'val')
+    
+    def testValueAsInteger(self):
+        self.values.set('col', 42)
+        self.assertEqual(str(self.values), '`col` = 42')
+    
+    def testValueAsFloat(self):
+        self.values.set('col', 42.1)
+        self.assertEqual(str(self.values), '`col` = 42.10000')
+    
+    def testValueAsBoolean(self):
+        self.values.set('col', True)
+        self.assertEqual(str(self.values), '`col` = 1')
     
     def testIsSet(self):
         self.assertEqual(self.values.isSet(), False)

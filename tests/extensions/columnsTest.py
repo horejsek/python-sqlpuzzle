@@ -7,6 +7,7 @@
 
 import unittest
 
+import sqlPuzzle.exceptions
 import sqlPuzzle.extensions.columns
 
 

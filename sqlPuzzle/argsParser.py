@@ -66,14 +66,16 @@ def parseArgsToListOfTuples(options={}, *args, **kwds):
             dict_ = kwds
         
         for arg in dict_.iteritems():
-            result.append(__createTuple(arg, maxItems))
+            values = __createTuple(arg, maxItems)
+            __appendIfOk(result, values, allowedDataTypes)
     else:
         if (len(args) == 1 and isinstance(args[0], dict)) or kwds != {}:
             raise SqlPuzzleException('Dictionary or kwds is disabled.')
     
     if not result:
         if minItems > 1 and minItems <= len(args) <= maxItems and not isinstance(args[0], (list, tuple)):
-            result.append(__createTuple(args, maxItems))
+            values = __createTuple(args, maxItems)
+            __appendIfOk(result, values, allowedDataTypes)
     
     if not result:
         list_ = args
@@ -87,11 +89,7 @@ def parseArgsToListOfTuples(options={}, *args, **kwds):
                 values = __createTuple((arg,), maxItems)
             else:
                 raise SqlPuzzleException('Too few arguments.')
-            
-            if __validate(values, allowedDataTypes):
-                result.append(values)
-            else:
-                raise SqlPuzzleException('Unsupported arguments.')
+            __appendIfOk(result, values, allowedDataTypes)
 
     return result
 
@@ -108,12 +106,22 @@ def __createTuple(values, length):
 
 
 
+def __appendIfOk(data, values, allowedDataTypes):
+    """
+    Append tuple into result, if tuple is ok.
+    """
+    if __validate(values, allowedDataTypes):
+        data.append(values)
+    else:
+        raise SqlPuzzleException('Unsupported arguments.')
+
+
 def __validate(values, allowedDataTypes):
     """
     Validate tuple on data types.
     """
     if not isinstance(allowedDataTypes, (tuple, list)):
-        raise qlPuzzleException('Invalid options for argsParser.')
+        raise SqlPuzzleException('Invalid options for argsParser.')
     
     for x, item in enumerate(values):
         dataTypes = allowedDataTypes
