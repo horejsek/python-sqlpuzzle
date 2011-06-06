@@ -18,28 +18,44 @@ class GroupBy:
         """
         Initialization of GroupBy.
         """
-        self.__groupBy = []
+        self._groupBy = []
     
     def __str__(self):
         """
         Print order (part of query).
         """
-        groupBy = "GROUP BY %s" % ', '.join(str(group) for group in self.__groupBy)
+        groupBy = "GROUP BY %s" % ', '.join(str(group) for group in self._groupBy)
         return groupBy
+    
+    def __contains__(self, item):
+        for group in self._groupBy:
+            if item._column == group._column:
+                return True
+        return False
+    
+    def __changeSorting(self, columnName, sort):
+        for group in self._groupBy:
+            if group._column == columnName:
+                group.sort(sort)
     
     def isSet(self):
         """
         Is groupBy set?
         """
-        return self.__groupBy != []
+        return self._groupBy != []
     
     def groupBy(self, *args):
         """
         Set GROUP BY.
         """
-        for arg in sqlPuzzle.argsParser.parseArgsToListOfTuples({'maxItems': 2}, *args):
-            group = Group(*arg)
-            self.__groupBy.append(group)
+        for columnName, sort in sqlPuzzle.argsParser.parseArgsToListOfTuples(
+            {'maxItems': 2, 'allowedDataTypes': (str, unicode)}, *args
+        ):
+            group = Group(columnName, sort)
+            if group not in self:
+                self._groupBy.append(group)
+            else:
+                self.__changeSorting(columnName, sort)
         
         return self
 

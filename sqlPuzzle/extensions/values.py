@@ -14,7 +14,7 @@ class Values:
         """
         Initialization of Values.
         """
-        self.__values = {}
+        self._values = {}
     
     def __str__(self):
         """
@@ -23,32 +23,32 @@ class Values:
         return ', '.join(
             '`%s` = %s' % (column, str(sqlPuzzle.sqlValue.SqlValue(value)))
             for column, value in
-            self.__values.iteritems()
+            self._values.iteritems()
         )
     
     def columns(self):
         """
         Print columns of values.
         """
-        return ', '.join('`%s`' % column for column in self.__values.keys())
+        return ', '.join('`%s`' % column for column in self._values.keys())
     
     def values(self):
         """
         Print values of values.
         """
-        return ', '.join('%s' % str(sqlPuzzle.sqlValue.SqlValue(value)) for value in self.__values.values())
+        return ', '.join('%s' % str(sqlPuzzle.sqlValue.SqlValue(value)) for value in self._values.values())
     
     def isSet(self):
         """
         Is limit set?
         """
-        return self.__values != {}
+        return self._values != {}
     
     def set(self, *args, **kwds):
         """
         Set columns.
         """
-        self.__values.update(dict(
+        self._values.update(dict(
             sqlPuzzle.argsParser.parseArgsToListOfTuples(
                 {
                     'minItems': 2,

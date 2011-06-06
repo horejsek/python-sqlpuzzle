@@ -6,6 +6,7 @@
 #
 
 import sqlPuzzle.argsParser
+import sqlPuzzle.sqlValue
 
 
 class Order:
@@ -20,19 +21,28 @@ class Order:
         """
         Print part of query.
         """
-        if self.__sort == 'ASC':
-            return '`%s`' % self.__column
+        if self._sort == 'ASC':
+            return sqlPuzzle.sqlValue.addBackQuotes(self._column)
         else:
-            return '`%s` %s' % (
-                self.__column,
-                self.__sort,
+            return '%s %s' % (
+                sqlPuzzle.sqlValue.addBackQuotes(self._column),
+                self._sort,
             )
+    
+    def __eq__(self, other):
+        """
+        Is orders equivalent?
+        """
+        return (
+            self._column == other._column and
+            self._sort == other._sort
+        )
     
     def column(self, column):
         """
         Set column.
         """
-        self.__column = column
+        self._column = column
     
     def sort(self, sort):
         """
@@ -43,9 +53,9 @@ class Order:
         
         sort = sort.upper()
         if sort in ('ASC', 'DESC'):
-            self.__sort = sort
+            self._sort = sort
         else:
-            self.__sort = 'ASC'
+            raise sqlPuzzle.exceptions.SqlPuzzleException('Type of order can be only ASC or DESC.')
 
 
 class OrderBy:
@@ -53,28 +63,44 @@ class OrderBy:
         """
         Initialization of OrderBy.
         """
-        self.__orderBy = []
+        self._orderBy = []
     
     def __str__(self):
         """
         Print order (part of query).
         """
-        orderBy = "ORDER BY %s" % ', '.join(str(order) for order in self.__orderBy)
+        orderBy = "ORDER BY %s" % ', '.join(str(order) for order in self._orderBy)
         return orderBy
+    
+    def __contains__(self, item):
+        for order in self._orderBy:
+            if item._column == order._column:
+                return True
+        return False
+    
+    def __changeSorting(self, columnName, sort):
+        for order in self._orderBy:
+            if order._column == columnName:
+                order.sort(sort)
     
     def isSet(self):
         """
         Is orderBy set?
         """
-        return self.__orderBy != []
+        return self._orderBy != []
     
     def orderBy(self, *args):
         """
         Set ORDER BY.
         """
-        for arg in sqlPuzzle.argsParser.parseArgsToListOfTuples({'maxItems': 2}, *args):
-            order = Order(*arg)
-            self.__orderBy.append(order)
+        for columnName, sort in sqlPuzzle.argsParser.parseArgsToListOfTuples(
+            {'maxItems': 2, 'allowedDataTypes': (str, unicode)}, *args
+        ):
+            order = Order(columnName, sort)
+            if order not in self:
+                self._orderBy.append(order)
+            else:
+                self.__changeSorting(columnName, sort)
         
         return self
 

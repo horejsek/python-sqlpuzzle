@@ -33,6 +33,34 @@ class GroupByTest(unittest.TestCase):
         self.groupBy.groupBy('id', ['name', 'desc'])
         self.assertEqual(str(self.groupBy), 'GROUP BY `id`, `name` DESC')
     
+    def testColumnNameAsTableAndColumn(self):
+        self.groupBy.groupBy('table.column')
+        self.assertEqual(str(self.groupBy), 'GROUP BY `table`.`column`')
+    
+    def testColumnNameAsTableAndColumnWithDotInName(self):
+        self.groupBy.groupBy('table.`column.`')
+        self.assertEqual(str(self.groupBy), 'GROUP BY `table`.`column.`')
+    
+    def testMoreSameColumnsPrintAsOne(self):
+        self.groupBy.groupBy('col', 'col')
+        self.assertEqual(str(self.groupBy), 'GROUP BY `col`')
+    
+    def testMoreSameColumnsWithDiffAscPrintAsOne(self):
+        self.groupBy.groupBy('col', ('col', 'DESC'))
+        self.assertEqual(str(self.groupBy), 'GROUP BY `col` DESC')
+    
+    def testNameAsIntegerException(self):
+        self.assertRaises(sqlPuzzle.exceptions.SqlPuzzleException, self.groupBy.groupBy, 42)
+    
+    def testNameAsFloatException(self):
+        self.assertRaises(sqlPuzzle.exceptions.SqlPuzzleException, self.groupBy.groupBy, 42.1)
+    
+    def testNameAsBooleanException(self):
+        self.assertRaises(sqlPuzzle.exceptions.SqlPuzzleException, self.groupBy.groupBy, True)
+    
+    def testNotAscOrDescException(self):
+        self.assertRaises(sqlPuzzle.exceptions.SqlPuzzleException, self.groupBy.groupBy, ('col', 'AAA'))
+    
     def testIsSet(self):
         self.assertEqual(self.groupBy.isSet(), False)
         self.groupBy.groupBy('id')

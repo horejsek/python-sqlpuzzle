@@ -33,6 +33,34 @@ class OrderByTest(unittest.TestCase):
         self.orderBy.orderBy('id', ['name', 'desc'])
         self.assertEqual(str(self.orderBy), 'ORDER BY `id`, `name` DESC')
     
+    def testColumnNameAsTableAndColumn(self):
+        self.orderBy.orderBy('table.column')
+        self.assertEqual(str(self.orderBy), 'ORDER BY `table`.`column`')
+    
+    def testColumnNameAsTableAndColumnWithDotInName(self):
+        self.orderBy.orderBy('table.`column.`')
+        self.assertEqual(str(self.orderBy), 'ORDER BY `table`.`column.`')
+    
+    def testMoreSameColumnsPrintAsOne(self):
+        self.orderBy.orderBy('col', 'col')
+        self.assertEqual(str(self.orderBy), 'ORDER BY `col`')
+    
+    def testMoreSameColumnsWithDiffAscPrintAsOne(self):
+        self.orderBy.orderBy('col', ('col', 'DESC'))
+        self.assertEqual(str(self.orderBy), 'ORDER BY `col` DESC')
+    
+    def testNameAsIntegerException(self):
+        self.assertRaises(sqlPuzzle.exceptions.SqlPuzzleException, self.orderBy.orderBy, 42)
+    
+    def testNameAsFloatException(self):
+        self.assertRaises(sqlPuzzle.exceptions.SqlPuzzleException, self.orderBy.orderBy, 42.1)
+    
+    def testNameAsBooleanException(self):
+        self.assertRaises(sqlPuzzle.exceptions.SqlPuzzleException, self.orderBy.orderBy, True)
+    
+    def testNotAscOrDescException(self):
+        self.assertRaises(sqlPuzzle.exceptions.SqlPuzzleException, self.orderBy.orderBy, ('col', 'AAA'))
+    
     def testIsSet(self):
         self.assertEqual(self.orderBy.isSet(), False)
         self.orderBy.orderBy('id')
