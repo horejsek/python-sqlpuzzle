@@ -23,6 +23,12 @@ class SqlPuzzleTest(unittest.TestCase):
         self.sqlPuzzle.from_('user')
         self.assertEqual(self.sqlPuzzle.getQuery(), 'SELECT `id`, `name` FROM `user`')
     
+    def testSelectColumn(self):
+        self.sqlPuzzle.select()
+        self.sqlPuzzle.columns('id', 'name')
+        self.sqlPuzzle.from_('user')
+        self.assertEqual(self.sqlPuzzle.getQuery(), 'SELECT `id`, `name` FROM `user`')
+    
     def testSelectWhere(self):
         self.sqlPuzzle.select('id', 'name')
         self.sqlPuzzle.from_('user')

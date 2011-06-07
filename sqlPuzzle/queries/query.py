@@ -71,6 +71,7 @@ class Query:
     def _limit(self): return self._getExtension('limit')
     
     
+    def columns(self, *args, **kwds): self.__raiser('columns')
     def from_(self, *args, **kwds): self.__raiser('from')
     def where(self, *args, **kwds): self.__raiser('where')
     def groupBy(self, *args, **kwds): self.__raiser('group by')

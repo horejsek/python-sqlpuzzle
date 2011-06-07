@@ -28,6 +28,13 @@ class SqlPuzzle:
         self.__query = sqlPuzzle.queries.select.Select(*columns)
         return self
     
+    def columns(self, *columns):
+        """
+        Set column(s) to select.
+        """
+        self.__query.columns(*columns)
+        return self
+    
     def limit(self, limit, offset=None):
         """
         Set limit (and offset).
