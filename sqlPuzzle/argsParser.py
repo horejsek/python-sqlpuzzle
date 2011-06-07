@@ -5,7 +5,7 @@
 # https://github.com/horejsek/sqlPuzzle
 #
 
-from sqlPuzzle.exceptions import SqlPuzzleException
+import sqlPuzzle.exceptions
 
 
 def parseArgsToListOfTuples(options={}, *args, **kwds):
@@ -50,10 +50,10 @@ def parseArgsToListOfTuples(options={}, *args, **kwds):
     result = []
     
     if minItems > maxItems:
-        raise SqlPuzzleException('maxItems must be bigger, than minItems.')
+        raise sqlPuzzle.exceptions.SqlPuzzleError('maxItems must be bigger, than minItems.')
     
     if allowDict and maxItems <= 1:
-        raise SqlPuzzleException('For allowDict must be maxItems bigger or equal to 2.')
+        raise sqlPuzzle.exceptions.SqlPuzzleError('For allowDict must be maxItems bigger or equal to 2.')
 
     if allowDict:
         dict_ = {}
@@ -61,7 +61,7 @@ def parseArgsToListOfTuples(options={}, *args, **kwds):
             if len(args) == 1:
                 dict_ = args[0]
             else:
-                raise SqlPuzzleException('Dictionary must be only one argument.')
+                raise sqlPuzzle.exceptions.InvalidArgumentException('Dictionary must be as only one argument.')
         elif kwds != {}:
             dict_ = kwds
         
@@ -70,7 +70,7 @@ def parseArgsToListOfTuples(options={}, *args, **kwds):
             __appendIfOk(result, values, allowedDataTypes)
     else:
         if (len(args) == 1 and isinstance(args[0], dict)) or kwds != {}:
-            raise SqlPuzzleException('Dictionary or kwds is disabled.')
+            raise sqlPuzzle.exceptions.InvalidArgumentException('Dictionary or kwds is disabled.')
     
     if not result:
         if minItems > 1 and minItems <= len(args) <= maxItems and not isinstance(args[0], (list, tuple)):
@@ -88,7 +88,7 @@ def parseArgsToListOfTuples(options={}, *args, **kwds):
             elif minItems == 1:
                 values = __createTuple((arg,), maxItems)
             else:
-                raise SqlPuzzleException('Too few arguments.')
+                raise sqlPuzzle.exceptions.InvalidArgumentException('Too few arguments.')
             __appendIfOk(result, values, allowedDataTypes)
 
     return result
@@ -101,7 +101,7 @@ def __createTuple(values, length):
     If is in list_ more items, than say length => raise.
     """
     if len(values) > length:
-        raise SqlPuzzleException('Too many arguments.')
+        raise sqlPuzzle.exceptions.InvalidArgumentException('Too many arguments.')
     return tuple(values) + (None,)*(length-len(values))
 
 
@@ -113,7 +113,7 @@ def __appendIfOk(data, values, allowedDataTypes):
     if __validate(values, allowedDataTypes):
         data.append(values)
     else:
-        raise SqlPuzzleException('Unsupported arguments.')
+        raise sqlPuzzle.exceptions.InvalidArgumentException()
 
 
 def __validate(values, allowedDataTypes):
@@ -121,7 +121,7 @@ def __validate(values, allowedDataTypes):
     Validate tuple on data types.
     """
     if not isinstance(allowedDataTypes, (tuple, list)):
-        raise SqlPuzzleException('Invalid options for argsParser.')
+        raise sqlPuzzle.exceptions.SqlPuzzleError('Invalid options for argsParser.')
     
     for x, item in enumerate(values):
         dataTypes = allowedDataTypes

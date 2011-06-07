@@ -55,7 +55,7 @@ class Order:
         if sort in ('ASC', 'DESC'):
             self._sort = sort
         else:
-            raise sqlPuzzle.exceptions.SqlPuzzleException('Type of order can be only ASC or DESC.')
+            raise sqlPuzzle.exceptions.InvalidArgumentException('Type of order can be only ASC or DESC.')
 
 
 class OrderBy:

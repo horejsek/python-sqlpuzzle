@@ -2,10 +2,8 @@
 ########################
 due: 9.6. | version: beta
 
-- vyjimky
-- testovat chybne pouziti
 - clearovaci metoda
-  setovani napriklad podminek nebude predchozi mazat, ale jen pridavat
+- setovani nemaze predchozi hodnoty, jen pridava
 
 ########################
 due: ? | version: 1.0

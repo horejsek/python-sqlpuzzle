@@ -50,16 +50,16 @@ class GroupByTest(unittest.TestCase):
         self.assertEqual(str(self.groupBy), 'GROUP BY `col` DESC')
     
     def testNameAsIntegerException(self):
-        self.assertRaises(sqlPuzzle.exceptions.SqlPuzzleException, self.groupBy.groupBy, 42)
+        self.assertRaises(sqlPuzzle.exceptions.InvalidArgumentException, self.groupBy.groupBy, 42)
     
     def testNameAsFloatException(self):
-        self.assertRaises(sqlPuzzle.exceptions.SqlPuzzleException, self.groupBy.groupBy, 42.1)
+        self.assertRaises(sqlPuzzle.exceptions.InvalidArgumentException, self.groupBy.groupBy, 42.1)
     
     def testNameAsBooleanException(self):
-        self.assertRaises(sqlPuzzle.exceptions.SqlPuzzleException, self.groupBy.groupBy, True)
+        self.assertRaises(sqlPuzzle.exceptions.InvalidArgumentException, self.groupBy.groupBy, True)
     
     def testNotAscOrDescException(self):
-        self.assertRaises(sqlPuzzle.exceptions.SqlPuzzleException, self.groupBy.groupBy, ('col', 'AAA'))
+        self.assertRaises(sqlPuzzle.exceptions.InvalidArgumentException, self.groupBy.groupBy, ('col', 'AAA'))
     
     def testIsSet(self):
         self.assertEqual(self.groupBy.isSet(), False)

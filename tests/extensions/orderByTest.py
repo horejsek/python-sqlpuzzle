@@ -50,16 +50,16 @@ class OrderByTest(unittest.TestCase):
         self.assertEqual(str(self.orderBy), 'ORDER BY `col` DESC')
     
     def testNameAsIntegerException(self):
-        self.assertRaises(sqlPuzzle.exceptions.SqlPuzzleException, self.orderBy.orderBy, 42)
+        self.assertRaises(sqlPuzzle.exceptions.InvalidArgumentException, self.orderBy.orderBy, 42)
     
     def testNameAsFloatException(self):
-        self.assertRaises(sqlPuzzle.exceptions.SqlPuzzleException, self.orderBy.orderBy, 42.1)
+        self.assertRaises(sqlPuzzle.exceptions.InvalidArgumentException, self.orderBy.orderBy, 42.1)
     
     def testNameAsBooleanException(self):
-        self.assertRaises(sqlPuzzle.exceptions.SqlPuzzleException, self.orderBy.orderBy, True)
+        self.assertRaises(sqlPuzzle.exceptions.InvalidArgumentException, self.orderBy.orderBy, True)
     
     def testNotAscOrDescException(self):
-        self.assertRaises(sqlPuzzle.exceptions.SqlPuzzleException, self.orderBy.orderBy, ('col', 'AAA'))
+        self.assertRaises(sqlPuzzle.exceptions.InvalidArgumentException, self.orderBy.orderBy, ('col', 'AAA'))
     
     def testIsSet(self):
         self.assertEqual(self.orderBy.isSet(), False)

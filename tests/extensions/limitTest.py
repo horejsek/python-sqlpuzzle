@@ -40,22 +40,22 @@ class LimitTest(unittest.TestCase):
         self.assertEqual(str(self.limit), 'LIMIT 4 OFFSET 16')
     
     def testLimitStringException(self):
-        self.assertRaises(sqlPuzzle.exceptions.SqlPuzzleException, self.limit.limit, 'limit')
+        self.assertRaises(sqlPuzzle.exceptions.InvalidArgumentException, self.limit.limit, 'limit')
     
     def testLimitFloatException(self):
-        self.assertRaises(sqlPuzzle.exceptions.SqlPuzzleException, self.limit.limit, 1.2)
+        self.assertRaises(sqlPuzzle.exceptions.InvalidArgumentException, self.limit.limit, 1.2)
     
     def testLimitBooleanException(self):
-        self.assertRaises(sqlPuzzle.exceptions.SqlPuzzleException, self.limit.limit, False)
+        self.assertRaises(sqlPuzzle.exceptions.InvalidArgumentException, self.limit.limit, False)
     
     def testOffsetStringException(self):
-        self.assertRaises(sqlPuzzle.exceptions.SqlPuzzleException, self.limit.offset, 'offset')
+        self.assertRaises(sqlPuzzle.exceptions.InvalidArgumentException, self.limit.offset, 'offset')
     
     def testOffsetFloatException(self):
-        self.assertRaises(sqlPuzzle.exceptions.SqlPuzzleException, self.limit.offset, 1.2)
+        self.assertRaises(sqlPuzzle.exceptions.InvalidArgumentException, self.limit.offset, 1.2)
     
     def testOffsetBooleanException(self):
-        self.assertRaises(sqlPuzzle.exceptions.SqlPuzzleException, self.limit.offset, False)
+        self.assertRaises(sqlPuzzle.exceptions.InvalidArgumentException, self.limit.offset, False)
     
     def testIsSet(self):
         self.assertEqual(self.limit.isSet(), False)

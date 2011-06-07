@@ -52,13 +52,13 @@ class ValuesTest(unittest.TestCase):
         self.assertEqual(str(self.values), '`name` = "Alan"')
     
     def testColumnAsIntegerException(self):
-        self.assertRaises(sqlPuzzle.exceptions.SqlPuzzleException, self.values.set, 42, 'val')
+        self.assertRaises(sqlPuzzle.exceptions.InvalidArgumentException, self.values.set, 42, 'val')
     
     def testColumnAsFloatException(self):
-        self.assertRaises(sqlPuzzle.exceptions.SqlPuzzleException, self.values.set, 42.1, 'val')
+        self.assertRaises(sqlPuzzle.exceptions.InvalidArgumentException, self.values.set, 42.1, 'val')
     
     def testColumnAsBooleanException(self):
-        self.assertRaises(sqlPuzzle.exceptions.SqlPuzzleException, self.values.set, True, 'val')
+        self.assertRaises(sqlPuzzle.exceptions.InvalidArgumentException, self.values.set, True, 'val')
     
     def testValueAsInteger(self):
         self.values.set('col', 42)

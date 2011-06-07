@@ -50,13 +50,13 @@ class ColumnsTest(unittest.TestCase):
         self.assertEqual(str(self.columns), '`col`, `col` AS "col2"')
     
     def testNameAsIntegerException(self):
-        self.assertRaises(sqlPuzzle.exceptions.SqlPuzzleException, self.columns.columns, 42)
+        self.assertRaises(sqlPuzzle.exceptions.InvalidArgumentException, self.columns.columns, 42)
     
     def testNameAsFloatException(self):
-        self.assertRaises(sqlPuzzle.exceptions.SqlPuzzleException, self.columns.columns, 42.1)
+        self.assertRaises(sqlPuzzle.exceptions.InvalidArgumentException, self.columns.columns, 42.1)
     
     def testNameAsBooleanException(self):
-        self.assertRaises(sqlPuzzle.exceptions.SqlPuzzleException, self.columns.columns, True)
+        self.assertRaises(sqlPuzzle.exceptions.InvalidArgumentException, self.columns.columns, True)
     
     def testIsSet(self):
         self.assertEqual(self.columns.isSet(), False)

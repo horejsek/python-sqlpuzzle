@@ -39,7 +39,7 @@ class Limit:
         Set LIMIT (and OFFSET).
         """
         if not type(limit) in (int, long, types.NoneType):
-            raise sqlPuzzle.exceptions.SqlPuzzleException('Unsupported argument.')
+            raise sqlPuzzle.exceptions.InvalidArgumentException()
         
         if limit is None:
             self.__limit = None
@@ -57,7 +57,7 @@ class Limit:
         Set OFFSET.
         """
         if not type(offset) in (int, long, types.NoneType):
-            raise sqlPuzzle.exceptions.SqlPuzzleException('Unsupported argument.')
+            raise sqlPuzzle.exceptions.InvalidArgumentException()
         
         self.__offset = int(offset)
         return self
