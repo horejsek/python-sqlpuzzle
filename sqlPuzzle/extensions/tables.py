@@ -18,9 +18,9 @@ class On(sqlPuzzle.extensions.conditions.Condition):
         Print part of query.
         """
         return '%s %s %s' % (
-            sqlPuzzle.sqlValue.addBackQuotes(self.getColumn()),
-            sqlPuzzle.relations.RELATIONS[self.getRelation()],
-            sqlPuzzle.sqlValue.addBackQuotes(self.getValue()),
+            sqlPuzzle.sqlValue.addBackQuotes(self._column),
+            sqlPuzzle.relations.RELATIONS[self._relation],
+            sqlPuzzle.sqlValue.addBackQuotes(self._value),
         )
 
 
@@ -33,7 +33,7 @@ class Ons(sqlPuzzle.extensions.conditions.Conditions):
         Print part of query.
         """
         if self.isSet():
-            return " AND ".join(str(condition) for condition in self._getConditions())
+            return " AND ".join(str(condition) for condition in self._conditions)
         return ""
 
 

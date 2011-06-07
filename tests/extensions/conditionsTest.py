@@ -69,6 +69,38 @@ class ConditionsTest(unittest.TestCase):
         self.conditions.remove()
         self.assertEqual(str(self.conditions), '')
     
+    def testColumnAsIntegerException(self):
+        self.assertRaises(sqlPuzzle.exceptions.InvalidArgumentException, self.conditions.where, 42, 'val')
+    
+    def testColumnAsFloatException(self):
+        self.assertRaises(sqlPuzzle.exceptions.InvalidArgumentException, self.conditions.where, 42.1, 'val')
+    
+    def testColumnAsBooleanException(self):
+        self.assertRaises(sqlPuzzle.exceptions.InvalidArgumentException, self.conditions.where, True, 'val')
+    
+    def testValueAsInteger(self):
+        self.conditions.where('col', 42)
+        self.assertEqual(str(self.conditions), 'WHERE `col` = 42')
+    
+    def testValueAsFloat(self):
+        self.conditions.where('col', 42.1)
+        self.assertEqual(str(self.conditions), 'WHERE `col` = 42.10000')
+    
+    def testValueAsBoolean(self):
+        self.conditions.where('col', True)
+        self.assertEqual(str(self.conditions), 'WHERE `col` = 1')
+    
+    def testMoreSameConditionsPrintAsOne(self):
+        self.conditions.where(('age', 20), ('age', 20))
+        self.assertEqual(str(self.conditions), 'WHERE `age` = 20')
+    
+    def testMoreSameConditionsWithDiffRelationPrintAsMore(self):
+        self.conditions.where(('age', 20), ('age', 20, sqlPuzzle.relations.NE))
+        self.assertEqual(str(self.conditions), 'WHERE `age` = 20 AND `age` != 20')
+    
+    def testWrongRelationException(self):
+        self.assertRaises(sqlPuzzle.exceptions.InvalidArgumentException, self.conditions.where, 'age', 20, 999)
+    
     def testIsSet(self):
         self.assertEqual(self.conditions.isSet(), False)
         self.conditions.where(name='Alan')
