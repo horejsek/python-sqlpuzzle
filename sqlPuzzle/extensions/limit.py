@@ -5,6 +5,12 @@
 # https://github.com/horejsek/sqlPuzzle
 #
 
+import types
+
+import sqlPuzzle.argsParser
+import sqlPuzzle.exceptions
+
+
 class Limit:
     def __init__(self):
         """
@@ -32,6 +38,9 @@ class Limit:
         """
         Set LIMIT (and OFFSET).
         """
+        if not type(limit) in (int, long, types.NoneType):
+            raise sqlPuzzle.exceptions.SqlPuzzleException('Unsupported argument.')
+        
         if limit is None:
             self.__limit = None
             self.__offset = None
@@ -47,6 +56,9 @@ class Limit:
         """
         Set OFFSET.
         """
+        if not type(offset) in (int, long, types.NoneType):
+            raise sqlPuzzle.exceptions.SqlPuzzleException('Unsupported argument.')
+        
         self.__offset = int(offset)
         return self
 

@@ -7,6 +7,7 @@
 
 import unittest
 
+import sqlPuzzle.exceptions
 import sqlPuzzle.extensions.limit
 
 
@@ -37,6 +38,24 @@ class LimitTest(unittest.TestCase):
     def testInlineInvert(self):
         self.limit.limit(4).offset(16)
         self.assertEqual(str(self.limit), 'LIMIT 4 OFFSET 16')
+    
+    def testLimitStringException(self):
+        self.assertRaises(sqlPuzzle.exceptions.SqlPuzzleException, self.limit.limit, 'limit')
+    
+    def testLimitFloatException(self):
+        self.assertRaises(sqlPuzzle.exceptions.SqlPuzzleException, self.limit.limit, 1.2)
+    
+    def testLimitBooleanException(self):
+        self.assertRaises(sqlPuzzle.exceptions.SqlPuzzleException, self.limit.limit, False)
+    
+    def testOffsetStringException(self):
+        self.assertRaises(sqlPuzzle.exceptions.SqlPuzzleException, self.limit.offset, 'offset')
+    
+    def testOffsetFloatException(self):
+        self.assertRaises(sqlPuzzle.exceptions.SqlPuzzleException, self.limit.offset, 1.2)
+    
+    def testOffsetBooleanException(self):
+        self.assertRaises(sqlPuzzle.exceptions.SqlPuzzleException, self.limit.offset, False)
     
     def testIsSet(self):
         self.assertEqual(self.limit.isSet(), False)
