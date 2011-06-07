@@ -74,6 +74,24 @@ class TablesTest(unittest.TestCase):
         self.tables.join('t2').on('t1.id', 't2.id')
         self.assertEqual(str(self.tables), '`t1` JOIN `t2` ON (`t1`.`id` = `t2`.`id`)')
     
+    def testMoreSameTablesPrintAsOne(self):
+        self.tables.set('tab', 'tab')
+        self.assertEqual(str(self.tables), '`tab`')
+    
+    def testMoreSameTablesWithDiffAsPrintAsMore(self):
+        self.tables.set('tab', ('tab', 'tab2'))
+        self.assertEqual(str(self.tables), '`tab`, `tab` AS `tab2`')
+    
+    def testNameAsIntegerException(self):
+        self.assertRaises(sqlPuzzle.exceptions.InvalidArgumentException, self.tables.set, 42)
+    
+    def testNameAsFloatException(self):
+        self.assertRaises(sqlPuzzle.exceptions.InvalidArgumentException, self.tables.set, 42.1)
+    
+    def testNameAsBooleanException(self):
+        self.assertRaises(sqlPuzzle.exceptions.InvalidArgumentException, self.tables.set, True)
+    
+    
     def testIsSet(self):
         self.assertEqual(self.tables.isSet(), False)
         self.tables.set('table')
