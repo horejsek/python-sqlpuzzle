@@ -40,10 +40,18 @@ class Delete(sqlPuzzle.queries.query.Query):
         return sqlPuzzle.queries.query.Query._appendExtensions(self, delete)
     
     def allowDeleteAll(self):
+        """
+        Allow delete all records.
+        """
         self.__allowDeleteAll = True
+        return self
     
     def forbidDeleteAll(self):
+        """
+        Forbid delete all records.
+        """
         self.__allowDeleteAll = False
+        return self
     
     def _typeOfQuery(self):
         return 'DELETE'

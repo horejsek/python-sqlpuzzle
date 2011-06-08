@@ -49,10 +49,18 @@ class Update(sqlPuzzle.queries.query.Query):
         return 'UPDATE'
     
     def allowUpdateAll(self):
+        """
+        Allow update all records.
+        """
         self.__allowUpdateAll = True
+        return self
     
     def forbidUpdateAll(self):
+        """
+        Forbid update all records.
+        """
         self.__allowUpdateAll = False
+        return self
     
     def table(self, table):
         """
