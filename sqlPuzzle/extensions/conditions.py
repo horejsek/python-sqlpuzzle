@@ -86,6 +86,9 @@ class Conditions:
             return "WHERE %s" % " AND ".join(str(condition) for condition in self._conditions)
         return ""
     
+    def __eq__(self, other):
+        return all(bool(sc == oc) for sc, oc in zip(self._conditions, other._conditions))
+    
     def __contains__(self, item):
         for condition in self._conditions:
             if item == condition:

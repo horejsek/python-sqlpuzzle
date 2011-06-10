@@ -1,13 +1,8 @@
 
 ########################
-due: 9.6. | version: beta
+version: 1.0
 
-- clearovaci metoda
-
-########################
-due: ? | version: 1.0
-
-- vnorene podminky
+- nested conditions
 - HAVING
 - USING
 - AVG, SUM, ...
@@ -17,7 +12,6 @@ due: ? | version: 1.0
 - ON DUPLICATE KEY UPDATE
 
 ########################
-due: ? | version: 2.0/3.0
+version: 2.0
 
-- podpora vice databazi
-
+- support for more databases

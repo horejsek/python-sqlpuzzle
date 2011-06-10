@@ -17,10 +17,15 @@ class On(sqlPuzzle.extensions.conditions.Condition):
         """
         Print part of query.
         """
-        return '%s %s %s' % (
+        return '%s = %s' % (
             sqlPuzzle.sqlValue.addBackQuotes(self._column),
-            sqlPuzzle.relations.RELATIONS[self._relation],
             sqlPuzzle.sqlValue.addBackQuotes(self._value),
+        )
+    
+    def __eq__(self, other):
+        return (
+            (self._column == other._column and self._value == other._value) or
+            (self._column == other._value and self._value == other._column)
         )
 
 
@@ -82,7 +87,7 @@ class Table:
         return (
             self._table == other._table and
             self._as == other._as and
-            self._joins == self._joins
+            self._joins == other._joins
         )
     
     def __minimizeJoins(self):
@@ -90,14 +95,19 @@ class Table:
         Minimize of joins.
         Left/right and inner join of the same join is only inner join.
         """
-        joinsGroup = {}
+        joinsGroup = []
         for join in self._joins:
-            joinStr = '%s %s' % (str(join['table']), str(join['on']))
-            joinsGroup[joinStr] = joinsGroup.get(joinStr, [])
-            joinsGroup[joinStr].append(join)
+            appendNew = True
+            for joinGroup in joinsGroup:
+                if joinGroup[0]['table'] == join['table'] and joinGroup[0]['on'] == join['on']:
+                    joinGroup.append(join)
+                    appendNew = False
+                    break
+            if appendNew:
+                joinsGroup.append([join])
         
         self._joins = []
-        for joinStr, joins in joinsGroup.iteritems():
+        for joins in joinsGroup:
             if len(joins) > 1 and any(bool(join['type'] == sqlPuzzle.joinTypes.INNER_JOIN) for join in joins):
                 joins[0]['type'] = sqlPuzzle.joinTypes.INNER_JOIN
                 self._joins.append(joins[0])

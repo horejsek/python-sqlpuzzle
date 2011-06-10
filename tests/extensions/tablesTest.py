@@ -74,6 +74,12 @@ class TablesTest(unittest.TestCase):
         self.tables.join('t2').on('t1.id', 't2.id')
         self.assertEqual(str(self.tables), '`t1` JOIN `t2` ON (`t1`.`id` = `t2`.`id`)')
     
+    def testLeftAndInnerIsInnerWithReverseCondition(self):
+        self.tables.set('t1')
+        self.tables.leftJoin('t2').on('t1.id', 't2.id')
+        self.tables.join('t2').on('t2.id', 't1.id')
+        self.assertEqual(str(self.tables), '`t1` JOIN `t2` ON (`t1`.`id` = `t2`.`id`)')
+    
     def testMoreSameTablesPrintAsOne(self):
         self.tables.set('tab', 'tab')
         self.assertEqual(str(self.tables), '`tab`')
