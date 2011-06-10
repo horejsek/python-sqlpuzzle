@@ -67,6 +67,27 @@ class Select(sqlPuzzle.queries.query.Query):
         self._tables.join(table)
         return self
     
+    def innerJoin(self, table):
+        """
+        Inner join table.
+        """
+        self._tables.innerJoin(table)
+        return self
+    
+    def leftJoin(self, table):
+        """
+        Left join table.
+        """
+        self._tables.leftJoin(table)
+        return self
+    
+    def rightJoin(self, table):
+        """
+        Right join table.
+        """
+        self._tables.rightJoin(table)
+        return self
+    
     def on(self, *args, **kwds):
         """
         Join on.

@@ -32,6 +32,18 @@ class SelectTest(unittest.TestCase):
         self.select.from_('user').join('country').on('user.country_id', 'country.id')
         self.assertEqual(str(self.select), 'SELECT * FROM `user` JOIN `country` ON (`user`.`country_id` = `country`.`id`)')
     
+    def testInnerJoin(self):
+        self.select.from_('user').innerJoin('country').on('user.country_id', 'country.id')
+        self.assertEqual(str(self.select), 'SELECT * FROM `user` JOIN `country` ON (`user`.`country_id` = `country`.`id`)')
+    
+    def testLeftJoin(self):
+        self.select.from_('user').leftJoin('country').on('user.country_id', 'country.id')
+        self.assertEqual(str(self.select), 'SELECT * FROM `user` LEFT JOIN `country` ON (`user`.`country_id` = `country`.`id`)')
+    
+    def testRightJoin(self):
+        self.select.from_('user').rightJoin('country').on('user.country_id', 'country.id')
+        self.assertEqual(str(self.select), 'SELECT * FROM `user` RIGHT JOIN `country` ON (`user`.`country_id` = `country`.`id`)')
+    
     def testOrderBy(self):
         self.select.from_('user')
         self.select.orderBy('id')
