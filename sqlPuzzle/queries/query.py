@@ -27,6 +27,7 @@ class Query:
     def __raiser(self, method):
         raise sqlPuzzle.exceptions.NotSupprotedException(method, self._typeOfQuery())
     
+    
     def _typeOfQuery(self):
         return 'undefined'
     
@@ -48,6 +49,7 @@ class Query:
         if extension in self.__extensions:
             return self.__extensions[extension]
         self.__raiser(extension)
+    
     
     @property
     def _tables(self): return self._getExtension('tables')
@@ -73,6 +75,11 @@ class Query:
     
     def columns(self, *args, **kwds): self.__raiser('columns')
     def from_(self, *args, **kwds): self.__raiser('from')
+    def join(self, *args, **kwds): self.__raiser('from')
+    def innerJoin(self, *args, **kwds): self.__raiser('innerJoin')
+    def leftJoin(self, *args, **kwds): self.__raiser('leftJoin')
+    def rightJoin(self, *args, **kwds): self.__raiser('rightJoin')
+    def on(self, *args, **kwds): self.__raiser('on')
     def where(self, *args, **kwds): self.__raiser('where')
     def groupBy(self, *args, **kwds): self.__raiser('group by')
     def orderBy(self, *args, **kwds): self.__raiser('order by')
@@ -80,5 +87,6 @@ class Query:
     def offset(self, *args, **kwds): self.__raiser('offset')
     def into(self, *args, **kwds): self.__raiser('into')
     def values(self, *args, **kwds): self.__raiser('values')
-    def set(self, *args, **kwds): self.__raiser('values')
+    def table(self, *args, **kwds): self.__raiser('table')
+    def set(self, *args, **kwds): self.__raiser('set')
 
