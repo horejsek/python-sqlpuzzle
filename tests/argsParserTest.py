@@ -74,10 +74,21 @@ class ArgsParserTest(unittest.TestCase):
         self.assertEqual(parser({'allowDict': True, 'maxItems': 2}, key=1), [('key', 1)])
     
     
+    def testDictionaryMustByOnlyOneArgumentException(self):
+        self.assertRaises(sqlPuzzle.exceptions.InvalidArgumentException, parser, {'maxItems': 2, 'allowDict': True}, {'key': 'val'}, "some arg")
+    
+    def testTooFewException(self):
+        self.assertRaises(sqlPuzzle.exceptions.InvalidArgumentException, parser, {'minItems': 2, 'maxItems': 2}, "arg")
+    
+    def testTooManyException(self):
+        self.assertRaises(sqlPuzzle.exceptions.InvalidArgumentException, parser, {'minItems': 2, 'maxItems': 2}, "arg1", "arg2", "arg3")
+    
+    def testWrongDatatype(self):
+        self.assertRaises(sqlPuzzle.exceptions.InvalidArgumentException, parser, {'allowedDataTypes': (int, long, float)}, "string")
+    
+    
     def testAllowList(self):
         self.assertEqual(parser({'allowList': True}, (1, 2, 3)), [(1,), (2,), (3,)])
-        
-        
 
 
 if __name__ == '__main__':

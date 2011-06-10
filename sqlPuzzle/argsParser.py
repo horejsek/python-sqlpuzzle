@@ -45,7 +45,7 @@ def parseArgsToListOfTuples(options={}, *args, **kwds):
     maxItems = options.get('maxItems', 1)
     allowDict = options.get('allowDict', False)
     allowList = options.get('allowList', False)
-    allowedDataTypes = options.get('allowedDataTypes', (str, unicode, int, long, bool))
+    allowedDataTypes = options.get('allowedDataTypes', (str, unicode, int, long, float, bool))
     
     result = []
     
