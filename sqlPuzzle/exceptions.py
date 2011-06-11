@@ -53,6 +53,13 @@ class InvalidArgumentException(SqlPuzzleException):
         return "Invalid argument"
 
 
+class InvalidQueryException(InvalidArgumentException):
+    def __str__(self):
+        if self.message:
+            return "Invalid query: %s" % self.message
+        return "Invalid query"
+
+
 class NotSupprotedException(SqlPuzzleException):
     def __init__(self, method, typeOfQuery):
         self.method = method

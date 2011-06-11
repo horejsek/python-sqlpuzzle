@@ -80,6 +80,21 @@ class TablesTest(unittest.TestCase):
         self.tables.join('t2').on('t2.id', 't1.id')
         self.assertEqual(str(self.tables), '`t1` JOIN `t2` ON (`t1`.`id` = `t2`.`id`)')
     
+    def testJoinWithoutOnException(self):
+        self.tables.set('table1')
+        self.tables.join('table2')
+        self.assertRaises(sqlPuzzle.exceptions.InvalidQueryException, str, self.tables)
+    
+    def testJoinWithoutTableException(self):
+        self.assertRaises(sqlPuzzle.exceptions.InvalidQueryException, self.tables.join, 'table')
+    
+    def testOnWithoutJoinException(self):
+        self.tables.set('table')
+        self.assertRaises(sqlPuzzle.exceptions.InvalidQueryException, self.tables.on, 'a', 'b')
+    
+    def testOnWithoutTableException(self):
+        self.assertRaises(sqlPuzzle.exceptions.InvalidQueryException, self.tables.on, 'a', 'b')
+    
     def testMoreSameTablesPrintAsOne(self):
         self.tables.set('tab', 'tab')
         self.assertEqual(str(self.tables), '`tab`')

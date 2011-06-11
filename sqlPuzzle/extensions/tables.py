@@ -66,6 +66,9 @@ class Table:
             table = '`%s`' % self._table
         
         if self._joins != []:
+            if None in [join['on'] for join in self._joins]:
+                raise sqlPuzzle.exceptions.InvalidQueryException("You can't use join without on.")
+            
             self.__minimizeJoins()
             table = '%s %s' % (
                 table,
@@ -151,6 +154,9 @@ class Table:
         """
         Join on.
         """
+        if self.isSimple():
+            raise sqlPuzzle.exceptions.InvalidQueryException("You can't set join without table.")
+        
         self._joins[-1]['on'] = condition
 
 
@@ -204,6 +210,9 @@ class Tables:
         """
         Join table.
         """
+        if not self.isSet():
+            raise sqlPuzzle.exceptions.InvalidQueryException("You can't set join without table.")
+        
         self._tables[-1].join(arg, sqlPuzzle.joinTypes.INNER_JOIN)
         return self
     
@@ -211,6 +220,9 @@ class Tables:
         """
         Inner join table.
         """
+        if not self.isSet():
+            raise sqlPuzzle.exceptions.InvalidQueryException("You can't set join without table.")
+        
         self._tables[-1].join(arg, sqlPuzzle.joinTypes.INNER_JOIN)
         return self
     
@@ -218,6 +230,9 @@ class Tables:
         """
         Left join table.
         """
+        if not self.isSet():
+            raise sqlPuzzle.exceptions.InvalidQueryException("You can't set join without table.")
+        
         self._tables[-1].join(arg, sqlPuzzle.joinTypes.LEFT_JOIN)
         return self
     
@@ -225,6 +240,9 @@ class Tables:
         """
         Right join table.
         """
+        if not self.isSet():
+            raise sqlPuzzle.exceptions.InvalidQueryException("You can't set join without table.")
+        
         self._tables[-1].join(arg, sqlPuzzle.joinTypes.RIGHT_JOIN)
         return self
     
@@ -232,6 +250,9 @@ class Tables:
         """
         Join on.
         """
+        if not self.isSet():
+            raise sqlPuzzle.exceptions.InvalidQueryException("You can't set condition of join without table.")
+        
         condition = Ons()
         condition.where(*args, **kwds)
         

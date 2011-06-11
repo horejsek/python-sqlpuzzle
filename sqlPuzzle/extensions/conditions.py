@@ -137,6 +137,8 @@ class Conditions:
         return ""
     
     def __eq__(self, other):
+        if other is None:
+            return False
         return all(bool(sc == oc) for sc, oc in zip(self._conditions, other._conditions))
     
     def __contains__(self, item):
