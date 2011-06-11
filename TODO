@@ -1,7 +1,13 @@
 
+- readme
+- examples
+- __repr__s
+- doc strings
+
 ########################
 version: 1.0
 
+- subselect
 - nested conditions
 - HAVING
 - USING
