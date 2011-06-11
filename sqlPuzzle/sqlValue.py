@@ -21,34 +21,18 @@ def addBackQuotes(value):
     return '.'.join('`%s`' % i for i in re.split('`([^`]+)`|\.', value) if i)
 
 
-
-class SqlValue:
-    def __init__(self, value=None):
-        """
-        Initialization of Value.
-        """
-        self.value(value)
-    
-    def __str__(self):
-        """
-        Print part of query.
-        """
-        if isinstance(self.__value, (str, unicode)):
-            return '"%s"' % self.__value
-        elif isinstance(self.__value, (int, long)):
-            return '%d' % self.__value
-        elif isinstance(self.__value, float):
-            return '%.5f' % self.__value
-        elif isinstance(self.__value, (datetime.date, datetime.datetime)):
-            return self.__value.isoformat()
-        elif self.__value is None:
-            return 'NULL'
-        return 'undefined'
-    
-    def value(self, value):
-        """
-        Set value.
-        """
-        self.__value = value
-
+def sqlValue(value):
+    if isinstance(value, (str, unicode)):
+        return '"%s"' % value
+    elif isinstance(value, (int, long)):
+        return '%d' % value
+    elif isinstance(value, float):
+        return '%.5f' % value
+    elif isinstance(value, (datetime.date, datetime.datetime)):
+        return value.isoformat()
+    elif isinstance(value, (list, tuple)):
+        return "(%s)" % ", ".join(sqlValue(item) for item in value)
+    elif value is None:
+        return 'NULL'
+    return 'undefined'
 

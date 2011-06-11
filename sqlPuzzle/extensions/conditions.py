@@ -12,6 +12,17 @@ import sqlPuzzle.relations
 
 
 class Condition:
+    __defaultRelations = {
+        str: sqlPuzzle.relations.EQ,
+        unicode: sqlPuzzle.relations.EQ,
+        int: sqlPuzzle.relations.EQ,
+        long: sqlPuzzle.relations.EQ,
+        float: sqlPuzzle.relations.EQ,
+        bool: sqlPuzzle.relations.EQ,
+        list: sqlPuzzle.relations.IN,
+        tuple: sqlPuzzle.relations.IN,
+    }
+    
     def __init__(self):
         """
         Initialization of Condition.
@@ -27,7 +38,7 @@ class Condition:
         return '`%s` %s %s' % (
             self._column,
             sqlPuzzle.relations.RELATIONS[self._relation],
-            sqlPuzzle.sqlValue.SqlValue(self._value),
+            sqlPuzzle.sqlValue.sqlValue(self._value),
         )
     
     def __eq__(self, other):
@@ -40,13 +51,46 @@ class Condition:
     def __ne__(self, other):
         return not self.__eq__(other)
     
+    def __isRelationAllowed(self, relation):
+        if isinstance(self._value, (str, unicode)):
+            return relation in (
+                sqlPuzzle.relations.EQ,
+                sqlPuzzle.relations.NE,
+                sqlPuzzle.relations.GT,
+                sqlPuzzle.relations.GE,
+                sqlPuzzle.relations.LT,
+                sqlPuzzle.relations.LE,
+                sqlPuzzle.relations.LIKE,
+            )
+        # bool is instance of int too, therefor bool must be before int
+        elif isinstance(self._value, (bool,)):
+            return relation in (
+                sqlPuzzle.relations.EQ,
+                sqlPuzzle.relations.NE,
+            )
+        elif isinstance(self._value, (int, long, float)):
+            return relation in (
+                sqlPuzzle.relations.EQ,
+                sqlPuzzle.relations.NE,
+                sqlPuzzle.relations.GT,
+                sqlPuzzle.relations.GE,
+                sqlPuzzle.relations.LT,
+                sqlPuzzle.relations.LE,
+            )
+        elif isinstance(self._value, (list, tuple)):
+            return relation in (
+                sqlPuzzle.relations.IN,
+                sqlPuzzle.relations.NOT_IN,
+            )
+        return False
+    
     def set(self, column, value, relation=None):
         """
         Set column, value and relation.
         """
         self.setColumn(column)
         self.setValue(value)
-        self.setRelation(relation or sqlPuzzle.relations.EQ)
+        self.setRelation(relation or self.__defaultRelations[type(value)])
     
     def setColumn(self, column):
         """
@@ -64,8 +108,14 @@ class Condition:
         """
         Set relation.
         """
-        if relation not in sqlPuzzle.relations.RELATIONS:
-            raise sqlPuzzle.exceptions.InvalidArgumentException()
+        if not self.__isRelationAllowed(relation):
+            raise sqlPuzzle.exceptions.InvalidArgumentException(
+                'Relation "%s" is not allowed for data type "%s".' % (
+                    sqlPuzzle.relations.RELATIONS.get(relation, 'undefined'),
+                    type(self._value)
+                )
+            )
+        
         self._relation = relation
 
 
@@ -111,7 +161,11 @@ class Conditions:
                 'maxItems': 3,
                 'allowDict': True,
                 'allowList': True,
-                'allowedDataTypes': ((str, unicode), (str, unicode, int, long, float, bool), int),
+                'allowedDataTypes': (
+                    (str, unicode),
+                    (str, unicode, int, long, float, bool, list, tuple),
+                    (int,)
+                ),
             },
             *args,
             **kwds

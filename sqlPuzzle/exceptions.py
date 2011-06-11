@@ -48,7 +48,9 @@ class InvalidArgumentException(SqlPuzzleException):
         self.message = message
     
     def __str__(self):
-        return "Invalid argument: %s" % self.message
+        if self.message:
+            return "Invalid argument: %s" % self.message
+        return "Invalid argument"
 
 
 class NotSupprotedException(SqlPuzzleException):

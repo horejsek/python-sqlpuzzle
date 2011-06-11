@@ -15,6 +15,8 @@ LT = LESS_THAN = 5
 LE = LESS_TAHN_OR_EQUAL_TO = 6
 
 LIKE = 7
+IN = 8
+NOT_IN = 9
 
 RELATIONS = {
     EQ: '=',
@@ -24,6 +26,8 @@ RELATIONS = {
     LT: '<',
     LE: '<=',
     LIKE: 'LIKE',
+    IN: 'IN',
+    NOT_IN: 'NOT IN'
 }
 
 

@@ -90,6 +90,32 @@ class ConditionsTest(unittest.TestCase):
         self.conditions.where('col', True)
         self.assertEqual(str(self.conditions), 'WHERE `col` = 1')
     
+    def testValueAsList(self):
+        self.conditions.where(id=(23, 34, 45))
+        self.assertEqual(str(self.conditions), 'WHERE `id` IN (23, 34, 45)')
+    
+    def testValueAsListNotIn(self):
+        self.conditions.where('id', (23, 34, 45), sqlPuzzle.relations.NOT_IN)
+        self.assertEqual(str(self.conditions), 'WHERE `id` NOT IN (23, 34, 45)')
+    
+    def testValueAsListWrongRelationException(self):
+        self.assertRaises(sqlPuzzle.exceptions.InvalidArgumentException, self.conditions.where, 'id', (23, 34, 45), sqlPuzzle.relations.LE)
+        self.assertRaises(sqlPuzzle.exceptions.InvalidArgumentException, self.conditions.where, 'id', (23, 34, 45), sqlPuzzle.relations.NE)
+        self.assertRaises(sqlPuzzle.exceptions.InvalidArgumentException, self.conditions.where, 'id', (23, 34, 45), sqlPuzzle.relations.LIKE)
+    
+    def testValueAsBooleanWrongRelationException(self):
+        self.assertRaises(sqlPuzzle.exceptions.InvalidArgumentException, self.conditions.where, 'id', True, sqlPuzzle.relations.GT)
+        self.assertRaises(sqlPuzzle.exceptions.InvalidArgumentException, self.conditions.where, 'id', True, sqlPuzzle.relations.NOT_IN)
+        self.assertRaises(sqlPuzzle.exceptions.InvalidArgumentException, self.conditions.where, 'id', True, sqlPuzzle.relations.LIKE)
+    
+    def testValueAsIntegerWrongRelationException(self):
+        self.assertRaises(sqlPuzzle.exceptions.InvalidArgumentException, self.conditions.where, 'id', 67, sqlPuzzle.relations.LIKE)
+        self.assertRaises(sqlPuzzle.exceptions.InvalidArgumentException, self.conditions.where, 'id', 67, sqlPuzzle.relations.IN)
+    
+    def testValueAsStringWrongRelationException(self):
+        self.assertRaises(sqlPuzzle.exceptions.InvalidArgumentException, self.conditions.where, 'id', 67, sqlPuzzle.relations.NOT_IN)
+        self.assertRaises(sqlPuzzle.exceptions.InvalidArgumentException, self.conditions.where, 'id', 67, sqlPuzzle.relations.IN)
+    
     def testMoreSameConditionsPrintAsOne(self):
         self.conditions.where(('age', 20), ('age', 20))
         self.assertEqual(str(self.conditions), 'WHERE `age` = 20')
