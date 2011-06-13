@@ -73,6 +73,9 @@ class Query:
     def _limit(self): return self._getExtension('limit')
     
     
+    def __and__(self, other): self.__raiser('union')
+    def __or__(self, other): self.__raiser('union all')
+    
     def columns(self, *args, **kwds): self.__raiser('columns')
     def from_(self, *args, **kwds): self.__raiser('from')
     def join(self, *args, **kwds): self.__raiser('from')

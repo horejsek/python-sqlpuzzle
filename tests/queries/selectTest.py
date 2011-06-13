@@ -82,6 +82,14 @@ class SelectTest(unittest.TestCase):
         ))
         self.assertEqual(str(self.select), 'SELECT * FROM `user` WHERE `age` = 42 AND `name` LIKE "Harry" AND `sex` = "male" AND `enabled` = 1')
     
+    def testUnion(self):
+        self.select.from_('table')
+        self.assertEqual(self.select | self.select, 'SELECT * FROM `table` UNION SELECT * FROM `table`')
+    
+    def testUnionAll(self):
+        self.select.from_('table')
+        self.assertEqual(self.select & self.select, 'SELECT * FROM `table` UNION ALL SELECT * FROM `table`')
+    
     def testUnsupportInto(self):
         self.assertRaises(sqlPuzzle.exceptions.NotSupprotedException, self.select.into, 'table')
     

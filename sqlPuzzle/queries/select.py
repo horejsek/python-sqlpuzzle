@@ -47,6 +47,12 @@ class Select(sqlPuzzle.queries.query.Query):
     def _typeOfQuery(self):
         return 'SELECT'
     
+    def __and__(self, other):
+        return '%s UNION ALL %s' % (str(self), str(other))
+    
+    def __or__(self, other):
+        return '%s UNION %s' % (str(self), str(other))
+    
     def columns(self, *columns_):
         """
         Set column(s) to query.
