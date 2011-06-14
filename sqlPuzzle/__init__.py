@@ -15,6 +15,10 @@ def select(*columns):
     return sqlPuzzle.queries.select.Select(*columns)
 
 
+def selectFrom(table):
+    return sqlPuzzle.queries.select.Select().from_(table)
+
+
 def insert():
     return sqlPuzzle.queries.insert.Insert()
 
