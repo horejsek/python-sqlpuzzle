@@ -84,7 +84,7 @@ class Columns:
         Set columns.
         """
         for columnName, as_ in sqlPuzzle.argsParser.parseArgsToListOfTuples(
-            {'maxItems': 2, 'allowedDataTypes': (str, unicode)}, *args
+            {'maxItems': 2, 'allowedDataTypes': ((str, unicode, sqlPuzzle.queries.select.Select), (str, unicode))}, *args
         ):
             column = Column(columnName, as_)
             if column not in self:

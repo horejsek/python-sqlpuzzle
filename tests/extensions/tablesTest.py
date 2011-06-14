@@ -29,7 +29,7 @@ class TablesTest(unittest.TestCase):
     def testSimpleJoinNameWithDot1(self):
         self.tables.set('t')
         self.tables.join('a.b').on('t.id', '`a.b`.id')
-        self.assertEqual(str(self.tables), '`t` JOIN `a.b` ON (`t`.`id` = `a.b`.`id`)')
+        self.assertEqual(str(self.tables), '`t` JOIN `a`.`b` ON (`t`.`id` = `a.b`.`id`)')
     
     def testSimpleJoinNameWithDot2(self):
         self.tables.set('t')

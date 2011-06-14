@@ -35,8 +35,8 @@ class Condition:
         """
         Print condition (part of WHERE).
         """
-        return '`%s` %s %s' % (
-            self._column,
+        return '%s %s %s' % (
+            sqlPuzzle.sqlValue.addBackQuotes(self._column),
             sqlPuzzle.relations.RELATIONS[self._relation],
             sqlPuzzle.sqlValue.sqlValue(self._value),
         )
@@ -164,7 +164,7 @@ class Conditions:
                 'allowDict': True,
                 'allowList': True,
                 'allowedDataTypes': (
-                    (str, unicode),
+                    (str, unicode, sqlPuzzle.queries.select.Select),
                     (str, unicode, int, long, float, bool, list, tuple),
                     (int,)
                 ),

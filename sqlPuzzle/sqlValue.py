@@ -5,6 +5,7 @@
 # https://github.com/horejsek/sqlPuzzle
 #
 
+import sqlPuzzle.queries
 import datetime
 import re
 
@@ -18,6 +19,8 @@ def addBackQuotes(value):
     "table.`col.umn`" => "`table`.`col.umn`"
     "`table`.`col.umn`" => "`table`.`col.umn`"
     """
+    if isinstance(value, sqlPuzzle.queries.select.Select):
+        return __subselect(value)
     return '.'.join('`%s`' % i for i in re.split('`([^`]+)`|\.', value) if i)
 
 
@@ -32,7 +35,13 @@ def sqlValue(value):
         return value.isoformat()
     elif isinstance(value, (list, tuple)):
         return "(%s)" % ", ".join(sqlValue(item) for item in value)
+    elif isinstance(value, sqlPuzzle.queries.select.Select):
+        return __subselect(value)
     elif value is None:
         return 'NULL'
     return 'undefined'
+
+
+def __subselect(value):
+    return "(%s)" % value
 

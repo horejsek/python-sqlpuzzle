@@ -58,12 +58,12 @@ class Table:
         Print part of query.
         """
         if self._as:
-            table = '`%s` AS `%s`' % (
-                self._table,
-                self._as,
+            table = '%s AS %s' % (
+                sqlPuzzle.sqlValue.addBackQuotes(self._table),
+                sqlPuzzle.sqlValue.addBackQuotes(self._as),
             )
         else:
-            table = '`%s`' % self._table
+            table = sqlPuzzle.sqlValue.addBackQuotes(self._table)
         
         if self._joins != []:
             if None in [join['on'] for join in self._joins]:
@@ -198,7 +198,7 @@ class Tables:
         args = [arg for arg in args if arg]
         
         for table, as_ in sqlPuzzle.argsParser.parseArgsToListOfTuples(
-            {'maxItems': 2, 'allowedDataTypes': ((str, unicode), (str, unicode))}, *args
+            {'maxItems': 2, 'allowedDataTypes': ((str, unicode, sqlPuzzle.queries.select.Select), (str, unicode))}, *args
         ):
             table = Table(table, as_)
             if table not in self:

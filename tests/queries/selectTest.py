@@ -98,6 +98,23 @@ class SelectTest(unittest.TestCase):
     
     def testUnsupportSet(self):
         self.assertRaises(sqlPuzzle.exceptions.NotSupprotedException, self.select.set, age=42)
+    
+    def testSubselectInColumns(self):
+        subselect = sqlPuzzle.queries.select.Select('col').from_('tab')
+        self.select.columns((subselect, 'c'))
+        self.select.from_('tab')
+        self.assertEqual(str(self.select), 'SELECT (SELECT `col` FROM `tab`) AS "c" FROM `tab`')
+    
+    def testSubselectInTables(self):
+        subselect = sqlPuzzle.queries.select.Select('col').from_('tab')
+        self.select.from_((subselect, 't'))
+        self.assertEqual(str(self.select), 'SELECT * FROM (SELECT `col` FROM `tab`) AS `t`')
+    
+    def testSubselectInCondition(self):
+        subselect = sqlPuzzle.queries.select.Select('col').from_('tab')
+        self.select.from_('tab')
+        self.select.where(subselect, 42, sqlPuzzle.relations.LE)
+        self.assertEqual(str(self.select), 'SELECT * FROM `tab` WHERE (SELECT `col` FROM `tab`) <= 42')
 
 
 if __name__ == '__main__':
