@@ -7,15 +7,15 @@
 
 import unittest
 
-import sqlPuzzle.extensions.orderBy
+import sqlPuzzle.features.orderBy
 
 
 class OrderByTest(unittest.TestCase):
     def setUp(self):
-        self.orderBy = sqlPuzzle.extensions.orderBy.OrderBy()
+        self.orderBy = sqlPuzzle.features.orderBy.OrderBy()
 
     def tearDown(self):
-        self.orderBy = sqlPuzzle.extensions.orderBy.OrderBy()
+        self.orderBy = sqlPuzzle.features.orderBy.OrderBy()
     
     def testSimply(self):
         self.orderBy.orderBy('id')

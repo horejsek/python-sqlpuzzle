@@ -8,15 +8,15 @@
 import unittest
 
 import sqlPuzzle.exceptions
-import sqlPuzzle.extensions.columns
+import sqlPuzzle.features.columns
 
 
 class ColumnsTest(unittest.TestCase):
     def setUp(self):
-        self.columns = sqlPuzzle.extensions.columns.Columns()
+        self.columns = sqlPuzzle.features.columns.Columns()
 
     def tearDown(self):
-        self.columns = sqlPuzzle.extensions.columns.Columns()
+        self.columns = sqlPuzzle.features.columns.Columns()
     
     def testOneColumn(self):
         self.columns.columns('id')

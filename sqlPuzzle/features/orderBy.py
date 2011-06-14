@@ -31,7 +31,7 @@ class Order:
     
     def __eq__(self, other):
         """
-        Is orders equivalent?
+        Are orders equivalent?
         """
         return (
             self._column == other._column and
@@ -73,12 +73,18 @@ class OrderBy:
         return orderBy
     
     def __contains__(self, item):
+        """
+        Is item (orderBy) in list of orderBy?
+        """
         for order in self._orderBy:
             if item._column == order._column:
                 return True
         return False
     
     def __changeSorting(self, columnName, sort):
+        """
+        If columnName in list, just set new sort.
+        """
         for order in self._orderBy:
             if order._column == columnName:
                 order.sort(sort)

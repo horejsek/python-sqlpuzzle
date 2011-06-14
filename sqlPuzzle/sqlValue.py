@@ -25,6 +25,9 @@ def addBackQuotes(value):
 
 
 def sqlValue(value):
+    """
+    Wrap value.
+    """
     if isinstance(value, (str, unicode)):
         return '"%s"' % value
     elif isinstance(value, (int, long)):
@@ -43,5 +46,8 @@ def sqlValue(value):
 
 
 def __subselect(value):
+    """
+    Wrap value as subselect.
+    """
     return "(%s)" % value
 

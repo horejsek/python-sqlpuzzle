@@ -6,10 +6,10 @@
 #
 
 import sqlPuzzle.argsParser
-import sqlPuzzle.extensions.orderBy
+import sqlPuzzle.features.orderBy
 
 
-class Group(sqlPuzzle.extensions.orderBy.Order):
+class Group(sqlPuzzle.features.orderBy.Order):
     pass
 
 
@@ -28,12 +28,18 @@ class GroupBy:
         return groupBy
     
     def __contains__(self, item):
+        """
+        Is item (groupBy) in list of groupBy?
+        """
         for group in self._groupBy:
             if item._column == group._column:
                 return True
         return False
     
     def __changeSorting(self, columnName, sort):
+        """
+        If columnName in list, just set new sort.
+        """
         for group in self._groupBy:
             if group._column == columnName:
                 group.sort(sort)

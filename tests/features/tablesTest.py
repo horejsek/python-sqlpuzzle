@@ -7,16 +7,16 @@
 
 import unittest
 
-import sqlPuzzle.extensions.tables
+import sqlPuzzle.features.tables
 import sqlPuzzle.joinTypes
 
 
 class TablesTest(unittest.TestCase):
     def setUp(self):
-        self.tables = sqlPuzzle.extensions.tables.Tables()
+        self.tables = sqlPuzzle.features.tables.Tables()
 
     def tearDown(self):
-        self.tables = sqlPuzzle.extensions.tables.Tables()
+        self.tables = sqlPuzzle.features.tables.Tables()
     
     def testSimple(self):
         self.tables.set('table')

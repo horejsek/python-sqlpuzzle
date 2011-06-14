@@ -9,9 +9,9 @@ import sqlPuzzle.exceptions
 
 import sqlPuzzle.queries.query
 
-import sqlPuzzle.extensions.conditions
-import sqlPuzzle.extensions.tables
-import sqlPuzzle.extensions.values
+import sqlPuzzle.features.conditions
+import sqlPuzzle.features.tables
+import sqlPuzzle.features.values
 
 
 class Update(sqlPuzzle.queries.query.Query):
@@ -21,12 +21,12 @@ class Update(sqlPuzzle.queries.query.Query):
         """
         sqlPuzzle.queries.query.Query.__init__(self)
         
-        self._setExtensions(
-            tables = sqlPuzzle.extensions.tables.Tables(),
-            values = sqlPuzzle.extensions.values.Values(),
-            conditions = sqlPuzzle.extensions.conditions.Conditions(),
+        self._setFeatures(
+            tables = sqlPuzzle.features.tables.Tables(),
+            values = sqlPuzzle.features.values.Values(),
+            conditions = sqlPuzzle.features.conditions.Conditions(),
         )
-        self._setPrintedExtensions('conditions')
+        self._setPrintedFeatures('conditions')
         
         self.__allowUpdateAll = False
         
@@ -43,9 +43,12 @@ class Update(sqlPuzzle.queries.query.Query):
             str(self._tables),
             str(self._values),
         )
-        return sqlPuzzle.queries.query.Query._appendExtensions(self, update)
+        return sqlPuzzle.queries.query.Query._appendFeatures(self, update)
     
     def _typeOfQuery(self):
+        """
+        Type of query.
+        """
         return 'UPDATE'
     
     def allowUpdateAll(self):

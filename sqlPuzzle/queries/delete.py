@@ -8,8 +8,8 @@
 import sqlPuzzle.exceptions
 import sqlPuzzle.queries.query
 
-import sqlPuzzle.extensions.conditions
-import sqlPuzzle.extensions.tables
+import sqlPuzzle.features.conditions
+import sqlPuzzle.features.tables
 
 
 class Delete(sqlPuzzle.queries.query.Query):
@@ -19,11 +19,11 @@ class Delete(sqlPuzzle.queries.query.Query):
         """
         sqlPuzzle.queries.query.Query.__init__(self)
         
-        self._setExtensions(
-            tables = sqlPuzzle.extensions.tables.Tables(),
-            conditions = sqlPuzzle.extensions.conditions.Conditions(),
+        self._setFeatures(
+            tables = sqlPuzzle.features.tables.Tables(),
+            conditions = sqlPuzzle.features.conditions.Conditions(),
         )
-        self._setPrintedExtensions('conditions')
+        self._setPrintedFeatures('conditions')
         
         self.__allowDeleteAll = False
     
@@ -37,7 +37,7 @@ class Delete(sqlPuzzle.queries.query.Query):
         delete = "DELETE FROM %s" % (
             str(self._tables),
         )
-        return sqlPuzzle.queries.query.Query._appendExtensions(self, delete)
+        return sqlPuzzle.queries.query.Query._appendFeatures(self, delete)
     
     def allowDeleteAll(self):
         """
@@ -54,6 +54,9 @@ class Delete(sqlPuzzle.queries.query.Query):
         return self
     
     def _typeOfQuery(self):
+        """
+        Type of query.
+        """
         return 'DELETE'
     
     def from_(self, *tables):

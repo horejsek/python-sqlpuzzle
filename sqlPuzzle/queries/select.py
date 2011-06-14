@@ -7,12 +7,12 @@
 
 import sqlPuzzle.queries.query
 
-import sqlPuzzle.extensions.columns
-import sqlPuzzle.extensions.conditions
-import sqlPuzzle.extensions.groupBy
-import sqlPuzzle.extensions.limit
-import sqlPuzzle.extensions.orderBy
-import sqlPuzzle.extensions.tables
+import sqlPuzzle.features.columns
+import sqlPuzzle.features.conditions
+import sqlPuzzle.features.groupBy
+import sqlPuzzle.features.limit
+import sqlPuzzle.features.orderBy
+import sqlPuzzle.features.tables
 
 
 class Select(sqlPuzzle.queries.query.Query):
@@ -22,15 +22,15 @@ class Select(sqlPuzzle.queries.query.Query):
         """
         sqlPuzzle.queries.query.Query.__init__(self)
         
-        self._setExtensions(
-            tables = sqlPuzzle.extensions.tables.Tables(),
-            columns = sqlPuzzle.extensions.columns.Columns(),
-            conditions = sqlPuzzle.extensions.conditions.Conditions(),
-            groupBy = sqlPuzzle.extensions.groupBy.GroupBy(),
-            orderBy = sqlPuzzle.extensions.orderBy.OrderBy(),
-            limit = sqlPuzzle.extensions.limit.Limit(),
+        self._setFeatures(
+            tables = sqlPuzzle.features.tables.Tables(),
+            columns = sqlPuzzle.features.columns.Columns(),
+            conditions = sqlPuzzle.features.conditions.Conditions(),
+            groupBy = sqlPuzzle.features.groupBy.GroupBy(),
+            orderBy = sqlPuzzle.features.orderBy.OrderBy(),
+            limit = sqlPuzzle.features.limit.Limit(),
         )
-        self._setPrintedExtensions('conditions', 'groupBy', 'orderBy', 'limit')
+        self._setPrintedFeatures('conditions', 'groupBy', 'orderBy', 'limit')
         
         self.columns(*columns_)
     
@@ -42,15 +42,24 @@ class Select(sqlPuzzle.queries.query.Query):
             str(self._columns),
             str(self._tables),
         )
-        return sqlPuzzle.queries.query.Query._appendExtensions(self, select)
+        return sqlPuzzle.queries.query.Query._appendFeatures(self, select)
     
     def _typeOfQuery(self):
+        """
+        Type of query.
+        """
         return 'SELECT'
     
     def __and__(self, other):
+        """
+        UNION ALL selects.
+        """
         return '%s UNION ALL %s' % (str(self), str(other))
     
     def __or__(self, other):
+        """
+        UNION selects.
+        """
         return '%s UNION %s' % (str(self), str(other))
     
     def columns(self, *columns_):

@@ -7,13 +7,13 @@
 
 import sqlPuzzle.exceptions
 
-import sqlPuzzle.extensions.columns
-import sqlPuzzle.extensions.conditions
-import sqlPuzzle.extensions.groupBy
-import sqlPuzzle.extensions.limit
-import sqlPuzzle.extensions.orderBy
-import sqlPuzzle.extensions.tables
-import sqlPuzzle.extensions.values
+import sqlPuzzle.features.columns
+import sqlPuzzle.features.conditions
+import sqlPuzzle.features.groupBy
+import sqlPuzzle.features.limit
+import sqlPuzzle.features.orderBy
+import sqlPuzzle.features.tables
+import sqlPuzzle.features.values
 
 
 class Query:
@@ -21,56 +21,74 @@ class Query:
         """
         Initialization of Query.
         """
-        self.__extensions = {}
-        self.__printedExtensions = ()
+        self.__features = {}
+        self.__printedFeatures = ()
     
     def __raiser(self, method):
+        """
+        Raise if method is not implemented in actual instance.
+        """
         raise sqlPuzzle.exceptions.NotSupprotedException(method, self._typeOfQuery())
     
     
     def _typeOfQuery(self):
+        """
+        Type of query.
+        """
         return 'undefined'
     
-    def _appendExtensions(self, query=''):
+    def _appendFeatures(self, query=''):
+        """
+        Append features into query.
+        """
         query = str(query)
-        for extension in self.__printedExtensions:
-            object_ = self._getExtension(extension)
+        for feature in self.__printedFeatures:
+            object_ = self._getFeature(feature)
             if object_.isSet():
                 query = '%s %s' % (query, object_)
         return query
     
-    def _setExtensions(self, **kwds):
-        self.__extensions = kwds
+    def _setFeatures(self, **kwds):
+        """
+        Set features.
+        """
+        self.__features = kwds
     
-    def _setPrintedExtensions(self, *args):
-        self.__printedExtensions = args
+    def _setPrintedFeatures(self, *args):
+        """
+        Set features which is proposed to automatic print.
+        """
+        self.__printedFeatures = args
     
-    def _getExtension(self, extension):
-        if extension in self.__extensions:
-            return self.__extensions[extension]
-        self.__raiser(extension)
+    def _getFeature(self, feature):
+        """
+        Get features.
+        """
+        if feature in self.__features:
+            return self.__features[feature]
+        self.__raiser(feature)
     
-    
-    @property
-    def _tables(self): return self._getExtension('tables')
-    
-    @property
-    def _columns(self): return self._getExtension('columns')
-    
-    @property
-    def _values(self): return self._getExtension('values')
-    
-    @property
-    def _conditions(self): return self._getExtension('conditions')
     
     @property
-    def _groupBy(self): return self._getExtension('groupBy')
+    def _tables(self): return self._getFeature('tables')
     
     @property
-    def _orderBy(self): return self._getExtension('orderBy')
+    def _columns(self): return self._getFeature('columns')
     
     @property
-    def _limit(self): return self._getExtension('limit')
+    def _values(self): return self._getFeature('values')
+    
+    @property
+    def _conditions(self): return self._getFeature('conditions')
+    
+    @property
+    def _groupBy(self): return self._getFeature('groupBy')
+    
+    @property
+    def _orderBy(self): return self._getFeature('orderBy')
+    
+    @property
+    def _limit(self): return self._getFeature('limit')
     
     
     def __and__(self, other): self.__raiser('union')

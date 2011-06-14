@@ -7,8 +7,8 @@
 
 import sqlPuzzle.queries.query
 
-import sqlPuzzle.extensions.tables
-import sqlPuzzle.extensions.values
+import sqlPuzzle.features.tables
+import sqlPuzzle.features.values
 
 
 class Insert(sqlPuzzle.queries.query.Query):
@@ -18,9 +18,9 @@ class Insert(sqlPuzzle.queries.query.Query):
         """
         sqlPuzzle.queries.query.Query.__init__(self)
         
-        self._setExtensions(
-            tables = sqlPuzzle.extensions.tables.Tables(),
-            values = sqlPuzzle.extensions.values.Values(),
+        self._setFeatures(
+            tables = sqlPuzzle.features.tables.Tables(),
+            values = sqlPuzzle.features.values.Values(),
         )
     
     def __str__(self):
@@ -35,6 +35,9 @@ class Insert(sqlPuzzle.queries.query.Query):
         return insert
     
     def _typeOfQuery(self):
+        """
+        Type of query.
+        """
         return 'INSERT'
     
     def into(self, table):

@@ -31,7 +31,7 @@ class Column:
     
     def __eq__(self, other):
         """
-        Is columns equivalent?
+        Are columns equivalent?
         """
         return (
             self._column == other._column and
@@ -68,6 +68,9 @@ class Columns:
             return '*'
     
     def __contains__(self, item):
+        """
+        Is item (column) in columns?
+        """
         for column in self._columns:
             if item == column:
                 return True

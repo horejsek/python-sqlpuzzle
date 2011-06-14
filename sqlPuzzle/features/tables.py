@@ -6,13 +6,13 @@
 #
 
 import sqlPuzzle.argsParser
-import sqlPuzzle.extensions.conditions
+import sqlPuzzle.features.conditions
 import sqlPuzzle.joinTypes
 import sqlPuzzle.sqlValue
 
 
 
-class On(sqlPuzzle.extensions.conditions.Condition):
+class On(sqlPuzzle.features.conditions.Condition):
     def __str__(self):
         """
         Print part of query.
@@ -23,6 +23,9 @@ class On(sqlPuzzle.extensions.conditions.Condition):
         )
     
     def __eq__(self, other):
+        """
+        Are on codntions equivalent?
+        """
         return (
             (self._column == other._column and self._value == other._value) or
             (self._column == other._value and self._value == other._column)
@@ -30,7 +33,7 @@ class On(sqlPuzzle.extensions.conditions.Condition):
 
 
 
-class Ons(sqlPuzzle.extensions.conditions.Conditions):
+class Ons(sqlPuzzle.features.conditions.Conditions):
     _conditionObject = On
     
     def __str__(self):
@@ -85,7 +88,7 @@ class Table:
     
     def __eq__(self, other):
         """
-        Is tables equivalent?
+        Are tables equivalent?
         """
         return (
             self._table == other._table and
@@ -174,6 +177,9 @@ class Tables:
         return ", ".join(str(table) for table in self._tables)
     
     def __contains__(self, item):
+        """
+        Is item (table) in list of tables?
+        """
         for table in self._tables:
             if item == table:
                 return True

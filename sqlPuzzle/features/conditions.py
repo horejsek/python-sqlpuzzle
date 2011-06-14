@@ -42,6 +42,9 @@ class Condition:
         )
     
     def __eq__(self, other):
+        """
+        Are conditions equivalent?
+        """
         return (
             self._column == other._column and
             self._value == other._value and
@@ -49,9 +52,15 @@ class Condition:
         )
     
     def __ne__(self, other):
+        """
+        Are conditions not equal?
+        """
         return not self.__eq__(other)
     
     def __isRelationAllowed(self, relation):
+        """
+        Is relation for this value allowed?
+        """
         if isinstance(self._value, (str, unicode)):
             return relation in (
                 sqlPuzzle.relations.EQ,
@@ -137,11 +146,17 @@ class Conditions:
         return ""
     
     def __eq__(self, other):
+        """
+        Are group of conditions equivalent?
+        """
         if other is None:
             return False
         return all(bool(sc == oc) for sc, oc in zip(self._conditions, other._conditions))
     
     def __contains__(self, item):
+        """
+        Is item (condition) in conditions?
+        """
         for condition in self._conditions:
             if item == condition:
                 return True

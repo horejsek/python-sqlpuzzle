@@ -7,13 +7,13 @@ import queries.insertTest
 import queries.selectTest
 import queries.updateTest
 
-import extensions.columnsTest
-import extensions.conditionsTest
-import extensions.groupByTest
-import extensions.limitTest
-import extensions.orderByTest
-import extensions.tablesTest
-import extensions.valuesTest
+import features.columnsTest
+import features.conditionsTest
+import features.groupByTest
+import features.limitTest
+import features.orderByTest
+import features.tablesTest
+import features.valuesTest
 
 import argsParserTest
 import sqlPuzzleTest
@@ -27,13 +27,13 @@ if __name__ == '__main__':
         queries.selectTest.SelectTest,
         queries.updateTest.UpdateTest,
         
-        extensions.columnsTest.ColumnsTest,
-        extensions.conditionsTest.ConditionsTest,
-        extensions.groupByTest.GroupByTest,
-        extensions.limitTest.LimitTest,
-        extensions.orderByTest.OrderByTest,
-        extensions.tablesTest.TablesTest,
-        extensions.valuesTest.ValuesTest,
+        features.columnsTest.ColumnsTest,
+        features.conditionsTest.ConditionsTest,
+        features.groupByTest.GroupByTest,
+        features.limitTest.LimitTest,
+        features.orderByTest.OrderByTest,
+        features.tablesTest.TablesTest,
+        features.valuesTest.ValuesTest,
         
         argsParserTest.ArgsParserTest,
         sqlValueTest.SqlValueTest,

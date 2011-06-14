@@ -7,16 +7,16 @@
 
 import unittest
 
-import sqlPuzzle.extensions.conditions
+import sqlPuzzle.features.conditions
 import sqlPuzzle.relations
 
 
 class ConditionsTest(unittest.TestCase):
     def setUp(self):
-        self.conditions = sqlPuzzle.extensions.conditions.Conditions()
+        self.conditions = sqlPuzzle.features.conditions.Conditions()
 
     def tearDown(self):
-        self.conditions = sqlPuzzle.extensions.conditions.Conditions()
+        self.conditions = sqlPuzzle.features.conditions.Conditions()
     
     def testWhereByTuple(self):
         self.conditions.where((

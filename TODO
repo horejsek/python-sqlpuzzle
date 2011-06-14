@@ -1,7 +1,6 @@
 
 - readme
 - __repr__s
-- doc strings
 
 ########################
 version: 1.0
