@@ -37,7 +37,7 @@ class Update(sqlPuzzle.queries.query.Query):
         Print query.
         """
         if not self._conditions.isSet() and not self.__allowUpdateAll:
-            raise exceptions.ConfirmUpdateAllException()
+            raise sqlPuzzle.exceptions.ConfirmUpdateAllException()
         
         update = "UPDATE %s SET %s" % (
             str(self._tables),
