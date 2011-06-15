@@ -7,7 +7,6 @@
 #
 
 import sqlPuzzle
-import sqlPuzzle.exceptions
 
 #---- BASE ---------------------------------------------------------------------
 
@@ -73,8 +72,9 @@ print sql
 sql1 = sqlPuzzle.selectFrom('t1')
 sql2 = sqlPuzzle.selectFrom('t2')
 
-print sql1 & sql2
+print sql1 & sql2 # returning string, not instance!
 # output: SELECT * FROM `t1` UNION ALL SELECT * FROM `t2`
 
-print sql1 | sql2
+print sql1 | sql2 # returning string, not instance!
 # output: SELECT * FROM `t1` UNION SELECT * FROM `t2`
+
