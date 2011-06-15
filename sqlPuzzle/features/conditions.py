@@ -5,6 +5,8 @@
 # https://github.com/horejsek/sqlPuzzle
 #
 
+import datetime
+
 import sqlPuzzle.argsParser
 import sqlPuzzle.exceptions
 import sqlPuzzle.sqlValue
@@ -21,6 +23,7 @@ class Condition:
         bool: sqlPuzzle.relations.EQ,
         list: sqlPuzzle.relations.IN,
         tuple: sqlPuzzle.relations.IN,
+        datetime.datetime: sqlPuzzle.relations.EQ,
     }
     
     def __init__(self):
@@ -80,7 +83,7 @@ class Condition:
                 sqlPuzzle.relations.EQ,
                 sqlPuzzle.relations.NE,
             )
-        elif isinstance(self._value, (int, long, float)):
+        elif isinstance(self._value, (int, long, float, datetime.datetime)):
             return relation in (
                 sqlPuzzle.relations.EQ,
                 sqlPuzzle.relations.NE,
@@ -186,7 +189,7 @@ class Conditions:
                 'allowList': True,
                 'allowedDataTypes': (
                     (str, unicode, sqlPuzzle.queries.select.Select),
-                    (str, unicode, int, long, float, bool, list, tuple),
+                    (str, unicode, int, long, float, bool, list, tuple, datetime.datetime),
                     (int,)
                 ),
             },

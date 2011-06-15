@@ -5,6 +5,8 @@
 # https://github.com/horejsek/sqlPuzzle
 #
 
+import datetime
+
 import sqlPuzzle.argsParser
 import sqlPuzzle.sqlValue
 
@@ -58,7 +60,7 @@ class Values:
                     'maxItems': 2,
                     'allowDict': True,
                     'allowList': True,
-                    'allowedDataTypes': ((str, unicode), (str, unicode, int, long, float, bool)),
+                    'allowedDataTypes': ((str, unicode), (str, unicode, int, long, float, bool, datetime.datetime)),
                 },
                 *args, **kwds
             )
