@@ -18,8 +18,8 @@ class On(sqlPuzzle.features.conditions.Condition):
         Print part of query.
         """
         return '%s = %s' % (
-            sqlPuzzle.sqlValue.addBackQuotes(self._column),
-            sqlPuzzle.sqlValue.addBackQuotes(self._value),
+            sqlPuzzle.sqlValue.SqlReference(self._column),
+            sqlPuzzle.sqlValue.SqlReference(self._value),
         )
     
     def __eq__(self, other):
@@ -62,11 +62,11 @@ class Table:
         """
         if self._as:
             table = '%s AS %s' % (
-                sqlPuzzle.sqlValue.addBackQuotes(self._table),
-                sqlPuzzle.sqlValue.addBackQuotes(self._as),
+                sqlPuzzle.sqlValue.SqlReference(self._table),
+                sqlPuzzle.sqlValue.SqlReference(self._as),
             )
         else:
-            table = sqlPuzzle.sqlValue.addBackQuotes(self._table)
+            table = str(sqlPuzzle.sqlValue.SqlReference(self._table))
         
         if self._joins != []:
             if None in [join['on'] for join in self._joins]:

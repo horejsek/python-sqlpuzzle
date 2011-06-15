@@ -36,9 +36,9 @@ class Condition:
         Print condition (part of WHERE).
         """
         return '%s %s %s' % (
-            sqlPuzzle.sqlValue.addBackQuotes(self._column),
+            sqlPuzzle.sqlValue.SqlReference(self._column),
             sqlPuzzle.relations.RELATIONS[self._relation],
-            sqlPuzzle.sqlValue.sqlValue(self._value),
+            sqlPuzzle.sqlValue.SqlValue(self._value),
         )
     
     def __eq__(self, other):

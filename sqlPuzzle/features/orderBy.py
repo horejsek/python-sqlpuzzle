@@ -22,10 +22,10 @@ class Order:
         Print part of query.
         """
         if self._sort == 'ASC':
-            return sqlPuzzle.sqlValue.addBackQuotes(self._column)
+            return str(sqlPuzzle.sqlValue.SqlReference(self._column))
         else:
             return '%s %s' % (
-                sqlPuzzle.sqlValue.addBackQuotes(self._column),
+                sqlPuzzle.sqlValue.SqlReference(self._column),
                 self._sort,
             )
     

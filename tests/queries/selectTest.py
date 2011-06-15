@@ -115,6 +115,12 @@ class SelectTest(unittest.TestCase):
         self.select.from_('tab')
         self.select.where(subselect, 42, sqlPuzzle.relations.LE)
         self.assertEqual(str(self.select), 'SELECT * FROM `tab` WHERE (SELECT `col` FROM `tab`) <= 42')
+    
+    def testSubselectReference(self):
+        subselect = sqlPuzzle.queries.select.Select('col').from_('t1').where('t1.a', '`t2`.a')
+        self.select.columns(subselect)
+        self.select.from_('t2')
+        self.assertEqual(str(self.select), 'SELECT (SELECT `col` FROM `t1` WHERE `t1`.`a` = `t2`.`a`) FROM `t2`')
 
 
 if __name__ == '__main__':

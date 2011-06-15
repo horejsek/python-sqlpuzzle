@@ -23,11 +23,11 @@ class Column:
         """
         if self._as:
             return '%s AS "%s"' % (
-                sqlPuzzle.sqlValue.addBackQuotes(self._column),
+                sqlPuzzle.sqlValue.SqlReference(self._column),
                 self._as,
             )
         else:
-            return sqlPuzzle.sqlValue.addBackQuotes(self._column)
+            return str(sqlPuzzle.sqlValue.SqlReference(self._column))
     
     def __eq__(self, other):
         """

@@ -21,7 +21,7 @@ class Values:
         Print values (part of query).
         """
         return ', '.join(
-            '`%s` = %s' % (column, str(sqlPuzzle.sqlValue.sqlValue(value)))
+            '`%s` = %s' % (column, str(sqlPuzzle.sqlValue.SqlValue(value)))
             for column, value in
             self._values.iteritems()
         )
@@ -36,7 +36,7 @@ class Values:
         """
         Print values of values.
         """
-        return ', '.join('%s' % str(sqlPuzzle.sqlValue.sqlValue(value)) for value in self._values.values())
+        return ', '.join('%s' % str(sqlPuzzle.sqlValue.SqlValue(value)) for value in self._values.values())
     
     def isSet(self):
         """
