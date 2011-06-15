@@ -17,7 +17,7 @@ sql.set(name='Harry')
 try:
     print sql
 except sqlPuzzle.exceptions.ConfirmUpdateAllException:
-    pass # delete all records is not enabled by default
+    pass # update all records is not enabled by default
 
 sql.allowUpdateAll()
 print sql

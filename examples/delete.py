@@ -29,3 +29,6 @@ except sqlPuzzle.exceptions.ConfirmDeleteAllException:
 sql.where(id=42)
 print sql
 # output: DELETE FROM `table` WHERE `id` = 42
+
+print sqlPuzzle.deleteFrom('table').where(id=42)
+# same output as previous command
