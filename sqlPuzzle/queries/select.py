@@ -44,6 +44,9 @@ class Select(sqlPuzzle.queries.query.Query):
         )
         return sqlPuzzle.queries.query.Query._appendFeatures(self, select)
     
+    def __repr__(self):
+        return "<Select: %s>" % self.__str__()
+    
     def _typeOfQuery(self):
         """
         Type of query.

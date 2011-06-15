@@ -26,6 +26,9 @@ class Values:
             self._values.iteritems()
         )
     
+    def __repr__(self):
+        return "<Values: %s>" % self.__str__()
+    
     def columns(self):
         """
         Print columns of values.

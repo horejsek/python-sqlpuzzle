@@ -41,6 +41,9 @@ class Condition:
             sqlPuzzle.sqlValue.SqlValue(self._value),
         )
     
+    def __repr__(self):
+        return "<Condition: %s>" % self.__str__()
+    
     def __eq__(self, other):
         """
         Are conditions equivalent?
@@ -144,6 +147,9 @@ class Conditions:
         if self.isSet():
             return "WHERE %s" % " AND ".join(str(condition) for condition in self._conditions)
         return ""
+    
+    def __repr__(self):
+        return "<Conditions: %s>" % self.__str__()
     
     def __eq__(self, other):
         """

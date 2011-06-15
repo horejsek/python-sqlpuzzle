@@ -45,6 +45,9 @@ class Update(sqlPuzzle.queries.query.Query):
         )
         return sqlPuzzle.queries.query.Query._appendFeatures(self, update)
     
+    def __repr__(self):
+        return "<Update: %s>" % self.__str__()
+    
     def _typeOfQuery(self):
         """
         Type of query.

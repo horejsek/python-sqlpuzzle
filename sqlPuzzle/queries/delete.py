@@ -39,6 +39,9 @@ class Delete(sqlPuzzle.queries.query.Query):
         )
         return sqlPuzzle.queries.query.Query._appendFeatures(self, delete)
     
+    def __repr__(self):
+        return "<Delete: %s>" % self.__str__()
+    
     def allowDeleteAll(self):
         """
         Allow delete all records.

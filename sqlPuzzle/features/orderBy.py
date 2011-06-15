@@ -29,6 +29,9 @@ class Order:
                 self._sort,
             )
     
+    def __repr__(self):
+        return "<Order: %s>" % self.__str__()
+    
     def __eq__(self, other):
         """
         Are orders equivalent?
@@ -71,6 +74,9 @@ class OrderBy:
         """
         orderBy = "ORDER BY %s" % ', '.join(str(order) for order in self._orderBy)
         return orderBy
+    
+    def __repr__(self):
+        return "<OrderBy: %s>" % self.__str__()
     
     def __contains__(self, item):
         """

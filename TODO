@@ -1,11 +1,9 @@
 
 - readme
-- __repr__s
 
 ########################
 version: 1.0
 
-- where in subselect can be `a.c`=`b.c`
 - nested conditions
 - HAVING
 - USING

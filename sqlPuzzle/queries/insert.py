@@ -34,6 +34,9 @@ class Insert(sqlPuzzle.queries.query.Query):
         )
         return insert
     
+    def __repr__(self):
+        return "<Insert: %s>" % self.__str__()
+    
     def _typeOfQuery(self):
         """
         Type of query.

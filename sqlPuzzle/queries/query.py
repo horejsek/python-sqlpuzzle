@@ -24,6 +24,9 @@ class Query:
         self.__features = {}
         self.__printedFeatures = ()
     
+    def __repr__(self):
+        return "<Query>"
+    
     def __raiser(self, method):
         """
         Raise if method is not implemented in actual instance.

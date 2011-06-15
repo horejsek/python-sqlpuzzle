@@ -10,7 +10,8 @@ import sqlPuzzle.features.orderBy
 
 
 class Group(sqlPuzzle.features.orderBy.Order):
-    pass
+    def __repr__(self):
+        return "<Group: %s>" % self.__str__()
 
 
 class GroupBy:
@@ -26,6 +27,9 @@ class GroupBy:
         """
         groupBy = "GROUP BY %s" % ', '.join(str(group) for group in self._groupBy)
         return groupBy
+    
+    def __repr__(self):
+        return "<GroupBy: %s>" % self.__str__()
     
     def __contains__(self, item):
         """

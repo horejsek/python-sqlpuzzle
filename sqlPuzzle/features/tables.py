@@ -22,6 +22,9 @@ class On(sqlPuzzle.features.conditions.Condition):
             sqlPuzzle.sqlValue.SqlReference(self._value),
         )
     
+    def __repr__(self):
+        return "<JoinOn: %s>" % self.__str__()
+    
     def __eq__(self, other):
         """
         Are on codntions equivalent?
@@ -43,6 +46,9 @@ class Ons(sqlPuzzle.features.conditions.Conditions):
         if self.isSet():
             return " AND ".join(str(condition) for condition in self._conditions)
         return ""
+    
+    def __repr__(self):
+        return "<JoinOns: %s>" % self.__str__()
 
 
 
@@ -85,6 +91,9 @@ class Table:
             )
         
         return table
+    
+    def __repr__(self):
+        return "<Table: %s>" % self.__str__()
     
     def __eq__(self, other):
         """
@@ -175,6 +184,9 @@ class Tables:
         Print tables (part of query).
         """
         return ", ".join(str(table) for table in self._tables)
+    
+    def __repr__(self):
+        return "<Tables: %s>" % self.__str__()
     
     def __contains__(self, item):
         """

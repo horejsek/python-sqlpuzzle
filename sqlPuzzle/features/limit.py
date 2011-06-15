@@ -28,6 +28,9 @@ class Limit:
             limit = "%s OFFSET %s" % (limit, self.__offset)
         return limit
     
+    def __repr__(self):
+        return "<Limit: %s>" % self.__str__()
+    
     def isSet(self):
         """
         Is limit set?

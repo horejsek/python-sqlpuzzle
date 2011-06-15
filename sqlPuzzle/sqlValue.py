@@ -43,6 +43,9 @@ class SqlValue:
         """
         return self._getConvertMethod()()
     
+    def __repr__(self):
+        return "<SqlValue: %s>" % self.__str__()
+    
     def _getConvertMethod(self):
         """
         Get right method to convert of the value.

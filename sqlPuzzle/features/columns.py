@@ -29,6 +29,9 @@ class Column:
         else:
             return str(sqlPuzzle.sqlValue.SqlReference(self._column))
     
+    def __repr__(self):
+        return "<Column: %s>" % self.__str__()
+    
     def __eq__(self, other):
         """
         Are columns equivalent?
@@ -66,6 +69,9 @@ class Columns:
             return ', '.join(str(column) for column in self._columns)
         else:
             return '*'
+    
+    def __repr__(self):
+        return "<Columns: %s>" % self.__str__()
     
     def __contains__(self, item):
         """
