@@ -24,18 +24,17 @@ class SqlPuzzleError(SqlPuzzleException):
 #### Confirms
 
 
-class ConfirmUpdateAllException(SqlPuzzleException):
+class ConfirmException(SqlPuzzleException):
     def __init__(self):
         pass
-    
+
+
+class ConfirmUpdateAllException(SqlPuzzleException):
     def __str__(self):
         return "Are you sure, that you want update all records?"
 
 
 class ConfirmDeleteAllException(SqlPuzzleException):
-    def __init__(self):
-        pass
-
     def __str__(self):
         return "Are you sure, that you want delete all records?"
 
