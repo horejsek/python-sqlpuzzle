@@ -70,6 +70,7 @@ class Select(sqlPuzzle.queries.query.Query):
         Set column(s) to query.
         """
         self._columns.columns(*columns_)
+        return self
     
     def from_(self, *tables):
         """

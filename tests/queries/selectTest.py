@@ -121,6 +121,10 @@ class SelectTest(unittest.TestCase):
         self.select.columns(subselect)
         self.select.from_('t2')
         self.assertEqual(str(self.select), 'SELECT (SELECT `col` FROM `t1` WHERE `t1`.`a` = `t2`.`a`) FROM `t2`')
+    
+    def testAllColumnsFromSpecificTable(self):
+        self.select.columns('user.*').from_('user')
+        self.assertEqual(str(self.select), 'SELECT `user`.* FROM `user`')
 
 
 if __name__ == '__main__':

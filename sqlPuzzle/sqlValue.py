@@ -127,7 +127,7 @@ class SqlValue:
         "table.`col.umn`" => "`table`.`col.umn`"
         "`table`.`col.umn`" => "`table`.`col.umn`"
         """
-        return '.'.join('`%s`' % i for i in re.split('`([^`]+)`|\.', self.value) if i)
+        return '.'.join('`%s`' % i if i != '*' else i for i in re.split('`([^`]+)`|\.', self.value) if i)
 
 
 
