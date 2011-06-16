@@ -10,6 +10,5 @@ import sqlPuzzle
 
 # TODO:
 # grouping join
-# subselect
 # convert of values
 # convert of references
