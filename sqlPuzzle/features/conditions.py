@@ -76,6 +76,7 @@ class Condition:
                 sqlPuzzle.relations.LT,
                 sqlPuzzle.relations.LE,
                 sqlPuzzle.relations.LIKE,
+                sqlPuzzle.relations.REGEXP,
             )
         # bool is instance of int too, therefor bool must be before int
         elif isinstance(self._value, (bool,)):
