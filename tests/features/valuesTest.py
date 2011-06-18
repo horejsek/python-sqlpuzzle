@@ -17,6 +17,16 @@ class ValuesTest(unittest.TestCase):
 
     def tearDown(self):
         self.values = sqlPuzzle.features.values.Values()
+
+
+
+class BaseTest(ValuesTest):
+    def testIsNotSet(self):
+        self.assertEqual(self.values.isSet(), False)
+    
+    def testIsSet(self):
+        self.values.set(id=23)
+        self.assertEqual(self.values.isSet(), True)
     
     def testValuesByTuple(self):
         self.values.set((
@@ -50,16 +60,10 @@ class ValuesTest(unittest.TestCase):
     def testValuesByKwargs(self):
         self.values.set(name='Alan')
         self.assertEqual(str(self.values), '`name` = "Alan"')
-    
-    def testColumnAsIntegerException(self):
-        self.assertRaises(sqlPuzzle.exceptions.InvalidArgumentException, self.values.set, 42, 'val')
-    
-    def testColumnAsFloatException(self):
-        self.assertRaises(sqlPuzzle.exceptions.InvalidArgumentException, self.values.set, 42.1, 'val')
-    
-    def testColumnAsBooleanException(self):
-        self.assertRaises(sqlPuzzle.exceptions.InvalidArgumentException, self.values.set, True, 'val')
-    
+
+
+
+class AllowedValuesTest(ValuesTest):
     def testValueAsInteger(self):
         self.values.set('col', 42)
         self.assertEqual(str(self.values), '`col` = 42')
@@ -71,15 +75,25 @@ class ValuesTest(unittest.TestCase):
     def testValueAsBoolean(self):
         self.values.set('col', True)
         self.assertEqual(str(self.values), '`col` = 1')
+
+
+
+class ExceptionsTest(ValuesTest):
+    def testColumnAsIntegerException(self):
+        self.assertRaises(sqlPuzzle.exceptions.InvalidArgumentException, self.values.set, 42, 'val')
     
-    def testIsSet(self):
-        self.assertEqual(self.values.isSet(), False)
-        self.values.set(id=23)
-        self.assertEqual(self.values.isSet(), True)
+    def testColumnAsFloatException(self):
+        self.assertRaises(sqlPuzzle.exceptions.InvalidArgumentException, self.values.set, 42.1, 'val')
+    
+    def testColumnAsBooleanException(self):
+        self.assertRaises(sqlPuzzle.exceptions.InvalidArgumentException, self.values.set, True, 'val')
+
 
 
 testCases = (
-    ValuesTest,
+    BaseTest,
+    AllowedValuesTest,
+    ExceptionsTest,
 )
 
 
