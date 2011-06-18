@@ -70,7 +70,14 @@ class SqlPuzzleTest(unittest.TestCase):
         self.assertEqual(str(sql), 'DELETE FROM `user` WHERE `id` = 5')
 
 
+testCases = (
+    SqlPuzzleTest,
+)
+
+
 if __name__ == '__main__':
-    suite = unittest.TestLoader().loadTestsFromTestCase(SqlPuzzleTest)
+    suite = unittest.TestSuite()
+    for testCase in testCases:
+        suite.addTests(unittest.TestLoader().loadTestsFromTestCase(testCase))
     unittest.TextTestRunner(verbosity=2).run(suite)
 

@@ -64,7 +64,14 @@ class ColumnsTest(unittest.TestCase):
         self.assertEqual(self.columns.isSet(), True)
 
 
+testCases = (
+    ColumnsTest,
+)
+
+
 if __name__ == '__main__':
-    suite = unittest.TestLoader().loadTestsFromTestCase(LimitTest)
+    suite = unittest.TestSuite()
+    for testCase in testCases:
+        suite.addTests(unittest.TestLoader().loadTestsFromTestCase(testCase))
     unittest.TextTestRunner(verbosity=2).run(suite)
 

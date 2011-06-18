@@ -63,7 +63,14 @@ class LimitTest(unittest.TestCase):
         self.assertEqual(self.limit.isSet(), True)
 
 
+testCases = (
+    LimitTest,
+)
+
+
 if __name__ == '__main__':
-    suite = unittest.TestLoader().loadTestsFromTestCase(LimitTest)
+    suite = unittest.TestSuite()
+    for testCase in testCases:
+        suite.addTests(unittest.TestLoader().loadTestsFromTestCase(testCase))
     unittest.TextTestRunner(verbosity=2).run(suite)
 

@@ -91,7 +91,14 @@ class ArgsParserTest(unittest.TestCase):
         self.assertEqual(parser({'allowList': True}, (1, 2, 3)), [(1,), (2,), (3,)])
 
 
+testCases = (
+    ArgsParserTest,
+)
+
+
 if __name__ == '__main__':
-    suite = unittest.TestLoader().loadTestsFromTestCase(ArgsParserTest)
+    suite = unittest.TestSuite()
+    for testCase in testCases:
+        suite.addTests(unittest.TestLoader().loadTestsFromTestCase(testCase))
     unittest.TextTestRunner(verbosity=2).run(suite)
 

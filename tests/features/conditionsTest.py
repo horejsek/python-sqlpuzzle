@@ -133,7 +133,14 @@ class ConditionsTest(unittest.TestCase):
         self.assertEqual(self.conditions.isSet(), True)
 
 
+testCases = (
+    ConditionsTest,
+)
+
+
 if __name__ == '__main__':
-    suite = unittest.TestLoader().loadTestsFromTestCase(ConditionsTest)
+    suite = unittest.TestSuite()
+    for testCase in testCases:
+        suite.addTests(unittest.TestLoader().loadTestsFromTestCase(testCase))
     unittest.TextTestRunner(verbosity=2).run(suite)
 

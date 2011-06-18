@@ -78,7 +78,14 @@ class ValuesTest(unittest.TestCase):
         self.assertEqual(self.values.isSet(), True)
 
 
+testCases = (
+    ValuesTest,
+)
+
+
 if __name__ == '__main__':
-    suite = unittest.TestLoader().loadTestsFromTestCase(ValuesTest)
+    suite = unittest.TestSuite()
+    for testCase in testCases:
+        suite.addTests(unittest.TestLoader().loadTestsFromTestCase(testCase))
     unittest.TextTestRunner(verbosity=2).run(suite)
 

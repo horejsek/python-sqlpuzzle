@@ -31,7 +31,14 @@ class SqlValueTest(unittest.TestCase):
         self.assertEqual(str(SqlValue(datetime.datetime(2011, 5, 25, 19, 33, 20))), '2011-05-25T19:33:20')
 
 
+testCases = (
+    SqlValueTest,
+)
+
+
 if __name__ == '__main__':
-    suite = unittest.TestLoader().loadTestsFromTestCase(SqlValueTest)
+    suite = unittest.TestSuite()
+    for testCase in testCases:
+        suite.addTests(unittest.TestLoader().loadTestsFromTestCase(testCase))
     unittest.TextTestRunner(verbosity=2).run(suite)
 

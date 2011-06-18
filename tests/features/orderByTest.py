@@ -67,7 +67,14 @@ class OrderByTest(unittest.TestCase):
         self.assertEqual(self.orderBy.isSet(), True)
 
 
+testCases = (
+    OrderByTest,
+)
+
+
 if __name__ == '__main__':
-    suite = unittest.TestLoader().loadTestsFromTestCase(OrderByTest)
+    suite = unittest.TestSuite()
+    for testCase in testCases:
+        suite.addTests(unittest.TestLoader().loadTestsFromTestCase(testCase))
     unittest.TextTestRunner(verbosity=2).run(suite)
 
