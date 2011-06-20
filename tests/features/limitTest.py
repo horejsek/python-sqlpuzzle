@@ -17,28 +17,44 @@ class LimitTest(unittest.TestCase):
 
     def tearDown(self):
         self.limit = sqlPuzzle.features.limit.Limit()
+
+
+
+class BaseTest(LimitTest):
+    def testIsNotSet(self):
+        self.assertEqual(self.limit.isSet(), False)
+    
+    def testIsSet(self):
+        self.limit.limit(42)
+        self.assertEqual(self.limit.isSet(), True)
     
     def testLimit(self):
         self.limit.limit(10)
         self.assertEqual(str(self.limit), 'LIMIT 10')
     
-    def testOffset(self):
+    def testLimitAndOffset(self):
         self.limit.limit(10)
         self.limit.offset(50)
         self.assertEqual(str(self.limit), 'LIMIT 10 OFFSET 50')
     
-    def testLimitOffset(self):
+    def testLimitAndOffsetInOne(self):
         self.limit.limit(5, 15)
         self.assertEqual(str(self.limit), 'LIMIT 5 OFFSET 15')
-    
+
+
+
+class InlineTest(LimitTest):
     def testInline(self):
         self.limit.limit(3).offset(12)
         self.assertEqual(str(self.limit), 'LIMIT 3 OFFSET 12')
     
     def testInlineInvert(self):
-        self.limit.limit(4).offset(16)
+        self.limit.offset(16).limit(4)
         self.assertEqual(str(self.limit), 'LIMIT 4 OFFSET 16')
-    
+
+
+
+class ExceptionsTest(LimitTest):
     def testLimitStringException(self):
         self.assertRaises(sqlPuzzle.exceptions.InvalidArgumentException, self.limit.limit, 'limit')
     
@@ -56,14 +72,19 @@ class LimitTest(unittest.TestCase):
     
     def testOffsetBooleanException(self):
         self.assertRaises(sqlPuzzle.exceptions.InvalidArgumentException, self.limit.offset, False)
-    
-    def testIsSet(self):
-        self.assertEqual(self.limit.isSet(), False)
-        self.limit.limit(42)
-        self.assertEqual(self.limit.isSet(), True)
+
+
+
+testCases = (
+    BaseTest,
+    InlineTest,
+    ExceptionsTest,
+)
 
 
 if __name__ == '__main__':
-    suite = unittest.TestLoader().loadTestsFromTestCase(LimitTest)
+    suite = unittest.TestSuite()
+    for testCase in testCases:
+        suite.addTests(unittest.TestLoader().loadTestsFromTestCase(testCase))
     unittest.TextTestRunner(verbosity=2).run(suite)
 

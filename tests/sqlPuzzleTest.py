@@ -12,65 +12,48 @@ import sqlPuzzle.relations
 
 
 class SqlPuzzleTest(unittest.TestCase):
-    def testSelect(self):
-        sql = sqlPuzzle.select('id', 'name')
-        sql.from_('user')
+    def testSelectWithoutColumns(self):
+        sql = sqlPuzzle.select().from_('user')
+        self.assertEqual(str(sql), 'SELECT * FROM `user`')
+    
+    def testSelectWithColumns(self):
+        sql = sqlPuzzle.select('id', 'name').from_('user')
         self.assertEqual(str(sql), 'SELECT `id`, `name` FROM `user`')
     
-    def testSelectColumn(self):
-        sql = sqlPuzzle.select()
-        sql.columns('id', 'name')
-        sql.from_('user')
-        self.assertEqual(str(sql), 'SELECT `id`, `name` FROM `user`')
-    
-    def testSelectWhere(self):
-        sql = sqlPuzzle.select('id', 'name')
-        sql.from_('user')
-        sql.where('name', 'John', sqlPuzzle.relations.EQUAL_TO)
-        self.assertEqual(str(sql), 'SELECT `id`, `name` FROM `user` WHERE `name` = "John"')
-    
-    def testSelectLimit(self):
-        sql = sqlPuzzle.select('id', 'name')
-        sql.from_('user')
-        sql.limit(10).offset(100)
-        self.assertEqual(str(sql), 'SELECT `id`, `name` FROM `user` LIMIT 10 OFFSET 100')
-        
-        sql.limit(20, 40)
-        self.assertEqual(str(sql), 'SELECT `id`, `name` FROM `user` LIMIT 20 OFFSET 40')
-        
-        sql.limit(None)
-        self.assertEqual(str(sql), 'SELECT `id`, `name` FROM `user`')
+    def testSelectFrom(self):
+        sql = sqlPuzzle.selectFrom('user')
+        self.assertEqual(str(sql), 'SELECT * FROM `user`')
     
     def testInsert(self):
-        sql = sqlPuzzle.insert().into('user')
-        sql.values({
-            'name': 'Harry',
-            'sex': 'female', # :)
-        })
-        self.assertEqual(str(sql), 'INSERT INTO `user` (`name`, `sex`) VALUES ("Harry", "female")')
-        
-        sql.values(
-            name = 'Alan',
-            sex = 'male'
-        )
-        self.assertEqual(str(sql), 'INSERT INTO `user` (`name`, `sex`) VALUES ("Alan", "male")')
+        sql = sqlPuzzle.insert().into('user').values(name='Harry')
+        self.assertEqual(str(sql), 'INSERT INTO `user` (`name`) VALUES ("Harry")')
+    
+    def testInsertInto(self):
+        sql = sqlPuzzle.insertInto('user').values(name='Harry')
+        self.assertEqual(str(sql), 'INSERT INTO `user` (`name`) VALUES ("Harry")')
     
     def testUpdate(self):
-        sql = sqlPuzzle.update('user')
-        sql.set(sex='male')
-        sql.where(name='Harry')
-        self.assertEqual(str(sql), 'UPDATE `user` SET `sex` = "male" WHERE `name` = "Harry"')
-        
-        sql.set({'sex': 'female'})
-        self.assertEqual(str(sql), 'UPDATE `user` SET `sex` = "female" WHERE `name` = "Harry"')
+        sql = sqlPuzzle.update('user').set(name='Alan').where(id=42)
+        self.assertEqual(str(sql), 'UPDATE `user` SET `name` = "Alan" WHERE `id` = 42')
     
     def testDelete(self):
-        sql = sqlPuzzle.delete().from_('user')
-        sql.where(id=5)
-        self.assertEqual(str(sql), 'DELETE FROM `user` WHERE `id` = 5')
+        sql = sqlPuzzle.delete().from_('user').where(id=42)
+        self.assertEqual(str(sql), 'DELETE FROM `user` WHERE `id` = 42')
+    
+    def testDeleteFrom(self):
+        sql = sqlPuzzle.deleteFrom('user').where(id=42)
+        self.assertEqual(str(sql), 'DELETE FROM `user` WHERE `id` = 42')
+
+
+
+testCases = (
+    SqlPuzzleTest,
+)
 
 
 if __name__ == '__main__':
-    suite = unittest.TestLoader().loadTestsFromTestCase(SqlPuzzleTest)
+    suite = unittest.TestSuite()
+    for testCase in testCases:
+        suite.addTests(unittest.TestLoader().loadTestsFromTestCase(testCase))
     unittest.TextTestRunner(verbosity=2).run(suite)
 

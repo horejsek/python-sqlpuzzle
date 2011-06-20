@@ -16,10 +16,24 @@ class GroupByTest(unittest.TestCase):
 
     def tearDown(self):
         self.groupBy = sqlPuzzle.features.groupBy.GroupBy()
+
+
+
+class BaseTest(GroupByTest):
+    def testIsNotSet(self):
+        self.assertEqual(self.groupBy.isSet(), False)
+    
+    def testIsSet(self):
+        self.groupBy.groupBy('id')
+        self.assertEqual(self.groupBy.isSet(), True)
     
     def testSimply(self):
         self.groupBy.groupBy('id')
         self.assertEqual(str(self.groupBy), 'GROUP BY `id`')
+    
+    def testMoreColumns(self):
+        self.groupBy.groupBy('id', ['name', 'desc'])
+        self.assertEqual(str(self.groupBy), 'GROUP BY `id`, `name` DESC')
     
     def testASC(self):
         self.groupBy.groupBy(['name', 'asc'])
@@ -28,11 +42,10 @@ class GroupByTest(unittest.TestCase):
     def testDESC(self):
         self.groupBy.groupBy(['name', 'desc'])
         self.assertEqual(str(self.groupBy), 'GROUP BY `name` DESC')
-    
-    def testMore(self):
-        self.groupBy.groupBy('id', ['name', 'desc'])
-        self.assertEqual(str(self.groupBy), 'GROUP BY `id`, `name` DESC')
-    
+
+
+
+class BackQuotesTest(GroupByTest):
     def testColumnNameAsTableAndColumn(self):
         self.groupBy.groupBy('table.column')
         self.assertEqual(str(self.groupBy), 'GROUP BY `table`.`column`')
@@ -40,7 +53,10 @@ class GroupByTest(unittest.TestCase):
     def testColumnNameAsTableAndColumnWithDotInName(self):
         self.groupBy.groupBy('table.`column.`')
         self.assertEqual(str(self.groupBy), 'GROUP BY `table`.`column.`')
-    
+
+
+
+class GroupingTest(GroupByTest):
     def testMoreSameColumnsPrintAsOne(self):
         self.groupBy.groupBy('col', 'col')
         self.assertEqual(str(self.groupBy), 'GROUP BY `col`')
@@ -48,7 +64,10 @@ class GroupByTest(unittest.TestCase):
     def testMoreSameColumnsWithDiffAscPrintAsOne(self):
         self.groupBy.groupBy('col', ('col', 'DESC'))
         self.assertEqual(str(self.groupBy), 'GROUP BY `col` DESC')
-    
+
+
+
+class ExceptionsTest(GroupByTest):
     def testNameAsIntegerException(self):
         self.assertRaises(sqlPuzzle.exceptions.InvalidArgumentException, self.groupBy.groupBy, 42)
     
@@ -60,14 +79,20 @@ class GroupByTest(unittest.TestCase):
     
     def testNotAscOrDescException(self):
         self.assertRaises(sqlPuzzle.exceptions.InvalidArgumentException, self.groupBy.groupBy, ('col', 'AAA'))
-    
-    def testIsSet(self):
-        self.assertEqual(self.groupBy.isSet(), False)
-        self.groupBy.groupBy('id')
-        self.assertEqual(self.groupBy.isSet(), True)
+
+
+
+testCases = (
+    BaseTest,
+    BackQuotesTest,
+    GroupingTest,
+    ExceptionsTest,
+)
 
 
 if __name__ == '__main__':
-    suite = unittest.TestLoader().loadTestsFromTestCase(GroupByTest)
+    suite = unittest.TestSuite()
+    for testCase in testCases:
+        suite.addTests(unittest.TestLoader().loadTestsFromTestCase(testCase))
     unittest.TextTestRunner(verbosity=2).run(suite)
 

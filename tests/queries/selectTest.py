@@ -18,7 +18,10 @@ class SelectTest(unittest.TestCase):
 
     def tearDown(self):
         self.select = sqlPuzzle.queries.select.Select()
-    
+
+
+
+class BaseTest(SelectTest):
     def testSimply(self):
         self.select.columns('id', 'name')
         self.select.from_('user')
@@ -28,6 +31,32 @@ class SelectTest(unittest.TestCase):
         self.select.from_('user')
         self.assertEqual(str(self.select), 'SELECT * FROM `user`')
     
+    def testAllColumnsFromSpecificTable(self):
+        self.select.columns('user.*').from_('user')
+        self.assertEqual(str(self.select), 'SELECT `user`.* FROM `user`')
+    
+    def testOrderBy(self):
+        self.select.from_('user')
+        self.select.orderBy('id')
+        self.assertEqual(str(self.select), 'SELECT * FROM `user` ORDER BY `id`')
+    
+    def testGroupBy(self):
+        self.select.from_('user')
+        self.select.groupBy('id')
+        self.assertEqual(str(self.select), 'SELECT * FROM `user` GROUP BY `id`')
+    
+    def testUnsupportedInto(self):
+        self.assertRaises(sqlPuzzle.exceptions.NotSupprotedException, self.select.into, 'table')
+    
+    def testUnsupportedValues(self):
+        self.assertRaises(sqlPuzzle.exceptions.NotSupprotedException, self.select.values, name='Alan')
+    
+    def testUnsupportedSet(self):
+        self.assertRaises(sqlPuzzle.exceptions.NotSupprotedException, self.select.set, age=42)
+
+
+
+class JoinTest(SelectTest):
     def testJoin(self):
         self.select.from_('user').join('country').on('user.country_id', 'country.id')
         self.assertEqual(str(self.select), 'SELECT * FROM `user` JOIN `country` ON (`user`.`country_id` = `country`.`id`)')
@@ -43,17 +72,25 @@ class SelectTest(unittest.TestCase):
     def testRightJoin(self):
         self.select.from_('user').rightJoin('country').on('user.country_id', 'country.id')
         self.assertEqual(str(self.select), 'SELECT * FROM `user` RIGHT JOIN `country` ON (`user`.`country_id` = `country`.`id`)')
-    
-    def testOrderBy(self):
+
+
+
+class WhereTest(SelectTest):
+    def testWhere(self):
         self.select.from_('user')
-        self.select.orderBy('id')
-        self.assertEqual(str(self.select), 'SELECT * FROM `user` ORDER BY `id`')
-    
-    def testGroupBy(self):
-        self.select.from_('user')
-        self.select.groupBy('id')
-        self.assertEqual(str(self.select), 'SELECT * FROM `user` GROUP BY `id`')
-    
+        self.select.where(age=42)
+        self.select.where('name', 'Harry', sqlPuzzle.relations.LIKE)
+        self.select.where({
+            'sex': 'male',
+        })
+        self.select.where((
+            ('enabled', 1),
+        ))
+        self.assertEqual(str(self.select), 'SELECT * FROM `user` WHERE `age` = 42 AND `name` LIKE "Harry" AND `sex` = "male" AND `enabled` = 1')
+
+
+
+class LimitTest(SelectTest):
     def testLimit(self):
         self.select.from_('user')
         self.select.limit(10)
@@ -69,19 +106,10 @@ class SelectTest(unittest.TestCase):
         self.select.limit(20)
         self.select.offset(30)
         self.assertEqual(str(self.select), 'SELECT * FROM `user` LIMIT 20 OFFSET 30')
-    
-    def testWhere(self):
-        self.select.from_('user')
-        self.select.where(age=42)
-        self.select.where('name', 'Harry', sqlPuzzle.relations.LIKE)
-        self.select.where({
-            'sex': 'male',
-        })
-        self.select.where((
-            ('enabled', 1),
-        ))
-        self.assertEqual(str(self.select), 'SELECT * FROM `user` WHERE `age` = 42 AND `name` LIKE "Harry" AND `sex` = "male" AND `enabled` = 1')
-    
+
+
+
+class UnionTest(SelectTest):
     def testUnion(self):
         self.select.from_('table')
         self.assertEqual(self.select | self.select, 'SELECT * FROM `table` UNION SELECT * FROM `table`')
@@ -89,16 +117,10 @@ class SelectTest(unittest.TestCase):
     def testUnionAll(self):
         self.select.from_('table')
         self.assertEqual(self.select & self.select, 'SELECT * FROM `table` UNION ALL SELECT * FROM `table`')
-    
-    def testUnsupportInto(self):
-        self.assertRaises(sqlPuzzle.exceptions.NotSupprotedException, self.select.into, 'table')
-    
-    def testUnsupportValues(self):
-        self.assertRaises(sqlPuzzle.exceptions.NotSupprotedException, self.select.values, name='Alan')
-    
-    def testUnsupportSet(self):
-        self.assertRaises(sqlPuzzle.exceptions.NotSupprotedException, self.select.set, age=42)
-    
+
+
+
+class SubselectTest(SelectTest):
     def testSubselectInColumns(self):
         subselect = sqlPuzzle.queries.select.Select('col').from_('tab')
         self.select.columns((subselect, 'c'))
@@ -121,13 +143,22 @@ class SelectTest(unittest.TestCase):
         self.select.columns(subselect)
         self.select.from_('t2')
         self.assertEqual(str(self.select), 'SELECT (SELECT `col` FROM `t1` WHERE `t1`.`a` = `t2`.`a`) FROM `t2`')
-    
-    def testAllColumnsFromSpecificTable(self):
-        self.select.columns('user.*').from_('user')
-        self.assertEqual(str(self.select), 'SELECT `user`.* FROM `user`')
+
+
+
+testCases = (
+    BaseTest,
+    JoinTest,
+    WhereTest,
+    LimitTest,
+    UnionTest,
+    SubselectTest,
+)
 
 
 if __name__ == '__main__':
-    suite = unittest.TestLoader().loadTestsFromTestCase(SelectTest)
+    suite = unittest.TestSuite()
+    for testCase in testCases:
+        suite.addTests(unittest.TestLoader().loadTestsFromTestCase(testCase))
     unittest.TextTestRunner(verbosity=2).run(suite)
 

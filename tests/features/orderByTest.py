@@ -16,10 +16,24 @@ class OrderByTest(unittest.TestCase):
 
     def tearDown(self):
         self.orderBy = sqlPuzzle.features.orderBy.OrderBy()
+
+
+
+class BaseTest(OrderByTest):
+    def testIsNotSet(self):
+        self.assertEqual(self.orderBy.isSet(), False)
+    
+    def testIsSet(self):
+        self.orderBy.orderBy('id')
+        self.assertEqual(self.orderBy.isSet(), True)
     
     def testSimply(self):
         self.orderBy.orderBy('id')
         self.assertEqual(str(self.orderBy), 'ORDER BY `id`')
+    
+    def testMoreColumns(self):
+        self.orderBy.orderBy('id', ['name', 'desc'])
+        self.assertEqual(str(self.orderBy), 'ORDER BY `id`, `name` DESC')
     
     def testASC(self):
         self.orderBy.orderBy(['name', 'asc'])
@@ -28,11 +42,10 @@ class OrderByTest(unittest.TestCase):
     def testDESC(self):
         self.orderBy.orderBy(['name', 'desc'])
         self.assertEqual(str(self.orderBy), 'ORDER BY `name` DESC')
-    
-    def testMore(self):
-        self.orderBy.orderBy('id', ['name', 'desc'])
-        self.assertEqual(str(self.orderBy), 'ORDER BY `id`, `name` DESC')
-    
+
+
+
+class BackQuotesTest(OrderByTest):
     def testColumnNameAsTableAndColumn(self):
         self.orderBy.orderBy('table.column')
         self.assertEqual(str(self.orderBy), 'ORDER BY `table`.`column`')
@@ -40,7 +53,10 @@ class OrderByTest(unittest.TestCase):
     def testColumnNameAsTableAndColumnWithDotInName(self):
         self.orderBy.orderBy('table.`column.`')
         self.assertEqual(str(self.orderBy), 'ORDER BY `table`.`column.`')
-    
+
+
+
+class GroupingTest(OrderByTest):
     def testMoreSameColumnsPrintAsOne(self):
         self.orderBy.orderBy('col', 'col')
         self.assertEqual(str(self.orderBy), 'ORDER BY `col`')
@@ -48,7 +64,10 @@ class OrderByTest(unittest.TestCase):
     def testMoreSameColumnsWithDiffAscPrintAsOne(self):
         self.orderBy.orderBy('col', ('col', 'DESC'))
         self.assertEqual(str(self.orderBy), 'ORDER BY `col` DESC')
-    
+
+
+
+class ExceptionsTest(OrderByTest):
     def testNameAsIntegerException(self):
         self.assertRaises(sqlPuzzle.exceptions.InvalidArgumentException, self.orderBy.orderBy, 42)
     
@@ -60,14 +79,20 @@ class OrderByTest(unittest.TestCase):
     
     def testNotAscOrDescException(self):
         self.assertRaises(sqlPuzzle.exceptions.InvalidArgumentException, self.orderBy.orderBy, ('col', 'AAA'))
-    
-    def testIsSet(self):
-        self.assertEqual(self.orderBy.isSet(), False)
-        self.orderBy.orderBy('id')
-        self.assertEqual(self.orderBy.isSet(), True)
+
+
+
+testCases = (
+    BaseTest,
+    BackQuotesTest,
+    GroupingTest,
+    ExceptionsTest,
+)
 
 
 if __name__ == '__main__':
-    suite = unittest.TestLoader().loadTestsFromTestCase(OrderByTest)
+    suite = unittest.TestSuite()
+    for testCase in testCases:
+        suite.addTests(unittest.TestLoader().loadTestsFromTestCase(testCase))
     unittest.TextTestRunner(verbosity=2).run(suite)
 

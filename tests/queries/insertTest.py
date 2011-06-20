@@ -17,29 +17,40 @@ class InsertTest(unittest.TestCase):
 
     def tearDown(self):
         self.insert = sqlPuzzle.queries.insert.Insert()
-    
+
+
+
+class BaseTest(InsertTest):
     def testSimply(self):
         self.insert.into('user')
         self.insert.values(name='Alan')
         self.assertEqual(str(self.insert), 'INSERT INTO `user` (`name`) VALUES ("Alan")')
     
-    def testUnsupportFrom(self):
+    def testUnsupportedFrom(self):
         self.assertRaises(sqlPuzzle.exceptions.NotSupprotedException, self.insert.from_, 'table')
     
-    def testUnsupportWhere(self):
+    def testUnsupportedWhere(self):
         self.assertRaises(sqlPuzzle.exceptions.NotSupprotedException, self.insert.where, name='Alan')
     
-    def testUnsupportLimit(self):
+    def testUnsupportedLimit(self):
         self.assertRaises(sqlPuzzle.exceptions.NotSupprotedException, self.insert.limit, 1)
     
-    def testUnsupportOffset(self):
+    def testUnsupportedOffset(self):
         self.assertRaises(sqlPuzzle.exceptions.NotSupprotedException, self.insert.offset, 2)
     
-    def testUnsupportSet(self):
+    def testUnsupportedSet(self):
         self.assertRaises(sqlPuzzle.exceptions.NotSupprotedException, self.insert.set, age=42)
 
 
+
+testCases = (
+    BaseTest,
+)
+
+
 if __name__ == '__main__':
-    suite = unittest.TestLoader().loadTestsFromTestCase(InsertTest)
+    suite = unittest.TestSuite()
+    for testCase in testCases:
+        suite.addTests(unittest.TestLoader().loadTestsFromTestCase(testCase))
     unittest.TextTestRunner(verbosity=2).run(suite)
 

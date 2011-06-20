@@ -21,24 +21,28 @@ import sqlValueTest
 
 
 if __name__ == '__main__':
-    testCases = (
-        queries.deleteTest.DeleteTest,
-        queries.insertTest.InsertTest,
-        queries.selectTest.SelectTest,
-        queries.updateTest.UpdateTest,
+    testModules = (
+        queries.deleteTest,
+        queries.insertTest,
+        queries.selectTest,
+        queries.updateTest,
         
-        features.columnsTest.ColumnsTest,
-        features.conditionsTest.ConditionsTest,
-        features.groupByTest.GroupByTest,
-        features.limitTest.LimitTest,
-        features.orderByTest.OrderByTest,
-        features.tablesTest.TablesTest,
-        features.valuesTest.ValuesTest,
+        features.columnsTest,
+        features.conditionsTest,
+        features.groupByTest,
+        features.limitTest,
+        features.orderByTest,
+        features.tablesTest,
+        features.valuesTest,
         
-        argsParserTest.ArgsParserTest,
-        sqlValueTest.SqlValueTest,
-        sqlPuzzleTest.SqlPuzzleTest,
+        argsParserTest,
+        sqlValueTest,
+        sqlPuzzleTest,
     )
+    
+    testCases = []
+    for testModule in testModules:
+        testCases += testModule.testCases
 
     suite = unittest.TestSuite()
     for testCase in testCases:
