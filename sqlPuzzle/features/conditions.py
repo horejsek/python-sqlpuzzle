@@ -23,6 +23,7 @@ class Condition:
         bool: sqlPuzzle.relations.EQ,
         list: sqlPuzzle.relations.IN,
         tuple: sqlPuzzle.relations.IN,
+        datetime.date: sqlPuzzle.relations.EQ,
         datetime.datetime: sqlPuzzle.relations.EQ,
     }
     
@@ -84,7 +85,7 @@ class Condition:
                 sqlPuzzle.relations.EQ,
                 sqlPuzzle.relations.NE,
             )
-        elif isinstance(self._value, (int, long, float, datetime.datetime)):
+        elif isinstance(self._value, (int, long, float, datetime.date, datetime.datetime)):
             return relation in (
                 sqlPuzzle.relations.EQ,
                 sqlPuzzle.relations.NE,
@@ -190,7 +191,7 @@ class Conditions:
                 'allowList': True,
                 'allowedDataTypes': (
                     (str, unicode, sqlPuzzle.queries.select.Select),
-                    (str, unicode, int, long, float, bool, list, tuple, datetime.datetime),
+                    (str, unicode, int, long, float, bool, list, tuple, datetime.date, datetime.datetime),
                     (int,)
                 ),
             },

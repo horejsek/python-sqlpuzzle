@@ -60,7 +60,7 @@ class Values:
                     'maxItems': 2,
                     'allowDict': True,
                     'allowList': True,
-                    'allowedDataTypes': ((str, unicode), (str, unicode, int, long, float, bool, datetime.datetime)),
+                    'allowedDataTypes': ((str, unicode), (str, unicode, int, long, float, bool, datetime.date, datetime.datetime)),
                 },
                 *args, **kwds
             )
