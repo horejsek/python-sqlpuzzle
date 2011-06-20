@@ -92,7 +92,7 @@ class SqlValue:
         """
         Convert as datetime.
         """
-        return self.value.isoformat()
+        return '"%s"' % self.value.isoformat()
     
     def _list(self):
         """
