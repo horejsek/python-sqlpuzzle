@@ -10,6 +10,7 @@ import sqlPuzzle.queries.query
 import sqlPuzzle.features.columns
 import sqlPuzzle.features.conditions
 import sqlPuzzle.features.groupBy
+import sqlPuzzle.features.having
 import sqlPuzzle.features.limit
 import sqlPuzzle.features.orderBy
 import sqlPuzzle.features.tables
@@ -27,10 +28,11 @@ class Select(sqlPuzzle.queries.query.Query):
             columns = sqlPuzzle.features.columns.Columns(),
             conditions = sqlPuzzle.features.conditions.Conditions(),
             groupBy = sqlPuzzle.features.groupBy.GroupBy(),
+            having = sqlPuzzle.features.having.Having(),
             orderBy = sqlPuzzle.features.orderBy.OrderBy(),
             limit = sqlPuzzle.features.limit.Limit(),
         )
-        self._setPrintedFeatures('conditions', 'groupBy', 'orderBy', 'limit')
+        self._setPrintedFeatures('conditions', 'groupBy', 'having', 'orderBy', 'limit')
         
         self._selectOptions = SelectOptions()
         
@@ -123,9 +125,16 @@ class Select(sqlPuzzle.queries.query.Query):
     
     def where(self, *args, **kwds):
         """
-        Set condition(s) to query.
+        Set condition(s) of where to query.
         """
         self._conditions.where(*args, **kwds)
+        return self
+    
+    def having(self, *args, **kwds):
+        """
+        Set condition(s) of having to query.
+        """
+        self._having.where(*args, **kwds)
         return self
     
     def groupBy(self, *args):

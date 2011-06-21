@@ -88,6 +88,9 @@ class Query:
     def _groupBy(self): return self._getFeature('groupBy')
     
     @property
+    def _having(self): return self._getFeature('having')
+    
+    @property
     def _orderBy(self): return self._getFeature('orderBy')
     
     @property

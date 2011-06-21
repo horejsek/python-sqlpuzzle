@@ -90,6 +90,21 @@ class WhereTest(SelectTest):
 
 
 
+class HavingTest(SelectTest):
+    def testWhere(self):
+        self.select.from_('user')
+        self.select.having(age=42)
+        self.select.having('name', 'Harry', sqlPuzzle.relations.LIKE)
+        self.select.having({
+            'sex': 'male',
+        })
+        self.select.having((
+            ('enabled', 1),
+        ))
+        self.assertEqual(str(self.select), 'SELECT * FROM `user` HAVING `age` = 42 AND `name` LIKE "Harry" AND `sex` = "male" AND `enabled` = 1')
+
+
+
 class LimitTest(SelectTest):
     def testLimit(self):
         self.select.from_('user')

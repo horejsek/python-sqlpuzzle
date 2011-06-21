@@ -147,7 +147,7 @@ class Conditions:
     
     def __str__(self):
         """
-        Print limit (part of query).
+        Print where (part of query).
         """
         if self.isSet():
             return "WHERE %s" % " AND ".join(str(condition) for condition in self._conditions)
