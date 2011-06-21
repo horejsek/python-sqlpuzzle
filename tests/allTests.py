@@ -10,6 +10,7 @@ import queries.updateTest
 import features.columnsTest
 import features.conditionsTest
 import features.groupByTest
+import features.havingTest
 import features.limitTest
 import features.orderByTest
 import features.tablesTest
@@ -30,6 +31,7 @@ if __name__ == '__main__':
         features.columnsTest,
         features.conditionsTest,
         features.groupByTest,
+        features.havingTest,
         features.limitTest,
         features.orderByTest,
         features.tablesTest,

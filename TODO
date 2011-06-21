@@ -5,7 +5,6 @@
 version: 1.0
 
 - nested conditions
-- USING
 - AVG, SUM, ...
 - INTO OUTFILE
 - ON DUPLICATE KEY UPDATE
