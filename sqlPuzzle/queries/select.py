@@ -158,14 +158,14 @@ class Select(sqlPuzzle.queries.query.Query):
     
     def sqlCache(self):
         """
-        SQL CACHE
+        SQL_CACHE
         """
         self._selectOptions.sqlCache()
         return self
     
     def sqlNoCache(self):
         """
-        SQL NO CACHE
+        SQL_NO_CACHE
         """
         self._selectOptions.sqlNoCache()
         return self
@@ -190,6 +190,27 @@ class Select(sqlPuzzle.queries.query.Query):
         """
         self._selectOptions.distinctrow()
         return self
+    
+    def sqlSmallResult(self):
+        """
+        SQL_SMALL_RESULT
+        """
+        self._selectOptions.sqlSmallResult()
+        return self
+    
+    def sqlBigResult(self):
+        """
+        SQL_BIG_RESULT
+        """
+        self._selectOptions.sqlBigResult()
+        return self
+    
+    def sqlBufferResult(self):
+        """
+        SQL_BUFFER_RESULT
+        """
+        self._selectOptions.sqlBufferResult()
+        return self
 
 
 
@@ -205,7 +226,19 @@ class SelectOptions:
             'all': 'ALL',
             'distinct': 'DISTINCT',
             'distinctrow': 'DISTINCTROW',
-        }
+        },
+        'sqlSmallResult': {
+            'off': '',
+            'on': 'SQL_SMALL_RESULT',
+        },
+        'sqlBigResult': {
+            'off': '',
+            'on': 'SQL_BIG_RESULT',
+        },
+        'sqlBufferResult': {
+            'off': '',
+            'on': 'SQL_BUFFER_RESULT',
+        },
     }
     
     def __init__(self):
@@ -230,5 +263,14 @@ class SelectOptions:
     
     def distinctrow(self):
         self._setOptions['duplicated'] = 'distinctrow'
+    
+    def sqlSmallResult(self):
+        self._setOptions['sqlSmallResult'] = 'on'
+    
+    def sqlBigResult(self):
+        self._setOptions['sqlBigResult'] = 'on'
+    
+    def sqlBufferResult(self):
+        self._setOptions['sqlBufferResult'] = 'on'
 
 

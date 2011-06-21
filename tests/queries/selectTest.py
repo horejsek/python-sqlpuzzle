@@ -129,6 +129,18 @@ class SelectOptionsTest(SelectTest):
     def testDistinctrow(self):
         self.select.from_('table').distinctrow()
         self.assertEqual(str(self.select), 'SELECT DISTINCTROW * FROM `table`')
+    
+    def testSqlSmallResult(self):
+        self.select.from_('table').sqlSmallResult()
+        self.assertEqual(str(self.select), 'SELECT SQL_SMALL_RESULT * FROM `table`')
+    
+    def testSqlBigResult(self):
+        self.select.from_('table').sqlBigResult()
+        self.assertEqual(str(self.select), 'SELECT SQL_BIG_RESULT * FROM `table`')
+    
+    def testSqlBufferResult(self):
+        self.select.from_('table').sqlBufferResult()
+        self.assertEqual(str(self.select), 'SELECT SQL_BUFFER_RESULT * FROM `table`')
 
 
 
