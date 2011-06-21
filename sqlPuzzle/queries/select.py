@@ -32,13 +32,20 @@ class Select(sqlPuzzle.queries.query.Query):
         )
         self._setPrintedFeatures('conditions', 'groupBy', 'orderBy', 'limit')
         
+        self._selectOptions = SelectOptions()
+        
         self.columns(*columns_)
     
     def __str__(self):
         """
         Print query.
         """
-        select = "SELECT %s FROM %s" % (
+        selectOptions = str(self._selectOptions)
+        if selectOptions:
+            selectOptions += ' '
+        
+        select = "SELECT %s%s FROM %s" % (
+            selectOptions,
             str(self._columns),
             str(self._tables),
         )
@@ -148,4 +155,44 @@ class Select(sqlPuzzle.queries.query.Query):
         """
         self._limit.offset(offset)
         return self
+    
+    def sqlCache(self):
+        """
+        SQL CACHE
+        """
+        self._selectOptions.sqlCache()
+        return self
+    
+    def sqlNoCache(self):
+        """
+        SQL NO CACHE
+        """
+        self._selectOptions.sqlNoCache()
+        return self
+
+
+
+class SelectOptions:
+    _options = {
+        'sqlCache': {
+            'off': '',
+            'cache': 'SQL_CACHE',
+            'noCache': 'SQL_NO_CACHE'
+        },
+    }
+    
+    def __init__(self):
+        self._setOptions = {}
+        for optionKey in self._options.keys():
+            self._setOptions[optionKey] = 'off'
+    
+    def __str__(self):
+        return ' '.join(self._options[key][val] for key, val in self._setOptions.iteritems() if val != 'off')
+    
+    def sqlCache(self):
+        self._setOptions['sqlCache'] = 'cache'
+    
+    def sqlNoCache(self):
+        self._setOptions['sqlCache'] = 'noCache'
+
 

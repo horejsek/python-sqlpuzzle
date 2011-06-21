@@ -109,6 +109,17 @@ class LimitTest(SelectTest):
 
 
 
+class SqlCacheTest(SelectTest):
+    def testSqlCache(self):
+        self.select.from_('table').sqlCache()
+        self.assertEqual(str(self.select), 'SELECT SQL_CACHE * FROM `table`')
+    
+    def testSqlNoCache(self):
+        self.select.from_('table').sqlNoCache()
+        self.assertEqual(str(self.select), 'SELECT SQL_NO_CACHE * FROM `table`')
+
+
+
 class UnionTest(SelectTest):
     def testUnion(self):
         self.select.from_('table')
@@ -151,6 +162,7 @@ testCases = (
     JoinTest,
     WhereTest,
     LimitTest,
+    SqlCacheTest,
     UnionTest,
     SubselectTest,
 )
