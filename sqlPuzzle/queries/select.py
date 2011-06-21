@@ -218,6 +218,20 @@ class Select(sqlPuzzle.queries.query.Query):
         """
         self._selectOptions.sqlCalcFoundRows()
         return self
+    
+    def straightJoin(self):
+        """
+        STRAIGHT_JOIN
+        """
+        self._selectOptions.straightJoin()
+        return self
+    
+    def highPriority(self):
+        """
+        HIGH_PRIORITY
+        """
+        self._selectOptions.highPriority()
+        return self
 
 
 
@@ -250,6 +264,14 @@ class SelectOptions:
             'off': '',
             'on': 'SQL_CALC_FOUND_ROWS',
         },
+        'straightJoin': {
+            'off': '',
+            'on': 'STRAIGHT_JOIN',
+        },
+        'highPriority': {
+            'off': '',
+            'on': 'HIGH_PRIORITY',
+        },
     }
     
     def __init__(self):
@@ -269,5 +291,7 @@ class SelectOptions:
     def sqlBigResult(self): self._setOptions['sqlBigResult'] = 'on'
     def sqlBufferResult(self): self._setOptions['sqlBufferResult'] = 'on'
     def sqlCalcFoundRows(self): self._setOptions['sqlCalcFoundRows'] = 'on'
+    def straightJoin(self): self._setOptions['straightJoin'] = 'on'
+    def highPriority(self): self._setOptions['highPriority'] = 'on'
 
 
