@@ -109,7 +109,7 @@ class LimitTest(SelectTest):
 
 
 
-class SqlCacheTest(SelectTest):
+class SelectOptionsTest(SelectTest):
     def testSqlCache(self):
         self.select.from_('table').sqlCache()
         self.assertEqual(str(self.select), 'SELECT SQL_CACHE * FROM `table`')
@@ -117,6 +117,18 @@ class SqlCacheTest(SelectTest):
     def testSqlNoCache(self):
         self.select.from_('table').sqlNoCache()
         self.assertEqual(str(self.select), 'SELECT SQL_NO_CACHE * FROM `table`')
+    
+    def testAll(self):
+        self.select.from_('table').all()
+        self.assertEqual(str(self.select), 'SELECT ALL * FROM `table`')
+    
+    def testDistinct(self):
+        self.select.from_('table').distinct()
+        self.assertEqual(str(self.select), 'SELECT DISTINCT * FROM `table`')
+    
+    def testDistinctrow(self):
+        self.select.from_('table').distinctrow()
+        self.assertEqual(str(self.select), 'SELECT DISTINCTROW * FROM `table`')
 
 
 
@@ -162,7 +174,7 @@ testCases = (
     JoinTest,
     WhereTest,
     LimitTest,
-    SqlCacheTest,
+    SelectOptionsTest,
     UnionTest,
     SubselectTest,
 )

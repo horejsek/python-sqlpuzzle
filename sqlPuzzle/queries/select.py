@@ -169,6 +169,27 @@ class Select(sqlPuzzle.queries.query.Query):
         """
         self._selectOptions.sqlNoCache()
         return self
+    
+    def all(self):
+        """
+        ALL
+        """
+        self._selectOptions.all()
+        return self
+    
+    def distinct(self):
+        """
+        DISTINCT
+        """
+        self._selectOptions.distinct()
+        return self
+    
+    def distinctrow(self):
+        """
+        DISTINCTROW
+        """
+        self._selectOptions.distinctrow()
+        return self
 
 
 
@@ -179,6 +200,12 @@ class SelectOptions:
             'cache': 'SQL_CACHE',
             'noCache': 'SQL_NO_CACHE'
         },
+        'duplicated': {
+            'off': '',
+            'all': 'ALL',
+            'distinct': 'DISTINCT',
+            'distinctrow': 'DISTINCTROW',
+        }
     }
     
     def __init__(self):
@@ -194,5 +221,14 @@ class SelectOptions:
     
     def sqlNoCache(self):
         self._setOptions['sqlCache'] = 'noCache'
+    
+    def all(self):
+        self._setOptions['duplicated'] = 'all'
+    
+    def distinct(self):
+        self._setOptions['duplicated'] = 'distinct'
+    
+    def distinctrow(self):
+        self._setOptions['duplicated'] = 'distinctrow'
 
 
