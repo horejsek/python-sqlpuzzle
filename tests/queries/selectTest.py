@@ -141,6 +141,14 @@ class SelectOptionsTest(SelectTest):
     def testSqlBufferResult(self):
         self.select.from_('table').sqlBufferResult()
         self.assertEqual(str(self.select), 'SELECT SQL_BUFFER_RESULT * FROM `table`')
+    
+    def testSqlCalcFoundRows(self):
+        self.select.from_('table').sqlCalcFoundRows()
+        self.assertEqual(str(self.select), 'SELECT SQL_CALC_FOUND_ROWS * FROM `table`')
+    
+    def testMoreOptions(self):
+        self.select.from_('table').distinct().sqlCalcFoundRows().sqlNoCache()
+        self.assertEqual(str(self.select), 'SELECT SQL_NO_CACHE SQL_CALC_FOUND_ROWS DISTINCT * FROM `table`')
 
 
 

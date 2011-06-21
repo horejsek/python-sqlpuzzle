@@ -211,6 +211,13 @@ class Select(sqlPuzzle.queries.query.Query):
         """
         self._selectOptions.sqlBufferResult()
         return self
+    
+    def sqlCalcFoundRows(self):
+        """
+        SQL_CALC_FOUND_ROWS
+        """
+        self._selectOptions.sqlCalcFoundRows()
+        return self
 
 
 
@@ -239,6 +246,10 @@ class SelectOptions:
             'off': '',
             'on': 'SQL_BUFFER_RESULT',
         },
+        'sqlCalcFoundRows': {
+            'off': '',
+            'on': 'SQL_CALC_FOUND_ROWS',
+        },
     }
     
     def __init__(self):
@@ -249,28 +260,14 @@ class SelectOptions:
     def __str__(self):
         return ' '.join(self._options[key][val] for key, val in self._setOptions.iteritems() if val != 'off')
     
-    def sqlCache(self):
-        self._setOptions['sqlCache'] = 'cache'
-    
-    def sqlNoCache(self):
-        self._setOptions['sqlCache'] = 'noCache'
-    
-    def all(self):
-        self._setOptions['duplicated'] = 'all'
-    
-    def distinct(self):
-        self._setOptions['duplicated'] = 'distinct'
-    
-    def distinctrow(self):
-        self._setOptions['duplicated'] = 'distinctrow'
-    
-    def sqlSmallResult(self):
-        self._setOptions['sqlSmallResult'] = 'on'
-    
-    def sqlBigResult(self):
-        self._setOptions['sqlBigResult'] = 'on'
-    
-    def sqlBufferResult(self):
-        self._setOptions['sqlBufferResult'] = 'on'
+    def sqlCache(self): self._setOptions['sqlCache'] = 'cache'
+    def sqlNoCache(self): self._setOptions['sqlCache'] = 'noCache'
+    def all(self): self._setOptions['duplicated'] = 'all'
+    def distinct(self): self._setOptions['duplicated'] = 'distinct'
+    def distinctrow(self): self._setOptions['duplicated'] = 'distinctrow'
+    def sqlSmallResult(self): self._setOptions['sqlSmallResult'] = 'on'
+    def sqlBigResult(self): self._setOptions['sqlBigResult'] = 'on'
+    def sqlBufferResult(self): self._setOptions['sqlBufferResult'] = 'on'
+    def sqlCalcFoundRows(self): self._setOptions['sqlCalcFoundRows'] = 'on'
 
 
