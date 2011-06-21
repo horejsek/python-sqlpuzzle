@@ -29,12 +29,12 @@ class ConfirmException(SqlPuzzleException):
         pass
 
 
-class ConfirmUpdateAllException(SqlPuzzleException):
+class ConfirmUpdateAllException(ConfirmException):
     def __str__(self):
         return "Are you sure, that you want update all records?"
 
 
-class ConfirmDeleteAllException(SqlPuzzleException):
+class ConfirmDeleteAllException(ConfirmException):
     def __str__(self):
         return "Are you sure, that you want delete all records?"
 

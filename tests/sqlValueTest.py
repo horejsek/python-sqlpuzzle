@@ -32,10 +32,10 @@ class SqlValueTest(unittest.TestCase):
         self.assertEqual(str(SqlValue(True)), '1')
     
     def testDate(self):
-        self.assertEqual(str(SqlValue(datetime.date(2011, 5, 25))), '2011-05-25')
+        self.assertEqual(str(SqlValue(datetime.date(2011, 5, 25))), '"2011-05-25"')
         
     def testDatetime(self):
-        self.assertEqual(str(SqlValue(datetime.datetime(2011, 5, 25, 19, 33, 20))), '2011-05-25T19:33:20')
+        self.assertEqual(str(SqlValue(datetime.datetime(2011, 5, 25, 19, 33, 20))), '"2011-05-25T19:33:20"')
     
     def testListWithString(self):
         self.assertEqual(str(SqlValue(['a', 'b', 'c'])), '("a", "b", "c")')
