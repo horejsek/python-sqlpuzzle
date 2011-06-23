@@ -99,6 +99,9 @@ class Query(object):
     @property
     def _limit(self): return self._getFeature('limit')
     
+    @property
+    def _intoOutfile(self): return self._getFeature('intoOutfile')
+    
     
     def __and__(self, other): self.__raiser('union')
     def __or__(self, other): self.__raiser('union all')

@@ -124,6 +124,38 @@ class LimitTest(SelectTest):
 
 
 
+class IntoOutfileTest(SelectTest):
+    def setUp(self):
+        self.select = sqlPuzzle.queries.select.Select()
+        self.select.from_('table')
+        self.select.intoOutfile('/tmp/file')
+    
+    def tearDown(self):
+        self.setUp()
+    
+    def testIntoOutfile(self):
+        self.assertEqual(str(self.select), 'SELECT * FROM `table` INTO OUTFILE "/tmp/file"')
+    
+    def testFieldsTerminatedBy(self):
+        self.select.fieldsTerminatedBy(',')
+        self.assertEqual(str(self.select), 'SELECT * FROM `table` INTO OUTFILE "/tmp/file" FIELDS TERMINATED BY ","')
+    
+    def testLinesTerminatedBy(self):
+        self.select.linesTerminatedBy('"')
+        self.assertEqual(str(self.select), 'SELECT * FROM `table` INTO OUTFILE "/tmp/file" LINES TERMINATED BY \'"\'')
+    
+    def testOptionallyEnclosedBy(self):
+        self.select.optionallyEnclosedBy('\n')
+        self.assertEqual(str(self.select), 'SELECT * FROM `table` INTO OUTFILE "/tmp/file" OPTIONALLY ENCLOSED BY "\n"')
+    
+    def testAllInOne(self):
+        self.select.fieldsTerminatedBy(',')
+        self.select.linesTerminatedBy('"')
+        self.select.optionallyEnclosedBy('\n')
+        self.assertEqual(str(self.select), 'SELECT * FROM `table` INTO OUTFILE "/tmp/file" FIELDS TERMINATED BY "," LINES TERMINATED BY \'"\' OPTIONALLY ENCLOSED BY "\n"')
+
+
+
 class SelectOptionsTest(SelectTest):
     def testSqlCache(self):
         self.select.from_('table').sqlCache()
@@ -217,6 +249,7 @@ testCases = (
     JoinTest,
     WhereTest,
     LimitTest,
+    IntoOutfileTest,
     SelectOptionsTest,
     UnionTest,
     SubselectTest,

@@ -11,6 +11,7 @@ import sqlPuzzle.features.columns
 import sqlPuzzle.features.conditions
 import sqlPuzzle.features.groupBy
 import sqlPuzzle.features.having
+import sqlPuzzle.features.intoOutfile
 import sqlPuzzle.features.limit
 import sqlPuzzle.features.orderBy
 import sqlPuzzle.features.tables
@@ -31,8 +32,9 @@ class Select(sqlPuzzle.queries.query.Query):
             having = sqlPuzzle.features.having.Having(),
             orderBy = sqlPuzzle.features.orderBy.OrderBy(),
             limit = sqlPuzzle.features.limit.Limit(),
+            intoOutfile = sqlPuzzle.features.intoOutfile.IntoOutfile(),
         )
-        self._setPrintedFeatures('conditions', 'groupBy', 'having', 'orderBy', 'limit')
+        self._setPrintedFeatures('conditions', 'groupBy', 'having', 'orderBy', 'limit', 'intoOutfile')
         
         self._selectOptions = SelectOptions()
         
@@ -164,6 +166,36 @@ class Select(sqlPuzzle.queries.query.Query):
         """
         self._limit.offset(offset)
         return self
+    
+    def intoOutfile(self, intoOutfile):
+        """
+        Set INTO OUTFILE.
+        """
+        self._intoOutfile.intoOutfile(intoOutfile)
+        return self
+    
+    def fieldsTerminatedBy(self, fieldsTerminatedBy):
+        """
+        Set FIELDS TERMINATED BY.
+        """
+        self._intoOutfile.fieldsTerminatedBy(fieldsTerminatedBy)
+        return self
+    
+    def linesTerminatedBy(self, linesTerminatedBy):
+        """
+        Set LINES TERMINATED BY.
+        """
+        self._intoOutfile.linesTerminatedBy(linesTerminatedBy)
+        return self
+    
+    def optionallyEnclosedBy(self, optionallyEnclosedBy):
+        """
+        Set OPTIONALLY ENCLOSED BY.
+        """
+        self._intoOutfile.optionallyEnclosedBy(optionallyEnclosedBy)
+        return self
+    
+    ### SELECT OPTIONS
     
     def sqlCache(self):
         """
