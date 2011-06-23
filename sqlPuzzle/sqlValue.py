@@ -11,7 +11,7 @@ import re
 import types
 
 
-class SqlValue:
+class SqlValue(object):
     """
     Wrap value.
     """

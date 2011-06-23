@@ -43,8 +43,21 @@ class BaseTest(InsertTest):
 
 
 
+class OnDuplicateKeyUpdateTest(InsertTest):
+    def testOnDuplicateKeyUpdate(self):
+        self.insert.into('user')
+        values = {
+            'name': 'Alan',
+        }
+        self.insert.values(id=1).values(values)
+        self.insert.onDuplicateKeyUpdate(values)
+        self.assertEqual(str(self.insert), 'INSERT INTO `user` (`id`, `name`) VALUES (1, "Alan") ON DUPLICATE KEY UPDATE `name` = "Alan"')
+
+
+
 testCases = (
     BaseTest,
+    OnDuplicateKeyUpdateTest,
 )
 
 

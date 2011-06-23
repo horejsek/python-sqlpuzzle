@@ -16,12 +16,14 @@ class Insert(sqlPuzzle.queries.query.Query):
         """
         Initialization of Insert.
         """
-        sqlPuzzle.queries.query.Query.__init__(self)
+        super(Insert, self).__init__()
         
         self._setFeatures(
             tables = sqlPuzzle.features.tables.Tables(),
             values = sqlPuzzle.features.values.Values(),
+            onDuplicateKeyUpdate = sqlPuzzle.features.values.OnDuplicateKeyUpdate(),
         )
+        self._setPrintedFeatures('onDuplicateKeyUpdate')
     
     def __str__(self):
         """
@@ -32,7 +34,7 @@ class Insert(sqlPuzzle.queries.query.Query):
             self._values.columns(),
             self._values.values(),
         )
-        return insert
+        return sqlPuzzle.queries.query.Query._appendFeatures(self, insert)
     
     def __repr__(self):
         return "<Insert: %s>" % self.__str__()
@@ -55,5 +57,12 @@ class Insert(sqlPuzzle.queries.query.Query):
         Set columns and values.
         """
         self._values.set(*args, **kwds)
+        return self
+    
+    def onDuplicateKeyUpdate(self, *args, **kwds):
+        """
+        Set on duplicate key update.
+        """
+        self._onDuplicateKeyUpdate.set(*args, **kwds)
         return self
 

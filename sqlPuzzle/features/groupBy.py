@@ -14,7 +14,7 @@ class Group(sqlPuzzle.features.orderBy.Order):
         return "<Group: %s>" % self.__str__()
 
 
-class GroupBy:
+class GroupBy(object):
     def __init__(self):
         """
         Initialization of GroupBy.

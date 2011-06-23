@@ -21,7 +21,7 @@ class Select(sqlPuzzle.queries.query.Query):
         """
         Initialization of Select.
         """
-        sqlPuzzle.queries.query.Query.__init__(self)
+        super(Select, self).__init__()
         
         self._setFeatures(
             tables = sqlPuzzle.features.tables.Tables(),

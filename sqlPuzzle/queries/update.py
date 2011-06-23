@@ -19,7 +19,7 @@ class Update(sqlPuzzle.queries.query.Query):
         """
         Initialization of Update.
         """
-        sqlPuzzle.queries.query.Query.__init__(self)
+        super(Update, self).__init__()
         
         self._setFeatures(
             tables = sqlPuzzle.features.tables.Tables(),

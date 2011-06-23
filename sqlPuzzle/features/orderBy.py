@@ -9,7 +9,7 @@ import sqlPuzzle.argsParser
 import sqlPuzzle.sqlValue
 
 
-class Order:
+class Order(object):
     def __init__(self, column=None, sort=None):
         """
         Initialization of Order.
@@ -61,7 +61,7 @@ class Order:
             raise sqlPuzzle.exceptions.InvalidArgumentException('Type of order can be only ASC or DESC.')
 
 
-class OrderBy:
+class OrderBy(object):
     def __init__(self):
         """
         Initialization of OrderBy.

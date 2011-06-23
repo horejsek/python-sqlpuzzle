@@ -16,7 +16,7 @@ import sqlPuzzle.features.tables
 import sqlPuzzle.features.values
 
 
-class Query:
+class Query(object):
     def __init__(self):
         """
         Initialization of Query.
@@ -80,6 +80,9 @@ class Query:
     
     @property
     def _values(self): return self._getFeature('values')
+    
+    @property
+    def _onDuplicateKeyUpdate(self): return self._getFeature('onDuplicateKeyUpdate')
     
     @property
     def _conditions(self): return self._getFeature('conditions')

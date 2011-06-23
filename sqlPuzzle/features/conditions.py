@@ -13,7 +13,7 @@ import sqlPuzzle.sqlValue
 import sqlPuzzle.relations
 
 
-class Condition:
+class Condition(object):
     __defaultRelations = {
         str: sqlPuzzle.relations.EQ,
         unicode: sqlPuzzle.relations.EQ,
@@ -136,7 +136,7 @@ class Condition:
         self._relation = relation
 
 
-class Conditions:
+class Conditions(object):
     _conditionObject = Condition
     
     def __init__(self):

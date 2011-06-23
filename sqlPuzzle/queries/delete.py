@@ -17,7 +17,7 @@ class Delete(sqlPuzzle.queries.query.Query):
         """
         Initialization of Delete.
         """
-        sqlPuzzle.queries.query.Query.__init__(self)
+        super(Delete, self).__init__()
         
         self._setFeatures(
             tables = sqlPuzzle.features.tables.Tables(),

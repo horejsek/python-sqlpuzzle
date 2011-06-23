@@ -52,7 +52,7 @@ class Ons(sqlPuzzle.features.conditions.Conditions):
 
 
 
-class Table:
+class Table(object):
     def __init__(self, table=None, as_=None):
         """
         Initialization of Table.
@@ -172,7 +172,7 @@ class Table:
         self._joins[-1]['on'] = condition
 
 
-class Tables:
+class Tables(object):
     def __init__(self):
         """
         Initialization of Tables.

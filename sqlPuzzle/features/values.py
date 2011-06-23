@@ -11,7 +11,7 @@ import sqlPuzzle.argsParser
 import sqlPuzzle.sqlValue
 
 
-class Values:
+class Values(object):
     def __init__(self):
         """
         Initialization of Values.
@@ -66,4 +66,11 @@ class Values:
             )
         ))
         return self
+
+
+
+class OnDuplicateKeyUpdate(Values):
+    def __str__(self):
+        return "ON DUPLICATE KEY UPDATE %s" % super(OnDuplicateKeyUpdate, self).__str__()
+
 

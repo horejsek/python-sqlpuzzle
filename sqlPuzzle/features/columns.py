@@ -9,7 +9,7 @@ import sqlPuzzle.argsParser
 import sqlPuzzle.sqlValue
 
 
-class Column:
+class Column(object):
     def __init__(self, column=None, as_=None):
         """
         Initialization of Column.
@@ -54,7 +54,7 @@ class Column:
         self._as = as_
 
 
-class Columns:
+class Columns(object):
     def __init__(self):
         """
         Initialization of Columns.

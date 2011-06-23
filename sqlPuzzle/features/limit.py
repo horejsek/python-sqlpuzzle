@@ -11,7 +11,7 @@ import sqlPuzzle.argsParser
 import sqlPuzzle.exceptions
 
 
-class Limit:
+class Limit(object):
     def __init__(self):
         """
         Initialization of Limit.
