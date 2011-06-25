@@ -46,7 +46,7 @@ print sql
 # `age` = 20 AND 
 # `enabled` = 1 AND 
 # `name` = "Michael" AND
-# `last_modify` = 2011-06-15T22:11:00 AND 
+# `last_modify` = "2011-06-15T22:11:00" AND 
 # `right` = "admin" AND 
 # `column` <= 10 AND 
 # `column` >= 10 AND 

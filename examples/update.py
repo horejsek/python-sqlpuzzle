@@ -53,7 +53,7 @@ print sql
 #
 # UPDATE `table` SET
 # `salary` = 12000,
-# `last_modify` = 2011-06-15T00:00:00,
+# `last_modify` = "2011-06-15T00:00:00",
 # `name` = "Harry",
 # `age` = 21,
 # `enabled` = 0

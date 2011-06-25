@@ -37,7 +37,7 @@ print sql
 # INSERT INTO `table`
 # (`salary`, `last_modify`, `loginname`, `name`, `age`, `enabled`)
 # VALUES
-# (12345.67000, 2011-06-15T00:00:00, "alan", "Alan", 21, 1)
+# (12345.67000, "2011-06-15T00:00:00", "alan", "Alan", 21, 1)
 #
 
 print sqlPuzzle.insertInto('table').values(values)
