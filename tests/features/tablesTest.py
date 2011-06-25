@@ -102,6 +102,11 @@ class SimpleJoinsTest(TablesTest):
         self.tables.innerJoin('country').on('user.country_id', 'country.id')
         self.tables.innerJoin('role').on('user.role_id', 'role.id')
         self.assertEqual(str(self.tables), '`user` JOIN `country` ON (`user`.`country_id` = `country`.`id`) JOIN `role` ON (`user`.`role_id` = `role`.`id`)')
+    
+    def testJoinWithMoreConditions(self):
+        self.tables.set('table')
+        self.tables.leftJoin('table2').on('table.id', 'table2.id').on('table.id2', 'table2.id2')
+        self.assertEqual(str(self.tables), '`table` LEFT JOIN `table2` ON (`table`.`id` = `table2`.`id` AND `table`.`id2` = `table2`.`id2`)')
 
 
 

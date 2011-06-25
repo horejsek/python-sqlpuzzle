@@ -75,7 +75,7 @@ class Table(object):
             table = str(sqlPuzzle.sqlValue.SqlReference(self._table))
         
         if self._joins != []:
-            if None in [join['on'] for join in self._joins]:
+            if [] in [join['on'] for join in self._joins]:
                 raise sqlPuzzle.exceptions.InvalidQueryException("You can't use join without on.")
             
             self.__minimizeJoins()
@@ -85,7 +85,7 @@ class Table(object):
                     '%s %s ON (%s)' % (
                         sqlPuzzle.joinTypes.JOIN_TYPES[join['type']],
                         str(join['table']),
-                        str(join['on'])
+                        ' AND '.join(str(on) for on in join['on'])
                     ) for join in self._joins
                 ])
             )
@@ -159,7 +159,7 @@ class Table(object):
         self._joins.append({
             'type': joinType,
             'table': table,
-            'on': None,
+            'on': [],
         })
     
     def on(self, condition):
@@ -169,7 +169,7 @@ class Table(object):
         if self.isSimple():
             raise sqlPuzzle.exceptions.InvalidQueryException("You can't set join without table.")
         
-        self._joins[-1]['on'] = condition
+        self._joins[-1]['on'].append(condition)
 
 
 class Tables(object):

@@ -41,3 +41,10 @@ sql.leftJoin('table2').on('table.id2', 'table2.id2')
 print sql
 # output:
 # SELECT * FROM `table` JOIN `table2` ON (`table`.`id` = `table2`.`id`) LEFT JOIN `table2` ON (`table`.`id2` = `table2`.`id2`)
+
+# more conditions
+sql = sqlPuzzle.selectFrom('table')
+sql.leftJoin('table2').on('table.id', 'table2.id').on('table.id2', 'table2.id2')
+print sql
+# output:
+# SELECT * FROM `table` LEFT JOIN `table2` ON (`table`.`id` = `table2`.`id` AND `table`.`id2` = `table2`.`id2`)
