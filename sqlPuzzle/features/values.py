@@ -67,10 +67,3 @@ class Values(object):
         ))
         return self
 
-
-
-class OnDuplicateKeyUpdate(Values):
-    def __str__(self):
-        return "ON DUPLICATE KEY UPDATE %s" % super(OnDuplicateKeyUpdate, self).__str__()
-
-

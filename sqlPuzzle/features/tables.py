@@ -12,6 +12,18 @@ import sqlPuzzle.sqlValue
 
 
 
+INNER_JOIN = 0
+LEFT_JOIN = 1
+RIGHT_JOIN = 2
+
+JOIN_TYPES = {
+    INNER_JOIN: 'JOIN',
+    LEFT_JOIN: 'LEFT JOIN',
+    RIGHT_JOIN: 'RIGHT JOIN',
+}
+
+
+
 class OnCondition(sqlPuzzle.features.conditions.Condition):
     def __str__(self):
         """
@@ -87,7 +99,7 @@ class Table(object):
                 table,
                 ' '.join([
                     '%s %s ON (%s)' % (
-                        sqlPuzzle.joinTypes.JOIN_TYPES[join['type']],
+                        JOIN_TYPES[join['type']],
                         str(join['table']),
                         str(join['ons']),
                     ) for join in self._joins
@@ -236,7 +248,7 @@ class Tables(object):
         if not self.isSet():
             raise sqlPuzzle.exceptions.InvalidQueryException("You can't set join without table.")
         
-        self._tables[-1].join(arg, sqlPuzzle.joinTypes.INNER_JOIN)
+        self._tables[-1].join(arg, INNER_JOIN)
         return self
     
     def innerJoin(self, arg):
@@ -246,7 +258,7 @@ class Tables(object):
         if not self.isSet():
             raise sqlPuzzle.exceptions.InvalidQueryException("You can't set join without table.")
         
-        self._tables[-1].join(arg, sqlPuzzle.joinTypes.INNER_JOIN)
+        self._tables[-1].join(arg, INNER_JOIN)
         return self
     
     def leftJoin(self, arg):
@@ -256,7 +268,7 @@ class Tables(object):
         if not self.isSet():
             raise sqlPuzzle.exceptions.InvalidQueryException("You can't set join without table.")
         
-        self._tables[-1].join(arg, sqlPuzzle.joinTypes.LEFT_JOIN)
+        self._tables[-1].join(arg, LEFT_JOIN)
         return self
     
     def rightJoin(self, arg):
@@ -266,7 +278,7 @@ class Tables(object):
         if not self.isSet():
             raise sqlPuzzle.exceptions.InvalidQueryException("You can't set join without table.")
         
-        self._tables[-1].join(arg, sqlPuzzle.joinTypes.RIGHT_JOIN)
+        self._tables[-1].join(arg, RIGHT_JOIN)
         return self
     
     def on(self, *args, **kwds):

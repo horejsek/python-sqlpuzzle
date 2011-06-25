@@ -8,6 +8,7 @@
 import sqlPuzzle.queries.query
 
 import sqlPuzzle.features.tables
+import sqlPuzzle.features.onDuplicateKeyUpdate
 import sqlPuzzle.features.values
 
 
@@ -21,7 +22,7 @@ class Insert(sqlPuzzle.queries.query.Query):
         self._setFeatures(
             tables = sqlPuzzle.features.tables.Tables(),
             values = sqlPuzzle.features.values.Values(),
-            onDuplicateKeyUpdate = sqlPuzzle.features.values.OnDuplicateKeyUpdate(),
+            onDuplicateKeyUpdate = sqlPuzzle.features.onDuplicateKeyUpdate.OnDuplicateKeyUpdate(),
         )
         self._setPrintedFeatures('onDuplicateKeyUpdate')
     
