@@ -8,13 +8,13 @@ import queries.selectTest
 import queries.updateTest
 
 import features.columnsTest
-import features.conditionsTest
 import features.groupByTest
 import features.havingTest
 import features.limitTest
 import features.orderByTest
 import features.tablesTest
 import features.valuesTest
+import features.whereTest
 
 import argsParserTest
 import sqlPuzzleTest
@@ -29,13 +29,13 @@ if __name__ == '__main__':
         queries.updateTest,
         
         features.columnsTest,
-        features.conditionsTest,
         features.groupByTest,
         features.havingTest,
         features.limitTest,
         features.orderByTest,
         features.tablesTest,
         features.valuesTest,
+        features.whereTest,
         
         argsParserTest,
         sqlValueTest,

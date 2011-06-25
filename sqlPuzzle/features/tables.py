@@ -12,7 +12,7 @@ import sqlPuzzle.sqlValue
 
 
 
-class On(sqlPuzzle.features.conditions.Condition):
+class OnCondition(sqlPuzzle.features.conditions.Condition):
     def __str__(self):
         """
         Print part of query.
@@ -23,7 +23,7 @@ class On(sqlPuzzle.features.conditions.Condition):
         )
     
     def __repr__(self):
-        return "<JoinOn: %s>" % self.__str__()
+        return "<OnCondition: %s>" % self.__str__()
     
     def __eq__(self, other):
         """
@@ -37,7 +37,11 @@ class On(sqlPuzzle.features.conditions.Condition):
 
 
 class Ons(sqlPuzzle.features.conditions.Conditions):
-    _conditionObject = On
+    def __init__(self):
+        """
+        Initialization of Ons.
+        """
+        super(Ons, self).__init__(OnCondition)
     
     def __str__(self):
         """
@@ -48,7 +52,7 @@ class Ons(sqlPuzzle.features.conditions.Conditions):
         return ""
     
     def __repr__(self):
-        return "<JoinOns: %s>" % self.__str__()
+        return "<Ons: %s>" % self.__str__()
 
 
 
@@ -75,7 +79,7 @@ class Table(object):
             table = str(sqlPuzzle.sqlValue.SqlReference(self._table))
         
         if self._joins != []:
-            if [] in [join['on'] for join in self._joins]:
+            if any([not join['ons'].isSet() for join in self._joins]):
                 raise sqlPuzzle.exceptions.InvalidQueryException("You can't use join without on.")
             
             self.__minimizeJoins()
@@ -85,7 +89,7 @@ class Table(object):
                     '%s %s ON (%s)' % (
                         sqlPuzzle.joinTypes.JOIN_TYPES[join['type']],
                         str(join['table']),
-                        ' AND '.join(str(on) for on in join['on'])
+                        str(join['ons']),
                     ) for join in self._joins
                 ])
             )
@@ -114,7 +118,7 @@ class Table(object):
         for join in self._joins:
             appendNew = True
             for joinGroup in joinsGroup:
-                if joinGroup[0]['table'] == join['table'] and joinGroup[0]['on'] == join['on']:
+                if joinGroup[0]['table'] == join['table'] and joinGroup[0]['ons'] == join['ons']:
                     joinGroup.append(join)
                     appendNew = False
                     break
@@ -159,17 +163,18 @@ class Table(object):
         self._joins.append({
             'type': joinType,
             'table': table,
-            'on': [],
+            'ons': Ons(),
         })
     
-    def on(self, condition):
+    def on(self, *args, **kwds):
         """
         Join on.
         """
         if self.isSimple():
             raise sqlPuzzle.exceptions.InvalidQueryException("You can't set join without table.")
         
-        self._joins[-1]['on'].append(condition)
+        self._joins[-1]['ons'].where(*args, **kwds)
+
 
 
 class Tables(object):
@@ -271,9 +276,6 @@ class Tables(object):
         if not self.isSet():
             raise sqlPuzzle.exceptions.InvalidQueryException("You can't set condition of join without table.")
         
-        condition = Ons()
-        condition.where(*args, **kwds)
-        
-        self._tables[-1].on(condition)
+        self._tables[-1].on(*args, **kwds)
         return self
 

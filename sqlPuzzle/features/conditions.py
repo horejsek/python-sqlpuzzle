@@ -136,22 +136,20 @@ class Condition(object):
         self._relation = relation
 
 
+
 class Conditions(object):
-    _conditionObject = Condition
-    
-    def __init__(self):
+    def __init__(self, conditionObject=Condition):
         """
         Initialization of Conditions.
         """
+        self._conditionObject = conditionObject
         self._conditions = []
     
     def __str__(self):
         """
         Print where (part of query).
         """
-        if self.isSet():
-            return "WHERE %s" % " AND ".join(str(condition) for condition in self._conditions)
-        return ""
+        raise sqlPuzzle.exceptions.SqlPuzzleNotImplemeted('Conditions.__str__()')
     
     def __repr__(self):
         return "<Conditions: %s>" % self.__str__()
@@ -204,21 +202,5 @@ class Conditions(object):
                 self._conditions.append(condition)
         
         return self
-    
-    def remove(self, *keys):
-        """
-        Remove condition(s).
-        """
-        if len(keys) == 0:
-            self._conditions = []
-        
-        if not isinstance(keys, (list, tuple)):
-            keys = (keys,)
-        
-        conditions = []
-        for condition in self._conditions:
-            if condition._column not in keys:
-                conditions.append(condition)
-        self._conditions = conditions
 
 

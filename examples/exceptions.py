@@ -14,6 +14,7 @@ import sqlPuzzle.exceptions
 #
 # SqlPuzzleException
 # - SqlPuzzleError (internal error)
+# - SqlNotImplemented
 # - ConfirmException
 # - - ConfirmUpdateAllException
 # - - ConfirmDeleteAllException

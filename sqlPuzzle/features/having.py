@@ -8,7 +8,18 @@
 import sqlPuzzle.features.conditions
 
 
+class HavingCondition(sqlPuzzle.features.conditions.Condition):
+    pass
+
+
+
 class Having(sqlPuzzle.features.conditions.Conditions):
+    def __init__(self):
+        """
+        Initialization of Having.
+        """
+        super(Having, self).__init__(HavingCondition)
+    
     def __str__(self):
         """
         Print having (part of query).

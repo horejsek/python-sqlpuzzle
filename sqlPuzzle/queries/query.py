@@ -85,7 +85,7 @@ class Query(object):
     def _onDuplicateKeyUpdate(self): return self._getFeature('onDuplicateKeyUpdate')
     
     @property
-    def _conditions(self): return self._getFeature('conditions')
+    def _where(self): return self._getFeature('where')
     
     @property
     def _groupBy(self): return self._getFeature('groupBy')

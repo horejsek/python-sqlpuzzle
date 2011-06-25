@@ -21,6 +21,10 @@ class SqlPuzzleError(SqlPuzzleException):
         return "SqlPuzzleError: %s" % self.message
 
 
+class SqlPuzzleNotImplemeted(SqlPuzzleException):
+    def __str__(self):
+        return "SqlPuzzleNotImplemeted: %s" % self.message
+
 #### Confirms
 
 

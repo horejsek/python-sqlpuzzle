@@ -9,9 +9,9 @@ import sqlPuzzle.exceptions
 
 import sqlPuzzle.queries.query
 
-import sqlPuzzle.features.conditions
 import sqlPuzzle.features.tables
 import sqlPuzzle.features.values
+import sqlPuzzle.features.where
 
 
 class Update(sqlPuzzle.queries.query.Query):
@@ -24,9 +24,9 @@ class Update(sqlPuzzle.queries.query.Query):
         self._setFeatures(
             tables = sqlPuzzle.features.tables.Tables(),
             values = sqlPuzzle.features.values.Values(),
-            conditions = sqlPuzzle.features.conditions.Conditions(),
+            where = sqlPuzzle.features.where.Where(),
         )
-        self._setPrintedFeatures('conditions')
+        self._setPrintedFeatures('where')
         
         self.__allowUpdateAll = False
         
@@ -36,7 +36,7 @@ class Update(sqlPuzzle.queries.query.Query):
         """
         Print query.
         """
-        if not self._conditions.isSet() and not self.__allowUpdateAll:
+        if not self._where.isSet() and not self.__allowUpdateAll:
             raise sqlPuzzle.exceptions.ConfirmUpdateAllException()
         
         update = "UPDATE %s SET %s" % (
@@ -86,6 +86,6 @@ class Update(sqlPuzzle.queries.query.Query):
         """
         Set condition(s) to query.
         """
-        self._conditions.where(*args, **kwds)
+        self._where.where(*args, **kwds)
         return self
 

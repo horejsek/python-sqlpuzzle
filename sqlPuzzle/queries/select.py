@@ -8,13 +8,13 @@
 import sqlPuzzle.queries.query
 
 import sqlPuzzle.features.columns
-import sqlPuzzle.features.conditions
 import sqlPuzzle.features.groupBy
 import sqlPuzzle.features.having
 import sqlPuzzle.features.intoOutfile
 import sqlPuzzle.features.limit
 import sqlPuzzle.features.orderBy
 import sqlPuzzle.features.tables
+import sqlPuzzle.features.where
 
 
 class Select(sqlPuzzle.queries.query.Query):
@@ -27,14 +27,14 @@ class Select(sqlPuzzle.queries.query.Query):
         self._setFeatures(
             tables = sqlPuzzle.features.tables.Tables(),
             columns = sqlPuzzle.features.columns.Columns(),
-            conditions = sqlPuzzle.features.conditions.Conditions(),
+            where = sqlPuzzle.features.where.Where(),
             groupBy = sqlPuzzle.features.groupBy.GroupBy(),
             having = sqlPuzzle.features.having.Having(),
             orderBy = sqlPuzzle.features.orderBy.OrderBy(),
             limit = sqlPuzzle.features.limit.Limit(),
             intoOutfile = sqlPuzzle.features.intoOutfile.IntoOutfile(),
         )
-        self._setPrintedFeatures('conditions', 'groupBy', 'having', 'orderBy', 'limit', 'intoOutfile')
+        self._setPrintedFeatures('where', 'groupBy', 'having', 'orderBy', 'limit', 'intoOutfile')
         
         self._selectOptions = SelectOptions()
         
@@ -129,7 +129,7 @@ class Select(sqlPuzzle.queries.query.Query):
         """
         Set condition(s) of where to query.
         """
-        self._conditions.where(*args, **kwds)
+        self._where.where(*args, **kwds)
         return self
     
     def having(self, *args, **kwds):

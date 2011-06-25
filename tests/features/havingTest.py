@@ -77,24 +77,6 @@ class GroupingTest(HavingTest):
 
 
 
-class RemoveTest(HavingTest):
-    def testRemoveOneCondition(self):
-        self.having.where(name='Harry', age=20)
-        self.having.remove('age')
-        self.assertEqual(str(self.having), 'HAVING `name` = "Harry"')
-    
-    def testRemoveMoreCondition(self):
-        self.having.where(name='Harry', age=22, sex='male')
-        self.having.remove('name', 'sex')
-        self.assertEqual(str(self.having), 'HAVING `age` = 22')
-    
-    def testRemoveAllCondition(self):
-        self.having.where(name='Harry', age=20)
-        self.having.remove()
-        self.assertEqual(str(self.having), '')
-
-
-
 class AllowedValuesTest(HavingTest):
     def testValueAsInteger(self):
         self.having.where('col', 42)
@@ -154,7 +136,6 @@ class ExceptionsTest(HavingTest):
 testCases = (
     BaseTest,
     GroupingTest,
-    RemoveTest,
     AllowedValuesTest,
     ExceptionsTest,
 )
