@@ -8,6 +8,7 @@
 import sqlPuzzle.exceptions
 
 
+
 def parseArgsToListOfTuples(options={}, *args, **kwds):
     """
     Parser.
@@ -41,94 +42,141 @@ def parseArgsToListOfTuples(options={}, *args, **kwds):
         {key1: val1, key2: val2} => ((key1, val1, None), (key2, val2, None))
         (arg1a, arg1b), arg2a, arg2b => FAIL
     """
-    minItems = options.get('minItems', 1)
-    maxItems = options.get('maxItems', 1)
-    allowDict = options.get('allowDict', False)
-    allowList = options.get('allowList', False)
-    allowedDataTypes = options.get('allowedDataTypes', (str, unicode, int, long, float, bool))
+    parserOptions = ParserOptions(options)
+    parserInput = ParserInput(*args, **kwds)
     
-    result = []
+    parser = Parser(parserOptions, parserInput)
+    parser.parse()
     
-    if minItems > maxItems:
-        raise sqlPuzzle.exceptions.SqlPuzzleError('maxItems must be bigger, than minItems.')
-    
-    if allowDict and maxItems <= 1:
-        raise sqlPuzzle.exceptions.SqlPuzzleError('For allowDict must be maxItems bigger or equal to 2.')
+    return parser.getOutput()
 
-    if allowDict:
-        dict_ = {}
-        if args and isinstance(args[0], dict):
-            if len(args) == 1:
-                dict_ = args[0]
+
+
+class ParserOptions(object):
+    def __init__(self, options):
+        self.set(options)
+        self.check()
+    
+    def set(self, options):
+        self.minItems = options.get('minItems', 1)
+        self.maxItems = options.get('maxItems', 1)
+        self.allowDict = options.get('allowDict', False)
+        self.allowList = options.get('allowList', False)
+        self.allowedDataTypes = options.get('allowedDataTypes', (str, unicode, int, long, float, bool))
+    
+    def check(self):
+        if self.minItems > self.maxItems:
+            raise sqlPuzzle.exceptions.SqlPuzzleError('maxItems must be bigger, than minItems.')
+        
+        if self.allowDict and self.maxItems <= 1:
+            raise sqlPuzzle.exceptions.SqlPuzzleError('For allowDict must be maxItems bigger or equal to 2.')
+        
+        if not isinstance(self.allowedDataTypes, (tuple, list)):
+            raise sqlPuzzle.exceptions.SqlPuzzleError('Invalid options for argsParser.')
+
+
+
+class ParserInput(object):
+    def __init__(self, *args, **kwds):
+        self.__args = args
+        self.__kwds = kwds
+    
+    def getArguments(self):
+        return self.__args
+    
+    def getList(self):
+        if self.isList():
+            return self.__args[0]
+        return []
+    
+    def getDictionaryOrKwds(self):
+        if self.isDictionary():
+            return self.__args[0]
+        elif self.isKwds():
+            return self.__kwds
+        return {}
+    
+    def isList(self):
+        return len(self.__args) == 1 and isinstance(self.__args[0], (list, tuple))
+    
+    def isDictionary(self):
+        return len(self.__args) == 1 and isinstance(self.__args[0], dict)
+    
+    def isKwds(self):
+        return self.__kwds != {}
+    
+    def isArgs(self):
+        return len(self.__args) > 0 and not isinstance(self.__args[0], (list, tuple))
+    
+    def countOfArgsIsInInterval(self, min_, max_):
+        return min_ <= len(self.__args) <= max_
+
+
+
+class Parser(object):
+    def __init__(self, options, inputData):
+        self.options = options
+        self.inputData = inputData
+        self.outputData = []
+    
+    def getOutput(self):
+        return self.outputData
+
+    def parse(self):
+        if self.inputData.isDictionary() or self.inputData.isKwds():
+            if self.options.allowDict:
+                self.__parseDictionary(self.inputData.getDictionaryOrKwds())
             else:
-                raise sqlPuzzle.exceptions.InvalidArgumentException('Dictionary must be as only one argument.')
-        elif kwds != {}:
-            dict_ = kwds
+                raise sqlPuzzle.exceptions.InvalidArgumentException('Dictionary or kwds is disabled.')
         
-        for arg in dict_.iteritems():
-            values = __createTuple(arg, maxItems)
-            __appendIfOk(result, values, allowedDataTypes)
-    else:
-        if (len(args) == 1 and isinstance(args[0], dict)) or kwds != {}:
-            raise sqlPuzzle.exceptions.InvalidArgumentException('Dictionary or kwds is disabled.')
-    
-    if not result:
-        if minItems > 1 and minItems <= len(args) <= maxItems and not isinstance(args[0], (list, tuple)):
-            values = __createTuple(args, maxItems)
-            __appendIfOk(result, values, allowedDataTypes)
-    
-    if not result:
-        list_ = args
-        if allowList and len(args) == 1 and isinstance(args[0], (list, tuple)):
-            list_ = args[0]
+        elif self.options.minItems > 1 and self.inputData.isArgs() and self.inputData.countOfArgsIsInInterval(self.options.minItems, self.options.maxItems):
+            self.__parseItem(self.inputData.getArguments())
         
-        for arg in list_:
-            if isinstance(arg, (list, tuple)):
-                values = __createTuple(arg, maxItems)
-            elif minItems == 1:
-                values = __createTuple((arg,), maxItems)
+        elif self.options.allowList and self.inputData.isList():
+            self.__parseList(self.inputData.getList())
+        
+        else:
+            self.__parseList(self.inputData.getArguments())
+    
+    def __parseDictionary(self, dict_):
+        for item in dict_.iteritems():
+            self.__parseItem(item)
+    
+    def __parseList(self, list_):
+        for item in list_:
+            if isinstance(item, (list, tuple)):
+                self.__parseItem(item)
+            elif self.options.minItems == 1:
+                self.__parseItem((item,))
             else:
                 raise sqlPuzzle.exceptions.InvalidArgumentException('Too few arguments.')
-            __appendIfOk(result, values, allowedDataTypes)
-
-    return result
-
-
-
-def __createTuple(values, length):
-    """
-    From list/tuple create tuple with `length` items. Default value is None.
-    If is in list_ more items, than say length => raise.
-    """
-    if len(values) > length:
-        raise sqlPuzzle.exceptions.InvalidArgumentException('Too many arguments.')
-    return tuple(values) + (None,)*(length-len(values))
-
-
-
-def __appendIfOk(data, values, allowedDataTypes):
-    """
-    Append tuple into result, if tuple is ok.
-    """
-    if __validate(values, allowedDataTypes):
-        data.append(values)
-    else:
-        raise sqlPuzzle.exceptions.InvalidArgumentException()
-
-
-def __validate(values, allowedDataTypes):
-    """
-    Validate tuple on data types.
-    """
-    if not isinstance(allowedDataTypes, (tuple, list)):
-        raise sqlPuzzle.exceptions.SqlPuzzleError('Invalid options for argsParser.')
     
-    for x, item in enumerate(values):
-        dataTypes = allowedDataTypes
-        if isinstance(allowedDataTypes[0], (tuple, list)):
-            dataTypes = allowedDataTypes[x]
-        if item is not None and not isinstance(item, dataTypes):
-            return False
-    return True
-
+    def __parseItem(self, item):
+        batch = self.__createBatch(item)
+        self.__appendBatchToOutputIfOk(batch)
+    
+    def __createBatch(self, values):
+        if len(values) > self.options.maxItems:
+            raise sqlPuzzle.exceptions.InvalidArgumentException('Too many arguments.')
+        return self.__appendNones(tuple(values))
+    
+    def __appendNones(self, tupleWithValues):
+        countOfNones = self.options.maxItems - len(tupleWithValues)
+        tupleWithNones = (None,) * countOfNones
+        return tupleWithValues + tupleWithNones
+    
+    def __appendBatchToOutputIfOk(self, batch):
+        if self.__validateBatch(batch):
+            self.outputData.append(batch)
+        else:
+            raise sqlPuzzle.exceptions.InvalidArgumentException()
+    
+    def __validateBatch(self, batch):
+        for x, item in enumerate(batch):
+            dataTypes = self.options.allowedDataTypes
+            if isinstance(self.options.allowedDataTypes[0], (tuple, list)):
+                dataTypes = self.options.allowedDataTypes[x]
+            if item is not None and not isinstance(item, dataTypes):
+                return False
+        return True
 
