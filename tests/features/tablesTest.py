@@ -8,7 +8,6 @@
 import unittest
 
 import sqlPuzzle.features.tables
-import sqlPuzzle.joinTypes
 
 
 class TablesTest(unittest.TestCase):

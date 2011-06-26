@@ -7,7 +7,6 @@
 
 import sqlPuzzle.argsParser
 import sqlPuzzle.features.conditions
-import sqlPuzzle.joinTypes
 import sqlPuzzle.sqlValue
 
 
@@ -125,8 +124,8 @@ class Table(object):
         
         self._joins = []
         for joins in joinsGroup:
-            if len(joins) > 1 and any(bool(join['type'] == sqlPuzzle.joinTypes.INNER_JOIN) for join in joins):
-                joins[0]['type'] = sqlPuzzle.joinTypes.INNER_JOIN
+            if len(joins) > 1 and any(bool(join['type'] == INNER_JOIN) for join in joins):
+                joins[0]['type'] = INNER_JOIN
                 self._joins.append(joins[0])
             else:
                 self._joins.extend(joins)
@@ -143,7 +142,7 @@ class Table(object):
         """Set as."""
         self._as = as_
     
-    def join(self, arg, joinType=sqlPuzzle.joinTypes.INNER_JOIN):
+    def join(self, arg, joinType=INNER_JOIN):
         """Join table."""
         if isinstance(arg, (list, tuple)) and len(arg) == 2:
             table = Table(*arg)
