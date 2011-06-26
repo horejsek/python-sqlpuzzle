@@ -43,11 +43,17 @@ class SqlValueTest(unittest.TestCase):
     def testListWithInteger(self):
         self.assertEqual(str(SqlValue([12,23,34])), '(12, 23, 34)')
     
+    def testEmptyList(self):
+        self.assertEqual(str(SqlValue([])), '(NULL)')
+    
     def testTupleWithInteger(self):
         self.assertEqual(str(SqlValue(('a', 'b', 'c'))), '("a", "b", "c")')
     
     def testTupleWithInteger(self):
         self.assertEqual(str(SqlValue((12,23,34))), '(12, 23, 34)')
+    
+    def testEmptyTuple(self):
+        self.assertEqual(str(SqlValue(())), '(NULL)')
     
     def testNone(self):
         self.assertEqual(str(SqlValue(None)), 'NULL')

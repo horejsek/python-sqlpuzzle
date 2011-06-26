@@ -98,7 +98,9 @@ class SqlValue(object):
         """
         Convert as list of values.
         """
-        return "(%s)" % ", ".join(str(SqlValue(item)) for item in self.value)
+        if self.value:
+            return "(%s)" % ", ".join(str(SqlValue(item)) for item in self.value)
+        return "(NULL)"
     
     def _subselect(self):
         """
