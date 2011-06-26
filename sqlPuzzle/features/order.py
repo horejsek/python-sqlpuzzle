@@ -18,16 +18,12 @@ ORDERING_TYPES = (ASC, DESC)
 
 class Order(object):
     def __init__(self, column=None, sort=None):
-        """
-        Initialization of Order.
-        """
+        """Initialization of Order."""
         self.column(column)
         self.sort(sort)
     
     def __str__(self):
-        """
-        Print part of query.
-        """
+        """Print part of query."""
         if self._sort == ASC:
             return str(sqlPuzzle.sqlValue.SqlReference(self._column))
         else:
@@ -40,24 +36,18 @@ class Order(object):
         return "<Order: %s>" % self.__str__()
     
     def __eq__(self, other):
-        """
-        Are orders equivalent?
-        """
+        """Are orders equivalent?"""
         return (
             self._column == other._column and
             self._sort == other._sort
         )
     
     def column(self, column):
-        """
-        Set column.
-        """
+        """Set column."""
         self._column = column
     
     def sort(self, sort=None):
-        """
-        Set type of sort (ASC or DESC).
-        """
+        """Set type of sort (ASC or DESC)."""
         if sort is None:
             sort = ASC
         
@@ -71,47 +61,35 @@ class Order(object):
 
 class Orders(object):
     def __init__(self):
-        """
-        Initialization of OrderBy.
-        """
+        """Initialization of OrderBy."""
         self._orders = []
     
     def __str__(self):
-        """
-        Print order (part of query).
-        """
+        """Print order (part of query)."""
         raise sqlPuzzle.exceptions.SqlPuzzleNotImplemeted('Orders.__str__()')
     
     def __repr__(self):
         return "<Orders: %s>" % self.__str__()
     
     def __contains__(self, item):
-        """
-        Is item (order) in list of orders?
-        """
+        """Is item (order) in list of orders?"""
         for order in self._orders:
             if item._column == order._column:
                 return True
         return False
     
     def _changeSorting(self, columnName, sort):
-        """
-        If columnName in list, just set new sort.
-        """
+        """If columnName in list, just set new sort."""
         for order in self._orders:
             if order._column == columnName:
                 order.sort(sort)
     
     def isSet(self):
-        """
-        Is orderBy set?
-        """
+        """Is orderBy set?"""
         return self._orders != []
     
     def order(self, *args):
-        """
-        Set Order.
-        """
+        """Set Order."""
         for columnName, sort in sqlPuzzle.argsParser.parseArgsToListOfTuples(
             {'maxItems': 2, 'allowedDataTypes': (str, unicode)}, *args
         ):

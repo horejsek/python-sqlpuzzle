@@ -19,9 +19,7 @@ import sqlPuzzle.features.where
 
 class Select(sqlPuzzle.queries.query.Query):
     def __init__(self, *columns_):
-        """
-        Initialization of Select.
-        """
+        """Initialization of Select."""
         super(Select, self).__init__()
         
         self._setFeatures(
@@ -41,9 +39,7 @@ class Select(sqlPuzzle.queries.query.Query):
         self.columns(*columns_)
     
     def __str__(self):
-        """
-        Print query.
-        """
+        """Print query."""
         selectOptions = str(self._selectOptions)
         if selectOptions:
             selectOptions += ' '
@@ -59,218 +55,156 @@ class Select(sqlPuzzle.queries.query.Query):
         return "<Select: %s>" % self.__str__()
     
     def _typeOfQuery(self):
-        """
-        Type of query.
-        """
+        """Type of query."""
         return 'SELECT'
     
     def __and__(self, other):
-        """
-        UNION ALL selects.
-        """
+        """UNION ALL selects."""
         return '%s UNION ALL %s' % (str(self), str(other))
     
     def __or__(self, other):
-        """
-        UNION selects.
-        """
+        """UNION selects."""
         return '%s UNION %s' % (str(self), str(other))
     
     def columns(self, *columns_):
-        """
-        Set column(s) to query.
-        """
+        """Set column(s) to query."""
         self._columns.columns(*columns_)
         return self
     
     def from_(self, *tables):
-        """
-        Set table(s) to query.
-        """
+        """Set table(s) to query."""
         self._tables.set(*tables)
         return self
     
     def join(self, table):
-        """
-        Join table.
-        """
+        """Join table."""
         self._tables.join(table)
         return self
     
     def innerJoin(self, table):
-        """
-        Inner join table.
-        """
+        """Inner join table."""
         self._tables.innerJoin(table)
         return self
     
     def leftJoin(self, table):
-        """
-        Left join table.
-        """
+        """Left join table."""
         self._tables.leftJoin(table)
         return self
     
     def rightJoin(self, table):
-        """
-        Right join table.
-        """
+        """Right join table."""
         self._tables.rightJoin(table)
         return self
     
     def on(self, *args, **kwds):
-        """
-        Join on.
-        """
+        """Join on."""
         self._tables.on(*args, **kwds)
         return self
     
     def where(self, *args, **kwds):
-        """
-        Set condition(s) of where to query.
-        """
+        """Set condition(s) of where to query."""
         self._where.where(*args, **kwds)
         return self
     
     def having(self, *args, **kwds):
-        """
-        Set condition(s) of having to query.
-        """
+        """Set condition(s) of having to query."""
         self._having.where(*args, **kwds)
         return self
     
     def groupBy(self, *args):
-        """
-        Set group to query.
-        """
+        """Set group to query."""
         self._groupBy.groupBy(*args)
         return self
     
     def orderBy(self, *args):
-        """
-        Set order to query.
-        """
+        """Set order to query."""
         self._orderBy.orderBy(*args)
         return self
     
     def limit(self, limit, offset=None):
-        """
-        Set limit (and offset).
-        """
+        """Set limit (and offset)."""
         self._limit.limit(limit, offset)
         return self
     
     def offset(self, offset):
-        """
-        Set offset.
-        """
+        """Set offset."""
         self._limit.offset(offset)
         return self
     
     def intoOutfile(self, intoOutfile):
-        """
-        Set INTO OUTFILE.
-        """
+        """Set INTO OUTFILE."""
         self._intoOutfile.intoOutfile(intoOutfile)
         return self
     
     def fieldsTerminatedBy(self, fieldsTerminatedBy):
-        """
-        Set FIELDS TERMINATED BY.
-        """
+        """Set FIELDS TERMINATED BY."""
         self._intoOutfile.fieldsTerminatedBy(fieldsTerminatedBy)
         return self
     
     def linesTerminatedBy(self, linesTerminatedBy):
-        """
-        Set LINES TERMINATED BY.
-        """
+        """Set LINES TERMINATED BY."""
         self._intoOutfile.linesTerminatedBy(linesTerminatedBy)
         return self
     
     def optionallyEnclosedBy(self, optionallyEnclosedBy):
-        """
-        Set OPTIONALLY ENCLOSED BY.
-        """
+        """Set OPTIONALLY ENCLOSED BY."""
         self._intoOutfile.optionallyEnclosedBy(optionallyEnclosedBy)
         return self
     
     ### SELECT OPTIONS
     
     def sqlCache(self):
-        """
-        SQL_CACHE
-        """
+        """SQL_CACHE"""
         self._selectOptions.sqlCache()
         return self
     
     def sqlNoCache(self):
-        """
-        SQL_NO_CACHE
-        """
+        """SQL_NO_CACHE"""
         self._selectOptions.sqlNoCache()
         return self
     
     def all(self):
-        """
-        ALL
-        """
+        """ALL"""
         self._selectOptions.all()
         return self
     
     def distinct(self):
-        """
-        DISTINCT
-        """
+        """DISTINCT"""
         self._selectOptions.distinct()
         return self
     
     def distinctrow(self):
-        """
-        DISTINCTROW
-        """
+        """DISTINCTROW"""
         self._selectOptions.distinctrow()
         return self
     
     def sqlSmallResult(self):
-        """
-        SQL_SMALL_RESULT
-        """
+        """SQL_SMALL_RESULT"""
         self._selectOptions.sqlSmallResult()
         return self
     
     def sqlBigResult(self):
-        """
-        SQL_BIG_RESULT
-        """
+        """SQL_BIG_RESULT"""
         self._selectOptions.sqlBigResult()
         return self
     
     def sqlBufferResult(self):
-        """
-        SQL_BUFFER_RESULT
-        """
+        """SQL_BUFFER_RESULT"""
         self._selectOptions.sqlBufferResult()
         return self
     
     def sqlCalcFoundRows(self):
-        """
-        SQL_CALC_FOUND_ROWS
-        """
+        """SQL_CALC_FOUND_ROWS"""
         self._selectOptions.sqlCalcFoundRows()
         return self
     
     def straightJoin(self):
-        """
-        STRAIGHT_JOIN
-        """
+        """STRAIGHT_JOIN"""
         self._selectOptions.straightJoin()
         return self
     
     def highPriority(self):
-        """
-        HIGH_PRIORITY
-        """
+        """HIGH_PRIORITY"""
         self._selectOptions.highPriority()
         return self
 

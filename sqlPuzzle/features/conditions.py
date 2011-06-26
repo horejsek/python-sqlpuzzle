@@ -28,17 +28,13 @@ class Condition(object):
     }
     
     def __init__(self):
-        """
-        Initialization of Condition.
-        """
+        """Initialization of Condition."""
         self._column = None
         self._value = None
         self._relation = None
     
     def __str__(self):
-        """
-        Print condition (part of WHERE).
-        """
+        """Print condition (part of WHERE)."""
         return '%s %s %s' % (
             sqlPuzzle.sqlValue.SqlReference(self._column),
             sqlPuzzle.relations.RELATIONS[self._relation],
@@ -49,9 +45,7 @@ class Condition(object):
         return "<Condition: %s>" % self.__str__()
     
     def __eq__(self, other):
-        """
-        Are conditions equivalent?
-        """
+        """Are conditions equivalent?"""
         return (
             self._column == other._column and
             self._value == other._value and
@@ -59,15 +53,11 @@ class Condition(object):
         )
     
     def __ne__(self, other):
-        """
-        Are conditions not equal?
-        """
+        """Are conditions not equal?"""
         return not self.__eq__(other)
     
     def __isRelationAllowed(self, relation):
-        """
-        Is relation for this value allowed?
-        """
+        """Is relation for this value allowed?"""
         if isinstance(self._value, (str, unicode)):
             return relation in (
                 sqlPuzzle.relations.EQ,
@@ -102,29 +92,21 @@ class Condition(object):
         return False
     
     def set(self, column, value, relation=None):
-        """
-        Set column, value and relation.
-        """
+        """Set column, value and relation."""
         self.setColumn(column)
         self.setValue(value)
         self.setRelation(relation or self.__defaultRelations[type(value)])
     
     def setColumn(self, column):
-        """
-        Set column.
-        """
+        """Set column."""
         self._column = column
     
     def setValue(self, value):
-        """
-        Set value.
-        """
+        """Set value."""
         self._value = value
     
     def setRelation(self, relation):
-        """
-        Set relation.
-        """
+        """Set relation."""
         if not self.__isRelationAllowed(relation):
             raise sqlPuzzle.exceptions.InvalidArgumentException(
                 'Relation "%s" is not allowed for data type "%s".' % (
@@ -139,48 +121,36 @@ class Condition(object):
 
 class Conditions(object):
     def __init__(self, conditionObject=Condition):
-        """
-        Initialization of Conditions.
-        """
+        """Initialization of Conditions."""
         self._conditionObject = conditionObject
         self._conditions = []
     
     def __str__(self):
-        """
-        Print where (part of query).
-        """
+        """Print where (part of query)."""
         raise sqlPuzzle.exceptions.SqlPuzzleNotImplemeted('Conditions.__str__()')
     
     def __repr__(self):
         return "<Conditions: %s>" % self.__str__()
     
     def __eq__(self, other):
-        """
-        Are group of conditions equivalent?
-        """
+        """Are group of conditions equivalent?"""
         if other is None:
             return False
         return all(bool(sc == oc) for sc, oc in zip(self._conditions, other._conditions))
     
     def __contains__(self, item):
-        """
-        Is item (condition) in conditions?
-        """
+        """Is item (condition) in conditions?"""
         for condition in self._conditions:
             if item == condition:
                 return True
         return False
     
     def isSet(self):
-        """
-        Is where set?
-        """
+        """Is where set?"""
         return self._conditions != []
     
     def where(self, *args, **kwds):
-        """
-        Set condition(s).
-        """
+        """Set condition(s)."""
         for column, value, relation in sqlPuzzle.argsParser.parseArgsToListOfTuples(
             {
                 'minItems': 2,

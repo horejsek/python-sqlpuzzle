@@ -18,15 +18,11 @@ class WhereCondition(sqlPuzzle.features.conditions.Condition):
 
 class Where(sqlPuzzle.features.conditions.Conditions):
     def __init__(self):
-        """
-        Initialization of Where.
-        """
+        """Initialization of Where."""
         super(Where, self).__init__(WhereCondition)
     
     def __str__(self):
-        """
-        Print where (part of query).
-        """
+        """Print where (part of query)."""
         if self.isSet():
             return "WHERE %s" % " AND ".join(str(condition) for condition in self._conditions)
         return ""

@@ -16,9 +16,7 @@ import sqlPuzzle.features.where
 
 class Update(sqlPuzzle.queries.query.Query):
     def __init__(self, table=None):
-        """
-        Initialization of Update.
-        """
+        """Initialization of Update."""
         super(Update, self).__init__()
         
         self._setFeatures(
@@ -33,9 +31,7 @@ class Update(sqlPuzzle.queries.query.Query):
         self.table(table)
     
     def __str__(self):
-        """
-        Print query.
-        """
+        """Print query."""
         if not self._where.isSet() and not self.__allowUpdateAll:
             raise sqlPuzzle.exceptions.ConfirmUpdateAllException()
         
@@ -49,43 +45,31 @@ class Update(sqlPuzzle.queries.query.Query):
         return "<Update: %s>" % self.__str__()
     
     def _typeOfQuery(self):
-        """
-        Type of query.
-        """
+        """Type of query."""
         return 'UPDATE'
     
     def allowUpdateAll(self):
-        """
-        Allow update all records.
-        """
+        """Allow update all records."""
         self.__allowUpdateAll = True
         return self
     
     def forbidUpdateAll(self):
-        """
-        Forbid update all records.
-        """
+        """Forbid update all records."""
         self.__allowUpdateAll = False
         return self
     
     def table(self, table):
-        """
-        Set table.
-        """
+        """Set table."""
         self._tables.set(table)
         return self
     
     def set(self, *args, **kwds):
-        """
-        Set columns and values.
-        """
+        """Set columns and values."""
         self._values.set(*args, **kwds)
         return self
     
     def where(self, *args, **kwds):
-        """
-        Set condition(s) to query.
-        """
+        """Set condition(s) to query."""
         self._where.where(*args, **kwds)
         return self
 

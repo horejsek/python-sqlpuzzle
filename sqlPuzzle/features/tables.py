@@ -26,9 +26,7 @@ JOIN_TYPES = {
 
 class OnCondition(sqlPuzzle.features.conditions.Condition):
     def __str__(self):
-        """
-        Print part of query.
-        """
+        """Print part of query."""
         return '%s = %s' % (
             sqlPuzzle.sqlValue.SqlReference(self._column),
             sqlPuzzle.sqlValue.SqlReference(self._value),
@@ -38,9 +36,7 @@ class OnCondition(sqlPuzzle.features.conditions.Condition):
         return "<OnCondition: %s>" % self.__str__()
     
     def __eq__(self, other):
-        """
-        Are on codntions equivalent?
-        """
+        """Are on codntions equivalent?"""
         return (
             (self._column == other._column and self._value == other._value) or
             (self._column == other._value and self._value == other._column)
@@ -50,15 +46,11 @@ class OnCondition(sqlPuzzle.features.conditions.Condition):
 
 class Ons(sqlPuzzle.features.conditions.Conditions):
     def __init__(self):
-        """
-        Initialization of Ons.
-        """
+        """Initialization of Ons."""
         super(Ons, self).__init__(OnCondition)
     
     def __str__(self):
-        """
-        Print part of query.
-        """
+        """Print part of query."""
         if self.isSet():
             return " AND ".join(str(condition) for condition in self._conditions)
         return ""
@@ -70,18 +62,14 @@ class Ons(sqlPuzzle.features.conditions.Conditions):
 
 class Table(object):
     def __init__(self, table=None, as_=None):
-        """
-        Initialization of Table.
-        """
+        """Initialization of Table."""
         self.table(table)
         self.as_(as_)
         
         self._joins = []
     
     def __str__(self):
-        """
-        Print part of query.
-        """
+        """Print part of query."""
         if self._as:
             table = '%s AS %s' % (
                 sqlPuzzle.sqlValue.SqlReference(self._table),
@@ -112,9 +100,7 @@ class Table(object):
         return "<Table: %s>" % self.__str__()
     
     def __eq__(self, other):
-        """
-        Are tables equivalent?
-        """
+        """Are tables equivalent?"""
         return (
             self._table == other._table and
             self._as == other._as and
@@ -146,27 +132,19 @@ class Table(object):
                 self._joins.extend(joins)
         
     def isSimple(self):
-        """
-        Is set table without join?
-        """
+        """Is set table without join?"""
         return self._joins == []
     
     def table(self, table):
-        """
-        Set table.
-        """
+        """Set table."""
         self._table = table
     
     def as_(self, as_):
-        """
-        Set as.
-        """
+        """Set as."""
         self._as = as_
     
     def join(self, arg, joinType=sqlPuzzle.joinTypes.INNER_JOIN):
-        """
-        Join table.
-        """
+        """Join table."""
         if isinstance(arg, (list, tuple)) and len(arg) == 2:
             table = Table(*arg)
         else:
@@ -179,9 +157,7 @@ class Table(object):
         })
     
     def on(self, *args, **kwds):
-        """
-        Join on.
-        """
+        """Join on."""
         if self.isSimple():
             raise sqlPuzzle.exceptions.InvalidQueryException("You can't set join without table.")
         
@@ -191,45 +167,33 @@ class Table(object):
 
 class Tables(object):
     def __init__(self):
-        """
-        Initialization of Tables.
-        """
+        """Initialization of Tables."""
         self._tables = []
     
     def __str__(self):
-        """
-        Print tables (part of query).
-        """
+        """Print tables (part of query)."""
         return ", ".join(str(table) for table in self._tables)
     
     def __repr__(self):
         return "<Tables: %s>" % self.__str__()
     
     def __contains__(self, item):
-        """
-        Is item (table) in list of tables?
-        """
+        """Is item (table) in list of tables?"""
         for table in self._tables:
             if item == table:
                 return True
         return False
     
     def isSet(self):
-        """
-        Is tables set?
-        """
+        """Is tables set?"""
         return self._tables != []
     
     def isSimple(self):
-        """
-        Is set only one table without join?
-        """
+        """Is set only one table without join?"""
         return len(self._tables) == 1 and self._tables[0].isSimple()
     
     def set(self, *args):
-        """
-        Set tables.
-        """
+        """Set tables."""
         args = [arg for arg in args if arg]
         
         for table, as_ in sqlPuzzle.argsParser.parseArgsToListOfTuples(
@@ -242,9 +206,7 @@ class Tables(object):
         return self
     
     def join(self, arg):
-        """
-        Join table.
-        """
+        """Join table."""
         if not self.isSet():
             raise sqlPuzzle.exceptions.InvalidQueryException("You can't set join without table.")
         
@@ -252,9 +214,7 @@ class Tables(object):
         return self
     
     def innerJoin(self, arg):
-        """
-        Inner join table.
-        """
+        """Inner join table."""
         if not self.isSet():
             raise sqlPuzzle.exceptions.InvalidQueryException("You can't set join without table.")
         
@@ -262,9 +222,7 @@ class Tables(object):
         return self
     
     def leftJoin(self, arg):
-        """
-        Left join table.
-        """
+        """Left join table."""
         if not self.isSet():
             raise sqlPuzzle.exceptions.InvalidQueryException("You can't set join without table.")
         
@@ -272,9 +230,7 @@ class Tables(object):
         return self
     
     def rightJoin(self, arg):
-        """
-        Right join table.
-        """
+        """Right join table."""
         if not self.isSet():
             raise sqlPuzzle.exceptions.InvalidQueryException("You can't set join without table.")
         
@@ -282,9 +238,7 @@ class Tables(object):
         return self
     
     def on(self, *args, **kwds):
-        """
-        Join on.
-        """
+        """Join on."""
         if not self.isSet():
             raise sqlPuzzle.exceptions.InvalidQueryException("You can't set condition of join without table.")
         

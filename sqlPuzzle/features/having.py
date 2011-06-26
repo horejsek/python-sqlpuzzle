@@ -15,15 +15,11 @@ class HavingCondition(sqlPuzzle.features.conditions.Condition):
 
 class Having(sqlPuzzle.features.conditions.Conditions):
     def __init__(self):
-        """
-        Initialization of Having.
-        """
+        """Initialization of Having."""
         super(Having, self).__init__(HavingCondition)
     
     def __str__(self):
-        """
-        Print having (part of query).
-        """
+        """Print having (part of query)."""
         if self.isSet():
             return "HAVING %s" % " AND ".join(str(condition) for condition in self._conditions)
         return ""

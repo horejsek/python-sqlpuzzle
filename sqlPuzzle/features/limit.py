@@ -13,16 +13,12 @@ import sqlPuzzle.exceptions
 
 class Limit(object):
     def __init__(self):
-        """
-        Initialization of Limit.
-        """
+        """Initialization of Limit."""
         self.__limit = None
         self.__offset = None
     
     def __str__(self):
-        """
-        Print limit (part of query).
-        """
+        """Print limit (part of query)."""
         limit = "LIMIT %s" % self.__limit
         if self.__offset is not None:
             limit = "%s OFFSET %s" % (limit, self.__offset)
@@ -32,15 +28,11 @@ class Limit(object):
         return "<Limit: %s>" % self.__str__()
     
     def isSet(self):
-        """
-        Is limit set?
-        """
+        """Is limit set?"""
         return self.__limit is not None
     
     def limit(self, limit, offset=None):
-        """
-        Set LIMIT (and OFFSET).
-        """
+        """Set LIMIT (and OFFSET)."""
         if not type(limit) in (int, long, types.NoneType):
             raise sqlPuzzle.exceptions.InvalidArgumentException()
         
@@ -56,9 +48,7 @@ class Limit(object):
         return self
     
     def offset(self, offset):
-        """
-        Set OFFSET.
-        """
+        """Set OFFSET."""
         if not type(offset) in (int, long, types.NoneType):
             raise sqlPuzzle.exceptions.InvalidArgumentException()
         

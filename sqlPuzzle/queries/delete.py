@@ -14,9 +14,7 @@ import sqlPuzzle.features.where
 
 class Delete(sqlPuzzle.queries.query.Query):
     def __init__(self):
-        """
-        Initialization of Delete.
-        """
+        """Initialization of Delete."""
         super(Delete, self).__init__()
         
         self._setFeatures(
@@ -28,9 +26,7 @@ class Delete(sqlPuzzle.queries.query.Query):
         self.__allowDeleteAll = False
     
     def __str__(self):
-        """
-        Print query.
-        """
+        """Print query."""
         if not self._where.isSet() and not self.__allowDeleteAll:
             raise sqlPuzzle.exceptions.ConfirmDeleteAllException()
         
@@ -43,36 +39,26 @@ class Delete(sqlPuzzle.queries.query.Query):
         return "<Delete: %s>" % self.__str__()
     
     def allowDeleteAll(self):
-        """
-        Allow delete all records.
-        """
+        """Allow delete all records."""
         self.__allowDeleteAll = True
         return self
     
     def forbidDeleteAll(self):
-        """
-        Forbid delete all records.
-        """
+        """Forbid delete all records."""
         self.__allowDeleteAll = False
         return self
     
     def _typeOfQuery(self):
-        """
-        Type of query.
-        """
+        """Type of query."""
         return 'DELETE'
     
     def from_(self, *tables):
-        """
-        Set table(s) to query.
-        """
+        """Set table(s) to query."""
         self._tables.set(tables)
         return self
     
     def where(self, *args, **kwds):
-        """
-        Set condition(s) to query.
-        """
+        """Set condition(s) to query."""
         self._where.where(*args, **kwds)
         return self
 

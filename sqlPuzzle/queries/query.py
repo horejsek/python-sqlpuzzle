@@ -18,9 +18,7 @@ import sqlPuzzle.features.values
 
 class Query(object):
     def __init__(self):
-        """
-        Initialization of Query.
-        """
+        """Initialization of Query."""
         self.__features = {}
         self.__printedFeatures = ()
     
@@ -28,22 +26,16 @@ class Query(object):
         return "<Query>"
     
     def __raiser(self, method):
-        """
-        Raise if method is not implemented in actual instance.
-        """
+        """Raise if method is not implemented in actual instance."""
         raise sqlPuzzle.exceptions.NotSupprotedException(method, self._typeOfQuery())
     
     
     def _typeOfQuery(self):
-        """
-        Type of query.
-        """
+        """Type of query."""
         return 'undefined'
     
     def _appendFeatures(self, query=''):
-        """
-        Append features into query.
-        """
+        """Append features into query."""
         query = str(query)
         for feature in self.__printedFeatures:
             object_ = self._getFeature(feature)
@@ -52,21 +44,15 @@ class Query(object):
         return query
     
     def _setFeatures(self, **kwds):
-        """
-        Set features.
-        """
+        """Set features."""
         self.__features = kwds
     
     def _setPrintedFeatures(self, *args):
-        """
-        Set features which is proposed to automatic print.
-        """
+        """Set features which is proposed to automatic print."""
         self.__printedFeatures = args
     
     def _getFeature(self, feature):
-        """
-        Get features.
-        """
+        """Get features."""
         if feature in self.__features:
             return self.__features[feature]
         self.__raiser(feature)

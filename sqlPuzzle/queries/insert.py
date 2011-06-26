@@ -14,9 +14,7 @@ import sqlPuzzle.features.values
 
 class Insert(sqlPuzzle.queries.query.Query):
     def __init__(self):
-        """
-        Initialization of Insert.
-        """
+        """Initialization of Insert."""
         super(Insert, self).__init__()
         
         self._setFeatures(
@@ -27,9 +25,7 @@ class Insert(sqlPuzzle.queries.query.Query):
         self._setPrintedFeatures('onDuplicateKeyUpdate')
     
     def __str__(self):
-        """
-        Print query.
-        """
+        """Print query."""
         insert = "INSERT INTO %s (%s) VALUES (%s)" % (
             str(self._tables),
             self._values.columns(),
@@ -41,29 +37,21 @@ class Insert(sqlPuzzle.queries.query.Query):
         return "<Insert: %s>" % self.__str__()
     
     def _typeOfQuery(self):
-        """
-        Type of query.
-        """
+        """Type of query."""
         return 'INSERT'
     
     def into(self, table):
-        """
-        Set table for insert.
-        """
+        """Set table for insert."""
         self._tables.set(table)
         return self
     
     def values(self, *args, **kwds):
-        """
-        Set columns and values.
-        """
+        """Set columns and values."""
         self._values.set(*args, **kwds)
         return self
     
     def onDuplicateKeyUpdate(self, *args, **kwds):
-        """
-        Set on duplicate key update.
-        """
+        """Set on duplicate key update."""
         self._onDuplicateKeyUpdate.set(*args, **kwds)
         return self
 

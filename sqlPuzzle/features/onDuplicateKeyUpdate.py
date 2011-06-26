@@ -13,5 +13,6 @@ import sqlPuzzle.features.values
 
 class OnDuplicateKeyUpdate(sqlPuzzle.features.values.Values):
     def __str__(self):
+        """Print on duplicate key update."""
         return "ON DUPLICATE KEY UPDATE %s" % super(OnDuplicateKeyUpdate, self).__str__()
 

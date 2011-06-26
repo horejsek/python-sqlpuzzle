@@ -12,14 +12,10 @@ import types
 
 
 class SqlValue(object):
-    """
-    Wrap value.
-    """
+    """Wrap value."""
     
     def __init__(self, value):
-        """
-        Initialization of SqlValue.
-        """
+        """Initialization of SqlValue."""
         self._map = {
             str: self._string,
             unicode: self._string,
@@ -38,86 +34,62 @@ class SqlValue(object):
         self.value = value
     
     def __str__(self):
-        """
-        Convert and print value.
-        """
+        """Convert and print value."""
         return self._getConvertMethod()()
     
     def __repr__(self):
         return "<SqlValue: %s>" % self.__str__()
     
     def _getConvertMethod(self):
-        """
-        Get right method to convert of the value.
-        """
+        """Get right method to convert of the value."""
         for type_, method in self._map.iteritems():
             if isinstance(self.value, type_):
                 return method
         return self._undefined
     
     def _string(self):
-        """
-        Convert as string.
-        """
+        """Convert as string."""
         # sometime, e.g. in subselect, is needed reference to column instead of self.value
         if self.value.strip()[0] == '`':
             return self._backQuotes()
         return '"%s"' % self.value
     
     def _integer(self):
-        """
-        Convert as integer.
-        """
+        """Convert as integer."""
         return '%d' % self.value
     
     def _float(self):
-        """
-        Convert as float.
-        """
+        """Convert as float."""
         return '%.5f' % self.value
     
     def _boolean(self):
-        """
-        Convert as boolean.
-        """
+        """Convert as boolean."""
         return '%d' % self.value
     
     def _date(self):
-        """
-        Convert as date.
-        """
+        """Convert as date."""
         return self._datetime()
     
     def _datetime(self):
-        """
-        Convert as datetime.
-        """
+        """Convert as datetime."""
         return '"%s"' % self.value.isoformat()
     
     def _list(self):
-        """
-        Convert as list of values.
-        """
+        """Convert as list of values."""
         if self.value:
             return "(%s)" % ", ".join(str(SqlValue(item)) for item in self.value)
         return "(NULL)"
     
     def _subselect(self):
-        """
-        Convert as subselect.
-        """
+        """Convert as subselect."""
         return "(%s)" % self.value
     
     def _null(self):
-        """
-        NULL
-        """
+        """NULL"""
         return 'NULL'
     
     def _undefined(self):
-        """
-        undefined
-        """
+        """undefined"""
         return 'undefined'
     
     def _backQuotes(self):
@@ -135,9 +107,7 @@ class SqlValue(object):
 
 class SqlReference(SqlValue):
     def __init__(self, value):
-        """
-        Initialization of SqlReference.
-        """
+        """Initialization of SqlReference."""
         self._map = {
             str: self._backQuotes,
             unicode: self._backQuotes,

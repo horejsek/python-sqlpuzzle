@@ -11,16 +11,12 @@ import sqlPuzzle.sqlValue
 
 class Column(object):
     def __init__(self, column=None, as_=None):
-        """
-        Initialization of Column.
-        """
+        """Initialization of Column."""
         self.column(column)
         self.as_(as_)
     
     def __str__(self):
-        """
-        Print part of query.
-        """
+        """Print part of query."""
         if self._as:
             return '%s AS "%s"' % (
                 sqlPuzzle.sqlValue.SqlReference(self._column),
@@ -33,38 +29,28 @@ class Column(object):
         return "<Column: %s>" % self.__str__()
     
     def __eq__(self, other):
-        """
-        Are columns equivalent?
-        """
+        """Are columns equivalent?"""
         return (
             self._column == other._column and
             self._as == other._as
         )
     
     def column(self, column):
-        """
-        Set column.
-        """
+        """Set column."""
         self._column = column
     
     def as_(self, as_):
-        """
-        Set as.
-        """
+        """Set as."""
         self._as = as_
 
 
 class Columns(object):
     def __init__(self):
-        """
-        Initialization of Columns.
-        """
+        """Initialization of Columns."""
         self._columns = []
     
     def __str__(self):
-        """
-        Print columns (part of query).
-        """
+        """Print columns (part of query)."""
         if self.isSet():
             return ', '.join(str(column) for column in self._columns)
         else:
@@ -74,24 +60,18 @@ class Columns(object):
         return "<Columns: %s>" % self.__str__()
     
     def __contains__(self, item):
-        """
-        Is item (column) in columns?
-        """
+        """Is item (column) in columns?"""
         for column in self._columns:
             if item == column:
                 return True
         return False
     
     def isSet(self):
-        """
-        Is limit set?
-        """
+        """Is limit set?"""
         return self._columns != []
     
     def columns(self, *args):
-        """
-        Set columns.
-        """
+        """Set columns."""
         for columnName, as_ in sqlPuzzle.argsParser.parseArgsToListOfTuples(
             {'maxItems': 2, 'allowedDataTypes': ((str, unicode, sqlPuzzle.queries.select.Select), (str, unicode))}, *args
         ):
