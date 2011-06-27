@@ -5,6 +5,7 @@ import unittest
 import queries.deleteTest
 import queries.insertTest
 import queries.selectTest
+import queries.unionTest
 import queries.updateTest
 
 import features.columnsTest
@@ -26,6 +27,7 @@ if __name__ == '__main__':
         queries.deleteTest,
         queries.insertTest,
         queries.selectTest,
+        queries.unionTest,
         queries.updateTest,
         
         features.columnsTest,

@@ -196,7 +196,10 @@ class Tables(object):
         args = [arg for arg in args if arg]
         
         for table, as_ in sqlPuzzle.argsParser.parseArgsToListOfTuples(
-            {'maxItems': 2, 'allowedDataTypes': ((str, unicode, sqlPuzzle.queries.select.Select), (str, unicode))}, *args
+            {'maxItems': 2, 'allowedDataTypes': (
+                (str, unicode, sqlPuzzle.queries.select.Select, sqlPuzzle.queries.union.Union),
+                (str, unicode)
+            )}, *args
         ):
             table = Table(table, as_)
             if table not in self:

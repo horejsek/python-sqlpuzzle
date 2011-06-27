@@ -6,6 +6,7 @@
 #
 
 import sqlPuzzle.queries.query
+import sqlPuzzle.queries.union
 
 import sqlPuzzle.features.columns
 import sqlPuzzle.features.groupBy
@@ -60,11 +61,11 @@ class Select(sqlPuzzle.queries.query.Query):
     
     def __and__(self, other):
         """UNION ALL selects."""
-        return '%s UNION ALL %s' % (str(self), str(other))
+        return sqlPuzzle.queries.union.Union(self, other, sqlPuzzle.queries.union.UNION_ALL)
     
     def __or__(self, other):
         """UNION selects."""
-        return '%s UNION %s' % (str(self), str(other))
+        return sqlPuzzle.queries.union.Union(self, other, sqlPuzzle.queries.union.UNION)
     
     def columns(self, *columns_):
         """Set column(s) to query."""

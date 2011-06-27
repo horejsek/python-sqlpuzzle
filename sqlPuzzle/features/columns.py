@@ -73,7 +73,10 @@ class Columns(object):
     def columns(self, *args):
         """Set columns."""
         for columnName, as_ in sqlPuzzle.argsParser.parseArgsToListOfTuples(
-            {'maxItems': 2, 'allowedDataTypes': ((str, unicode, sqlPuzzle.queries.select.Select), (str, unicode))}, *args
+            {'maxItems': 2, 'allowedDataTypes': (
+                (str, unicode, sqlPuzzle.queries.select.Select, sqlPuzzle.queries.union.Union),
+                (str, unicode)
+            )}, *args
         ):
             column = Column(columnName, as_)
             if column not in self:

@@ -28,6 +28,7 @@ class SqlValue(object):
             list: self._list,
             tuple: self._list,
             sqlPuzzle.queries.select.Select: self._subselect,
+            sqlPuzzle.queries.union.Union: self._subselect,
             types.NoneType: self._null,
         }
 
@@ -112,6 +113,7 @@ class SqlReference(SqlValue):
             str: self._backQuotes,
             unicode: self._backQuotes,
             sqlPuzzle.queries.select.Select: self._subselect,
+            sqlPuzzle.queries.union.Union: self._subselect,
         }
 
         self.value = value

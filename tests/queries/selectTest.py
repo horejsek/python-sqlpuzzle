@@ -210,11 +210,11 @@ class SelectOptionsTest(SelectTest):
 class UnionTest(SelectTest):
     def testUnion(self):
         self.select.from_('table')
-        self.assertEqual(self.select | self.select, 'SELECT * FROM `table` UNION SELECT * FROM `table`')
+        self.assertEqual(str(self.select | self.select), 'SELECT * FROM `table` UNION SELECT * FROM `table`')
     
     def testUnionAll(self):
         self.select.from_('table')
-        self.assertEqual(self.select & self.select, 'SELECT * FROM `table` UNION ALL SELECT * FROM `table`')
+        self.assertEqual(str(self.select & self.select), 'SELECT * FROM `table` UNION ALL SELECT * FROM `table`')
 
 
 
