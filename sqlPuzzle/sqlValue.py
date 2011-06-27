@@ -34,6 +34,17 @@ class SqlValue(object):
 
         self.value = value
     
+    def _escapeValue(self, value):
+        replaceTable = (
+            ("\\", "\\\\"),
+            ('"', '\\"'),
+            ("'", "\\'"),
+            ("\n", "\\n"),
+        )
+        for old, new in replaceTable:
+            value = value.replace(old, new)
+        return value
+    
     def __str__(self):
         """Convert and print value."""
         return self._getConvertMethod()()
@@ -53,7 +64,7 @@ class SqlValue(object):
         # sometime, e.g. in subselect, is needed reference to column instead of self.value
         if self.value.strip()[0] == '`':
             return self._backQuotes()
-        return '"%s"' % self.value
+        return '"%s"' % self._escapeValue(self.value)
     
     def _integer(self):
         """Convert as integer."""

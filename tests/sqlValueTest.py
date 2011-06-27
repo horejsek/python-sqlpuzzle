@@ -83,9 +83,27 @@ class SqlReferenceTest(unittest.TestCase):
 
 
 
+class SecurityTest(unittest.TestCase):
+    def testSingleQuotes(self):
+        self.assertEqual(str(SqlValue('test\'test')), '"test\\\'test"')
+    
+    def testQuotes(self):
+        self.assertEqual(str(SqlValue('test"test')), '"test\\"test"')
+    
+    def testSlash(self):
+        self.assertEqual(str(SqlValue('test\\test')), '"test\\\\test"')
+    
+    def testNewLine(self):
+        value = """first line
+second line"""
+        self.assertEqual(str(SqlValue(value)), '"first line\\nsecond line"')
+
+
+
 testCases = (
     SqlValueTest,
     SqlReferenceTest,
+    SecurityTest,
 )
 
 
