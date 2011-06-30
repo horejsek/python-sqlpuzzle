@@ -8,7 +8,7 @@
 import unittest
 
 import sqlPuzzle.exceptions
-from sqlPuzzle.argsParser import parseArgsToListOfTuples as parser
+from sqlPuzzle.libs.argsParser import parseArgsToListOfTuples as parser
 
 
 class ArgsParserTest(unittest.TestCase):

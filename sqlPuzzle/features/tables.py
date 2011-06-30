@@ -5,9 +5,9 @@
 # https://github.com/horejsek/sqlPuzzle
 #
 
-import sqlPuzzle.argsParser
+import sqlPuzzle.libs.argsParser
 import sqlPuzzle.features.conditions
-import sqlPuzzle.sqlValue
+import sqlPuzzle.libs.sqlValue
 
 
 
@@ -27,8 +27,8 @@ class OnCondition(sqlPuzzle.features.conditions.Condition):
     def __str__(self):
         """Print part of query."""
         return '%s = %s' % (
-            sqlPuzzle.sqlValue.SqlReference(self._column),
-            sqlPuzzle.sqlValue.SqlReference(self._value),
+            sqlPuzzle.libs.sqlValue.SqlReference(self._column),
+            sqlPuzzle.libs.sqlValue.SqlReference(self._value),
         )
     
     def __repr__(self):
@@ -71,11 +71,11 @@ class Table(object):
         """Print part of query."""
         if self._as:
             table = '%s AS %s' % (
-                sqlPuzzle.sqlValue.SqlReference(self._table),
-                sqlPuzzle.sqlValue.SqlReference(self._as),
+                sqlPuzzle.libs.sqlValue.SqlReference(self._table),
+                sqlPuzzle.libs.sqlValue.SqlReference(self._as),
             )
         else:
-            table = str(sqlPuzzle.sqlValue.SqlReference(self._table))
+            table = str(sqlPuzzle.libs.sqlValue.SqlReference(self._table))
         
         if self._joins != []:
             if any([not join['ons'].isSet() for join in self._joins]):
@@ -195,7 +195,7 @@ class Tables(object):
         """Set tables."""
         args = [arg for arg in args if arg]
         
-        for table, as_ in sqlPuzzle.argsParser.parseArgsToListOfTuples(
+        for table, as_ in sqlPuzzle.libs.argsParser.parseArgsToListOfTuples(
             {'maxItems': 2, 'allowedDataTypes': (
                 (str, unicode, sqlPuzzle.queries.select.Select, sqlPuzzle.queries.union.Union),
                 (str, unicode)

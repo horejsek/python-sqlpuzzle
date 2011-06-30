@@ -9,7 +9,7 @@ import datetime
 import unittest
 
 import sqlPuzzle
-from sqlPuzzle.sqlValue import SqlValue, SqlReference
+from sqlPuzzle.libs.sqlValue import SqlValue, SqlReference
 
 
 class SqlValueTest(unittest.TestCase):

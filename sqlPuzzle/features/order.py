@@ -5,8 +5,8 @@
 # https://github.com/horejsek/sqlPuzzle
 #
 
-import sqlPuzzle.argsParser
-import sqlPuzzle.sqlValue
+import sqlPuzzle.libs.argsParser
+import sqlPuzzle.libs.sqlValue
 
 
 
@@ -25,10 +25,10 @@ class Order(object):
     def __str__(self):
         """Print part of query."""
         if self._sort == ASC:
-            return str(sqlPuzzle.sqlValue.SqlReference(self._column))
+            return str(sqlPuzzle.libs.sqlValue.SqlReference(self._column))
         else:
             return '%s %s' % (
-                sqlPuzzle.sqlValue.SqlReference(self._column),
+                sqlPuzzle.libs.sqlValue.SqlReference(self._column),
                 self._sort,
             )
     
@@ -90,7 +90,7 @@ class Orders(object):
     
     def order(self, *args):
         """Set Order."""
-        for columnName, sort in sqlPuzzle.argsParser.parseArgsToListOfTuples(
+        for columnName, sort in sqlPuzzle.libs.argsParser.parseArgsToListOfTuples(
             {'maxItems': 2, 'allowedDataTypes': (str, unicode, int)}, *args
         ):
             order = Order(columnName, sort)

@@ -7,9 +7,9 @@
 
 import datetime
 
-import sqlPuzzle.argsParser
+import sqlPuzzle.libs.argsParser
 import sqlPuzzle.exceptions
-import sqlPuzzle.sqlValue
+import sqlPuzzle.libs.sqlValue
 import sqlPuzzle.relations
 
 
@@ -36,9 +36,9 @@ class Condition(object):
     def __str__(self):
         """Print condition (part of WHERE)."""
         return '%s %s %s' % (
-            sqlPuzzle.sqlValue.SqlReference(self._column),
+            sqlPuzzle.libs.sqlValue.SqlReference(self._column),
             sqlPuzzle.relations.RELATIONS[self._relation],
-            sqlPuzzle.sqlValue.SqlValue(self._value),
+            sqlPuzzle.libs.sqlValue.SqlValue(self._value),
         )
     
     def __repr__(self):
@@ -151,7 +151,7 @@ class Conditions(object):
     
     def where(self, *args, **kwds):
         """Set condition(s)."""
-        for column, value, relation in sqlPuzzle.argsParser.parseArgsToListOfTuples(
+        for column, value, relation in sqlPuzzle.libs.argsParser.parseArgsToListOfTuples(
             {
                 'minItems': 2,
                 'maxItems': 3,

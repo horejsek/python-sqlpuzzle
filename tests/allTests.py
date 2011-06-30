@@ -17,9 +17,10 @@ import features.tablesTest
 import features.valuesTest
 import features.whereTest
 
-import argsParserTest
+import libs.argsParserTest
+import libs.sqlValueTest
+
 import sqlPuzzleTest
-import sqlValueTest
 
 
 if __name__ == '__main__':
@@ -39,8 +40,9 @@ if __name__ == '__main__':
         features.valuesTest,
         features.whereTest,
         
-        argsParserTest,
-        sqlValueTest,
+        libs.argsParserTest,
+        libs.sqlValueTest,
+        
         sqlPuzzleTest,
     )
     

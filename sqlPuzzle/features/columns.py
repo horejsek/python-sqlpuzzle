@@ -5,8 +5,8 @@
 # https://github.com/horejsek/sqlPuzzle
 #
 
-import sqlPuzzle.argsParser
-import sqlPuzzle.sqlValue
+import sqlPuzzle.libs.argsParser
+import sqlPuzzle.libs.sqlValue
 
 
 class Column(object):
@@ -19,11 +19,11 @@ class Column(object):
         """Print part of query."""
         if self._as:
             return '%s AS "%s"' % (
-                sqlPuzzle.sqlValue.SqlReference(self._column),
+                sqlPuzzle.libs.sqlValue.SqlReference(self._column),
                 self._as,
             )
         else:
-            return str(sqlPuzzle.sqlValue.SqlReference(self._column))
+            return str(sqlPuzzle.libs.sqlValue.SqlReference(self._column))
     
     def __repr__(self):
         return "<Column: %s>" % self.__str__()
@@ -72,7 +72,7 @@ class Columns(object):
     
     def columns(self, *args):
         """Set columns."""
-        for columnName, as_ in sqlPuzzle.argsParser.parseArgsToListOfTuples(
+        for columnName, as_ in sqlPuzzle.libs.argsParser.parseArgsToListOfTuples(
             {'maxItems': 2, 'allowedDataTypes': (
                 (str, unicode, sqlPuzzle.queries.select.Select, sqlPuzzle.queries.union.Union),
                 (str, unicode)

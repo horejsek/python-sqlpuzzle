@@ -7,8 +7,8 @@
 
 import datetime
 
-import sqlPuzzle.argsParser
-import sqlPuzzle.sqlValue
+import sqlPuzzle.libs.argsParser
+import sqlPuzzle.libs.sqlValue
 
 
 class Values(object):
@@ -19,7 +19,7 @@ class Values(object):
     def __str__(self):
         """Print values (part of query)."""
         return ', '.join(
-            '`%s` = %s' % (column, str(sqlPuzzle.sqlValue.SqlValue(value)))
+            '`%s` = %s' % (column, str(sqlPuzzle.libs.sqlValue.SqlValue(value)))
             for column, value in
             self._values.iteritems()
         )
@@ -33,7 +33,7 @@ class Values(object):
     
     def values(self):
         """Print values of values."""
-        return ', '.join('%s' % str(sqlPuzzle.sqlValue.SqlValue(value)) for value in self._values.values())
+        return ', '.join('%s' % str(sqlPuzzle.libs.sqlValue.SqlValue(value)) for value in self._values.values())
     
     def isSet(self):
         """Is limit set?"""
@@ -42,7 +42,7 @@ class Values(object):
     def set(self, *args, **kwds):
         """Set columns."""
         self._values.update(dict(
-            sqlPuzzle.argsParser.parseArgsToListOfTuples(
+            sqlPuzzle.libs.argsParser.parseArgsToListOfTuples(
                 {
                     'minItems': 2,
                     'maxItems': 2,

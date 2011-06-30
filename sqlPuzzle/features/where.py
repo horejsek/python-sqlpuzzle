@@ -7,7 +7,7 @@
 
 import datetime
 
-import sqlPuzzle.argsParser
+import sqlPuzzle.libs.argsParser
 import sqlPuzzle.features.conditions
 
 

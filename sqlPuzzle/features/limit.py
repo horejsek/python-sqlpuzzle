@@ -7,7 +7,7 @@
 
 import types
 
-import sqlPuzzle.argsParser
+import sqlPuzzle.libs.argsParser
 import sqlPuzzle.exceptions
 
 
