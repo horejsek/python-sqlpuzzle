@@ -42,6 +42,10 @@ class BaseTest(GroupByTest):
     def testDESC(self):
         self.groupBy.groupBy(['name', 'desc'])
         self.assertEqual(str(self.groupBy), 'GROUP BY `name` DESC')
+    
+    def testOrderByNumber(self):
+        self.groupBy.groupBy(1)
+        self.assertEqual(str(self.groupBy), 'GROUP BY 1')
 
 
 
@@ -68,9 +72,6 @@ class GroupingTest(GroupByTest):
 
 
 class ExceptionsTest(GroupByTest):
-    def testNameAsIntegerException(self):
-        self.assertRaises(sqlPuzzle.exceptions.InvalidArgumentException, self.groupBy.groupBy, 42)
-    
     def testNameAsFloatException(self):
         self.assertRaises(sqlPuzzle.exceptions.InvalidArgumentException, self.groupBy.groupBy, 42.1)
     

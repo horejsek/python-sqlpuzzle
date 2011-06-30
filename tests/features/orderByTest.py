@@ -42,6 +42,10 @@ class BaseTest(OrderByTest):
     def testDESC(self):
         self.orderBy.orderBy(['name', 'desc'])
         self.assertEqual(str(self.orderBy), 'ORDER BY `name` DESC')
+    
+    def testOrderByNumber(self):
+        self.orderBy.orderBy(1)
+        self.assertEqual(str(self.orderBy), 'ORDER BY 1')
 
 
 
@@ -68,9 +72,6 @@ class GroupingTest(OrderByTest):
 
 
 class ExceptionsTest(OrderByTest):
-    def testNameAsIntegerException(self):
-        self.assertRaises(sqlPuzzle.exceptions.InvalidArgumentException, self.orderBy.orderBy, 42)
-    
     def testNameAsFloatException(self):
         self.assertRaises(sqlPuzzle.exceptions.InvalidArgumentException, self.orderBy.orderBy, 42.1)
     

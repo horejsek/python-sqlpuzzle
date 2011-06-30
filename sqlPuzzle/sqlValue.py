@@ -123,6 +123,7 @@ class SqlReference(SqlValue):
         self._map = {
             str: self._backQuotes,
             unicode: self._backQuotes,
+            int: self._integer,
             sqlPuzzle.queries.select.Select: self._subselect,
             sqlPuzzle.queries.union.Union: self._subselect,
         }

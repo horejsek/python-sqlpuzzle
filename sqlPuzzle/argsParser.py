@@ -5,6 +5,8 @@
 # https://github.com/horejsek/sqlPuzzle
 #
 
+import types
+
 import sqlPuzzle.exceptions
 
 
@@ -177,6 +179,9 @@ class Parser(object):
             if isinstance(self.options.allowedDataTypes[0], (tuple, list)):
                 dataTypes = self.options.allowedDataTypes[x]
             if item is not None and not isinstance(item, dataTypes):
+                return False
+            # isinstance(True, (int, long)) is True => must be special condition
+            if bool not in dataTypes and type(item) == types.BooleanType:
                 return False
         return True
 

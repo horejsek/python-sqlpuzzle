@@ -91,7 +91,7 @@ class Orders(object):
     def order(self, *args):
         """Set Order."""
         for columnName, sort in sqlPuzzle.argsParser.parseArgsToListOfTuples(
-            {'maxItems': 2, 'allowedDataTypes': (str, unicode)}, *args
+            {'maxItems': 2, 'allowedDataTypes': (str, unicode, int)}, *args
         ):
             order = Order(columnName, sort)
             if order not in self:
