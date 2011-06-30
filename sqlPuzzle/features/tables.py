@@ -6,8 +6,9 @@
 #
 
 import sqlPuzzle.libs.argsParser
-import sqlPuzzle.features.conditions
 import sqlPuzzle.libs.sqlValue
+import sqlPuzzle.features.features
+import sqlPuzzle.features.conditions
 
 
 
@@ -164,7 +165,7 @@ class Table(object):
 
 
 
-class Tables(object):
+class Tables(sqlPuzzle.features.features.Features):
     def __init__(self):
         """Initialization of Tables."""
         self._tables = []
@@ -193,17 +194,21 @@ class Tables(object):
     
     def set(self, *args):
         """Set tables."""
-        args = [arg for arg in args if arg]
+        if self.isCustumSql(*args):
+            self._tables.append(args[0])
         
-        for table, as_ in sqlPuzzle.libs.argsParser.parseArgsToListOfTuples(
-            {'maxItems': 2, 'allowedDataTypes': (
-                (str, unicode, sqlPuzzle.queries.select.Select, sqlPuzzle.queries.union.Union),
-                (str, unicode)
-            )}, *args
-        ):
-            table = Table(table, as_)
-            if table not in self:
-                self._tables.append(table)
+        else:
+            args = [arg for arg in args if arg]
+            
+            for table, as_ in sqlPuzzle.libs.argsParser.parseArgsToListOfTuples(
+                {'maxItems': 2, 'allowedDataTypes': (
+                    (str, unicode, sqlPuzzle.queries.select.Select, sqlPuzzle.queries.union.Union),
+                    (str, unicode)
+                )}, *args
+            ):
+                table = Table(table, as_)
+                if table not in self:
+                    self._tables.append(table)
         
         return self
     

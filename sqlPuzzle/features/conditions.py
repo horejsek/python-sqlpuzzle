@@ -8,8 +8,9 @@
 import datetime
 
 import sqlPuzzle.libs.argsParser
-import sqlPuzzle.exceptions
 import sqlPuzzle.libs.sqlValue
+import sqlPuzzle.features.features
+import sqlPuzzle.exceptions
 import sqlPuzzle.relations
 
 
@@ -119,7 +120,7 @@ class Condition(object):
 
 
 
-class Conditions(object):
+class Conditions(sqlPuzzle.features.features.Features):
     def __init__(self, conditionObject=Condition):
         """Initialization of Conditions."""
         self._conditionObject = conditionObject
@@ -151,25 +152,29 @@ class Conditions(object):
     
     def where(self, *args, **kwds):
         """Set condition(s)."""
-        for column, value, relation in sqlPuzzle.libs.argsParser.parseArgsToListOfTuples(
-            {
-                'minItems': 2,
-                'maxItems': 3,
-                'allowDict': True,
-                'allowList': True,
-                'allowedDataTypes': (
-                    (str, unicode, sqlPuzzle.queries.select.Select),
-                    (str, unicode, int, long, float, bool, list, tuple, datetime.date, datetime.datetime),
-                    (int,)
-                ),
-            },
-            *args,
-            **kwds
-        ):
-            condition = self._conditionObject()
-            condition.set(column, value, relation)
-            if condition not in self:
-                self._conditions.append(condition)
+        if self.isCustumSql(*args):
+            self._conditions.append(args[0])
+        
+        else:
+            for column, value, relation in sqlPuzzle.libs.argsParser.parseArgsToListOfTuples(
+                {
+                    'minItems': 2,
+                    'maxItems': 3,
+                    'allowDict': True,
+                    'allowList': True,
+                    'allowedDataTypes': (
+                        (str, unicode, sqlPuzzle.queries.select.Select),
+                        (str, unicode, int, long, float, bool, list, tuple, datetime.date, datetime.datetime),
+                        (int,)
+                    ),
+                },
+                *args,
+                **kwds
+            ):
+                condition = self._conditionObject()
+                condition.set(column, value, relation)
+                if condition not in self:
+                    self._conditions.append(condition)
         
         return self
 

@@ -7,7 +7,6 @@
 
 import sqlPuzzle.libs.argsParser
 import sqlPuzzle.libs.sqlValue
-
 import sqlPuzzle.features.features
 
 
