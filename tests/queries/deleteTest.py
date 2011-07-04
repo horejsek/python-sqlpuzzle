@@ -2,21 +2,21 @@
 #
 # sqlpuzzle
 # Michal Horejsek <horejsekmichal@gmail.com>
-# https://github.com/horejsek/sqlPuzzle
+# https://github.com/horejsek/sqlpuzzle
 #
 
 import unittest
 
-import sqlPuzzle.exceptions
-import sqlPuzzle.queries.delete
+import sqlpuzzle.exceptions
+import sqlpuzzle.queries.delete
 
 
 class DeleteTest(unittest.TestCase):
     def setUp(self):
-        self.delete = sqlPuzzle.queries.delete.Delete()
+        self.delete = sqlpuzzle.queries.delete.Delete()
 
     def tearDown(self):
-        self.delete = sqlPuzzle.queries.delete.Delete()
+        self.delete = sqlpuzzle.queries.delete.Delete()
 
 
 
@@ -27,19 +27,19 @@ class BaseTest(DeleteTest):
         self.assertEqual(str(self.delete), 'DELETE FROM `user`')
     
     def testUnsupportLimit(self):
-        self.assertRaises(sqlPuzzle.exceptions.NotSupprotedException, self.delete.limit, 1)
+        self.assertRaises(sqlpuzzle.exceptions.NotSupprotedException, self.delete.limit, 1)
     
     def testUnsupportOffset(self):
-        self.assertRaises(sqlPuzzle.exceptions.NotSupprotedException, self.delete.offset, 2)
+        self.assertRaises(sqlpuzzle.exceptions.NotSupprotedException, self.delete.offset, 2)
     
     def testUnsupportInto(self):
-        self.assertRaises(sqlPuzzle.exceptions.NotSupprotedException, self.delete.into, 'table')
+        self.assertRaises(sqlpuzzle.exceptions.NotSupprotedException, self.delete.into, 'table')
     
     def testUnsupportValues(self):
-        self.assertRaises(sqlPuzzle.exceptions.NotSupprotedException, self.delete.values, name='Alan')
+        self.assertRaises(sqlpuzzle.exceptions.NotSupprotedException, self.delete.values, name='Alan')
     
     def testUnsupportSet(self):
-        self.assertRaises(sqlPuzzle.exceptions.NotSupprotedException, self.delete.set, age=42)
+        self.assertRaises(sqlpuzzle.exceptions.NotSupprotedException, self.delete.set, age=42)
 
 
 
@@ -47,7 +47,7 @@ class WhereTest(DeleteTest):
     def testWhere(self):
         self.delete.from_('user')
         self.delete.where(age=42)
-        self.delete.where('name', 'Harry', sqlPuzzle.relations.LIKE)
+        self.delete.where('name', 'Harry', sqlpuzzle.relations.LIKE)
         self.delete.where({
             'sex': 'male',
         })

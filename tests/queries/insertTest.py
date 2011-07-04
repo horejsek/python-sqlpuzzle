@@ -2,21 +2,21 @@
 #
 # sqlpuzzle
 # Michal Horejsek <horejsekmichal@gmail.com>
-# https://github.com/horejsek/sqlPuzzle
+# https://github.com/horejsek/sqlpuzzle
 #
 
 import unittest
 
-import sqlPuzzle.exceptions
-import sqlPuzzle.queries.insert
+import sqlpuzzle.exceptions
+import sqlpuzzle.queries.insert
 
 
 class InsertTest(unittest.TestCase):
     def setUp(self):
-        self.insert = sqlPuzzle.queries.insert.Insert()
+        self.insert = sqlpuzzle.queries.insert.Insert()
 
     def tearDown(self):
-        self.insert = sqlPuzzle.queries.insert.Insert()
+        self.insert = sqlpuzzle.queries.insert.Insert()
 
 
 
@@ -27,19 +27,19 @@ class BaseTest(InsertTest):
         self.assertEqual(str(self.insert), 'INSERT INTO `user` (`name`) VALUES ("Alan")')
     
     def testUnsupportedFrom(self):
-        self.assertRaises(sqlPuzzle.exceptions.NotSupprotedException, self.insert.from_, 'table')
+        self.assertRaises(sqlpuzzle.exceptions.NotSupprotedException, self.insert.from_, 'table')
     
     def testUnsupportedWhere(self):
-        self.assertRaises(sqlPuzzle.exceptions.NotSupprotedException, self.insert.where, name='Alan')
+        self.assertRaises(sqlpuzzle.exceptions.NotSupprotedException, self.insert.where, name='Alan')
     
     def testUnsupportedLimit(self):
-        self.assertRaises(sqlPuzzle.exceptions.NotSupprotedException, self.insert.limit, 1)
+        self.assertRaises(sqlpuzzle.exceptions.NotSupprotedException, self.insert.limit, 1)
     
     def testUnsupportedOffset(self):
-        self.assertRaises(sqlPuzzle.exceptions.NotSupprotedException, self.insert.offset, 2)
+        self.assertRaises(sqlpuzzle.exceptions.NotSupprotedException, self.insert.offset, 2)
     
     def testUnsupportedSet(self):
-        self.assertRaises(sqlPuzzle.exceptions.NotSupprotedException, self.insert.set, age=42)
+        self.assertRaises(sqlpuzzle.exceptions.NotSupprotedException, self.insert.set, age=42)
 
 
 

@@ -2,13 +2,13 @@
 #
 # sqlpuzzle
 # Michal Horejsek <horejsekmichal@gmail.com>
-# https://github.com/horejsek/sqlPuzzle
+# https://github.com/horejsek/sqlpuzzle
 #
 
 import unittest
 
-import sqlPuzzle.exceptions
-from sqlPuzzle.libs.argsParser import parseArgsToListOfTuples as parser
+import sqlpuzzle.exceptions
+from sqlpuzzle.libs.argsParser import parseArgsToListOfTuples as parser
 
 
 class ArgsParserTest(unittest.TestCase):
@@ -34,19 +34,19 @@ class DefaultTest(ArgsParserTest):
 
 class ExceptionsTest(ArgsParserTest):
     def testKwdsException(self):
-        self.assertRaises(sqlPuzzle.exceptions.SqlPuzzleException, parser, {}, arg=1)
+        self.assertRaises(sqlpuzzle.exceptions.SqlPuzzleException, parser, {}, arg=1)
     
     def testDictionaryException(self):
-        self.assertRaises(sqlPuzzle.exceptions.SqlPuzzleException, parser, {}, {'key': 1})
+        self.assertRaises(sqlpuzzle.exceptions.SqlPuzzleException, parser, {}, {'key': 1})
         
     def testTooManyException(self):
-        self.assertRaises(sqlPuzzle.exceptions.SqlPuzzleException, parser, {}, (1, 2))
+        self.assertRaises(sqlpuzzle.exceptions.SqlPuzzleException, parser, {}, (1, 2))
 
 
 
 class OptionMinItemsTest(ArgsParserTest):
     def testMin2Args1Exception(self):
-        self.assertRaises(sqlPuzzle.exceptions.SqlPuzzleException, parser, {'minItems': 2, 'maxItems': 2}, 1)
+        self.assertRaises(sqlpuzzle.exceptions.SqlPuzzleException, parser, {'minItems': 2, 'maxItems': 2}, 1)
     
     def testMin2Args2(self):
         self.assertEqual(parser({'minItems': 2, 'maxItems': 2}, 1, 2), [(1, 2)])
@@ -58,10 +58,10 @@ class OptionMinItemsTest(ArgsParserTest):
         self.assertEqual(parser({'minItems': 2, 'maxItems': 2}, (1, 2)), [(1, 2)])
     
     def testMinBiggerThanMaxException(self):
-        self.assertRaises(sqlPuzzle.exceptions.SqlPuzzleException, parser, {'minItems': 2})
+        self.assertRaises(sqlpuzzle.exceptions.SqlPuzzleException, parser, {'minItems': 2})
     
     def testTooFewException(self):
-        self.assertRaises(sqlPuzzle.exceptions.InvalidArgumentException, parser, {'minItems': 2, 'maxItems': 2}, "arg")
+        self.assertRaises(sqlpuzzle.exceptions.InvalidArgumentException, parser, {'minItems': 2, 'maxItems': 2}, "arg")
 
 
 
@@ -83,7 +83,7 @@ class OptionMaxItemsTest(ArgsParserTest):
         self.assertEqual(parser({'maxItems': 2}, (1, 2), 3), [(1, 2), (3, None)])
     
     def testTooManyException(self):
-        self.assertRaises(sqlPuzzle.exceptions.InvalidArgumentException, parser, {'minItems': 2, 'maxItems': 2}, "arg1", "arg2", "arg3")
+        self.assertRaises(sqlpuzzle.exceptions.InvalidArgumentException, parser, {'minItems': 2, 'maxItems': 2}, "arg1", "arg2", "arg3")
 
 
 
@@ -96,10 +96,10 @@ class OptionAllowDictionaryTest(ArgsParserTest):
         self.assertEqual(parser({'allowDict': True, 'maxItems': 2}, key=1), [('key', 1)])
     
     def testTooFewException(self):
-        self.assertRaises(sqlPuzzle.exceptions.SqlPuzzleException, parser, {'allowDict': True}, "arg")
+        self.assertRaises(sqlpuzzle.exceptions.SqlPuzzleException, parser, {'allowDict': True}, "arg")
     
     def testDictionaryMustBeOnlyOneArgumentException(self):
-        self.assertRaises(sqlPuzzle.exceptions.SqlPuzzleException, parser, {'allowDict': True, 'maxItems': 2}, {'key': 1}, "some arg")
+        self.assertRaises(sqlpuzzle.exceptions.SqlPuzzleException, parser, {'allowDict': True, 'maxItems': 2}, {'key': 1}, "some arg")
 
 
 
@@ -119,13 +119,13 @@ class OptionAllowedDataTypesTest(ArgsParserTest):
         self.assertEqual(parser({'allowedDataTypes': (int, long, float)}, 2), [(2,)])
     
     def testSimpleExceptions(self):
-        self.assertRaises(sqlPuzzle.exceptions.InvalidArgumentException, parser, {'allowedDataTypes': (int, long, float)}, "string")
+        self.assertRaises(sqlpuzzle.exceptions.InvalidArgumentException, parser, {'allowedDataTypes': (int, long, float)}, "string")
     
     def testSetForEachArgument(self):
         self.assertEqual(parser({'allowedDataTypes': ((int, long, float), (str, unicode)), 'maxItems': 2}, (2, "string")), [(2, "string")])
     
     def testSetForEachArgumentException(self):
-        self.assertRaises(sqlPuzzle.exceptions.InvalidArgumentException, parser, {'allowedDataTypes': ((int, long, float), (str, unicode)), 'maxItems': 2}, ("string", 2))
+        self.assertRaises(sqlpuzzle.exceptions.InvalidArgumentException, parser, {'allowedDataTypes': ((int, long, float), (str, unicode)), 'maxItems': 2}, ("string", 2))
 
 
 

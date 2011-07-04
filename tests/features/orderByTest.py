@@ -2,20 +2,20 @@
 #
 # sqlpuzzle
 # Michal Horejsek <horejsekmichal@gmail.com>
-# https://github.com/horejsek/sqlPuzzle
+# https://github.com/horejsek/sqlpuzzle
 #
 
 import unittest
 
-import sqlPuzzle.features.orderBy
+import sqlpuzzle.features.orderBy
 
 
 class OrderByTest(unittest.TestCase):
     def setUp(self):
-        self.orderBy = sqlPuzzle.features.orderBy.OrderBy()
+        self.orderBy = sqlpuzzle.features.orderBy.OrderBy()
 
     def tearDown(self):
-        self.orderBy = sqlPuzzle.features.orderBy.OrderBy()
+        self.orderBy = sqlpuzzle.features.orderBy.OrderBy()
 
 
 
@@ -73,13 +73,13 @@ class GroupingTest(OrderByTest):
 
 class ExceptionsTest(OrderByTest):
     def testNameAsFloatException(self):
-        self.assertRaises(sqlPuzzle.exceptions.InvalidArgumentException, self.orderBy.orderBy, 42.1)
+        self.assertRaises(sqlpuzzle.exceptions.InvalidArgumentException, self.orderBy.orderBy, 42.1)
     
     def testNameAsBooleanException(self):
-        self.assertRaises(sqlPuzzle.exceptions.InvalidArgumentException, self.orderBy.orderBy, True)
+        self.assertRaises(sqlpuzzle.exceptions.InvalidArgumentException, self.orderBy.orderBy, True)
     
     def testNotAscOrDescException(self):
-        self.assertRaises(sqlPuzzle.exceptions.InvalidArgumentException, self.orderBy.orderBy, ('col', 'AAA'))
+        self.assertRaises(sqlpuzzle.exceptions.InvalidArgumentException, self.orderBy.orderBy, ('col', 'AAA'))
 
 
 

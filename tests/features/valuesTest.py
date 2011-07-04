@@ -2,21 +2,21 @@
 #
 # sqlpuzzle
 # Michal Horejsek <horejsekmichal@gmail.com>
-# https://github.com/horejsek/sqlPuzzle
+# https://github.com/horejsek/sqlpuzzle
 #
 
 import unittest
 
-import sqlPuzzle.exceptions
-import sqlPuzzle.features.values
+import sqlpuzzle.exceptions
+import sqlpuzzle.features.values
 
 
 class ValuesTest(unittest.TestCase):
     def setUp(self):
-        self.values = sqlPuzzle.features.values.Values()
+        self.values = sqlpuzzle.features.values.Values()
 
     def tearDown(self):
-        self.values = sqlPuzzle.features.values.Values()
+        self.values = sqlpuzzle.features.values.Values()
 
 
 
@@ -80,13 +80,13 @@ class AllowedValuesTest(ValuesTest):
 
 class ExceptionsTest(ValuesTest):
     def testColumnAsIntegerException(self):
-        self.assertRaises(sqlPuzzle.exceptions.InvalidArgumentException, self.values.set, 42, 'val')
+        self.assertRaises(sqlpuzzle.exceptions.InvalidArgumentException, self.values.set, 42, 'val')
     
     def testColumnAsFloatException(self):
-        self.assertRaises(sqlPuzzle.exceptions.InvalidArgumentException, self.values.set, 42.1, 'val')
+        self.assertRaises(sqlpuzzle.exceptions.InvalidArgumentException, self.values.set, 42.1, 'val')
     
     def testColumnAsBooleanException(self):
-        self.assertRaises(sqlPuzzle.exceptions.InvalidArgumentException, self.values.set, True, 'val')
+        self.assertRaises(sqlpuzzle.exceptions.InvalidArgumentException, self.values.set, True, 'val')
 
 
 

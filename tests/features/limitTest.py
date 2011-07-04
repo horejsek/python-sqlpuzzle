@@ -2,21 +2,21 @@
 #
 # sqlpuzzle
 # Michal Horejsek <horejsekmichal@gmail.com>
-# https://github.com/horejsek/sqlPuzzle
+# https://github.com/horejsek/sqlpuzzle
 #
 
 import unittest
 
-import sqlPuzzle.exceptions
-import sqlPuzzle.features.limit
+import sqlpuzzle.exceptions
+import sqlpuzzle.features.limit
 
 
 class LimitTest(unittest.TestCase):
     def setUp(self):
-        self.limit = sqlPuzzle.features.limit.Limit()
+        self.limit = sqlpuzzle.features.limit.Limit()
 
     def tearDown(self):
-        self.limit = sqlPuzzle.features.limit.Limit()
+        self.limit = sqlpuzzle.features.limit.Limit()
 
 
 
@@ -56,22 +56,22 @@ class InlineTest(LimitTest):
 
 class ExceptionsTest(LimitTest):
     def testLimitStringException(self):
-        self.assertRaises(sqlPuzzle.exceptions.InvalidArgumentException, self.limit.limit, 'limit')
+        self.assertRaises(sqlpuzzle.exceptions.InvalidArgumentException, self.limit.limit, 'limit')
     
     def testLimitFloatException(self):
-        self.assertRaises(sqlPuzzle.exceptions.InvalidArgumentException, self.limit.limit, 1.2)
+        self.assertRaises(sqlpuzzle.exceptions.InvalidArgumentException, self.limit.limit, 1.2)
     
     def testLimitBooleanException(self):
-        self.assertRaises(sqlPuzzle.exceptions.InvalidArgumentException, self.limit.limit, False)
+        self.assertRaises(sqlpuzzle.exceptions.InvalidArgumentException, self.limit.limit, False)
     
     def testOffsetStringException(self):
-        self.assertRaises(sqlPuzzle.exceptions.InvalidArgumentException, self.limit.offset, 'offset')
+        self.assertRaises(sqlpuzzle.exceptions.InvalidArgumentException, self.limit.offset, 'offset')
     
     def testOffsetFloatException(self):
-        self.assertRaises(sqlPuzzle.exceptions.InvalidArgumentException, self.limit.offset, 1.2)
+        self.assertRaises(sqlpuzzle.exceptions.InvalidArgumentException, self.limit.offset, 1.2)
     
     def testOffsetBooleanException(self):
-        self.assertRaises(sqlPuzzle.exceptions.InvalidArgumentException, self.limit.offset, False)
+        self.assertRaises(sqlpuzzle.exceptions.InvalidArgumentException, self.limit.offset, False)
 
 
 

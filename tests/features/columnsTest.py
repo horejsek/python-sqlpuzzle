@@ -2,14 +2,14 @@
 #
 # sqlpuzzle
 # Michal Horejsek <horejsekmichal@gmail.com>
-# https://github.com/horejsek/sqlPuzzle
+# https://github.com/horejsek/sqlpuzzle
 #
 
 import unittest
 
-import sqlPuzzle.exceptions
-import sqlPuzzle.customSql
-import sqlPuzzle.features.columns
+import sqlpuzzle.exceptions
+import sqlpuzzle.customSql
+import sqlpuzzle.features.columns
 
 
 class ColumnsTest(unittest.TestCase):
@@ -17,7 +17,7 @@ class ColumnsTest(unittest.TestCase):
         self.tearDown()
 
     def tearDown(self):
-        self.columns = sqlPuzzle.features.columns.Columns()
+        self.columns = sqlpuzzle.features.columns.Columns()
 
 
 
@@ -49,7 +49,7 @@ class BaseTest(ColumnsTest):
 class CustomSqlTest(ColumnsTest):
     def tearDown(self):
         super(CustomSqlTest, self).tearDown()
-        self.customSql = sqlPuzzle.customSql.CustomSql('AVG(`custom`) AS "x"')
+        self.customSql = sqlpuzzle.customSql.CustomSql('AVG(`custom`) AS "x"')
     
     def testOneColumn(self):
         self.columns.columns(self.customSql)
@@ -85,13 +85,13 @@ class GroupingTest(ColumnsTest):
 
 class ExceptionsTest(ColumnsTest):
     def testNameAsIntegerException(self):
-        self.assertRaises(sqlPuzzle.exceptions.InvalidArgumentException, self.columns.columns, 42)
+        self.assertRaises(sqlpuzzle.exceptions.InvalidArgumentException, self.columns.columns, 42)
     
     def testNameAsFloatException(self):
-        self.assertRaises(sqlPuzzle.exceptions.InvalidArgumentException, self.columns.columns, 42.1)
+        self.assertRaises(sqlpuzzle.exceptions.InvalidArgumentException, self.columns.columns, 42.1)
     
     def testNameAsBooleanException(self):
-        self.assertRaises(sqlPuzzle.exceptions.InvalidArgumentException, self.columns.columns, True)
+        self.assertRaises(sqlpuzzle.exceptions.InvalidArgumentException, self.columns.columns, True)
 
 
 

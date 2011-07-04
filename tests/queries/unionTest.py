@@ -2,13 +2,13 @@
 #
 # sqlpuzzle
 # Michal Horejsek <horejsekmichal@gmail.com>
-# https://github.com/horejsek/sqlPuzzle
+# https://github.com/horejsek/sqlpuzzle
 #
 
 import unittest
 
-import sqlPuzzle.exceptions
-import sqlPuzzle.queries.select
+import sqlpuzzle.exceptions
+import sqlpuzzle.queries.select
 
 
 class UnionTest(unittest.TestCase):
@@ -16,8 +16,8 @@ class UnionTest(unittest.TestCase):
         self.tearDown()
 
     def tearDown(self):
-        self.select1 = sqlPuzzle.queries.select.Select().from_('t1')
-        self.select2 = sqlPuzzle.queries.select.Select().from_('t2')
+        self.select1 = sqlpuzzle.queries.select.Select().from_('t1')
+        self.select2 = sqlpuzzle.queries.select.Select().from_('t2')
 
 
 
@@ -32,11 +32,11 @@ class BaseTest(UnionTest):
         self.assertEqual(str(self.select1 & self.select2 | self.select1), 'SELECT * FROM `t1` UNION ALL SELECT * FROM `t2` UNION SELECT * FROM `t1`')
     
     def testSubselectInColumnAsUnion(self):
-        select = sqlPuzzle.select(self.select1 & self.select2).from_('t')
+        select = sqlpuzzle.select(self.select1 & self.select2).from_('t')
         self.assertEqual(str(select), 'SELECT (SELECT * FROM `t1` UNION ALL SELECT * FROM `t2`) FROM `t`')
     
     def testSubselectInTableAsUnion(self):
-        select = sqlPuzzle.selectFrom(self.select1 | self.select2)
+        select = sqlpuzzle.selectFrom(self.select1 | self.select2)
         self.assertEqual(str(select), 'SELECT * FROM (SELECT * FROM `t1` UNION SELECT * FROM `t2`)')
 
 

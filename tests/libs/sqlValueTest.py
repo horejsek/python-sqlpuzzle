@@ -2,14 +2,14 @@
 #
 # sqlpuzzle
 # Michal Horejsek <horejsekmichal@gmail.com>
-# https://github.com/horejsek/sqlPuzzle
+# https://github.com/horejsek/sqlpuzzle
 #
 
 import datetime
 import unittest
 
-import sqlPuzzle
-from sqlPuzzle.libs.sqlValue import SqlValue, SqlReference
+import sqlpuzzle
+from sqlpuzzle.libs.sqlValue import SqlValue, SqlReference
 
 
 class SqlValueTest(unittest.TestCase):
@@ -59,7 +59,7 @@ class SqlValueTest(unittest.TestCase):
         self.assertEqual(str(SqlValue(None)), 'NULL')
     
     def testSubselect(self):
-        select = sqlPuzzle.selectFrom('table')
+        select = sqlpuzzle.selectFrom('table')
         self.assertEqual(str(SqlValue(select)), '(SELECT * FROM `table`)')
 
 
@@ -72,7 +72,7 @@ class SqlReferenceTest(unittest.TestCase):
         self.assertEqual(str(SqlReference(u'test')), '`test`')
     
     def testSubselect(self):
-        select = sqlPuzzle.selectFrom('table')
+        select = sqlpuzzle.selectFrom('table')
         self.assertEqual(str(SqlReference(select)), '(SELECT * FROM `table`)')
     
     def testTableColumn(self):

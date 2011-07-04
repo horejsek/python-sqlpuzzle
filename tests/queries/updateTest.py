@@ -2,22 +2,22 @@
 #
 # sqlpuzzle
 # Michal Horejsek <horejsekmichal@gmail.com>
-# https://github.com/horejsek/sqlPuzzle
+# https://github.com/horejsek/sqlpuzzle
 #
 
 import unittest
 
-import sqlPuzzle.exceptions
-import sqlPuzzle.queries.update
-import sqlPuzzle.relations
+import sqlpuzzle.exceptions
+import sqlpuzzle.queries.update
+import sqlpuzzle.relations
 
 
 class UpdateTest(unittest.TestCase):
     def setUp(self):
-        self.update = sqlPuzzle.queries.update.Update()
+        self.update = sqlpuzzle.queries.update.Update()
 
     def tearDown(self):
-        self.update = sqlPuzzle.queries.update.Update()
+        self.update = sqlpuzzle.queries.update.Update()
 
 
 
@@ -29,19 +29,19 @@ class BaseTest(UpdateTest):
         self.assertEqual(str(self.update), 'UPDATE `user` SET `name` = "Alan"')
     
     def testUnsupportedFrom(self):
-        self.assertRaises(sqlPuzzle.exceptions.NotSupprotedException, self.update.from_, 'table')
+        self.assertRaises(sqlpuzzle.exceptions.NotSupprotedException, self.update.from_, 'table')
     
     def testUnsupportedLimit(self):
-        self.assertRaises(sqlPuzzle.exceptions.NotSupprotedException, self.update.limit, 1)
+        self.assertRaises(sqlpuzzle.exceptions.NotSupprotedException, self.update.limit, 1)
     
     def testUnsupportedOffset(self):
-        self.assertRaises(sqlPuzzle.exceptions.NotSupprotedException, self.update.offset, 2)
+        self.assertRaises(sqlpuzzle.exceptions.NotSupprotedException, self.update.offset, 2)
     
     def testUnsupportedInto(self):
-        self.assertRaises(sqlPuzzle.exceptions.NotSupprotedException, self.update.into, 'table')
+        self.assertRaises(sqlpuzzle.exceptions.NotSupprotedException, self.update.into, 'table')
     
     def testUnsupportedValues(self):
-        self.assertRaises(sqlPuzzle.exceptions.NotSupprotedException, self.update.values, name='Alan')
+        self.assertRaises(sqlpuzzle.exceptions.NotSupprotedException, self.update.values, name='Alan')
 
 
 
@@ -50,7 +50,7 @@ class WhereTest(UpdateTest):
         self.update.table('user')
         self.update.set(name='Alan')
         self.update.where(age=42)
-        self.update.where('name', 'Harry', sqlPuzzle.relations.LIKE)
+        self.update.where('name', 'Harry', sqlpuzzle.relations.LIKE)
         self.update.where({
             'sex': 'male',
         })

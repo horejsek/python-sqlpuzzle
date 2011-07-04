@@ -2,20 +2,20 @@
 #
 # sqlpuzzle
 # Michal Horejsek <horejsekmichal@gmail.com>
-# https://github.com/horejsek/sqlPuzzle
+# https://github.com/horejsek/sqlpuzzle
 #
 
 import unittest
 
-import sqlPuzzle.features.groupBy
+import sqlpuzzle.features.groupBy
 
 
 class GroupByTest(unittest.TestCase):
     def setUp(self):
-        self.groupBy = sqlPuzzle.features.groupBy.GroupBy()
+        self.groupBy = sqlpuzzle.features.groupBy.GroupBy()
 
     def tearDown(self):
-        self.groupBy = sqlPuzzle.features.groupBy.GroupBy()
+        self.groupBy = sqlpuzzle.features.groupBy.GroupBy()
 
 
 
@@ -73,13 +73,13 @@ class GroupingTest(GroupByTest):
 
 class ExceptionsTest(GroupByTest):
     def testNameAsFloatException(self):
-        self.assertRaises(sqlPuzzle.exceptions.InvalidArgumentException, self.groupBy.groupBy, 42.1)
+        self.assertRaises(sqlpuzzle.exceptions.InvalidArgumentException, self.groupBy.groupBy, 42.1)
     
     def testNameAsBooleanException(self):
-        self.assertRaises(sqlPuzzle.exceptions.InvalidArgumentException, self.groupBy.groupBy, True)
+        self.assertRaises(sqlpuzzle.exceptions.InvalidArgumentException, self.groupBy.groupBy, True)
     
     def testNotAscOrDescException(self):
-        self.assertRaises(sqlPuzzle.exceptions.InvalidArgumentException, self.groupBy.groupBy, ('col', 'AAA'))
+        self.assertRaises(sqlpuzzle.exceptions.InvalidArgumentException, self.groupBy.groupBy, ('col', 'AAA'))
 
 
 

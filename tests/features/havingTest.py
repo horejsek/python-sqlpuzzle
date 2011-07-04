@@ -2,21 +2,21 @@
 #
 # sqlpuzzle
 # Michal Horejsek <horejsekmichal@gmail.com>
-# https://github.com/horejsek/sqlPuzzle
+# https://github.com/horejsek/sqlpuzzle
 #
 
 import unittest
 
-import sqlPuzzle.features.having
-import sqlPuzzle.relations
+import sqlpuzzle.features.having
+import sqlpuzzle.relations
 
 
 class HavingTest(unittest.TestCase):
     def setUp(self):
-        self.having = sqlPuzzle.features.having.Having()
+        self.having = sqlpuzzle.features.having.Having()
 
     def tearDown(self):
-        self.having = sqlPuzzle.features.having.Having()
+        self.having = sqlpuzzle.features.having.Having()
 
 
 
@@ -31,16 +31,16 @@ class BaseTest(HavingTest):
     def testWhereByTuple(self):
         self.having.where((
             ('name', 'Harry'),
-            ('sex', 'female', sqlPuzzle.relations.NOT_EQUAL_TO),
-            ('age', 20, sqlPuzzle.relations.GRATHER_THAN),
+            ('sex', 'female', sqlpuzzle.relations.NOT_EQUAL_TO),
+            ('age', 20, sqlpuzzle.relations.GRATHER_THAN),
         ))
         self.assertEqual(str(self.having), 'HAVING `name` = "Harry" AND `sex` != "female" AND `age` > 20')
     
     def testWhereByList(self):
         self.having.where([
-            ['name', 'Harry', sqlPuzzle.relations.LIKE],
-            ['sex', 'female', sqlPuzzle.relations.NOT_EQUAL_TO],
-            ['age', 20, sqlPuzzle.relations.LESS_TAHN_OR_EQUAL_TO],
+            ['name', 'Harry', sqlpuzzle.relations.LIKE],
+            ['sex', 'female', sqlpuzzle.relations.NOT_EQUAL_TO],
+            ['age', 20, sqlpuzzle.relations.LESS_TAHN_OR_EQUAL_TO],
         ])
         self.assertEqual(str(self.having), 'HAVING `name` LIKE "Harry" AND `sex` != "female" AND `age` <= 20')
     
@@ -52,7 +52,7 @@ class BaseTest(HavingTest):
         self.assertEqual(str(self.having), 'HAVING `age` = 20 AND `name` = "Alan"')
     
     def testWhereByArgs(self):
-        self.having.where('age', 20, sqlPuzzle.relations.LESS_THAN)
+        self.having.where('age', 20, sqlpuzzle.relations.LESS_THAN)
         self.assertEqual(str(self.having), 'HAVING `age` < 20')
     
     def testWhereByKwargs(self):
@@ -72,7 +72,7 @@ class GroupingTest(HavingTest):
         self.assertEqual(str(self.having), 'HAVING `age` = 20')
     
     def testMoreSameConditionsWithDiffRelationPrintAsMore(self):
-        self.having.where(('age', 20), ('age', 20, sqlPuzzle.relations.NE))
+        self.having.where(('age', 20), ('age', 20, sqlpuzzle.relations.NE))
         self.assertEqual(str(self.having), 'HAVING `age` = 20 AND `age` != 20')
 
 
@@ -95,41 +95,41 @@ class AllowedValuesTest(HavingTest):
         self.assertEqual(str(self.having), 'HAVING `id` IN (23, 34, 45)')
     
     def testValueAsListNotIn(self):
-        self.having.where('id', (23, 34, 45), sqlPuzzle.relations.NOT_IN)
+        self.having.where('id', (23, 34, 45), sqlpuzzle.relations.NOT_IN)
         self.assertEqual(str(self.having), 'HAVING `id` NOT IN (23, 34, 45)')
 
 
 
 class ExceptionsTest(HavingTest):
     def testColumnAsIntegerException(self):
-        self.assertRaises(sqlPuzzle.exceptions.InvalidArgumentException, self.having.where, 42, 'val')
+        self.assertRaises(sqlpuzzle.exceptions.InvalidArgumentException, self.having.where, 42, 'val')
     
     def testColumnAsFloatException(self):
-        self.assertRaises(sqlPuzzle.exceptions.InvalidArgumentException, self.having.where, 42.1, 'val')
+        self.assertRaises(sqlpuzzle.exceptions.InvalidArgumentException, self.having.where, 42.1, 'val')
     
     def testColumnAsBooleanException(self):
-        self.assertRaises(sqlPuzzle.exceptions.InvalidArgumentException, self.having.where, True, 'val')
+        self.assertRaises(sqlpuzzle.exceptions.InvalidArgumentException, self.having.where, True, 'val')
     
     def testValueAsListWrongRelationException(self):
-        self.assertRaises(sqlPuzzle.exceptions.InvalidArgumentException, self.having.where, 'id', (23, 34, 45), sqlPuzzle.relations.LE)
-        self.assertRaises(sqlPuzzle.exceptions.InvalidArgumentException, self.having.where, 'id', (23, 34, 45), sqlPuzzle.relations.NE)
-        self.assertRaises(sqlPuzzle.exceptions.InvalidArgumentException, self.having.where, 'id', (23, 34, 45), sqlPuzzle.relations.LIKE)
+        self.assertRaises(sqlpuzzle.exceptions.InvalidArgumentException, self.having.where, 'id', (23, 34, 45), sqlpuzzle.relations.LE)
+        self.assertRaises(sqlpuzzle.exceptions.InvalidArgumentException, self.having.where, 'id', (23, 34, 45), sqlpuzzle.relations.NE)
+        self.assertRaises(sqlpuzzle.exceptions.InvalidArgumentException, self.having.where, 'id', (23, 34, 45), sqlpuzzle.relations.LIKE)
     
     def testValueAsBooleanWrongRelationException(self):
-        self.assertRaises(sqlPuzzle.exceptions.InvalidArgumentException, self.having.where, 'id', True, sqlPuzzle.relations.GT)
-        self.assertRaises(sqlPuzzle.exceptions.InvalidArgumentException, self.having.where, 'id', True, sqlPuzzle.relations.NOT_IN)
-        self.assertRaises(sqlPuzzle.exceptions.InvalidArgumentException, self.having.where, 'id', True, sqlPuzzle.relations.LIKE)
+        self.assertRaises(sqlpuzzle.exceptions.InvalidArgumentException, self.having.where, 'id', True, sqlpuzzle.relations.GT)
+        self.assertRaises(sqlpuzzle.exceptions.InvalidArgumentException, self.having.where, 'id', True, sqlpuzzle.relations.NOT_IN)
+        self.assertRaises(sqlpuzzle.exceptions.InvalidArgumentException, self.having.where, 'id', True, sqlpuzzle.relations.LIKE)
     
     def testValueAsIntegerWrongRelationException(self):
-        self.assertRaises(sqlPuzzle.exceptions.InvalidArgumentException, self.having.where, 'id', 67, sqlPuzzle.relations.LIKE)
-        self.assertRaises(sqlPuzzle.exceptions.InvalidArgumentException, self.having.where, 'id', 67, sqlPuzzle.relations.IN)
+        self.assertRaises(sqlpuzzle.exceptions.InvalidArgumentException, self.having.where, 'id', 67, sqlpuzzle.relations.LIKE)
+        self.assertRaises(sqlpuzzle.exceptions.InvalidArgumentException, self.having.where, 'id', 67, sqlpuzzle.relations.IN)
     
     def testValueAsStringWrongRelationException(self):
-        self.assertRaises(sqlPuzzle.exceptions.InvalidArgumentException, self.having.where, 'id', 67, sqlPuzzle.relations.NOT_IN)
-        self.assertRaises(sqlPuzzle.exceptions.InvalidArgumentException, self.having.where, 'id', 67, sqlPuzzle.relations.IN)
+        self.assertRaises(sqlpuzzle.exceptions.InvalidArgumentException, self.having.where, 'id', 67, sqlpuzzle.relations.NOT_IN)
+        self.assertRaises(sqlpuzzle.exceptions.InvalidArgumentException, self.having.where, 'id', 67, sqlpuzzle.relations.IN)
     
     def testWrongRelationException(self):
-        self.assertRaises(sqlPuzzle.exceptions.InvalidArgumentException, self.having.where, 'age', 20, 999)
+        self.assertRaises(sqlpuzzle.exceptions.InvalidArgumentException, self.having.where, 'age', 20, 999)
 
 
 

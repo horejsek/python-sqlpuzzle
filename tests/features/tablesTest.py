@@ -2,13 +2,13 @@
 #
 # sqlpuzzle
 # Michal Horejsek <horejsekmichal@gmail.com>
-# https://github.com/horejsek/sqlPuzzle
+# https://github.com/horejsek/sqlpuzzle
 #
 
 import unittest
 
-import sqlPuzzle.customSql
-import sqlPuzzle.features.tables
+import sqlpuzzle.customSql
+import sqlpuzzle.features.tables
 
 
 class TablesTest(unittest.TestCase):
@@ -16,7 +16,7 @@ class TablesTest(unittest.TestCase):
         self.tearDown()
 
     def tearDown(self):
-        self.tables = sqlPuzzle.features.tables.Tables()
+        self.tables = sqlpuzzle.features.tables.Tables()
 
 
 
@@ -58,7 +58,7 @@ class BaseTest(TablesTest):
 class CustomSqlTest(TablesTest):
     def tearDown(self):
         super(CustomSqlTest, self).tearDown()
-        self.customSql = sqlPuzzle.customSql.CustomSql('`custom` JOIN `sql`')
+        self.customSql = sqlpuzzle.customSql.CustomSql('`custom` JOIN `sql`')
     
     def testOneTable(self):
         self.tables.set(self.customSql)
@@ -83,13 +83,13 @@ class GroupingTest(TablesTest):
 
 class ExceptionsTest(TablesTest):
     def testNameAsIntegerException(self):
-        self.assertRaises(sqlPuzzle.exceptions.InvalidArgumentException, self.tables.set, 42)
+        self.assertRaises(sqlpuzzle.exceptions.InvalidArgumentException, self.tables.set, 42)
     
     def testNameAsFloatException(self):
-        self.assertRaises(sqlPuzzle.exceptions.InvalidArgumentException, self.tables.set, 42.1)
+        self.assertRaises(sqlpuzzle.exceptions.InvalidArgumentException, self.tables.set, 42.1)
     
     def testNameAsBooleanException(self):
-        self.assertRaises(sqlPuzzle.exceptions.InvalidArgumentException, self.tables.set, True)
+        self.assertRaises(sqlpuzzle.exceptions.InvalidArgumentException, self.tables.set, True)
 
 
 
@@ -157,17 +157,17 @@ class ExceptionsJoinTest(TablesTest):
     def testJoinWithoutOnException(self):
         self.tables.set('table1')
         self.tables.join('table2')
-        self.assertRaises(sqlPuzzle.exceptions.InvalidQueryException, str, self.tables)
+        self.assertRaises(sqlpuzzle.exceptions.InvalidQueryException, str, self.tables)
     
     def testJoinWithoutTableException(self):
-        self.assertRaises(sqlPuzzle.exceptions.InvalidQueryException, self.tables.join, 'table')
+        self.assertRaises(sqlpuzzle.exceptions.InvalidQueryException, self.tables.join, 'table')
     
     def testOnWithoutJoinException(self):
         self.tables.set('table')
-        self.assertRaises(sqlPuzzle.exceptions.InvalidQueryException, self.tables.on, 'a', 'b')
+        self.assertRaises(sqlpuzzle.exceptions.InvalidQueryException, self.tables.on, 'a', 'b')
     
     def testOnWithoutTableException(self):
-        self.assertRaises(sqlPuzzle.exceptions.InvalidQueryException, self.tables.on, 'a', 'b')
+        self.assertRaises(sqlpuzzle.exceptions.InvalidQueryException, self.tables.on, 'a', 'b')
     
 
 
