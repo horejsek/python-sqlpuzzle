@@ -3,20 +3,20 @@
 #
 # sqlpuzzle
 # Michal Horejsek <horejsekmichal@gmail.com>
-# https://github.com/horejsek/sqlPuzzle
+# https://github.com/horejsek/sqlpuzzle
 #
 
-import sqlPuzzle
-import sqlPuzzle.exceptions
+import sqlpuzzle
+import sqlpuzzle.exceptions
 
 import datetime
 
-sql = sqlPuzzle.update('table')
+sql = sqlpuzzle.update('table')
 sql.set(name='Harry')
 
 try:
     print sql
-except sqlPuzzle.exceptions.ConfirmUpdateAllException:
+except sqlpuzzle.exceptions.ConfirmUpdateAllException:
     pass # update all records is not enabled by default
 
 sql.allowUpdateAll()
@@ -26,7 +26,7 @@ print sql
 try:
     sql.forbidUpdateAll()
     print sql
-except sqlPuzzle.exceptions.ConfirmUpdateAllException:
+except sqlpuzzle.exceptions.ConfirmUpdateAllException:
     pass # protected of update all records can be turned on again
 
 sql.where(id=42)

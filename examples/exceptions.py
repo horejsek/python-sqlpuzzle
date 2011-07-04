@@ -3,11 +3,11 @@
 #
 # sqlpuzzle
 # Michal Horejsek <horejsekmichal@gmail.com>
-# https://github.com/horejsek/sqlPuzzle
+# https://github.com/horejsek/sqlpuzzle
 #
 
-import sqlPuzzle
-import sqlPuzzle.exceptions
+import sqlpuzzle
+import sqlpuzzle.exceptions
 
 #
 # inheritance of SqlPuzzleException:
@@ -24,39 +24,39 @@ import sqlPuzzle.exceptions
 #
 
 try:
-    sqlPuzzle.select(True)
-except sqlPuzzle.exceptions.InvalidArgumentException, e:
+    sqlpuzzle.select(True)
+except sqlpuzzle.exceptions.InvalidArgumentException, e:
     print "catched:", e
 
 try:
-    print sqlPuzzle.selectFrom('t').join('t2')
-except sqlPuzzle.exceptions.InvalidQueryException, e:
+    print sqlpuzzle.selectFrom('t').join('t2')
+except sqlpuzzle.exceptions.InvalidQueryException, e:
     print "catched:", e
 
 try:
-    sqlPuzzle.select().set(name='Alan')
-except sqlPuzzle.exceptions.NotSupprotedException, e:
+    sqlpuzzle.select().set(name='Alan')
+except sqlpuzzle.exceptions.NotSupprotedException, e:
     print "catched:", e
 
 try:
-    print sqlPuzzle.update('table').set(name='Alan')
-except sqlPuzzle.exceptions.ConfirmUpdateAllException, e:
+    print sqlpuzzle.update('table').set(name='Alan')
+except sqlpuzzle.exceptions.ConfirmUpdateAllException, e:
     print "catched:", e
 
 try:
-    print sqlPuzzle.delete().from_('table')
-except sqlPuzzle.exceptions.ConfirmDeleteAllException, e:
+    print sqlpuzzle.delete().from_('table')
+except sqlpuzzle.exceptions.ConfirmDeleteAllException, e:
     print "catched:", e
 
 
 # all exceptions is inherit from SqlPuzzleException
 try:
-    sqlPuzzle.select(1)
-except sqlPuzzle.exceptions.SqlPuzzleException, e:
+    sqlpuzzle.select(1)
+except sqlpuzzle.exceptions.SqlPuzzleException, e:
     print "catched:", e
 
 # InvalidQueryException is inherit from InvalidArgumentException
 try:
-    print sqlPuzzle.selectFrom('t').join('t2')
-except sqlPuzzle.exceptions.InvalidArgumentException, e:
+    print sqlpuzzle.selectFrom('t').join('t2')
+except sqlpuzzle.exceptions.InvalidArgumentException, e:
     print "catched:", e

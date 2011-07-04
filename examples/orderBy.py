@@ -3,12 +3,12 @@
 #
 # sqlpuzzle
 # Michal Horejsek <horejsekmichal@gmail.com>
-# https://github.com/horejsek/sqlPuzzle
+# https://github.com/horejsek/sqlpuzzle
 #
 
-import sqlPuzzle
+import sqlpuzzle
 
-sql = sqlPuzzle.selectFrom('table')
+sql = sqlpuzzle.selectFrom('table')
 sql.orderBy('name')
 print sql
 # output: SELECT * FROM `table` ORDER BY `name`

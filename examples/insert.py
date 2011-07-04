@@ -3,15 +3,15 @@
 #
 # sqlpuzzle
 # Michal Horejsek <horejsekmichal@gmail.com>
-# https://github.com/horejsek/sqlPuzzle
+# https://github.com/horejsek/sqlpuzzle
 #
 
-import sqlPuzzle
-import sqlPuzzle.exceptions
+import sqlpuzzle
+import sqlpuzzle.exceptions
 
 import datetime
 
-sql = sqlPuzzle.insert().into('table')
+sql = sqlpuzzle.insert().into('table')
 
 sql.values(name='Alan')
 
@@ -40,6 +40,6 @@ print sql
 # (12345.67000, "2011-06-15T00:00:00", "alan", "Alan", 21, 1)
 #
 
-print sqlPuzzle.insertInto('table').values(values)
+print sqlpuzzle.insertInto('table').values(values)
 # output:
 # INSERT INTO `table` (`age`, `loginname`) VALUES (21, "alan")

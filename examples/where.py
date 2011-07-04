@@ -3,15 +3,15 @@
 #
 # sqlpuzzle
 # Michal Horejsek <horejsekmichal@gmail.com>
-# https://github.com/horejsek/sqlPuzzle
+# https://github.com/horejsek/sqlpuzzle
 #
 
-import sqlPuzzle
-import sqlPuzzle.relations
+import sqlpuzzle
+import sqlpuzzle.relations
 
 import datetime
 
-sql = sqlPuzzle.selectFrom('user')
+sql = sqlpuzzle.selectFrom('user')
 
 sql.where(id=42)
 
@@ -22,16 +22,16 @@ sql.where({
     'right': 'admin',
 })
 
-sql.where('column', 10, sqlPuzzle.relations.LE).where('column', 10, sqlPuzzle.relations.GE)
+sql.where('column', 10, sqlpuzzle.relations.LE).where('column', 10, sqlpuzzle.relations.GE)
 
 sql.where(
-    ('id', range(10, 20, 2), sqlPuzzle.relations.NOT_IN),
+    ('id', range(10, 20, 2), sqlpuzzle.relations.NOT_IN),
     ('name', 'Alan'),
 )
 
 conditions = (
-    ('salary', 10000, sqlPuzzle.relations.GRATHER_THAN),
-    ('lastname', '%ar%', sqlPuzzle.relations.LIKE)
+    ('salary', 10000, sqlpuzzle.relations.GRATHER_THAN),
+    ('lastname', '%ar%', sqlpuzzle.relations.LIKE)
 )
 sql.where(conditions)
 
