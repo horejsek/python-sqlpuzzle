@@ -1,14 +1,14 @@
 # -*- coding: utf-8 -*-
 #
-# SqlPuzzle
+# sqlpuzzle
 # Michal Horejsek <horejsekmichal@gmail.com>
-# https://github.com/horejsek/sqlPuzzle
+# https://github.com/horejsek/sqlpuzzle
 #
 
-import sqlPuzzle.features.order
+import sqlpuzzle.features.order
 
 
-class OrderBy(sqlPuzzle.features.order.Orders):
+class OrderBy(sqlpuzzle.features.order.Orders):
     def __str__(self):
         """Print order (part of query)."""
         orderBy = "ORDER BY %s" % ', '.join(str(order) for order in self._orders)

@@ -1,14 +1,14 @@
 # -*- coding: utf-8 -*-
 #
-# SqlPuzzle
+# sqlpuzzle
 # Michal Horejsek <horejsekmichal@gmail.com>
-# https://github.com/horejsek/sqlPuzzle
+# https://github.com/horejsek/sqlpuzzle
 #
 
 import datetime
 
-import sqlPuzzle.libs.argsParser
-import sqlPuzzle.libs.sqlValue
+import sqlpuzzle.libs.argsParser
+import sqlpuzzle.libs.sqlValue
 
 
 class Values(object):
@@ -19,7 +19,7 @@ class Values(object):
     def __str__(self):
         """Print values (part of query)."""
         return ', '.join(
-            '`%s` = %s' % (column, str(sqlPuzzle.libs.sqlValue.SqlValue(value)))
+            '`%s` = %s' % (column, str(sqlpuzzle.libs.sqlValue.SqlValue(value)))
             for column, value in
             self._values.iteritems()
         )
@@ -33,7 +33,7 @@ class Values(object):
     
     def values(self):
         """Print values of values."""
-        return ', '.join('%s' % str(sqlPuzzle.libs.sqlValue.SqlValue(value)) for value in self._values.values())
+        return ', '.join('%s' % str(sqlpuzzle.libs.sqlValue.SqlValue(value)) for value in self._values.values())
     
     def isSet(self):
         """Is limit set?"""
@@ -42,7 +42,7 @@ class Values(object):
     def set(self, *args, **kwds):
         """Set columns."""
         self._values.update(dict(
-            sqlPuzzle.libs.argsParser.parseArgsToListOfTuples(
+            sqlpuzzle.libs.argsParser.parseArgsToListOfTuples(
                 {
                     'minItems': 2,
                     'maxItems': 2,

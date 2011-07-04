@@ -1,13 +1,13 @@
 # -*- coding: utf-8 -*-
 #
-# SqlPuzzle
+# sqlpuzzle
 # Michal Horejsek <horejsekmichal@gmail.com>
-# https://github.com/horejsek/sqlPuzzle
+# https://github.com/horejsek/sqlpuzzle
 #
 
 import types
 
-import sqlPuzzle.exceptions
+import sqlpuzzle.exceptions
 
 
 
@@ -68,13 +68,13 @@ class ParserOptions(object):
     
     def check(self):
         if self.minItems > self.maxItems:
-            raise sqlPuzzle.exceptions.SqlPuzzleError('maxItems must be bigger, than minItems.')
+            raise sqlpuzzle.exceptions.SqlPuzzleError('maxItems must be bigger, than minItems.')
         
         if self.allowDict and self.maxItems <= 1:
-            raise sqlPuzzle.exceptions.SqlPuzzleError('For allowDict must be maxItems bigger or equal to 2.')
+            raise sqlpuzzle.exceptions.SqlPuzzleError('For allowDict must be maxItems bigger or equal to 2.')
         
         if not isinstance(self.allowedDataTypes, (tuple, list)):
-            raise sqlPuzzle.exceptions.SqlPuzzleError('Invalid options for argsParser.')
+            raise sqlpuzzle.exceptions.SqlPuzzleError('Invalid options for argsParser.')
 
 
 
@@ -129,7 +129,7 @@ class Parser(object):
             if self.options.allowDict:
                 self.__parseDictionary(self.inputData.getDictionaryOrKwds())
             else:
-                raise sqlPuzzle.exceptions.InvalidArgumentException('Dictionary or kwds is disabled.')
+                raise sqlpuzzle.exceptions.InvalidArgumentException('Dictionary or kwds is disabled.')
         
         elif self.options.minItems > 1 and self.inputData.isArgs() and self.inputData.countOfArgsIsInInterval(self.options.minItems, self.options.maxItems):
             self.__parseItem(self.inputData.getArguments())
@@ -151,7 +151,7 @@ class Parser(object):
             elif self.options.minItems == 1:
                 self.__parseItem((item,))
             else:
-                raise sqlPuzzle.exceptions.InvalidArgumentException('Too few arguments.')
+                raise sqlpuzzle.exceptions.InvalidArgumentException('Too few arguments.')
     
     def __parseItem(self, item):
         batch = self.__createBatch(item)
@@ -159,7 +159,7 @@ class Parser(object):
     
     def __createBatch(self, values):
         if len(values) > self.options.maxItems:
-            raise sqlPuzzle.exceptions.InvalidArgumentException('Too many arguments.')
+            raise sqlpuzzle.exceptions.InvalidArgumentException('Too many arguments.')
         return self.__appendNones(tuple(values))
     
     def __appendNones(self, tupleWithValues):
@@ -171,7 +171,7 @@ class Parser(object):
         if self.__validateBatch(batch):
             self.outputData.append(batch)
         else:
-            raise sqlPuzzle.exceptions.InvalidArgumentException()
+            raise sqlpuzzle.exceptions.InvalidArgumentException()
     
     def __validateBatch(self, batch):
         for x, item in enumerate(batch):

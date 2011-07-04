@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
 #
-# SqlPuzzle
+# sqlpuzzle
 # Michal Horejsek <horejsekmichal@gmail.com>
-# https://github.com/horejsek/sqlPuzzle
+# https://github.com/horejsek/sqlpuzzle
 #
 
-import sqlPuzzle.libs.argsParser
-import sqlPuzzle.libs.sqlValue
+import sqlpuzzle.libs.argsParser
+import sqlpuzzle.libs.sqlValue
 
 
 
@@ -25,10 +25,10 @@ class Order(object):
     def __str__(self):
         """Print part of query."""
         if self._sort == ASC:
-            return str(sqlPuzzle.libs.sqlValue.SqlReference(self._column))
+            return str(sqlpuzzle.libs.sqlValue.SqlReference(self._column))
         else:
             return '%s %s' % (
-                sqlPuzzle.libs.sqlValue.SqlReference(self._column),
+                sqlpuzzle.libs.sqlValue.SqlReference(self._column),
                 self._sort,
             )
     
@@ -55,7 +55,7 @@ class Order(object):
         if sort in ORDERING_TYPES:
             self._sort = sort
         else:
-            raise sqlPuzzle.exceptions.InvalidArgumentException('Type of order can be only %s.' % ' or '.join(ORDERING_TYPES))
+            raise sqlpuzzle.exceptions.InvalidArgumentException('Type of order can be only %s.' % ' or '.join(ORDERING_TYPES))
 
 
 
@@ -66,7 +66,7 @@ class Orders(object):
     
     def __str__(self):
         """Print order (part of query)."""
-        raise sqlPuzzle.exceptions.SqlPuzzleNotImplemeted('Orders.__str__()')
+        raise sqlpuzzle.exceptions.SqlPuzzleNotImplemeted('Orders.__str__()')
     
     def __repr__(self):
         return "<Orders: %s>" % self.__str__()
@@ -90,7 +90,7 @@ class Orders(object):
     
     def order(self, *args):
         """Set Order."""
-        for columnName, sort in sqlPuzzle.libs.argsParser.parseArgsToListOfTuples(
+        for columnName, sort in sqlpuzzle.libs.argsParser.parseArgsToListOfTuples(
             {'maxItems': 2, 'allowedDataTypes': (str, unicode, int)}, *args
         ):
             order = Order(columnName, sort)

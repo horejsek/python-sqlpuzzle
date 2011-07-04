@@ -1,14 +1,14 @@
 # -*- coding: utf-8 -*-
 #
-# SqlPuzzle
+# sqlpuzzle
 # Michal Horejsek <horejsekmichal@gmail.com>
-# https://github.com/horejsek/sqlPuzzle
+# https://github.com/horejsek/sqlpuzzle
 #
 
 import types
 
-import sqlPuzzle.libs.argsParser
-import sqlPuzzle.exceptions
+import sqlpuzzle.libs.argsParser
+import sqlpuzzle.exceptions
 
 
 class Limit(object):
@@ -34,7 +34,7 @@ class Limit(object):
     def limit(self, limit, offset=None):
         """Set LIMIT (and OFFSET)."""
         if not type(limit) in (int, long, types.NoneType):
-            raise sqlPuzzle.exceptions.InvalidArgumentException()
+            raise sqlpuzzle.exceptions.InvalidArgumentException()
         
         if limit is None:
             self.__limit = None
@@ -50,7 +50,7 @@ class Limit(object):
     def offset(self, offset):
         """Set OFFSET."""
         if not type(offset) in (int, long, types.NoneType):
-            raise sqlPuzzle.exceptions.InvalidArgumentException()
+            raise sqlpuzzle.exceptions.InvalidArgumentException()
         
         self.__offset = int(offset)
         return self

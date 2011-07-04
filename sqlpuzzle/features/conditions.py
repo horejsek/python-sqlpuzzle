@@ -1,31 +1,31 @@
 # -*- coding: utf-8 -*-
 #
-# SqlPuzzle
+# sqlpuzzle
 # Michal Horejsek <horejsekmichal@gmail.com>
-# https://github.com/horejsek/sqlPuzzle
+# https://github.com/horejsek/sqlpuzzle
 #
 
 import datetime
 
-import sqlPuzzle.libs.argsParser
-import sqlPuzzle.libs.sqlValue
-import sqlPuzzle.features.features
-import sqlPuzzle.exceptions
-import sqlPuzzle.relations
+import sqlpuzzle.libs.argsParser
+import sqlpuzzle.libs.sqlValue
+import sqlpuzzle.features.features
+import sqlpuzzle.exceptions
+import sqlpuzzle.relations
 
 
 class Condition(object):
     __defaultRelations = {
-        str: sqlPuzzle.relations.EQ,
-        unicode: sqlPuzzle.relations.EQ,
-        int: sqlPuzzle.relations.EQ,
-        long: sqlPuzzle.relations.EQ,
-        float: sqlPuzzle.relations.EQ,
-        bool: sqlPuzzle.relations.EQ,
-        list: sqlPuzzle.relations.IN,
-        tuple: sqlPuzzle.relations.IN,
-        datetime.date: sqlPuzzle.relations.EQ,
-        datetime.datetime: sqlPuzzle.relations.EQ,
+        str: sqlpuzzle.relations.EQ,
+        unicode: sqlpuzzle.relations.EQ,
+        int: sqlpuzzle.relations.EQ,
+        long: sqlpuzzle.relations.EQ,
+        float: sqlpuzzle.relations.EQ,
+        bool: sqlpuzzle.relations.EQ,
+        list: sqlpuzzle.relations.IN,
+        tuple: sqlpuzzle.relations.IN,
+        datetime.date: sqlpuzzle.relations.EQ,
+        datetime.datetime: sqlpuzzle.relations.EQ,
     }
     
     def __init__(self):
@@ -37,9 +37,9 @@ class Condition(object):
     def __str__(self):
         """Print condition (part of WHERE)."""
         return '%s %s %s' % (
-            sqlPuzzle.libs.sqlValue.SqlReference(self._column),
-            sqlPuzzle.relations.RELATIONS[self._relation],
-            sqlPuzzle.libs.sqlValue.SqlValue(self._value),
+            sqlpuzzle.libs.sqlValue.SqlReference(self._column),
+            sqlpuzzle.relations.RELATIONS[self._relation],
+            sqlpuzzle.libs.sqlValue.SqlValue(self._value),
         )
     
     def __repr__(self):
@@ -61,34 +61,34 @@ class Condition(object):
         """Is relation for this value allowed?"""
         if isinstance(self._value, (str, unicode)):
             return relation in (
-                sqlPuzzle.relations.EQ,
-                sqlPuzzle.relations.NE,
-                sqlPuzzle.relations.GT,
-                sqlPuzzle.relations.GE,
-                sqlPuzzle.relations.LT,
-                sqlPuzzle.relations.LE,
-                sqlPuzzle.relations.LIKE,
-                sqlPuzzle.relations.REGEXP,
+                sqlpuzzle.relations.EQ,
+                sqlpuzzle.relations.NE,
+                sqlpuzzle.relations.GT,
+                sqlpuzzle.relations.GE,
+                sqlpuzzle.relations.LT,
+                sqlpuzzle.relations.LE,
+                sqlpuzzle.relations.LIKE,
+                sqlpuzzle.relations.REGEXP,
             )
         # bool is instance of int too, therefor bool must be before int
         elif isinstance(self._value, (bool,)):
             return relation in (
-                sqlPuzzle.relations.EQ,
-                sqlPuzzle.relations.NE,
+                sqlpuzzle.relations.EQ,
+                sqlpuzzle.relations.NE,
             )
         elif isinstance(self._value, (int, long, float, datetime.date, datetime.datetime)):
             return relation in (
-                sqlPuzzle.relations.EQ,
-                sqlPuzzle.relations.NE,
-                sqlPuzzle.relations.GT,
-                sqlPuzzle.relations.GE,
-                sqlPuzzle.relations.LT,
-                sqlPuzzle.relations.LE,
+                sqlpuzzle.relations.EQ,
+                sqlpuzzle.relations.NE,
+                sqlpuzzle.relations.GT,
+                sqlpuzzle.relations.GE,
+                sqlpuzzle.relations.LT,
+                sqlpuzzle.relations.LE,
             )
         elif isinstance(self._value, (list, tuple)):
             return relation in (
-                sqlPuzzle.relations.IN,
-                sqlPuzzle.relations.NOT_IN,
+                sqlpuzzle.relations.IN,
+                sqlpuzzle.relations.NOT_IN,
             )
         return False
     
@@ -109,9 +109,9 @@ class Condition(object):
     def setRelation(self, relation):
         """Set relation."""
         if not self.__isRelationAllowed(relation):
-            raise sqlPuzzle.exceptions.InvalidArgumentException(
+            raise sqlpuzzle.exceptions.InvalidArgumentException(
                 'Relation "%s" is not allowed for data type "%s".' % (
-                    sqlPuzzle.relations.RELATIONS.get(relation, 'undefined'),
+                    sqlpuzzle.relations.RELATIONS.get(relation, 'undefined'),
                     type(self._value)
                 )
             )
@@ -120,7 +120,7 @@ class Condition(object):
 
 
 
-class Conditions(sqlPuzzle.features.features.Features):
+class Conditions(sqlpuzzle.features.features.Features):
     def __init__(self, conditionObject=Condition):
         """Initialization of Conditions."""
         self._conditionObject = conditionObject
@@ -128,7 +128,7 @@ class Conditions(sqlPuzzle.features.features.Features):
     
     def __str__(self):
         """Print where (part of query)."""
-        raise sqlPuzzle.exceptions.SqlPuzzleNotImplemeted('Conditions.__str__()')
+        raise sqlpuzzle.exceptions.SqlPuzzleNotImplemeted('Conditions.__str__()')
     
     def __repr__(self):
         return "<Conditions: %s>" % self.__str__()
@@ -156,14 +156,14 @@ class Conditions(sqlPuzzle.features.features.Features):
             self._conditions.append(args[0])
         
         else:
-            for column, value, relation in sqlPuzzle.libs.argsParser.parseArgsToListOfTuples(
+            for column, value, relation in sqlpuzzle.libs.argsParser.parseArgsToListOfTuples(
                 {
                     'minItems': 2,
                     'maxItems': 3,
                     'allowDict': True,
                     'allowList': True,
                     'allowedDataTypes': (
-                        (str, unicode, sqlPuzzle.queries.select.Select),
+                        (str, unicode, sqlpuzzle.queries.select.Select),
                         (str, unicode, int, long, float, bool, list, tuple, datetime.date, datetime.datetime),
                         (int,)
                     ),

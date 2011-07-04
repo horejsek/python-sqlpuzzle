@@ -1,22 +1,22 @@
 # -*- coding: utf-8 -*-
 #
-# SqlPuzzle
+# sqlpuzzle
 # Michal Horejsek <horejsekmichal@gmail.com>
-# https://github.com/horejsek/sqlPuzzle
+# https://github.com/horejsek/sqlpuzzle
 #
 
 import datetime
 
-import sqlPuzzle.libs.argsParser
-import sqlPuzzle.features.conditions
+import sqlpuzzle.libs.argsParser
+import sqlpuzzle.features.conditions
 
 
-class WhereCondition(sqlPuzzle.features.conditions.Condition):
+class WhereCondition(sqlpuzzle.features.conditions.Condition):
     pass
 
 
 
-class Where(sqlPuzzle.features.conditions.Conditions):
+class Where(sqlpuzzle.features.conditions.Conditions):
     def __init__(self):
         """Initialization of Where."""
         super(Where, self).__init__(WhereCondition)

@@ -1,26 +1,26 @@
 # -*- coding: utf-8 -*-
 #
-# SqlPuzzle
+# sqlpuzzle
 # Michal Horejsek <horejsekmichal@gmail.com>
-# https://github.com/horejsek/sqlPuzzle
+# https://github.com/horejsek/sqlpuzzle
 #
 
-import sqlPuzzle.queries.query
+import sqlpuzzle.queries.query
 
-import sqlPuzzle.features.tables
-import sqlPuzzle.features.onDuplicateKeyUpdate
-import sqlPuzzle.features.values
+import sqlpuzzle.features.tables
+import sqlpuzzle.features.onDuplicateKeyUpdate
+import sqlpuzzle.features.values
 
 
-class Insert(sqlPuzzle.queries.query.Query):
+class Insert(sqlpuzzle.queries.query.Query):
     def __init__(self):
         """Initialization of Insert."""
         super(Insert, self).__init__()
         
         self._setFeatures(
-            tables = sqlPuzzle.features.tables.Tables(),
-            values = sqlPuzzle.features.values.Values(),
-            onDuplicateKeyUpdate = sqlPuzzle.features.onDuplicateKeyUpdate.OnDuplicateKeyUpdate(),
+            tables = sqlpuzzle.features.tables.Tables(),
+            values = sqlpuzzle.features.values.Values(),
+            onDuplicateKeyUpdate = sqlpuzzle.features.onDuplicateKeyUpdate.OnDuplicateKeyUpdate(),
         )
         self._setPrintedFeatures('onDuplicateKeyUpdate')
     
@@ -31,7 +31,7 @@ class Insert(sqlPuzzle.queries.query.Query):
             self._values.columns(),
             self._values.values(),
         )
-        return sqlPuzzle.queries.query.Query._appendFeatures(self, insert)
+        return sqlpuzzle.queries.query.Query._appendFeatures(self, insert)
     
     def __repr__(self):
         return "<Insert: %s>" % self.__str__()

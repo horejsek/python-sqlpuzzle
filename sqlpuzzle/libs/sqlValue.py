@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
 #
-# SqlPuzzle
+# sqlpuzzle
 # Michal Horejsek <horejsekmichal@gmail.com>
-# https://github.com/horejsek/sqlPuzzle
+# https://github.com/horejsek/sqlpuzzle
 #
 
-import sqlPuzzle.queries
+import sqlpuzzle.queries
 import datetime
 import re
 import types
@@ -27,8 +27,8 @@ class SqlValue(object):
             datetime.datetime: self._datetime,
             list: self._list,
             tuple: self._list,
-            sqlPuzzle.queries.select.Select: self._subselect,
-            sqlPuzzle.queries.union.Union: self._subselect,
+            sqlpuzzle.queries.select.Select: self._subselect,
+            sqlpuzzle.queries.union.Union: self._subselect,
             types.NoneType: self._null,
         }
 
@@ -124,8 +124,8 @@ class SqlReference(SqlValue):
             str: self._backQuotes,
             unicode: self._backQuotes,
             int: self._integer,
-            sqlPuzzle.queries.select.Select: self._subselect,
-            sqlPuzzle.queries.union.Union: self._subselect,
+            sqlpuzzle.queries.select.Select: self._subselect,
+            sqlpuzzle.queries.union.Union: self._subselect,
         }
 
         self.value = value

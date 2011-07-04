@@ -1,13 +1,13 @@
 # -*- coding: utf-8 -*-
 #
-# SqlPuzzle
+# sqlpuzzle
 # Michal Horejsek <horejsekmichal@gmail.com>
-# https://github.com/horejsek/sqlPuzzle
+# https://github.com/horejsek/sqlpuzzle
 #
 
-import sqlPuzzle.libs.argsParser
-import sqlPuzzle.libs.sqlValue
-import sqlPuzzle.features.features
+import sqlpuzzle.libs.argsParser
+import sqlpuzzle.libs.sqlValue
+import sqlpuzzle.features.features
 
 
 class Column(object):
@@ -20,11 +20,11 @@ class Column(object):
         """Print part of query."""
         if self._as:
             return '%s AS "%s"' % (
-                sqlPuzzle.libs.sqlValue.SqlReference(self._column),
+                sqlpuzzle.libs.sqlValue.SqlReference(self._column),
                 self._as,
             )
         else:
-            return str(sqlPuzzle.libs.sqlValue.SqlReference(self._column))
+            return str(sqlpuzzle.libs.sqlValue.SqlReference(self._column))
     
     def __repr__(self):
         return "<Column: %s>" % self.__str__()
@@ -45,7 +45,7 @@ class Column(object):
         self._as = as_
 
 
-class Columns(sqlPuzzle.features.features.Features):
+class Columns(sqlpuzzle.features.features.Features):
     def __init__(self):
         """Initialization of Columns."""
         self._columns = []
@@ -77,9 +77,9 @@ class Columns(sqlPuzzle.features.features.Features):
             self._columns.append(args[0])
         
         else:
-            for columnName, as_ in sqlPuzzle.libs.argsParser.parseArgsToListOfTuples(
+            for columnName, as_ in sqlpuzzle.libs.argsParser.parseArgsToListOfTuples(
                 {'maxItems': 2, 'allowedDataTypes': (
-                    (str, unicode, sqlPuzzle.queries.select.Select, sqlPuzzle.queries.union.Union),
+                    (str, unicode, sqlpuzzle.queries.select.Select, sqlpuzzle.queries.union.Union),
                     (str, unicode)
                 )}, *args
             ):

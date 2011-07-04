@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 #
-# SqlPuzzle
+# sqlpuzzle
 # Michal Horejsek <horejsekmichal@gmail.com>
-# https://github.com/horejsek/sqlPuzzle
+# https://github.com/horejsek/sqlpuzzle
 #
 # This application is released under the GNU General Public License
 # v3 (or, at your option, any later version). You can find the full
@@ -17,10 +17,10 @@ from distutils.core import setup
 version = '0.1b'
 
 setup(
-    name = 'sqlPuzzle',
-    packages = ['sqlPuzzle', 'sqlPuzzle/queries', 'sqlPuzzle/features', 'sqlPuzzle/libs'],
+    name = 'sqlpuzzle',
+    packages = ['sqlpuzzle', 'sqlpuzzle/queries', 'sqlpuzzle/features', 'sqlpuzzle/libs'],
     version = version,
-    url = 'https://github.com/horejsek/sqlPuzzle',
+    url = 'https://github.com/horejsek/sqlpuzzle',
     description = 'Python module.',
     author = 'Michal Horejsek',
     author_email = 'horejsekmichal@gmail.com',

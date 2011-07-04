@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
 #
-# SqlPuzzle
+# sqlpuzzle
 # Michal Horejsek <horejsekmichal@gmail.com>
-# https://github.com/horejsek/sqlPuzzle
+# https://github.com/horejsek/sqlpuzzle
 #
 
-import sqlPuzzle.exceptions
+import sqlpuzzle.exceptions
 
 
 class IntoOutfile(object):
@@ -42,28 +42,28 @@ class IntoOutfile(object):
     def intoOutfile(self, intoOutfile):
         """Set INTO OUTFILE."""
         if not isinstance(intoOutfile, (str, unicode)):
-            raise sqlPuzzle.exceptions.InvalidArgumentException()
+            raise sqlpuzzle.exceptions.InvalidArgumentException()
         self._intoOutfile = intoOutfile
         return self
     
     def fieldsTerminatedBy(self, fieldsTerminatedBy):
         """Set FIELDS TERMINATED BY."""
         if not isinstance(fieldsTerminatedBy, (str, unicode)):
-            raise sqlPuzzle.exceptions.InvalidArgumentException()
+            raise sqlpuzzle.exceptions.InvalidArgumentException()
         self._fieldsTerminatedBy = fieldsTerminatedBy
         return self
     
     def linesTerminatedBy(self, linesTerminatedBy):
         """Set LINES TERMINATED BY."""
         if not isinstance(linesTerminatedBy, (str, unicode)):
-            raise sqlPuzzle.exceptions.InvalidArgumentException()
+            raise sqlpuzzle.exceptions.InvalidArgumentException()
         self._linesTerminatedBy = linesTerminatedBy
         return self
     
     def optionallyEnclosedBy(self, optionallyEnclosedBy):
         """Set OPTIONALLY ENCLOSED BY."""
         if not isinstance(optionallyEnclosedBy, (str, unicode)):
-            raise sqlPuzzle.exceptions.InvalidArgumentException()
+            raise sqlpuzzle.exceptions.InvalidArgumentException()
         self._optionallyEnclosedBy = optionallyEnclosedBy
         return self
 

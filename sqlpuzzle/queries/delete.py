@@ -1,25 +1,25 @@
 # -*- coding: utf-8 -*-
 #
-# SqlPuzzle
+# sqlpuzzle
 # Michal Horejsek <horejsekmichal@gmail.com>
-# https://github.com/horejsek/sqlPuzzle
+# https://github.com/horejsek/sqlpuzzle
 #
 
-import sqlPuzzle.exceptions
-import sqlPuzzle.queries.query
+import sqlpuzzle.exceptions
+import sqlpuzzle.queries.query
 
-import sqlPuzzle.features.tables
-import sqlPuzzle.features.where
+import sqlpuzzle.features.tables
+import sqlpuzzle.features.where
 
 
-class Delete(sqlPuzzle.queries.query.Query):
+class Delete(sqlpuzzle.queries.query.Query):
     def __init__(self):
         """Initialization of Delete."""
         super(Delete, self).__init__()
         
         self._setFeatures(
-            tables = sqlPuzzle.features.tables.Tables(),
-            where = sqlPuzzle.features.where.Where(),
+            tables = sqlpuzzle.features.tables.Tables(),
+            where = sqlpuzzle.features.where.Where(),
         )
         self._setPrintedFeatures('where')
         
@@ -28,12 +28,12 @@ class Delete(sqlPuzzle.queries.query.Query):
     def __str__(self):
         """Print query."""
         if not self._where.isSet() and not self.__allowDeleteAll:
-            raise sqlPuzzle.exceptions.ConfirmDeleteAllException()
+            raise sqlpuzzle.exceptions.ConfirmDeleteAllException()
         
         delete = "DELETE FROM %s" % (
             str(self._tables),
         )
-        return sqlPuzzle.queries.query.Query._appendFeatures(self, delete)
+        return sqlpuzzle.queries.query.Query._appendFeatures(self, delete)
     
     def __repr__(self):
         return "<Delete: %s>" % self.__str__()

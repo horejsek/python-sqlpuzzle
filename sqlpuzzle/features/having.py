@@ -1,19 +1,19 @@
 # -*- coding: utf-8 -*-
 #
-# SqlPuzzle
+# sqlpuzzle
 # Michal Horejsek <horejsekmichal@gmail.com>
-# https://github.com/horejsek/sqlPuzzle
+# https://github.com/horejsek/sqlpuzzle
 #
 
-import sqlPuzzle.features.conditions
+import sqlpuzzle.features.conditions
 
 
-class HavingCondition(sqlPuzzle.features.conditions.Condition):
+class HavingCondition(sqlpuzzle.features.conditions.Condition):
     pass
 
 
 
-class Having(sqlPuzzle.features.conditions.Conditions):
+class Having(sqlpuzzle.features.conditions.Conditions):
     def __init__(self):
         """Initialization of Having."""
         super(Having, self).__init__(HavingCondition)

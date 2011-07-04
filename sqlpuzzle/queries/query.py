@@ -1,19 +1,19 @@
 # -*- coding: utf-8 -*-
 #
-# SqlPuzzle
+# sqlpuzzle
 # Michal Horejsek <horejsekmichal@gmail.com>
-# https://github.com/horejsek/sqlPuzzle
+# https://github.com/horejsek/sqlpuzzle
 #
 
-import sqlPuzzle.exceptions
+import sqlpuzzle.exceptions
 
-import sqlPuzzle.features.columns
-import sqlPuzzle.features.conditions
-import sqlPuzzle.features.groupBy
-import sqlPuzzle.features.limit
-import sqlPuzzle.features.orderBy
-import sqlPuzzle.features.tables
-import sqlPuzzle.features.values
+import sqlpuzzle.features.columns
+import sqlpuzzle.features.conditions
+import sqlpuzzle.features.groupBy
+import sqlpuzzle.features.limit
+import sqlpuzzle.features.orderBy
+import sqlpuzzle.features.tables
+import sqlpuzzle.features.values
 
 
 class Query(object):
@@ -27,7 +27,7 @@ class Query(object):
     
     def __raiser(self, method):
         """Raise if method is not implemented in actual instance."""
-        raise sqlPuzzle.exceptions.NotSupprotedException(method, self._typeOfQuery())
+        raise sqlpuzzle.exceptions.NotSupprotedException(method, self._typeOfQuery())
     
     
     def _typeOfQuery(self):

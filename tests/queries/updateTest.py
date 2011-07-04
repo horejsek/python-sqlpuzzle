@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# SqlPuzzle
+# sqlpuzzle
 # Michal Horejsek <horejsekmichal@gmail.com>
 # https://github.com/horejsek/sqlPuzzle
 #

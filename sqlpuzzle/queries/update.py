@@ -1,28 +1,28 @@
 # -*- coding: utf-8 -*-
 #
-# SqlPuzzle
+# sqlpuzzle
 # Michal Horejsek <horejsekmichal@gmail.com>
-# https://github.com/horejsek/sqlPuzzle
+# https://github.com/horejsek/sqlpuzzle
 #
 
-import sqlPuzzle.exceptions
+import sqlpuzzle.exceptions
 
-import sqlPuzzle.queries.query
+import sqlpuzzle.queries.query
 
-import sqlPuzzle.features.tables
-import sqlPuzzle.features.values
-import sqlPuzzle.features.where
+import sqlpuzzle.features.tables
+import sqlpuzzle.features.values
+import sqlpuzzle.features.where
 
 
-class Update(sqlPuzzle.queries.query.Query):
+class Update(sqlpuzzle.queries.query.Query):
     def __init__(self, table=None):
         """Initialization of Update."""
         super(Update, self).__init__()
         
         self._setFeatures(
-            tables = sqlPuzzle.features.tables.Tables(),
-            values = sqlPuzzle.features.values.Values(),
-            where = sqlPuzzle.features.where.Where(),
+            tables = sqlpuzzle.features.tables.Tables(),
+            values = sqlpuzzle.features.values.Values(),
+            where = sqlpuzzle.features.where.Where(),
         )
         self._setPrintedFeatures('where')
         
@@ -33,13 +33,13 @@ class Update(sqlPuzzle.queries.query.Query):
     def __str__(self):
         """Print query."""
         if not self._where.isSet() and not self.__allowUpdateAll:
-            raise sqlPuzzle.exceptions.ConfirmUpdateAllException()
+            raise sqlpuzzle.exceptions.ConfirmUpdateAllException()
         
         update = "UPDATE %s SET %s" % (
             str(self._tables),
             str(self._values),
         )
-        return sqlPuzzle.queries.query.Query._appendFeatures(self, update)
+        return sqlpuzzle.queries.query.Query._appendFeatures(self, update)
     
     def __repr__(self):
         return "<Update: %s>" % self.__str__()

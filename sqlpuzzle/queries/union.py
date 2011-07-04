@@ -1,15 +1,15 @@
 # -*- coding: utf-8 -*-
 #
-# SqlPuzzle
+# sqlpuzzle
 # Michal Horejsek <horejsekmichal@gmail.com>
-# https://github.com/horejsek/sqlPuzzle
+# https://github.com/horejsek/sqlpuzzle
 #
 
 
-import sqlPuzzle.exceptions
+import sqlpuzzle.exceptions
 
-import sqlPuzzle.queries.query
-import sqlPuzzle.queries.select
+import sqlpuzzle.queries.query
+import sqlpuzzle.queries.select
 
 
 
@@ -23,25 +23,25 @@ UNION_TYPES = {
 
 
 
-class Union(sqlPuzzle.queries.query.Query):
+class Union(sqlpuzzle.queries.query.Query):
     def __init__(self, query1, query2, unionType):
         self._setQuery1(query1)
         self._setQuery2(query2)
         self._setType(unionType)
     
     def _setQuery1(self, query):
-        if not isinstance(query, (Union, sqlPuzzle.queries.select.Select)):
-            raise sqlPuzzle.exceptions.InvalidArgumentException()
+        if not isinstance(query, (Union, sqlpuzzle.queries.select.Select)):
+            raise sqlpuzzle.exceptions.InvalidArgumentException()
         self._query1 = query
     
     def _setQuery2(self, query):
-        if not isinstance(query, (Union, sqlPuzzle.queries.select.Select)):
-            raise sqlPuzzle.exceptions.InvalidArgumentException()
+        if not isinstance(query, (Union, sqlpuzzle.queries.select.Select)):
+            raise sqlpuzzle.exceptions.InvalidArgumentException()
         self._query2 = query
     
     def _setType(self, type):
         if not type in UNION_TYPES.keys():
-            raise sqlPuzzle.exceptions.InvalidArgumentException()
+            raise sqlpuzzle.exceptions.InvalidArgumentException()
         self._type = type
     
     def __str__(self):

@@ -1,37 +1,37 @@
 # -*- coding: utf-8 -*-
 #
-# SqlPuzzle
+# sqlpuzzle
 # Michal Horejsek <horejsekmichal@gmail.com>
-# https://github.com/horejsek/sqlPuzzle
+# https://github.com/horejsek/sqlpuzzle
 #
 
-import sqlPuzzle.queries.query
-import sqlPuzzle.queries.union
+import sqlpuzzle.queries.query
+import sqlpuzzle.queries.union
 
-import sqlPuzzle.features.columns
-import sqlPuzzle.features.groupBy
-import sqlPuzzle.features.having
-import sqlPuzzle.features.intoOutfile
-import sqlPuzzle.features.limit
-import sqlPuzzle.features.orderBy
-import sqlPuzzle.features.tables
-import sqlPuzzle.features.where
+import sqlpuzzle.features.columns
+import sqlpuzzle.features.groupBy
+import sqlpuzzle.features.having
+import sqlpuzzle.features.intoOutfile
+import sqlpuzzle.features.limit
+import sqlpuzzle.features.orderBy
+import sqlpuzzle.features.tables
+import sqlpuzzle.features.where
 
 
-class Select(sqlPuzzle.queries.query.Query):
+class Select(sqlpuzzle.queries.query.Query):
     def __init__(self, *columns_):
         """Initialization of Select."""
         super(Select, self).__init__()
         
         self._setFeatures(
-            tables = sqlPuzzle.features.tables.Tables(),
-            columns = sqlPuzzle.features.columns.Columns(),
-            where = sqlPuzzle.features.where.Where(),
-            groupBy = sqlPuzzle.features.groupBy.GroupBy(),
-            having = sqlPuzzle.features.having.Having(),
-            orderBy = sqlPuzzle.features.orderBy.OrderBy(),
-            limit = sqlPuzzle.features.limit.Limit(),
-            intoOutfile = sqlPuzzle.features.intoOutfile.IntoOutfile(),
+            tables = sqlpuzzle.features.tables.Tables(),
+            columns = sqlpuzzle.features.columns.Columns(),
+            where = sqlpuzzle.features.where.Where(),
+            groupBy = sqlpuzzle.features.groupBy.GroupBy(),
+            having = sqlpuzzle.features.having.Having(),
+            orderBy = sqlpuzzle.features.orderBy.OrderBy(),
+            limit = sqlpuzzle.features.limit.Limit(),
+            intoOutfile = sqlpuzzle.features.intoOutfile.IntoOutfile(),
         )
         self._setPrintedFeatures('where', 'groupBy', 'having', 'orderBy', 'limit', 'intoOutfile')
         
@@ -50,7 +50,7 @@ class Select(sqlPuzzle.queries.query.Query):
             str(self._columns),
             str(self._tables),
         )
-        return sqlPuzzle.queries.query.Query._appendFeatures(self, select)
+        return sqlpuzzle.queries.query.Query._appendFeatures(self, select)
     
     def __repr__(self):
         return "<Select: %s>" % self.__str__()
@@ -61,11 +61,11 @@ class Select(sqlPuzzle.queries.query.Query):
     
     def __and__(self, other):
         """UNION ALL selects."""
-        return sqlPuzzle.queries.union.Union(self, other, sqlPuzzle.queries.union.UNION_ALL)
+        return sqlpuzzle.queries.union.Union(self, other, sqlpuzzle.queries.union.UNION_ALL)
     
     def __or__(self, other):
         """UNION selects."""
-        return sqlPuzzle.queries.union.Union(self, other, sqlPuzzle.queries.union.UNION)
+        return sqlpuzzle.queries.union.Union(self, other, sqlpuzzle.queries.union.UNION)
     
     def columns(self, *columns_):
         """Set column(s) to query."""

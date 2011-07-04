@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
 #
-# SqlPuzzle
+# sqlpuzzle
 # Michal Horejsek <horejsekmichal@gmail.com>
-# https://github.com/horejsek/sqlPuzzle
+# https://github.com/horejsek/sqlpuzzle
 #
 
-import sqlPuzzle.customSql
+import sqlpuzzle.customSql
 
 
 class Features(object):
@@ -13,6 +13,6 @@ class Features(object):
         return (
             kwds == {} and
             len(args) == 1 and
-            isinstance(args[0], sqlPuzzle.customSql.CustomSql)
+            isinstance(args[0], sqlpuzzle.customSql.CustomSql)
         )
 
