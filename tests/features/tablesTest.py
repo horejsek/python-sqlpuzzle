@@ -7,12 +7,13 @@
 
 import unittest
 
+import sqlPuzzle.customSql
 import sqlPuzzle.features.tables
 
 
 class TablesTest(unittest.TestCase):
     def setUp(self):
-        self.tables = sqlPuzzle.features.tables.Tables()
+        self.tearDown()
 
     def tearDown(self):
         self.tables = sqlPuzzle.features.tables.Tables()
@@ -51,6 +52,21 @@ class BaseTest(TablesTest):
     def testMoreTablesWithAs(self):
         self.tables.set(('user', 'u'), ('country', 'c'))
         self.assertEqual(str(self.tables), '`user` AS `u`, `country` AS `c`')
+
+
+
+class CustomSqlTest(TablesTest):
+    def tearDown(self):
+        super(CustomSqlTest, self).tearDown()
+        self.customSql = sqlPuzzle.customSql.CustomSql('`custom` JOIN `sql`')
+    
+    def testOneTable(self):
+        self.tables.set(self.customSql)
+        self.assertEqual(str(self.tables), '`custom` JOIN `sql`')
+    
+    def testMoreTables(self):
+        self.tables.set(self.customSql, 'id')
+        self.assertEqual(str(self.tables), '`custom` JOIN `sql`, `id`')
 
 
 
@@ -157,6 +173,7 @@ class ExceptionsJoinTest(TablesTest):
 
 testCases = (
     BaseTest,
+    CustomSqlTest,
     GroupingTest,
     ExceptionsTest,
     SimpleJoinsTest,

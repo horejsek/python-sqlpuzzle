@@ -8,19 +8,20 @@
 import unittest
 
 import sqlPuzzle.features.where
+import sqlPuzzle.customSql
 import sqlPuzzle.relations
 
 
-class ConditionsTest(unittest.TestCase):
+class WhereTest(unittest.TestCase):
     def setUp(self):
-        self.where = sqlPuzzle.features.where.Where()
+        self.tearDown()
 
     def tearDown(self):
         self.where = sqlPuzzle.features.where.Where()
 
 
 
-class BaseTest(ConditionsTest):
+class BaseTest(WhereTest):
     def testIsNotSet(self):
         self.assertEqual(self.where.isSet(), False)
     
@@ -66,7 +67,18 @@ class BaseTest(ConditionsTest):
 
 
 
-class GroupingTest(ConditionsTest):
+class CustomSqlTest(WhereTest):
+    def tearDown(self):
+        super(CustomSqlTest, self).tearDown()
+        self.customSql = sqlPuzzle.customSql.CustomSql('`custom` = "sql" OR `sql` = "custom"')
+    
+    def testSimple(self):
+        self.where.where(self.customSql)
+        self.assertEqual(str(self.where), 'WHERE `custom` = "sql" OR `sql` = "custom"')
+
+
+
+class GroupingTest(WhereTest):
     def testMoreSameConditionsPrintAsOne(self):
         self.where.where(('age', 20), ('age', 20))
         self.assertEqual(str(self.where), 'WHERE `age` = 20')
@@ -77,7 +89,7 @@ class GroupingTest(ConditionsTest):
 
 
 
-class AllowedValuesTest(ConditionsTest):
+class AllowedValuesTest(WhereTest):
     def testValueAsInteger(self):
         self.where.where('col', 42)
         self.assertEqual(str(self.where), 'WHERE `col` = 42')
@@ -100,7 +112,7 @@ class AllowedValuesTest(ConditionsTest):
 
 
 
-class ExceptionsTest(ConditionsTest):
+class ExceptionsTest(WhereTest):
     def testColumnAsIntegerException(self):
         self.assertRaises(sqlPuzzle.exceptions.InvalidArgumentException, self.where.where, 42, 'val')
     
@@ -135,6 +147,7 @@ class ExceptionsTest(ConditionsTest):
 
 testCases = (
     BaseTest,
+    CustomSqlTest,
     GroupingTest,
     AllowedValuesTest,
     ExceptionsTest,

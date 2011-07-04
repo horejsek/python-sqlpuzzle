@@ -8,12 +8,13 @@
 import unittest
 
 import sqlPuzzle.exceptions
+import sqlPuzzle.customSql
 import sqlPuzzle.features.columns
 
 
 class ColumnsTest(unittest.TestCase):
     def setUp(self):
-        self.columns = sqlPuzzle.features.columns.Columns()
+        self.tearDown()
 
     def tearDown(self):
         self.columns = sqlPuzzle.features.columns.Columns()
@@ -42,6 +43,21 @@ class BaseTest(ColumnsTest):
     def testColumnAs(self):
         self.columns.columns(('id', 'ID'), 'name')
         self.assertEqual(str(self.columns), '`id` AS "ID", `name`')
+
+
+
+class CustomSqlTest(ColumnsTest):
+    def tearDown(self):
+        super(CustomSqlTest, self).tearDown()
+        self.customSql = sqlPuzzle.customSql.CustomSql('AVG(`custom`) AS "x"')
+    
+    def testOneColumn(self):
+        self.columns.columns(self.customSql)
+        self.assertEqual(str(self.columns), 'AVG(`custom`) AS "x"')
+    
+    def testMoreColumns(self):
+        self.columns.columns(self.customSql, 'id')
+        self.assertEqual(str(self.columns), 'AVG(`custom`) AS "x", `id`')
 
 
 
@@ -81,6 +97,7 @@ class ExceptionsTest(ColumnsTest):
 
 testCases = (
     BaseTest,
+    CustomSqlTest,
     BackQuotesTest,
     GroupingTest,
     ExceptionsTest,
