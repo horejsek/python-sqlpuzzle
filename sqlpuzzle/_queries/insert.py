@@ -5,22 +5,22 @@
 # https://github.com/horejsek/sqlpuzzle
 #
 
-import sqlpuzzle.queries.query
+import sqlpuzzle._queries.query
 
-import sqlpuzzle.features.tables
-import sqlpuzzle.features.onDuplicateKeyUpdate
-import sqlpuzzle.features.values
+import sqlpuzzle._features.tables
+import sqlpuzzle._features.onDuplicateKeyUpdate
+import sqlpuzzle._features.values
 
 
-class Insert(sqlpuzzle.queries.query.Query):
+class Insert(sqlpuzzle._queries.query.Query):
     def __init__(self):
         """Initialization of Insert."""
         super(Insert, self).__init__()
         
         self._setFeatures(
-            tables = sqlpuzzle.features.tables.Tables(),
-            values = sqlpuzzle.features.values.Values(),
-            onDuplicateKeyUpdate = sqlpuzzle.features.onDuplicateKeyUpdate.OnDuplicateKeyUpdate(),
+            tables = sqlpuzzle._features.tables.Tables(),
+            values = sqlpuzzle._features.values.Values(),
+            onDuplicateKeyUpdate = sqlpuzzle._features.onDuplicateKeyUpdate.OnDuplicateKeyUpdate(),
         )
         self._setPrintedFeatures('onDuplicateKeyUpdate')
     
@@ -31,7 +31,7 @@ class Insert(sqlpuzzle.queries.query.Query):
             self._values.columns(),
             self._values.values(),
         )
-        return sqlpuzzle.queries.query.Query._appendFeatures(self, insert)
+        return sqlpuzzle._queries.query.Query._appendFeatures(self, insert)
     
     def __repr__(self):
         return "<Insert: %s>" % self.__str__()

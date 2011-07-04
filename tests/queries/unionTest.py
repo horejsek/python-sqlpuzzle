@@ -8,7 +8,7 @@
 import unittest
 
 import sqlpuzzle.exceptions
-import sqlpuzzle.queries.select
+import sqlpuzzle._queries.select
 
 
 class UnionTest(unittest.TestCase):
@@ -16,8 +16,8 @@ class UnionTest(unittest.TestCase):
         self.tearDown()
 
     def tearDown(self):
-        self.select1 = sqlpuzzle.queries.select.Select().from_('t1')
-        self.select2 = sqlpuzzle.queries.select.Select().from_('t2')
+        self.select1 = sqlpuzzle._queries.select.Select().from_('t1')
+        self.select2 = sqlpuzzle._queries.select.Select().from_('t2')
 
 
 

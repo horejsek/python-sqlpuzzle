@@ -5,9 +5,9 @@
 # https://github.com/horejsek/sqlpuzzle
 #
 
-import sqlpuzzle.libs.argsParser
-import sqlpuzzle.libs.sqlValue
-import sqlpuzzle.features.features
+import sqlpuzzle._libs.argsParser
+import sqlpuzzle._libs.sqlValue
+import sqlpuzzle._features.features
 
 
 class Column(object):
@@ -20,11 +20,11 @@ class Column(object):
         """Print part of query."""
         if self._as:
             return '%s AS "%s"' % (
-                sqlpuzzle.libs.sqlValue.SqlReference(self._column),
+                sqlpuzzle._libs.sqlValue.SqlReference(self._column),
                 self._as,
             )
         else:
-            return str(sqlpuzzle.libs.sqlValue.SqlReference(self._column))
+            return str(sqlpuzzle._libs.sqlValue.SqlReference(self._column))
     
     def __repr__(self):
         return "<Column: %s>" % self.__str__()
@@ -45,7 +45,7 @@ class Column(object):
         self._as = as_
 
 
-class Columns(sqlpuzzle.features.features.Features):
+class Columns(sqlpuzzle._features.features.Features):
     def __init__(self):
         """Initialization of Columns."""
         self._columns = []
@@ -77,9 +77,9 @@ class Columns(sqlpuzzle.features.features.Features):
             self._columns.append(args[0])
         
         else:
-            for columnName, as_ in sqlpuzzle.libs.argsParser.parseArgsToListOfTuples(
+            for columnName, as_ in sqlpuzzle._libs.argsParser.parseArgsToListOfTuples(
                 {'maxItems': 2, 'allowedDataTypes': (
-                    (str, unicode, sqlpuzzle.queries.select.Select, sqlpuzzle.queries.union.Union),
+                    (str, unicode, sqlpuzzle._queries.select.Select, sqlpuzzle._queries.union.Union),
                     (str, unicode)
                 )}, *args
             ):

@@ -7,22 +7,22 @@
 
 import sqlpuzzle.exceptions
 
-import sqlpuzzle.queries.query
+import sqlpuzzle._queries.query
 
-import sqlpuzzle.features.tables
-import sqlpuzzle.features.values
-import sqlpuzzle.features.where
+import sqlpuzzle._features.tables
+import sqlpuzzle._features.values
+import sqlpuzzle._features.where
 
 
-class Update(sqlpuzzle.queries.query.Query):
+class Update(sqlpuzzle._queries.query.Query):
     def __init__(self, table=None):
         """Initialization of Update."""
         super(Update, self).__init__()
         
         self._setFeatures(
-            tables = sqlpuzzle.features.tables.Tables(),
-            values = sqlpuzzle.features.values.Values(),
-            where = sqlpuzzle.features.where.Where(),
+            tables = sqlpuzzle._features.tables.Tables(),
+            values = sqlpuzzle._features.values.Values(),
+            where = sqlpuzzle._features.where.Where(),
         )
         self._setPrintedFeatures('where')
         
@@ -39,7 +39,7 @@ class Update(sqlpuzzle.queries.query.Query):
             str(self._tables),
             str(self._values),
         )
-        return sqlpuzzle.queries.query.Query._appendFeatures(self, update)
+        return sqlpuzzle._queries.query.Query._appendFeatures(self, update)
     
     def __repr__(self):
         return "<Update: %s>" % self.__str__()

@@ -7,16 +7,16 @@
 
 import datetime
 
-import sqlpuzzle.libs.argsParser
-import sqlpuzzle.features.conditions
+import sqlpuzzle._libs.argsParser
+import sqlpuzzle._features.conditions
 
 
-class WhereCondition(sqlpuzzle.features.conditions.Condition):
+class WhereCondition(sqlpuzzle._features.conditions.Condition):
     pass
 
 
 
-class Where(sqlpuzzle.features.conditions.Conditions):
+class Where(sqlpuzzle._features.conditions.Conditions):
     def __init__(self):
         """Initialization of Where."""
         super(Where, self).__init__(WhereCondition)

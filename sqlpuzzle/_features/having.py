@@ -5,15 +5,15 @@
 # https://github.com/horejsek/sqlpuzzle
 #
 
-import sqlpuzzle.features.conditions
+import sqlpuzzle._features.conditions
 
 
-class HavingCondition(sqlpuzzle.features.conditions.Condition):
+class HavingCondition(sqlpuzzle._features.conditions.Condition):
     pass
 
 
 
-class Having(sqlpuzzle.features.conditions.Conditions):
+class Having(sqlpuzzle._features.conditions.Conditions):
     def __init__(self):
         """Initialization of Having."""
         super(Having, self).__init__(HavingCondition)

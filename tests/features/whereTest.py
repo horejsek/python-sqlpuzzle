@@ -7,7 +7,7 @@
 
 import unittest
 
-import sqlpuzzle.features.where
+import sqlpuzzle._features.where
 import sqlpuzzle.customSql
 import sqlpuzzle.relations
 
@@ -17,7 +17,7 @@ class WhereTest(unittest.TestCase):
         self.tearDown()
 
     def tearDown(self):
-        self.where = sqlpuzzle.features.where.Where()
+        self.where = sqlpuzzle._features.where.Where()
 
 
 

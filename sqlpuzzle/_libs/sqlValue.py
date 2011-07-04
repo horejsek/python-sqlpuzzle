@@ -5,7 +5,7 @@
 # https://github.com/horejsek/sqlpuzzle
 #
 
-import sqlpuzzle.queries
+import sqlpuzzle._queries
 import datetime
 import re
 import types
@@ -27,8 +27,8 @@ class SqlValue(object):
             datetime.datetime: self._datetime,
             list: self._list,
             tuple: self._list,
-            sqlpuzzle.queries.select.Select: self._subselect,
-            sqlpuzzle.queries.union.Union: self._subselect,
+            sqlpuzzle._queries.select.Select: self._subselect,
+            sqlpuzzle._queries.union.Union: self._subselect,
             types.NoneType: self._null,
         }
 
@@ -124,8 +124,8 @@ class SqlReference(SqlValue):
             str: self._backQuotes,
             unicode: self._backQuotes,
             int: self._integer,
-            sqlpuzzle.queries.select.Select: self._subselect,
-            sqlpuzzle.queries.union.Union: self._subselect,
+            sqlpuzzle._queries.select.Select: self._subselect,
+            sqlpuzzle._queries.union.Union: self._subselect,
         }
 
         self.value = value

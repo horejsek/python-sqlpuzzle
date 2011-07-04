@@ -8,15 +8,15 @@
 import unittest
 
 import sqlpuzzle.exceptions
-import sqlpuzzle.features.limit
+import sqlpuzzle._features.limit
 
 
 class LimitTest(unittest.TestCase):
     def setUp(self):
-        self.limit = sqlpuzzle.features.limit.Limit()
+        self.limit = sqlpuzzle._features.limit.Limit()
 
     def tearDown(self):
-        self.limit = sqlpuzzle.features.limit.Limit()
+        self.limit = sqlpuzzle._features.limit.Limit()
 
 
 

@@ -7,13 +7,13 @@
 
 import sqlpuzzle.exceptions
 
-import sqlpuzzle.features.columns
-import sqlpuzzle.features.conditions
-import sqlpuzzle.features.groupBy
-import sqlpuzzle.features.limit
-import sqlpuzzle.features.orderBy
-import sqlpuzzle.features.tables
-import sqlpuzzle.features.values
+import sqlpuzzle._features.columns
+import sqlpuzzle._features.conditions
+import sqlpuzzle._features.groupBy
+import sqlpuzzle._features.limit
+import sqlpuzzle._features.orderBy
+import sqlpuzzle._features.tables
+import sqlpuzzle._features.values
 
 
 class Query(object):

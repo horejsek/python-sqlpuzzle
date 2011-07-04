@@ -5,10 +5,10 @@
 # https://github.com/horejsek/sqlpuzzle
 #
 
-import sqlpuzzle.libs.argsParser
-import sqlpuzzle.libs.sqlValue
-import sqlpuzzle.features.features
-import sqlpuzzle.features.conditions
+import sqlpuzzle._libs.argsParser
+import sqlpuzzle._libs.sqlValue
+import sqlpuzzle._features.features
+import sqlpuzzle._features.conditions
 
 
 
@@ -24,12 +24,12 @@ JOIN_TYPES = {
 
 
 
-class OnCondition(sqlpuzzle.features.conditions.Condition):
+class OnCondition(sqlpuzzle._features.conditions.Condition):
     def __str__(self):
         """Print part of query."""
         return '%s = %s' % (
-            sqlpuzzle.libs.sqlValue.SqlReference(self._column),
-            sqlpuzzle.libs.sqlValue.SqlReference(self._value),
+            sqlpuzzle._libs.sqlValue.SqlReference(self._column),
+            sqlpuzzle._libs.sqlValue.SqlReference(self._value),
         )
     
     def __repr__(self):
@@ -44,7 +44,7 @@ class OnCondition(sqlpuzzle.features.conditions.Condition):
 
 
 
-class Ons(sqlpuzzle.features.conditions.Conditions):
+class Ons(sqlpuzzle._features.conditions.Conditions):
     def __init__(self):
         """Initialization of Ons."""
         super(Ons, self).__init__(OnCondition)
@@ -72,11 +72,11 @@ class Table(object):
         """Print part of query."""
         if self._as:
             table = '%s AS %s' % (
-                sqlpuzzle.libs.sqlValue.SqlReference(self._table),
-                sqlpuzzle.libs.sqlValue.SqlReference(self._as),
+                sqlpuzzle._libs.sqlValue.SqlReference(self._table),
+                sqlpuzzle._libs.sqlValue.SqlReference(self._as),
             )
         else:
-            table = str(sqlpuzzle.libs.sqlValue.SqlReference(self._table))
+            table = str(sqlpuzzle._libs.sqlValue.SqlReference(self._table))
         
         if self._joins != []:
             if any([not join['ons'].isSet() for join in self._joins]):
@@ -165,7 +165,7 @@ class Table(object):
 
 
 
-class Tables(sqlpuzzle.features.features.Features):
+class Tables(sqlpuzzle._features.features.Features):
     def __init__(self):
         """Initialization of Tables."""
         self._tables = []
@@ -200,9 +200,9 @@ class Tables(sqlpuzzle.features.features.Features):
         else:
             args = [arg for arg in args if arg]
             
-            for table, as_ in sqlpuzzle.libs.argsParser.parseArgsToListOfTuples(
+            for table, as_ in sqlpuzzle._libs.argsParser.parseArgsToListOfTuples(
                 {'maxItems': 2, 'allowedDataTypes': (
-                    (str, unicode, sqlpuzzle.queries.select.Select, sqlpuzzle.queries.union.Union),
+                    (str, unicode, sqlpuzzle._queries.select.Select, sqlpuzzle._queries.union.Union),
                     (str, unicode)
                 )}, *args
             ):

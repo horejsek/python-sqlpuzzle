@@ -9,7 +9,7 @@ import unittest
 
 import sqlpuzzle.exceptions
 import sqlpuzzle.customSql
-import sqlpuzzle.features.columns
+import sqlpuzzle._features.columns
 
 
 class ColumnsTest(unittest.TestCase):
@@ -17,7 +17,7 @@ class ColumnsTest(unittest.TestCase):
         self.tearDown()
 
     def tearDown(self):
-        self.columns = sqlpuzzle.features.columns.Columns()
+        self.columns = sqlpuzzle._features.columns.Columns()
 
 
 

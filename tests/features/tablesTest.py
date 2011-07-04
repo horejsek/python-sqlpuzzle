@@ -8,7 +8,7 @@
 import unittest
 
 import sqlpuzzle.customSql
-import sqlpuzzle.features.tables
+import sqlpuzzle._features.tables
 
 
 class TablesTest(unittest.TestCase):
@@ -16,7 +16,7 @@ class TablesTest(unittest.TestCase):
         self.tearDown()
 
     def tearDown(self):
-        self.tables = sqlpuzzle.features.tables.Tables()
+        self.tables = sqlpuzzle._features.tables.Tables()
 
 
 

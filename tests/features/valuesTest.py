@@ -8,15 +8,15 @@
 import unittest
 
 import sqlpuzzle.exceptions
-import sqlpuzzle.features.values
+import sqlpuzzle._features.values
 
 
 class ValuesTest(unittest.TestCase):
     def setUp(self):
-        self.values = sqlpuzzle.features.values.Values()
+        self.values = sqlpuzzle._features.values.Values()
 
     def tearDown(self):
-        self.values = sqlpuzzle.features.values.Values()
+        self.values = sqlpuzzle._features.values.Values()
 
 
 

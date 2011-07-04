@@ -7,9 +7,9 @@
 
 import datetime
 
-import sqlpuzzle.libs.argsParser
-import sqlpuzzle.libs.sqlValue
-import sqlpuzzle.features.features
+import sqlpuzzle._libs.argsParser
+import sqlpuzzle._libs.sqlValue
+import sqlpuzzle._features.features
 import sqlpuzzle.exceptions
 import sqlpuzzle.relations
 
@@ -37,9 +37,9 @@ class Condition(object):
     def __str__(self):
         """Print condition (part of WHERE)."""
         return '%s %s %s' % (
-            sqlpuzzle.libs.sqlValue.SqlReference(self._column),
+            sqlpuzzle._libs.sqlValue.SqlReference(self._column),
             sqlpuzzle.relations.RELATIONS[self._relation],
-            sqlpuzzle.libs.sqlValue.SqlValue(self._value),
+            sqlpuzzle._libs.sqlValue.SqlValue(self._value),
         )
     
     def __repr__(self):
@@ -120,7 +120,7 @@ class Condition(object):
 
 
 
-class Conditions(sqlpuzzle.features.features.Features):
+class Conditions(sqlpuzzle._features.features.Features):
     def __init__(self, conditionObject=Condition):
         """Initialization of Conditions."""
         self._conditionObject = conditionObject
@@ -156,14 +156,14 @@ class Conditions(sqlpuzzle.features.features.Features):
             self._conditions.append(args[0])
         
         else:
-            for column, value, relation in sqlpuzzle.libs.argsParser.parseArgsToListOfTuples(
+            for column, value, relation in sqlpuzzle._libs.argsParser.parseArgsToListOfTuples(
                 {
                     'minItems': 2,
                     'maxItems': 3,
                     'allowDict': True,
                     'allowList': True,
                     'allowedDataTypes': (
-                        (str, unicode, sqlpuzzle.queries.select.Select),
+                        (str, unicode, sqlpuzzle._queries.select.Select),
                         (str, unicode, int, long, float, bool, list, tuple, datetime.date, datetime.datetime),
                         (int,)
                     ),

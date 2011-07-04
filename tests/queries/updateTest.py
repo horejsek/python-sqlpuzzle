@@ -8,16 +8,16 @@
 import unittest
 
 import sqlpuzzle.exceptions
-import sqlpuzzle.queries.update
+import sqlpuzzle._queries.update
 import sqlpuzzle.relations
 
 
 class UpdateTest(unittest.TestCase):
     def setUp(self):
-        self.update = sqlpuzzle.queries.update.Update()
+        self.update = sqlpuzzle._queries.update.Update()
 
     def tearDown(self):
-        self.update = sqlpuzzle.queries.update.Update()
+        self.update = sqlpuzzle._queries.update.Update()
 
 
 

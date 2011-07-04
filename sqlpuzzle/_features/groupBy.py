@@ -5,10 +5,10 @@
 # https://github.com/horejsek/sqlpuzzle
 #
 
-import sqlpuzzle.features.order
+import sqlpuzzle._features.order
 
 
-class GroupBy(sqlpuzzle.features.order.Orders):
+class GroupBy(sqlpuzzle._features.order.Orders):
     def __str__(self):
         """Print order (part of query)."""
         groupBy = "GROUP BY %s" % ', '.join(str(order) for order in self._orders)

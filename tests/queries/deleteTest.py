@@ -8,15 +8,15 @@
 import unittest
 
 import sqlpuzzle.exceptions
-import sqlpuzzle.queries.delete
+import sqlpuzzle._queries.delete
 
 
 class DeleteTest(unittest.TestCase):
     def setUp(self):
-        self.delete = sqlpuzzle.queries.delete.Delete()
+        self.delete = sqlpuzzle._queries.delete.Delete()
 
     def tearDown(self):
-        self.delete = sqlpuzzle.queries.delete.Delete()
+        self.delete = sqlpuzzle._queries.delete.Delete()
 
 
 

@@ -8,16 +8,16 @@
 import unittest
 
 import sqlpuzzle.exceptions
-import sqlpuzzle.queries.select
+import sqlpuzzle._queries.select
 import sqlpuzzle.relations
 
 
 class SelectTest(unittest.TestCase):
     def setUp(self):
-        self.select = sqlpuzzle.queries.select.Select()
+        self.select = sqlpuzzle._queries.select.Select()
 
     def tearDown(self):
-        self.select = sqlpuzzle.queries.select.Select()
+        self.select = sqlpuzzle._queries.select.Select()
 
 
 
@@ -126,7 +126,7 @@ class LimitTest(SelectTest):
 
 class IntoOutfileTest(SelectTest):
     def setUp(self):
-        self.select = sqlpuzzle.queries.select.Select()
+        self.select = sqlpuzzle._queries.select.Select()
         self.select.from_('table')
         self.select.intoOutfile('/tmp/file')
     
@@ -220,24 +220,24 @@ class UnionTest(SelectTest):
 
 class SubselectTest(SelectTest):
     def testSubselectInColumns(self):
-        subselect = sqlpuzzle.queries.select.Select('col').from_('tab')
+        subselect = sqlpuzzle._queries.select.Select('col').from_('tab')
         self.select.columns((subselect, 'c'))
         self.select.from_('tab')
         self.assertEqual(str(self.select), 'SELECT (SELECT `col` FROM `tab`) AS "c" FROM `tab`')
     
     def testSubselectInTables(self):
-        subselect = sqlpuzzle.queries.select.Select('col').from_('tab')
+        subselect = sqlpuzzle._queries.select.Select('col').from_('tab')
         self.select.from_((subselect, 't'))
         self.assertEqual(str(self.select), 'SELECT * FROM (SELECT `col` FROM `tab`) AS `t`')
     
     def testSubselectInCondition(self):
-        subselect = sqlpuzzle.queries.select.Select('col').from_('tab')
+        subselect = sqlpuzzle._queries.select.Select('col').from_('tab')
         self.select.from_('tab')
         self.select.where(subselect, 42, sqlpuzzle.relations.LE)
         self.assertEqual(str(self.select), 'SELECT * FROM `tab` WHERE (SELECT `col` FROM `tab`) <= 42')
     
     def testSubselectReference(self):
-        subselect = sqlpuzzle.queries.select.Select('col').from_('t1').where('t1.a', '`t2`.a')
+        subselect = sqlpuzzle._queries.select.Select('col').from_('t1').where('t1.a', '`t2`.a')
         self.select.columns(subselect)
         self.select.from_('t2')
         self.assertEqual(str(self.select), 'SELECT (SELECT `col` FROM `t1` WHERE `t1`.`a` = `t2`.`a`) FROM `t2`')

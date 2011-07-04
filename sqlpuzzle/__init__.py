@@ -5,10 +5,10 @@
 # https://github.com/horejsek/sqlpuzzle
 #
 
-import sqlpuzzle.queries.delete
-import sqlpuzzle.queries.insert
-import sqlpuzzle.queries.select
-import sqlpuzzle.queries.update
+import sqlpuzzle._queries.delete
+import sqlpuzzle._queries.insert
+import sqlpuzzle._queries.select
+import sqlpuzzle._queries.update
 
 
 def select(*columns):
@@ -16,7 +16,7 @@ def select(*columns):
     Select.
     Params are strings or list of columns to select.
     """
-    return sqlpuzzle.queries.select.Select(*columns)
+    return sqlpuzzle._queries.select.Select(*columns)
 
 
 def selectFrom(table):
@@ -24,14 +24,14 @@ def selectFrom(table):
     Select.
     Param is table, column is set to *.
     """
-    return sqlpuzzle.queries.select.Select().from_(table)
+    return sqlpuzzle._queries.select.Select().from_(table)
 
 
 def insert():
     """
     Insert.
     """
-    return sqlpuzzle.queries.insert.Insert()
+    return sqlpuzzle._queries.insert.Insert()
 
 
 def insertInto(table):
@@ -39,7 +39,7 @@ def insertInto(table):
     Insert.
     Param is table.
     """
-    return sqlpuzzle.queries.insert.Insert().into(table)
+    return sqlpuzzle._queries.insert.Insert().into(table)
 
 
 def update(table):
@@ -47,14 +47,14 @@ def update(table):
     Update.
     Param is table.
     """
-    return sqlpuzzle.queries.update.Update(table)
+    return sqlpuzzle._queries.update.Update(table)
 
 
 def delete():
     """
     Delete.
     """
-    return sqlpuzzle.queries.delete.Delete()
+    return sqlpuzzle._queries.delete.Delete()
 
 
 def deleteFrom(table):
@@ -62,6 +62,6 @@ def deleteFrom(table):
     Delete.
     Param is table.
     """
-    return sqlpuzzle.queries.delete.Delete().from_(table)
+    return sqlpuzzle._queries.delete.Delete().from_(table)
 
 

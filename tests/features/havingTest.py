@@ -7,16 +7,16 @@
 
 import unittest
 
-import sqlpuzzle.features.having
+import sqlpuzzle._features.having
 import sqlpuzzle.relations
 
 
 class HavingTest(unittest.TestCase):
     def setUp(self):
-        self.having = sqlpuzzle.features.having.Having()
+        self.having = sqlpuzzle._features.having.Having()
 
     def tearDown(self):
-        self.having = sqlpuzzle.features.having.Having()
+        self.having = sqlpuzzle._features.having.Having()
 
 
 

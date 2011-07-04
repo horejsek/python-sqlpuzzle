@@ -8,15 +8,15 @@
 import unittest
 
 import sqlpuzzle.exceptions
-import sqlpuzzle.queries.insert
+import sqlpuzzle._queries.insert
 
 
 class InsertTest(unittest.TestCase):
     def setUp(self):
-        self.insert = sqlpuzzle.queries.insert.Insert()
+        self.insert = sqlpuzzle._queries.insert.Insert()
 
     def tearDown(self):
-        self.insert = sqlpuzzle.queries.insert.Insert()
+        self.insert = sqlpuzzle._queries.insert.Insert()
 
 
 

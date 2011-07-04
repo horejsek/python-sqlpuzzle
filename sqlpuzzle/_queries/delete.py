@@ -6,20 +6,20 @@
 #
 
 import sqlpuzzle.exceptions
-import sqlpuzzle.queries.query
+import sqlpuzzle._queries.query
 
-import sqlpuzzle.features.tables
-import sqlpuzzle.features.where
+import sqlpuzzle._features.tables
+import sqlpuzzle._features.where
 
 
-class Delete(sqlpuzzle.queries.query.Query):
+class Delete(sqlpuzzle._queries.query.Query):
     def __init__(self):
         """Initialization of Delete."""
         super(Delete, self).__init__()
         
         self._setFeatures(
-            tables = sqlpuzzle.features.tables.Tables(),
-            where = sqlpuzzle.features.where.Where(),
+            tables = sqlpuzzle._features.tables.Tables(),
+            where = sqlpuzzle._features.where.Where(),
         )
         self._setPrintedFeatures('where')
         
@@ -33,7 +33,7 @@ class Delete(sqlpuzzle.queries.query.Query):
         delete = "DELETE FROM %s" % (
             str(self._tables),
         )
-        return sqlpuzzle.queries.query.Query._appendFeatures(self, delete)
+        return sqlpuzzle._queries.query.Query._appendFeatures(self, delete)
     
     def __repr__(self):
         return "<Delete: %s>" % self.__str__()
