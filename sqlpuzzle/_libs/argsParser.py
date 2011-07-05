@@ -73,7 +73,7 @@ class ParserOptions(object):
         if self.allowDict and self.maxItems <= 1:
             raise sqlpuzzle.exceptions.SqlPuzzleError('For allowDict must be maxItems bigger or equal to 2.')
         
-        if not isinstance(self.allowedDataTypes, (tuple, list)):
+        if not isinstance(self.allowedDataTypes, (tuple, list, AllowedDataTypes)):
             raise sqlpuzzle.exceptions.SqlPuzzleError('Invalid options for argsParser.')
 
 
@@ -174,14 +174,36 @@ class Parser(object):
             raise sqlpuzzle.exceptions.InvalidArgumentException()
     
     def __validateBatch(self, batch):
+        if isinstance(self.options.allowedDataTypes, AllowedDataTypes):
+            return self.options.allowedDataTypes.validateBatch(batch)
+        return AllowedDataTypes()._validateBatch(batch, self.options.allowedDataTypes)
+
+
+
+class AllowedDataTypes:
+    def __init__(self):
+        self._allowedDataTypes = []
+    
+    def add(self, *args):
+        self._allowedDataTypes.append(args)
+        return self
+    
+    def validateBatch(self, batch):
+        for allowedDataTypes in self._allowedDataTypes:
+            if self._validateBatch(batch, allowedDataTypes):
+                return True
+        return False
+    
+    def _validateBatch(self, batch, allowedDataTypes):
         for x, item in enumerate(batch):
-            dataTypes = self.options.allowedDataTypes
-            if isinstance(self.options.allowedDataTypes[0], (tuple, list)):
-                dataTypes = self.options.allowedDataTypes[x]
+            dataTypes = allowedDataTypes
+            if isinstance(allowedDataTypes[0], (tuple, list)):
+                dataTypes = allowedDataTypes[x]
             if item is not None and not isinstance(item, dataTypes):
                 return False
             # isinstance(True, (int, long)) is True => must be special condition
             if bool not in dataTypes and type(item) == types.BooleanType:
                 return False
         return True
+            
 
