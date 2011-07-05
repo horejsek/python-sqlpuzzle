@@ -9,10 +9,6 @@ import sqlpuzzle.customSql
 
 
 class Features(object):
-    def isCustumSql(self, *args, **kwds):
-        return (
-            kwds == {} and
-            len(args) == 1 and
-            isinstance(args[0], sqlpuzzle.customSql.CustomSql)
-        )
+    def isCustumSql(self, args):
+        return isinstance(args, sqlpuzzle.customSql.CustomSql)
 

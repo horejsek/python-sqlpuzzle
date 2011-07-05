@@ -73,16 +73,20 @@ class Columns(sqlpuzzle._features.features.Features):
     
     def columns(self, *args):
         """Set columns."""
-        if self.isCustumSql(*args):
-            self._columns.append(args[0])
-        
-        else:
-            for columnName, as_ in sqlpuzzle._libs.argsParser.parseArgsToListOfTuples(
-                {'maxItems': 2, 'allowedDataTypes': (
-                    (str, unicode, sqlpuzzle._queries.select.Select, sqlpuzzle._queries.union.Union),
-                    (str, unicode)
-                )}, *args
-            ):
+
+        allowedDataTypes = sqlpuzzle._libs.argsParser.AllowedDataTypes().add(
+            (str, unicode, sqlpuzzle._queries.select.Select, sqlpuzzle._queries.union.Union),
+            (str, unicode)
+        ).add(
+            sqlpuzzle.customSql.CustomSql
+        )
+
+        for columnName, as_ in sqlpuzzle._libs.argsParser.parseArgsToListOfTuples(
+            {'maxItems': 2, 'allowedDataTypes': allowedDataTypes}, *args
+        ):
+            if self.isCustumSql(columnName):
+                self._columns.append(columnName)
+            else:
                 column = Column(columnName, as_)
                 if column not in self:
                     self._columns.append(column)

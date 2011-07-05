@@ -194,18 +194,21 @@ class Tables(sqlpuzzle._features.features.Features):
     
     def set(self, *args):
         """Set tables."""
-        if self.isCustumSql(*args):
-            self._tables.append(args[0])
+        args = [arg for arg in args if arg]
         
-        else:
-            args = [arg for arg in args if arg]
-            
-            for table, as_ in sqlpuzzle._libs.argsParser.parseArgsToListOfTuples(
-                {'maxItems': 2, 'allowedDataTypes': (
-                    (str, unicode, sqlpuzzle._queries.select.Select, sqlpuzzle._queries.union.Union),
-                    (str, unicode)
-                )}, *args
-            ):
+        allowedDataTypes = sqlpuzzle._libs.argsParser.AllowedDataTypes().add(
+            (str, unicode, sqlpuzzle._queries.select.Select, sqlpuzzle._queries.union.Union),
+            (str, unicode)
+        ).add(
+            sqlpuzzle.customSql.CustomSql
+        )
+        
+        for table, as_ in sqlpuzzle._libs.argsParser.parseArgsToListOfTuples(
+            {'maxItems': 2, 'allowedDataTypes': allowedDataTypes}, *args
+        ):
+            if self.isCustumSql(table):
+                self._tables.append(table)
+            else:
                 table = Table(table, as_)
                 if table not in self:
                     self._tables.append(table)

@@ -152,7 +152,7 @@ class Conditions(sqlpuzzle._features.features.Features):
     
     def where(self, *args, **kwds):
         """Set condition(s)."""
-        if self.isCustumSql(*args):
+        if args and self.isCustumSql(args[0]):
             self._conditions.append(args[0])
         
         else:
