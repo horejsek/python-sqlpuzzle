@@ -13,7 +13,7 @@ import sqlpuzzle._features.values
 
 class ValuesTest(unittest.TestCase):
     def setUp(self):
-        self.values = sqlpuzzle._features.values.Values()
+        self.tearDown()
 
     def tearDown(self):
         self.values = sqlpuzzle._features.values.Values()
@@ -35,7 +35,7 @@ class BaseTest(ValuesTest):
             ('age', 20),
             ('country', None),
         ))
-        self.assertEqual(str(self.values), '`country` = NULL, `age` = 20, `name` = "Harry", `sex` = "female"')
+        self.assertEqual(str(self.values), '`name` = "Harry", `sex` = "female", `age` = 20, `country` = NULL')
     
     def testValuesByList(self):
         self.values.set([
@@ -44,7 +44,7 @@ class BaseTest(ValuesTest):
             ['age', 20],
             ['country', None],
         ])
-        self.assertEqual(str(self.values), '`country` = NULL, `age` = 20, `name` = "Harry", `sex` = "female"')
+        self.assertEqual(str(self.values), '`name` = "Harry", `sex` = "female", `age` = 20, `country` = NULL')
     
     def testValuesByDictionary(self):
         self.values.set({
@@ -60,6 +60,17 @@ class BaseTest(ValuesTest):
     def testValuesByKwargs(self):
         self.values.set(name='Alan')
         self.assertEqual(str(self.values), '`name` = "Alan"')
+
+
+
+class CustomSqlTest(ValuesTest):
+    def tearDown(self):
+        super(CustomSqlTest, self).tearDown()
+        self.customSql = sqlpuzzle.customSql.CustomSql('`age` = `age` + 1')
+    
+    def testSimple(self):
+        self.values.set(self.customSql)
+        self.assertEqual(str(self.values), '`age` = `age` + 1')
 
 
 
@@ -92,6 +103,7 @@ class ExceptionsTest(ValuesTest):
 
 testCases = (
     BaseTest,
+    CustomSqlTest,
     AllowedValuesTest,
     ExceptionsTest,
 )
