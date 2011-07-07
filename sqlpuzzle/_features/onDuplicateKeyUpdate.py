@@ -5,14 +5,12 @@
 # https://github.com/horejsek/sqlpuzzle
 #
 
-import datetime
-
 import sqlpuzzle._features.values
 
 
 
 class OnDuplicateKeyUpdate(sqlpuzzle._features.values.Values):
-    def __str__(self):
-        """Print on duplicate key update."""
-        return "ON DUPLICATE KEY UPDATE %s" % super(OnDuplicateKeyUpdate, self).__str__()
+    def __init__(self):
+        super(OnDuplicateKeyUpdate, self).__init__()
+        self._keywordOfFeature = 'ON DUPLICATE KEY UPDATE'
 

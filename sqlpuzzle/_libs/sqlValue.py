@@ -62,7 +62,7 @@ class SqlValue(object):
     def _string(self):
         """Convert as string."""
         # sometime, e.g. in subselect, is needed reference to column instead of self.value
-        if self.value.strip()[0] == '`':
+        if self.value.strip() and self.value.strip()[0] == '`':
             return self._backQuotes()
         return '"%s"' % self._escapeValue(self.value)
     

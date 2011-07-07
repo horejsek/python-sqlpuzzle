@@ -9,10 +9,9 @@ import datetime
 
 import sqlpuzzle._libs.argsParser
 import sqlpuzzle._libs.sqlValue
-import sqlpuzzle._features.features
 
 
-class Value(object):
+class Value(sqlpuzzle._features.Feature):
     def __init__(self, column=None, value=None):
         """Initialization of Value."""
         self._column = column
@@ -25,9 +24,6 @@ class Value(object):
             sqlpuzzle._libs.sqlValue.SqlValue(self._value),
         )
     
-    def __repr__(self):
-        return "<Value: %s>" % self.__str__()
-    
     def __eq__(self, other):
         """Are values equivalent?"""
         return (
@@ -37,44 +33,19 @@ class Value(object):
 
 
 
-class Values(sqlpuzzle._features.features.Features):
-    def __init__(self):
-        """Initialization of Values."""
-        self._values = []
-    
-    def __str__(self):
-        """Print values (part of query)."""
-        if self.isSet():
-            return ', '.join(str(value) for value in self._values)
-        else:
-            return ''
-    
-    def __repr__(self):
-        return "<Values: %s>" % self.__str__()
-    
-    def __contains__(self, item):
-        """Is item (column) in columns?"""
-        for value in self._values:
-            if item == value:
-                return True
-        return False
-    
+class Values(sqlpuzzle._features.Features):
     def columns(self):
         """Print columns of values."""
-        return ', '.join('%s' % sqlpuzzle._libs.sqlValue.SqlReference(value._column) for value in self._values)
+        return ', '.join('%s' % sqlpuzzle._libs.sqlValue.SqlReference(value._column) for value in self._features)
     
     def values(self):
         """Print values of values."""
-        return ', '.join('%s' % sqlpuzzle._libs.sqlValue.SqlValue(value._value) for value in self._values)
-    
-    def isSet(self):
-        """Is limit set?"""
-        return self._values != []
+        return ', '.join('%s' % sqlpuzzle._libs.sqlValue.SqlValue(value._value) for value in self._features)
     
     def set(self, *args, **kwds):
         """Set columns."""
         if args and self.isCustumSql(args[0]):
-            self._values.append(args[0])
+            self._features.append(args[0])
         
         else:
             for columnName, value in sqlpuzzle._libs.argsParser.parseArgsToListOfTuples(
@@ -89,7 +60,7 @@ class Values(sqlpuzzle._features.features.Features):
             ):
                 value = Value(columnName, value)
                 if value not in self:
-                    self._values.append(value)
+                    self._features.append(value)
             
         
         return self

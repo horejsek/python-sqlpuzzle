@@ -16,7 +16,7 @@ ORDERING_TYPES = (ASC, DESC)
 
 
 
-class Order(object):
+class Order(sqlpuzzle._features.Feature):
     def __init__(self, column=None, sort=None):
         """Initialization of Order."""
         self.column(column)
@@ -31,9 +31,6 @@ class Order(object):
                 sqlpuzzle._libs.sqlValue.SqlReference(self._column),
                 self._sort,
             )
-    
-    def __repr__(self):
-        return "<Order: %s>" % self.__str__()
     
     def __eq__(self, other):
         """Are orders equivalent?"""
@@ -59,34 +56,19 @@ class Order(object):
 
 
 
-class Orders(object):
-    def __init__(self):
-        """Initialization of OrderBy."""
-        self._orders = []
-    
-    def __str__(self):
-        """Print order (part of query)."""
-        raise sqlpuzzle.exceptions.SqlPuzzleNotImplemeted('Orders.__str__()')
-    
-    def __repr__(self):
-        return "<Orders: %s>" % self.__str__()
-    
+class Orders(sqlpuzzle._features.Features):
     def __contains__(self, item):
         """Is item (order) in list of orders?"""
-        for order in self._orders:
+        for order in self._features:
             if item._column == order._column:
                 return True
         return False
     
     def _changeSorting(self, columnName, sort):
         """If columnName in list, just set new sort."""
-        for order in self._orders:
+        for order in self._features:
             if order._column == columnName:
                 order.sort(sort)
-    
-    def isSet(self):
-        """Is orderBy set?"""
-        return self._orders != []
     
     def order(self, *args):
         """Set Order."""
@@ -95,7 +77,7 @@ class Orders(object):
         ):
             order = Order(columnName, sort)
             if order not in self:
-                self._orders.append(order)
+                self._features.append(order)
             else:
                 self._changeSorting(columnName, sort)
         

@@ -142,17 +142,17 @@ class IntoOutfileTest(SelectTest):
     
     def testLinesTerminatedBy(self):
         self.select.linesTerminatedBy('"')
-        self.assertEqual(str(self.select), 'SELECT * FROM `table` INTO OUTFILE "/tmp/file" LINES TERMINATED BY \'"\'')
+        self.assertEqual(str(self.select), 'SELECT * FROM `table` INTO OUTFILE "/tmp/file" LINES TERMINATED BY "\\""')
     
     def testOptionallyEnclosedBy(self):
         self.select.optionallyEnclosedBy('\n')
-        self.assertEqual(str(self.select), 'SELECT * FROM `table` INTO OUTFILE "/tmp/file" OPTIONALLY ENCLOSED BY "\n"')
+        self.assertEqual(str(self.select), 'SELECT * FROM `table` INTO OUTFILE "/tmp/file" OPTIONALLY ENCLOSED BY "\\n"')
     
     def testAllInOne(self):
         self.select.fieldsTerminatedBy(',')
         self.select.linesTerminatedBy('"')
         self.select.optionallyEnclosedBy('\n')
-        self.assertEqual(str(self.select), 'SELECT * FROM `table` INTO OUTFILE "/tmp/file" FIELDS TERMINATED BY "," LINES TERMINATED BY \'"\' OPTIONALLY ENCLOSED BY "\n"')
+        self.assertEqual(str(self.select), 'SELECT * FROM `table` INTO OUTFILE "/tmp/file" FIELDS TERMINATED BY "," LINES TERMINATED BY "\\"" OPTIONALLY ENCLOSED BY "\\n"')
 
 
 

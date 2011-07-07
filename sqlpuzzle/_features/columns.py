@@ -7,10 +7,9 @@
 
 import sqlpuzzle._libs.argsParser
 import sqlpuzzle._libs.sqlValue
-import sqlpuzzle._features.features
 
 
-class Column(object):
+class Column(sqlpuzzle._features.Feature):
     def __init__(self, column=None, as_=None):
         """Initialization of Column."""
         self.column(column)
@@ -25,9 +24,6 @@ class Column(object):
             )
         else:
             return str(sqlpuzzle._libs.sqlValue.SqlReference(self._column))
-    
-    def __repr__(self):
-        return "<Column: %s>" % self.__str__()
     
     def __eq__(self, other):
         """Are columns equivalent?"""
@@ -45,31 +41,11 @@ class Column(object):
         self._as = as_
 
 
-class Columns(sqlpuzzle._features.features.Features):
+class Columns(sqlpuzzle._features.Features):
     def __init__(self):
         """Initialization of Columns."""
-        self._columns = []
-    
-    def __str__(self):
-        """Print columns (part of query)."""
-        if self.isSet():
-            return ', '.join(str(column) for column in self._columns)
-        else:
-            return '*'
-    
-    def __repr__(self):
-        return "<Columns: %s>" % self.__str__()
-    
-    def __contains__(self, item):
-        """Is item (column) in columns?"""
-        for column in self._columns:
-            if item == column:
-                return True
-        return False
-    
-    def isSet(self):
-        """Is limit set?"""
-        return self._columns != []
+        super(Columns, self).__init__()
+        self._defaultQueryString = '*'
     
     def columns(self, *args):
         """Set columns."""
@@ -85,11 +61,11 @@ class Columns(sqlpuzzle._features.features.Features):
             {'maxItems': 2, 'allowedDataTypes': allowedDataTypes}, *args
         ):
             if self.isCustumSql(columnName):
-                self._columns.append(columnName)
+                self._features.append(columnName)
             else:
                 column = Column(columnName, as_)
                 if column not in self:
-                    self._columns.append(column)
+                    self._features.append(column)
         
         return self
 

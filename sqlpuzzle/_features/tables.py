@@ -7,7 +7,6 @@
 
 import sqlpuzzle._libs.argsParser
 import sqlpuzzle._libs.sqlValue
-import sqlpuzzle._features.features
 import sqlpuzzle._features.conditions
 
 
@@ -32,9 +31,6 @@ class OnCondition(sqlpuzzle._features.conditions.Condition):
             sqlpuzzle._libs.sqlValue.SqlReference(self._value),
         )
     
-    def __repr__(self):
-        return "<OnCondition: %s>" % self.__str__()
-    
     def __eq__(self, other):
         """Are on codntions equivalent?"""
         return (
@@ -44,23 +40,15 @@ class OnCondition(sqlpuzzle._features.conditions.Condition):
 
 
 
-class Ons(sqlpuzzle._features.conditions.Conditions):
+class OnConditions(sqlpuzzle._features.conditions.Conditions):
     def __init__(self):
-        """Initialization of Ons."""
-        super(Ons, self).__init__(OnCondition)
-    
-    def __str__(self):
-        """Print part of query."""
-        if self.isSet():
-            return " AND ".join(str(condition) for condition in self._conditions)
-        return ""
-    
-    def __repr__(self):
-        return "<Ons: %s>" % self.__str__()
+        """Initialization of OnConditions."""
+        super(OnConditions, self).__init__(OnCondition)
+        self._separatorOfFeatures = ' AND '
 
 
 
-class Table(object):
+class Table(sqlpuzzle._features.Feature):
     def __init__(self, table=None, as_=None):
         """Initialization of Table."""
         self.table(table)
@@ -95,9 +83,6 @@ class Table(object):
             )
         
         return table
-    
-    def __repr__(self):
-        return "<Table: %s>" % self.__str__()
     
     def __eq__(self, other):
         """Are tables equivalent?"""
@@ -153,7 +138,7 @@ class Table(object):
         self._joins.append({
             'type': joinType,
             'table': table,
-            'ons': Ons(),
+            'ons': OnConditions(),
         })
     
     def on(self, *args, **kwds):
@@ -165,32 +150,10 @@ class Table(object):
 
 
 
-class Tables(sqlpuzzle._features.features.Features):
-    def __init__(self):
-        """Initialization of Tables."""
-        self._tables = []
-    
-    def __str__(self):
-        """Print tables (part of query)."""
-        return ", ".join(str(table) for table in self._tables)
-    
-    def __repr__(self):
-        return "<Tables: %s>" % self.__str__()
-    
-    def __contains__(self, item):
-        """Is item (table) in list of tables?"""
-        for table in self._tables:
-            if item == table:
-                return True
-        return False
-    
-    def isSet(self):
-        """Is tables set?"""
-        return self._tables != []
-    
+class Tables(sqlpuzzle._features.Features):
     def isSimple(self):
         """Is set only one table without join?"""
-        return len(self._tables) == 1 and self._tables[0].isSimple()
+        return len(self._features) == 1 and self._features[0].isSimple()
     
     def set(self, *args):
         """Set tables."""
@@ -207,11 +170,11 @@ class Tables(sqlpuzzle._features.features.Features):
             {'maxItems': 2, 'allowedDataTypes': allowedDataTypes}, *args
         ):
             if self.isCustumSql(table):
-                self._tables.append(table)
+                self._features.append(table)
             else:
                 table = Table(table, as_)
                 if table not in self:
-                    self._tables.append(table)
+                    self._features.append(table)
         
         return self
     
@@ -220,7 +183,7 @@ class Tables(sqlpuzzle._features.features.Features):
         if not self.isSet():
             raise sqlpuzzle.exceptions.InvalidQueryException("You can't set join without table.")
         
-        self._tables[-1].join(arg, INNER_JOIN)
+        self._features[-1].join(arg, INNER_JOIN)
         return self
     
     def innerJoin(self, arg):
@@ -228,7 +191,7 @@ class Tables(sqlpuzzle._features.features.Features):
         if not self.isSet():
             raise sqlpuzzle.exceptions.InvalidQueryException("You can't set join without table.")
         
-        self._tables[-1].join(arg, INNER_JOIN)
+        self._features[-1].join(arg, INNER_JOIN)
         return self
     
     def leftJoin(self, arg):
@@ -236,7 +199,7 @@ class Tables(sqlpuzzle._features.features.Features):
         if not self.isSet():
             raise sqlpuzzle.exceptions.InvalidQueryException("You can't set join without table.")
         
-        self._tables[-1].join(arg, LEFT_JOIN)
+        self._features[-1].join(arg, LEFT_JOIN)
         return self
     
     def rightJoin(self, arg):
@@ -244,7 +207,7 @@ class Tables(sqlpuzzle._features.features.Features):
         if not self.isSet():
             raise sqlpuzzle.exceptions.InvalidQueryException("You can't set join without table.")
         
-        self._tables[-1].join(arg, RIGHT_JOIN)
+        self._features[-1].join(arg, RIGHT_JOIN)
         return self
     
     def on(self, *args, **kwds):
@@ -252,6 +215,6 @@ class Tables(sqlpuzzle._features.features.Features):
         if not self.isSet():
             raise sqlpuzzle.exceptions.InvalidQueryException("You can't set condition of join without table.")
         
-        self._tables[-1].on(*args, **kwds)
+        self._features[-1].on(*args, **kwds)
         return self
 

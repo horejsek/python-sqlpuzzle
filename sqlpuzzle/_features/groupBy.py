@@ -9,13 +9,10 @@ import sqlpuzzle._features.order
 
 
 class GroupBy(sqlpuzzle._features.order.Orders):
-    def __str__(self):
-        """Print order (part of query)."""
-        groupBy = "GROUP BY %s" % ', '.join(str(order) for order in self._orders)
-        return groupBy
-    
-    def __repr__(self):
-        return "<GroupBy: %s>" % self.__str__()
+    def __init__(self):
+        """Initialization of GroupBy."""
+        super(GroupBy, self).__init__()
+        self._keywordOfFeature = 'GROUP BY'
     
     def groupBy(self, *args):
         """Set GROUP BY."""

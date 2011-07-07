@@ -9,12 +9,11 @@ import datetime
 
 import sqlpuzzle._libs.argsParser
 import sqlpuzzle._libs.sqlValue
-import sqlpuzzle._features.features
 import sqlpuzzle.exceptions
 import sqlpuzzle.relations
 
 
-class Condition(object):
+class Condition(sqlpuzzle._features.Feature):
     __defaultRelations = {
         str: sqlpuzzle.relations.EQ,
         unicode: sqlpuzzle.relations.EQ,
@@ -41,9 +40,6 @@ class Condition(object):
             sqlpuzzle.relations.RELATIONS[self._relation],
             sqlpuzzle._libs.sqlValue.SqlValue(self._value),
         )
-    
-    def __repr__(self):
-        return "<Condition: %s>" % self.__str__()
     
     def __eq__(self, other):
         """Are conditions equivalent?"""
@@ -120,40 +116,16 @@ class Condition(object):
 
 
 
-class Conditions(sqlpuzzle._features.features.Features):
+class Conditions(sqlpuzzle._features.Features):
     def __init__(self, conditionObject=Condition):
         """Initialization of Conditions."""
+        super(Conditions, self).__init__()
         self._conditionObject = conditionObject
-        self._conditions = []
-    
-    def __str__(self):
-        """Print where (part of query)."""
-        raise sqlpuzzle.exceptions.SqlPuzzleNotImplemeted('Conditions.__str__()')
-    
-    def __repr__(self):
-        return "<Conditions: %s>" % self.__str__()
-    
-    def __eq__(self, other):
-        """Are group of conditions equivalent?"""
-        if other is None:
-            return False
-        return all(bool(sc == oc) for sc, oc in zip(self._conditions, other._conditions))
-    
-    def __contains__(self, item):
-        """Is item (condition) in conditions?"""
-        for condition in self._conditions:
-            if item == condition:
-                return True
-        return False
-    
-    def isSet(self):
-        """Is where set?"""
-        return self._conditions != []
     
     def where(self, *args, **kwds):
         """Set condition(s)."""
         if args and self.isCustumSql(args[0]):
-            self._conditions.append(args[0])
+            self._features.append(args[0])
         
         else:
             for column, value, relation in sqlpuzzle._libs.argsParser.parseArgsToListOfTuples(
@@ -174,7 +146,7 @@ class Conditions(sqlpuzzle._features.features.Features):
                 condition = self._conditionObject()
                 condition.set(column, value, relation)
                 if condition not in self:
-                    self._conditions.append(condition)
+                    self._features.append(condition)
         
         return self
 

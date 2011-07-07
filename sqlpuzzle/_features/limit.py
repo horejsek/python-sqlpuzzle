@@ -11,25 +11,26 @@ import sqlpuzzle._libs.argsParser
 import sqlpuzzle.exceptions
 
 
-class Limit(object):
+class Limit(sqlpuzzle._features.Feature):
     def __init__(self):
         """Initialization of Limit."""
-        self.__limit = None
-        self.__offset = None
+        self._clear()
+    
+    def _clear(self):
+        """Clear object."""
+        self._limit = None
+        self._offset = None
     
     def __str__(self):
         """Print limit (part of query)."""
-        limit = "LIMIT %s" % self.__limit
-        if self.__offset is not None:
-            limit = "%s OFFSET %s" % (limit, self.__offset)
+        limit = "LIMIT %s" % self._limit
+        if self._offset is not None:
+            limit = "%s OFFSET %s" % (limit, self._offset)
         return limit
-    
-    def __repr__(self):
-        return "<Limit: %s>" % self.__str__()
     
     def isSet(self):
         """Is limit set?"""
-        return self.__limit is not None
+        return self._limit is not None
     
     def limit(self, limit, offset=None):
         """Set LIMIT (and OFFSET)."""
@@ -37,13 +38,11 @@ class Limit(object):
             raise sqlpuzzle.exceptions.InvalidArgumentException()
         
         if limit is None:
-            self.__limit = None
-            self.__offset = None
+            self._clear()
         else:
-            self.__limit = int(limit)
-        
-        if offset is not None:
-            self.offset(offset)
+            self._limit = int(limit)
+            if offset is not None:
+                self.offset(offset)
         
         return self
     
@@ -52,6 +51,7 @@ class Limit(object):
         if not type(offset) in (int, long, types.NoneType):
             raise sqlpuzzle.exceptions.InvalidArgumentException()
         
-        self.__offset = int(offset)
+        self._offset = int(offset) if offset is not None else None
+        
         return self
 
