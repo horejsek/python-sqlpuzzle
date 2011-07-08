@@ -8,7 +8,6 @@
 
 import sqlpuzzle.exceptions
 
-import sqlpuzzle._queries.query
 import sqlpuzzle._queries.select
 
 
@@ -23,23 +22,30 @@ UNION_TYPES = {
 
 
 
-class Union(sqlpuzzle._queries.query.Query):
+class Union(sqlpuzzle._queries.Query):
     def __init__(self, query1, query2, unionType):
+        """Initialization of Union."""
         self._setQuery1(query1)
         self._setQuery2(query2)
         self._setType(unionType)
     
     def _setQuery1(self, query):
-        if not isinstance(query, (Union, sqlpuzzle._queries.select.Select)):
-            raise sqlpuzzle.exceptions.InvalidArgumentException()
+        """Set first query."""
+        self._checkInstance(query)
         self._query1 = query
     
     def _setQuery2(self, query):
-        if not isinstance(query, (Union, sqlpuzzle._queries.select.Select)):
-            raise sqlpuzzle.exceptions.InvalidArgumentException()
+        """Set second query."""
+        self._checkInstance(query)
         self._query2 = query
     
+    def _checkInstance(self, query):
+        """Check instance of query."""
+        if not isinstance(query, (Union, sqlpuzzle._queries.select.Select)):
+            raise sqlpuzzle.exceptions.InvalidArgumentException()
+    
     def _setType(self, type):
+        """Set type of union."""
         if not type in UNION_TYPES.keys():
             raise sqlpuzzle.exceptions.InvalidArgumentException()
         self._type = type
@@ -51,9 +57,6 @@ class Union(sqlpuzzle._queries.query.Query):
             UNION_TYPES[self._type],
             str(self._query2),
         )
-    
-    def __repr__(self):
-        return "<Union: %s>" % self.__str__()
     
     def __and__(self, other):
         """UNION ALL"""

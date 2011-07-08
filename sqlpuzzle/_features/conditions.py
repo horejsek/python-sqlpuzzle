@@ -11,6 +11,7 @@ import sqlpuzzle._libs.argsParser
 import sqlpuzzle._libs.sqlValue
 import sqlpuzzle.exceptions
 import sqlpuzzle.relations
+import sqlpuzzle.customSql
 
 
 class Condition(sqlpuzzle._features.Feature):

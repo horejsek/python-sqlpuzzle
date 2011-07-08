@@ -7,6 +7,7 @@
 
 import sqlpuzzle._libs.argsParser
 import sqlpuzzle._libs.sqlValue
+import sqlpuzzle.customSql
 
 
 class Column(sqlpuzzle._features.Feature):

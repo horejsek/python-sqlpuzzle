@@ -6,13 +6,12 @@
 #
 
 import sqlpuzzle.exceptions
-import sqlpuzzle._queries.query
 
 import sqlpuzzle._features.tables
 import sqlpuzzle._features.where
 
 
-class Delete(sqlpuzzle._queries.query.Query):
+class Delete(sqlpuzzle._queries.Query):
     def __init__(self):
         """Initialization of Delete."""
         super(Delete, self).__init__()
@@ -33,10 +32,7 @@ class Delete(sqlpuzzle._queries.query.Query):
         delete = "DELETE FROM %s" % (
             str(self._tables),
         )
-        return sqlpuzzle._queries.query.Query._appendFeatures(self, delete)
-    
-    def __repr__(self):
-        return "<Delete: %s>" % self.__str__()
+        return super(Delete, self)._printFeatures(delete)
     
     def allowDeleteAll(self):
         """Allow delete all records."""
@@ -47,10 +43,6 @@ class Delete(sqlpuzzle._queries.query.Query):
         """Forbid delete all records."""
         self.__allowDeleteAll = False
         return self
-    
-    def _typeOfQuery(self):
-        """Type of query."""
-        return 'DELETE'
     
     def from_(self, *tables):
         """Set table(s) to query."""

@@ -5,7 +5,6 @@
 # https://github.com/horejsek/sqlpuzzle
 #
 
-import sqlpuzzle._queries.query
 import sqlpuzzle._queries.union
 
 import sqlpuzzle._features.columns
@@ -18,7 +17,7 @@ import sqlpuzzle._features.tables
 import sqlpuzzle._features.where
 
 
-class Select(sqlpuzzle._queries.query.Query):
+class Select(sqlpuzzle._queries.Query):
     def __init__(self, *columns_):
         """Initialization of Select."""
         super(Select, self).__init__()
@@ -36,7 +35,6 @@ class Select(sqlpuzzle._queries.query.Query):
         self._setPrintedFeatures('where', 'groupBy', 'having', 'orderBy', 'limit', 'intoOutfile')
         
         self._selectOptions = SelectOptions()
-        
         self.columns(*columns_)
     
     def __str__(self):
@@ -50,14 +48,7 @@ class Select(sqlpuzzle._queries.query.Query):
             str(self._columns),
             str(self._tables),
         )
-        return sqlpuzzle._queries.query.Query._appendFeatures(self, select)
-    
-    def __repr__(self):
-        return "<Select: %s>" % self.__str__()
-    
-    def _typeOfQuery(self):
-        """Type of query."""
-        return 'SELECT'
+        return super(Select, self)._printFeatures(select)
     
     def __and__(self, other):
         """UNION ALL selects."""

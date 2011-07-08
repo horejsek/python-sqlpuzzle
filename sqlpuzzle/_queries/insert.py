@@ -5,14 +5,12 @@
 # https://github.com/horejsek/sqlpuzzle
 #
 
-import sqlpuzzle._queries.query
-
 import sqlpuzzle._features.tables
 import sqlpuzzle._features.onDuplicateKeyUpdate
 import sqlpuzzle._features.values
 
 
-class Insert(sqlpuzzle._queries.query.Query):
+class Insert(sqlpuzzle._queries.Query):
     def __init__(self):
         """Initialization of Insert."""
         super(Insert, self).__init__()
@@ -31,14 +29,7 @@ class Insert(sqlpuzzle._queries.query.Query):
             self._values.columns(),
             self._values.values(),
         )
-        return sqlpuzzle._queries.query.Query._appendFeatures(self, insert)
-    
-    def __repr__(self):
-        return "<Insert: %s>" % self.__str__()
-    
-    def _typeOfQuery(self):
-        """Type of query."""
-        return 'INSERT'
+        return super(Insert, self)._printFeatures(insert)
     
     def into(self, table):
         """Set table for insert."""

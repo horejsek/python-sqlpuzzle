@@ -7,14 +7,12 @@
 
 import sqlpuzzle.exceptions
 
-import sqlpuzzle._queries.query
-
 import sqlpuzzle._features.tables
 import sqlpuzzle._features.values
 import sqlpuzzle._features.where
 
 
-class Update(sqlpuzzle._queries.query.Query):
+class Update(sqlpuzzle._queries.Query):
     def __init__(self, table=None):
         """Initialization of Update."""
         super(Update, self).__init__()
@@ -27,7 +25,6 @@ class Update(sqlpuzzle._queries.query.Query):
         self._setPrintedFeatures('where')
         
         self.__allowUpdateAll = False
-        
         self.table(table)
     
     def __str__(self):
@@ -39,14 +36,7 @@ class Update(sqlpuzzle._queries.query.Query):
             str(self._tables),
             str(self._values),
         )
-        return sqlpuzzle._queries.query.Query._appendFeatures(self, update)
-    
-    def __repr__(self):
-        return "<Update: %s>" % self.__str__()
-    
-    def _typeOfQuery(self):
-        """Type of query."""
-        return 'UPDATE'
+        return super(Update, self)._printFeatures(update)
     
     def allowUpdateAll(self):
         """Allow update all records."""
