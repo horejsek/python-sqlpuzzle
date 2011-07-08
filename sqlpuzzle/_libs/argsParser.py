@@ -180,7 +180,7 @@ class Parser(object):
 
 
 
-class AllowedDataTypes:
+class AllowedDataTypes(object):
     def __init__(self):
         self._allowedDataTypes = []
     
