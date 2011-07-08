@@ -51,9 +51,8 @@ class OnConditions(sqlpuzzle._features.conditions.Conditions):
 class Table(sqlpuzzle._features.Feature):
     def __init__(self, table=None, as_=None):
         """Initialization of Table."""
-        self.table(table)
-        self.as_(as_)
-        
+        self._table = table
+        self._as = as_
         self._joins = []
     
     def __str__(self):
@@ -120,14 +119,6 @@ class Table(sqlpuzzle._features.Feature):
         """Is set table without join?"""
         return self._joins == []
     
-    def table(self, table):
-        """Set table."""
-        self._table = table
-    
-    def as_(self, as_):
-        """Set as."""
-        self._as = as_
-    
     def join(self, arg, joinType=INNER_JOIN):
         """Join table."""
         if isinstance(arg, (list, tuple)) and len(arg) == 2:
@@ -151,6 +142,12 @@ class Table(sqlpuzzle._features.Feature):
 
 
 class Tables(sqlpuzzle._features.Features):
+    def lastTable(self):
+        """Get last table."""
+        if self._features:
+            return self._features[-1]
+        raise sqlpuzzle.exceptions.SqlPuzzleException('Tables doesn\'t set - there is no last table.')
+    
     def isSimple(self):
         """Is set only one table without join?"""
         return len(self._features) == 1 and self._features[0].isSimple()
@@ -170,28 +167,24 @@ class Tables(sqlpuzzle._features.Features):
             {'maxItems': 2, 'allowedDataTypes': allowedDataTypes}, *args
         ):
             if self.isCustumSql(table):
-                self._features.append(table)
+                self.appendFeature(table)
             else:
                 table = Table(table, as_)
                 if table not in self:
-                    self._features.append(table)
+                    self.appendFeature(table)
         
         return self
     
     def join(self, arg):
         """Join table."""
-        if not self.isSet():
-            raise sqlpuzzle.exceptions.InvalidQueryException("You can't set join without table.")
-        
-        self._features[-1].join(arg, INNER_JOIN)
-        return self
+        return self.innerJoin(arg)
     
     def innerJoin(self, arg):
         """Inner join table."""
         if not self.isSet():
             raise sqlpuzzle.exceptions.InvalidQueryException("You can't set join without table.")
         
-        self._features[-1].join(arg, INNER_JOIN)
+        self.lastTable().join(arg, INNER_JOIN)
         return self
     
     def leftJoin(self, arg):
@@ -199,7 +192,7 @@ class Tables(sqlpuzzle._features.Features):
         if not self.isSet():
             raise sqlpuzzle.exceptions.InvalidQueryException("You can't set join without table.")
         
-        self._features[-1].join(arg, LEFT_JOIN)
+        self.lastTable().join(arg, LEFT_JOIN)
         return self
     
     def rightJoin(self, arg):
@@ -207,7 +200,7 @@ class Tables(sqlpuzzle._features.Features):
         if not self.isSet():
             raise sqlpuzzle.exceptions.InvalidQueryException("You can't set join without table.")
         
-        self._features[-1].join(arg, RIGHT_JOIN)
+        self.lastTable().join(arg, RIGHT_JOIN)
         return self
     
     def on(self, *args, **kwds):
@@ -215,6 +208,6 @@ class Tables(sqlpuzzle._features.Features):
         if not self.isSet():
             raise sqlpuzzle.exceptions.InvalidQueryException("You can't set condition of join without table.")
         
-        self._features[-1].on(*args, **kwds)
+        self.lastTable().on(*args, **kwds)
         return self
 

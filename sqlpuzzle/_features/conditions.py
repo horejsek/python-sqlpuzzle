@@ -14,7 +14,7 @@ import sqlpuzzle.relations
 
 
 class Condition(sqlpuzzle._features.Feature):
-    __defaultRelations = {
+    _defaultRelations = {
         str: sqlpuzzle.relations.EQ,
         unicode: sqlpuzzle.relations.EQ,
         int: sqlpuzzle.relations.EQ,
@@ -27,11 +27,11 @@ class Condition(sqlpuzzle._features.Feature):
         datetime.datetime: sqlpuzzle.relations.EQ,
     }
     
-    def __init__(self):
+    def __init__(self, column, value, relation=None):
         """Initialization of Condition."""
-        self._column = None
-        self._value = None
-        self._relation = None
+        self._column = column
+        self._value = value
+        self._setRelation(relation)
     
     def __str__(self):
         """Print condition (part of WHERE)."""
@@ -53,7 +53,7 @@ class Condition(sqlpuzzle._features.Feature):
         """Are conditions not equal?"""
         return not self.__eq__(other)
     
-    def __isRelationAllowed(self, relation):
+    def _isRelationAllowed(self, relation):
         """Is relation for this value allowed?"""
         if isinstance(self._value, (str, unicode)):
             return relation in (
@@ -88,23 +88,11 @@ class Condition(sqlpuzzle._features.Feature):
             )
         return False
     
-    def set(self, column, value, relation=None):
-        """Set column, value and relation."""
-        self.setColumn(column)
-        self.setValue(value)
-        self.setRelation(relation or self.__defaultRelations[type(value)])
-    
-    def setColumn(self, column):
-        """Set column."""
-        self._column = column
-    
-    def setValue(self, value):
-        """Set value."""
-        self._value = value
-    
-    def setRelation(self, relation):
+    def _setRelation(self, relation):
         """Set relation."""
-        if not self.__isRelationAllowed(relation):
+        relation = relation or self._defaultRelations[type(self._value)]
+        
+        if not self._isRelationAllowed(relation):
             raise sqlpuzzle.exceptions.InvalidArgumentException(
                 'Relation "%s" is not allowed for data type "%s".' % (
                     sqlpuzzle.relations.RELATIONS.get(relation, 'undefined'),
@@ -125,7 +113,7 @@ class Conditions(sqlpuzzle._features.Features):
     def where(self, *args, **kwds):
         """Set condition(s)."""
         if args and self.isCustumSql(args[0]):
-            self._features.append(args[0])
+            self.appendFeature(args[0])
         
         else:
             for column, value, relation in sqlpuzzle._libs.argsParser.parseArgsToListOfTuples(
@@ -143,10 +131,9 @@ class Conditions(sqlpuzzle._features.Features):
                 *args,
                 **kwds
             ):
-                condition = self._conditionObject()
-                condition.set(column, value, relation)
+                condition = self._conditionObject(column, value, relation)
                 if condition not in self:
-                    self._features.append(condition)
+                    self.appendFeature(condition)
         
         return self
 

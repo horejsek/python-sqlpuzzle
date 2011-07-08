@@ -12,8 +12,8 @@ import sqlpuzzle._libs.sqlValue
 class Column(sqlpuzzle._features.Feature):
     def __init__(self, column=None, as_=None):
         """Initialization of Column."""
-        self.column(column)
-        self.as_(as_)
+        self._column = column
+        self._as = as_
     
     def __str__(self):
         """Print part of query."""
@@ -31,14 +31,6 @@ class Column(sqlpuzzle._features.Feature):
             self._column == other._column and
             self._as == other._as
         )
-    
-    def column(self, column):
-        """Set column."""
-        self._column = column
-    
-    def as_(self, as_):
-        """Set as."""
-        self._as = as_
 
 
 class Columns(sqlpuzzle._features.Features):
@@ -61,11 +53,11 @@ class Columns(sqlpuzzle._features.Features):
             {'maxItems': 2, 'allowedDataTypes': allowedDataTypes}, *args
         ):
             if self.isCustumSql(columnName):
-                self._features.append(columnName)
+                self.appendFeature(columnName)
             else:
                 column = Column(columnName, as_)
                 if column not in self:
-                    self._features.append(column)
+                    self.appendFeature(column)
         
         return self
 

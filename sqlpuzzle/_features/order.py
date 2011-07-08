@@ -19,7 +19,7 @@ ORDERING_TYPES = (ASC, DESC)
 class Order(sqlpuzzle._features.Feature):
     def __init__(self, column=None, sort=None):
         """Initialization of Order."""
-        self.column(column)
+        self._column = column
         self.sort(sort)
     
     def __str__(self):
@@ -39,10 +39,6 @@ class Order(sqlpuzzle._features.Feature):
             self._sort == other._sort
         )
     
-    def column(self, column):
-        """Set column."""
-        self._column = column
-    
     def sort(self, sort=None):
         """Set type of sort (ASC or DESC)."""
         if sort is None:
@@ -57,29 +53,24 @@ class Order(sqlpuzzle._features.Feature):
 
 
 class Orders(sqlpuzzle._features.Features):
-    def __contains__(self, item):
-        """Is item (order) in list of orders?"""
-        for order in self._features:
-            if item._column == order._column:
-                return True
-        return False
-    
-    def _changeSorting(self, columnName, sort):
-        """If columnName in list, just set new sort."""
+    def _findOrderByName(self, columnName):
+        """Find Order instance by column name."""
         for order in self._features:
             if order._column == columnName:
-                order.sort(sort)
+                return order
+        return None
     
     def order(self, *args):
         """Set Order."""
         for columnName, sort in sqlpuzzle._libs.argsParser.parseArgsToListOfTuples(
             {'maxItems': 2, 'allowedDataTypes': (str, unicode, int)}, *args
         ):
-            order = Order(columnName, sort)
-            if order not in self:
-                self._features.append(order)
+            order = self._findOrderByName(columnName)
+            if order is None:
+                order = Order(columnName, sort)
+                self.appendFeature(order)
             else:
-                self._changeSorting(columnName, sort)
+                order.sort(sort)
         
         return self
 

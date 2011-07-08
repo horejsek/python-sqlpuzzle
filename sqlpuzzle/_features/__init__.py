@@ -51,6 +51,10 @@ class Features(sqlpuzzle._libs.object.Object):
         """Is feature set?"""
         return self._features != []
     
+    def appendFeature(self, feature):
+        """Append feature into list of features."""
+        self._features.append(feature)
+    
     def isCustumSql(self, args):
         """Is custom sql?"""
         return isinstance(args, sqlpuzzle.customSql.CustomSql)
