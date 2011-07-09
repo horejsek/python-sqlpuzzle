@@ -24,6 +24,10 @@ class SqlPuzzleTest(unittest.TestCase):
         sql = sqlpuzzle.selectFrom('user')
         self.assertEqual(str(sql), 'SELECT * FROM `user`')
     
+    def testSelectFromWithMore(self):
+        sql = sqlpuzzle.selectFrom('user', 'country')
+        self.assertEqual(str(sql), 'SELECT * FROM `user`, `country`')
+    
     def testInsert(self):
         sql = sqlpuzzle.insert().into('user').values(name='Harry')
         self.assertEqual(str(sql), 'INSERT INTO `user` (`name`) VALUES ("Harry")')

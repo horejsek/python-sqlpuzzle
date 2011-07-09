@@ -19,12 +19,12 @@ def select(*columns):
     return sqlpuzzle._queries.select.Select(*columns)
 
 
-def selectFrom(table):
+def selectFrom(*tables):
     """
     Select.
     Param is table, column is set to *.
     """
-    return sqlpuzzle._queries.select.Select().from_(table)
+    return sqlpuzzle._queries.select.Select().from_(*tables)
 
 
 def insert():
