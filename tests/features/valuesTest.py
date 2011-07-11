@@ -66,7 +66,7 @@ class BaseTest(ValuesTest):
 class CustomSqlTest(ValuesTest):
     def tearDown(self):
         super(CustomSqlTest, self).tearDown()
-        self.customSql = sqlpuzzle.customSql.CustomSql('`age` = `age` + 1')
+        self.customSql = sqlpuzzle.customSql('`age` = `age` + 1')
     
     def testSimple(self):
         self.values.set(self.customSql)

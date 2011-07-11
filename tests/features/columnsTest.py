@@ -8,7 +8,6 @@
 import unittest
 
 import sqlpuzzle.exceptions
-import sqlpuzzle.customSql
 import sqlpuzzle._features.columns
 
 
@@ -49,7 +48,7 @@ class BaseTest(ColumnsTest):
 class CustomSqlTest(ColumnsTest):
     def tearDown(self):
         super(CustomSqlTest, self).tearDown()
-        self.customSql = sqlpuzzle.customSql.CustomSql('AVG(`custom`) AS "x"')
+        self.customSql = sqlpuzzle.customSql('AVG(`custom`) AS "x"')
     
     def testOneColumn(self):
         self.columns.columns(self.customSql)

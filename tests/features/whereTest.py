@@ -8,7 +8,6 @@
 import unittest
 
 import sqlpuzzle._features.where
-import sqlpuzzle.customSql
 import sqlpuzzle.relations
 
 
@@ -121,7 +120,7 @@ class RelationsTest(WhereTest):
 class CustomSqlTest(WhereTest):
     def tearDown(self):
         super(CustomSqlTest, self).tearDown()
-        self.customSql = sqlpuzzle.customSql.CustomSql('`custom` = "sql" OR `sql` = "custom"')
+        self.customSql = sqlpuzzle.customSql('`custom` = "sql" OR `sql` = "custom"')
     
     def testSimple(self):
         self.where.where(self.customSql)

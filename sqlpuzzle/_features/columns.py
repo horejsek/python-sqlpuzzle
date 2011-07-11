@@ -7,7 +7,7 @@
 
 import sqlpuzzle._libs.argsParser
 import sqlpuzzle._libs.sqlValue
-import sqlpuzzle.customSql
+import sqlpuzzle._libs.customSql
 
 
 class Column(sqlpuzzle._features.Feature):
@@ -47,7 +47,7 @@ class Columns(sqlpuzzle._features.Features):
             (str, unicode, sqlpuzzle._queries.select.Select, sqlpuzzle._queries.union.Union),
             (str, unicode)
         ).add(
-            sqlpuzzle.customSql.CustomSql
+            sqlpuzzle._libs.customSql.CustomSql
         )
 
         for columnName, as_ in sqlpuzzle._libs.argsParser.parseArgsToListOfTuples(

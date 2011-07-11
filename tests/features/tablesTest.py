@@ -7,7 +7,6 @@
 
 import unittest
 
-import sqlpuzzle.customSql
 import sqlpuzzle._features.tables
 
 
@@ -58,7 +57,7 @@ class BaseTest(TablesTest):
 class CustomSqlTest(TablesTest):
     def tearDown(self):
         super(CustomSqlTest, self).tearDown()
-        self.customSql = sqlpuzzle.customSql.CustomSql('`custom` JOIN `sql`')
+        self.customSql = sqlpuzzle.customSql('`custom` JOIN `sql`')
     
     def testOneTable(self):
         self.tables.set(self.customSql)

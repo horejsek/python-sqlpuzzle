@@ -7,8 +7,8 @@
 
 import sqlpuzzle._libs.argsParser
 import sqlpuzzle._libs.sqlValue
+import sqlpuzzle._libs.customSql
 import sqlpuzzle._features.conditions
-import sqlpuzzle.customSql
 
 
 
@@ -161,7 +161,7 @@ class Tables(sqlpuzzle._features.Features):
             (str, unicode, sqlpuzzle._queries.select.Select, sqlpuzzle._queries.union.Union),
             (str, unicode)
         ).add(
-            sqlpuzzle.customSql.CustomSql
+            sqlpuzzle._libs.customSql.CustomSql
         )
         
         for table, as_ in sqlpuzzle._libs.argsParser.parseArgsToListOfTuples(

@@ -12,56 +12,51 @@ import sqlpuzzle._queries.update
 
 
 def select(*columns):
-    """
-    Select.
+    """Select.
     Params are strings or list of columns to select.
     """
     return sqlpuzzle._queries.select.Select(*columns)
 
 
 def selectFrom(*tables):
-    """
-    Select.
+    """Select.
     Param is table, column is set to *.
     """
     return sqlpuzzle._queries.select.Select().from_(*tables)
 
 
 def insert():
-    """
-    Insert.
-    """
+    """Insert."""
     return sqlpuzzle._queries.insert.Insert()
 
 
 def insertInto(table):
-    """
-    Insert.
+    """Insert.
     Param is table.
     """
     return sqlpuzzle._queries.insert.Insert().into(table)
 
 
 def update(table):
-    """
-    Update.
+    """Update.
     Param is table.
     """
     return sqlpuzzle._queries.update.Update(table)
 
 
 def delete():
-    """
-    Delete.
-    """
+    """Delete."""
     return sqlpuzzle._queries.delete.Delete()
 
 
 def deleteFrom(table):
-    """
-    Delete.
+    """Delete.
     Param is table.
     """
     return sqlpuzzle._queries.delete.Delete().from_(table)
 
+
+def customSql(text):
+    """Custom SQL."""
+    return sqlpuzzle._libs.customSql.CustomSql(text)
 

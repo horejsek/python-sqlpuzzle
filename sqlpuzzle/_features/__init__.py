@@ -57,7 +57,7 @@ class Features(sqlpuzzle._libs.object.Object):
     
     def isCustumSql(self, args):
         """Is custom sql?"""
-        return isinstance(args, sqlpuzzle.customSql.CustomSql)
+        return isinstance(args, sqlpuzzle._libs.customSql.CustomSql)
 
 
 

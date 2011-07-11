@@ -7,12 +7,11 @@
 #
 
 import sqlpuzzle
-import sqlpuzzle.customSql
 
 
-avg = sqlpuzzle.customSql.CustomSql('AVG(`age`) AS "avgAge"')
-table = sqlpuzzle.customSql.CustomSql('`user` LEFT JOIN `country` ON `user`.`country_id`=`country`.`id`')
-where = sqlpuzzle.customSql.CustomSql('(`enable` = 1 OR `vip` = 1)')
+avg = sqlpuzzle.customSql('AVG(`age`) AS "avgAge"')
+table = sqlpuzzle.customSql('`user` LEFT JOIN `country` ON `user`.`country_id`=`country`.`id`')
+where = sqlpuzzle.customSql('(`enable` = 1 OR `vip` = 1)')
 
 sql = sqlpuzzle.select('country.name', avg).from_(table)
 sql.where(where).where(planet='Earth')
@@ -30,8 +29,8 @@ print sql
 #
 
 
-table = sqlpuzzle.customSql.CustomSql('`user`')
-set_ = sqlpuzzle.customSql.CustomSql('`age` = `age` + 1')
+table = sqlpuzzle.customSql('`user`')
+set_ = sqlpuzzle.customSql('`age` = `age` + 1')
 
 sql = sqlpuzzle.update(table).set(set_).where(where)
 print sql
