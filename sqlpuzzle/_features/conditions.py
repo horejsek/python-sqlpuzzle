@@ -26,6 +26,7 @@ class Condition(sqlpuzzle._features.Feature):
         tuple: sqlpuzzle.relations.IN,
         datetime.date: sqlpuzzle.relations.EQ,
         datetime.datetime: sqlpuzzle.relations.EQ,
+        type(None): sqlpuzzle.relations.IS,
     }
     
     def __init__(self, column, value, relation=None):
@@ -86,6 +87,11 @@ class Condition(sqlpuzzle._features.Feature):
             return relation in (
                 sqlpuzzle.relations.IN,
                 sqlpuzzle.relations.NOT_IN,
+            )
+        elif isinstance(self._value, type(None)):
+            return relation in (
+                sqlpuzzle.relations.IS,
+                sqlpuzzle.relations.IS_NOT,
             )
         return False
     

@@ -67,7 +67,7 @@ else:
             return "uniqName_%d" % self.__inc
     uniqName = UniqName()
     
-    # all tests object add to the global scope with unique name
+    # all test objects add to the global scope with unique name
     globals_ = globals()
     for testModule in testModules:
         for testCase in testModule.testCases:

@@ -16,8 +16,12 @@ LE = LESS_TAHN_OR_EQUAL_TO = 6
 
 LIKE = 7
 REGEXP = 8
+
 IN = 9
 NOT_IN = 10
+
+IS = 11
+IS_NOT = 12
 
 RELATIONS = {
     EQ: '=',
@@ -29,7 +33,9 @@ RELATIONS = {
     LIKE: 'LIKE',
     REGEXP: 'REGEXP',
     IN: 'IN',
-    NOT_IN: 'NOT IN'
+    NOT_IN: 'NOT IN',
+    IS: 'IS',
+    IS_NOT: 'IS NOT',
 }
 
 

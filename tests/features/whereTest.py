@@ -67,6 +67,57 @@ class BaseTest(WhereTest):
 
 
 
+class RelationsTest(WhereTest):
+    def testEQ(self):
+        self.where.where('col', 12, sqlpuzzle.relations.EQ)
+        self.assertEqual(str(self.where), 'WHERE `col` = 12')
+    
+    def testNE(self):
+        self.where.where('col', 12, sqlpuzzle.relations.NE)
+        self.assertEqual(str(self.where), 'WHERE `col` != 12')
+    
+    def testGT(self):
+        self.where.where('col', 12, sqlpuzzle.relations.GT)
+        self.assertEqual(str(self.where), 'WHERE `col` > 12')
+    
+    def testGE(self):
+        self.where.where('col', 12, sqlpuzzle.relations.GE)
+        self.assertEqual(str(self.where), 'WHERE `col` >= 12')
+    
+    def testLT(self):
+        self.where.where('col', 12, sqlpuzzle.relations.LT)
+        self.assertEqual(str(self.where), 'WHERE `col` < 12')
+    
+    def testLE(self):
+        self.where.where('col', 12, sqlpuzzle.relations.LE)
+        self.assertEqual(str(self.where), 'WHERE `col` <= 12')
+    
+    def testLIKE(self):
+        self.where.where('col', 'val', sqlpuzzle.relations.LIKE)
+        self.assertEqual(str(self.where), 'WHERE `col` LIKE "val"')
+    
+    def testREGEXP(self):
+        self.where.where('col', 'val', sqlpuzzle.relations.REGEXP)
+        self.assertEqual(str(self.where), 'WHERE `col` REGEXP "val"')
+    
+    def testIN(self):
+        self.where.where('col', range(3), sqlpuzzle.relations.IN)
+        self.assertEqual(str(self.where), 'WHERE `col` IN (0, 1, 2)')
+    
+    def testNOT_IN(self):
+        self.where.where('col', range(3), sqlpuzzle.relations.NOT_IN)
+        self.assertEqual(str(self.where), 'WHERE `col` NOT IN (0, 1, 2)')
+    
+    def testIS(self):
+        self.where.where('col', None, sqlpuzzle.relations.IS)
+        self.assertEqual(str(self.where), 'WHERE `col` IS NULL')
+    
+    def testIS_NOT(self):
+        self.where.where('col', None, sqlpuzzle.relations.IS_NOT)
+        self.assertEqual(str(self.where), 'WHERE `col` IS NOT NULL')
+
+
+
 class CustomSqlTest(WhereTest):
     def tearDown(self):
         super(CustomSqlTest, self).tearDown()
@@ -109,6 +160,10 @@ class AllowedValuesTest(WhereTest):
     def testValueAsListNotIn(self):
         self.where.where('id', (23, 34, 45), sqlpuzzle.relations.NOT_IN)
         self.assertEqual(str(self.where), 'WHERE `id` NOT IN (23, 34, 45)')
+    
+    def testValueAsNone(self):
+        self.where.where('country', None, sqlpuzzle.relations.IS_NOT)
+        self.assertEqual(str(self.where), 'WHERE `country` IS NOT NULL')
 
 
 
@@ -147,6 +202,7 @@ class ExceptionsTest(WhereTest):
 
 testCases = (
     BaseTest,
+    RelationsTest,
     CustomSqlTest,
     GroupingTest,
     AllowedValuesTest,
