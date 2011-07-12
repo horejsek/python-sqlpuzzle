@@ -5,6 +5,7 @@
 # https://github.com/horejsek/sqlpuzzle
 #
 
+import sqlpuzzle._libs.doc
 import sqlpuzzle._queries.delete
 import sqlpuzzle._queries.insert
 import sqlpuzzle._queries.select
@@ -12,16 +13,12 @@ import sqlpuzzle._queries.update
 
 
 def select(*columns):
-    """Select.
-    Params are strings or list of columns to select.
-    """
+    """Select. Set column(s) by parameter(s)."""
     return sqlpuzzle._queries.select.Select(*columns)
 
 
 def selectFrom(*tables):
-    """Select.
-    Param is table, column is set to *.
-    """
+    """Select. Columns is set to *. Set table(s) by parameter(s)."""
     return sqlpuzzle._queries.select.Select().from_(*tables)
 
 
@@ -31,16 +28,12 @@ def insert():
 
 
 def insertInto(table):
-    """Insert.
-    Param is table.
-    """
+    """Insert. Set table by parameter."""
     return sqlpuzzle._queries.insert.Insert().into(table)
 
 
 def update(table):
-    """Update.
-    Param is table.
-    """
+    """Update. Set table by parameter."""
     return sqlpuzzle._queries.update.Update(table)
 
 
@@ -50,13 +43,15 @@ def delete():
 
 
 def deleteFrom(table):
-    """Delete.
-    Param is table.
-    """
+    """Delete. Set table by parameter."""
     return sqlpuzzle._queries.delete.Delete().from_(table)
 
 
 def customSql(text):
     """Custom SQL."""
     return sqlpuzzle._libs.customSql.CustomSql(text)
+
+
+sqlpuzzle._libs.doc.doc(select, 'columns')
+sqlpuzzle._libs.doc.doc(selectFrom, 'tables')
 

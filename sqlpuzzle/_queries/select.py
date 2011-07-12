@@ -7,6 +7,7 @@
 
 import sqlpuzzle._queries.union
 
+import sqlpuzzle._libs.doc
 import sqlpuzzle._features.columns
 import sqlpuzzle._features.groupBy
 import sqlpuzzle._features.having
@@ -142,6 +143,19 @@ class Select(sqlpuzzle._queries.Query):
         """Set OPTIONALLY ENCLOSED BY."""
         self._intoOutfile.optionallyEnclosedBy(optionallyEnclosedBy)
         return self
+    
+    sqlpuzzle._libs.doc.doc(columns, 'columns')
+    sqlpuzzle._libs.doc.doc(from_, 'tables')
+    sqlpuzzle._libs.doc.doc(join, 'join')
+    sqlpuzzle._libs.doc.doc(innerJoin, 'join')
+    sqlpuzzle._libs.doc.doc(leftJoin, 'join')
+    sqlpuzzle._libs.doc.doc(rightJoin, 'join')
+    sqlpuzzle._libs.doc.doc(on, 'where')
+    sqlpuzzle._libs.doc.doc(where, 'where')
+    sqlpuzzle._libs.doc.doc(having, 'where')
+    sqlpuzzle._libs.doc.doc(groupBy, 'order')
+    sqlpuzzle._libs.doc.doc(orderBy, 'order')
+    sqlpuzzle._libs.doc.doc(limit, 'limit')
     
     ### SELECT OPTIONS
     

@@ -5,6 +5,7 @@
 # https://github.com/horejsek/sqlpuzzle
 #
 
+import sqlpuzzle._libs.doc
 import sqlpuzzle._features.tables
 import sqlpuzzle._features.onDuplicateKeyUpdate
 import sqlpuzzle._features.values
@@ -45,4 +46,7 @@ class Insert(sqlpuzzle._queries.Query):
         """Set on duplicate key update."""
         self._onDuplicateKeyUpdate.set(*args, **kwds)
         return self
+    
+    sqlpuzzle._libs.doc.doc(into, 'tables')
+    sqlpuzzle._libs.doc.doc(values, 'values')
 

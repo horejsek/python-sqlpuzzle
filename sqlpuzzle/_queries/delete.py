@@ -7,6 +7,7 @@
 
 import sqlpuzzle.exceptions
 
+import sqlpuzzle._libs.doc
 import sqlpuzzle._features.tables
 import sqlpuzzle._features.where
 
@@ -53,4 +54,7 @@ class Delete(sqlpuzzle._queries.Query):
         """Set condition(s) to query."""
         self._where.where(*args, **kwds)
         return self
+    
+    sqlpuzzle._libs.doc.doc(from_, 'tables')
+    sqlpuzzle._libs.doc.doc(where, 'where')
 
