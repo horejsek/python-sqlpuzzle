@@ -26,7 +26,7 @@ setup(
     ],
     version = version,
     url = 'https://github.com/horejsek/sqlpuzzle',
-    description = 'Python module.',
+    description = 'Python library for writing SQL queries.',
     author = 'Michal Horejsek',
     author_email = 'horejsekmichal@gmail.com',
     license = 'GNU General Public License (GPL)',
