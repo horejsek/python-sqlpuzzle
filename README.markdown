@@ -1,7 +1,12 @@
-### Python library for ease of writing SQL queries.
+# sqlpuzzle
 
-Installation
-------------
+Python library for ease of writing SQL queries.
+
+## Requirements
+
+- Python 2.5 or later.
+
+## Installation
 
 Installation of Python module `sqlpuzzle` is very simple - just extract archive
 and then from created directory sqlpuzzle run this command:
@@ -12,8 +17,7 @@ That's all! After this step you can start your favorite Python interpret (perhap
 bpython) and try import module `sqlpuzzle`. See for examples below.
 
 
-Examples:
----------
+## Examples:
 
     >>> import sqlPuzzle
 
