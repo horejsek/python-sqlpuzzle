@@ -4,7 +4,7 @@ PYTHON=`which python`
 DESTDIR=/
 BUILDIR=$(CURDIR)/debian/sqlpuzzle
 PROJECT=sqlpuzzle
-VERSION=0.14.2
+VERSION=0.14.3
 
 all:
 	@echo "make source - Create source package"
