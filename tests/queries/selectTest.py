@@ -53,6 +53,29 @@ class BaseTest(SelectTest):
 
 
 
+class TableTest(SelectTest):
+    def testFrom(self):
+        self.select.from_('table')
+        self.assertEqual(str(self.select), 'SELECT * FROM `table`')
+
+    def testFromTable(self):
+        self.select.fromTable('table')
+        self.assertEqual(str(self.select), 'SELECT * FROM `table`')
+
+    def testFromTableWithAlias(self):
+        self.select.fromTable('table', 'asTable')
+        self.assertEqual(str(self.select), 'SELECT * FROM `table` AS `asTable`')
+
+    def testFromTables(self):
+        self.select.fromTables('table', 'table2')
+        self.assertEqual(str(self.select), 'SELECT * FROM `table`, `table2`')
+
+    def testFromTablesWithAlias(self):
+        self.select.fromTables(('table', 'asTable'), 'table2')
+        self.assertEqual(str(self.select), 'SELECT * FROM `table` AS `asTable`, `table2`')
+
+
+
 class JoinTest(SelectTest):
     def testJoin(self):
         self.select.from_('user').join('country').on('user.country_id', 'country.id')
@@ -246,6 +269,7 @@ class SubselectTest(SelectTest):
 
 testCases = (
     BaseTest,
+    TableTest,
     JoinTest,
     WhereTest,
     LimitTest,
