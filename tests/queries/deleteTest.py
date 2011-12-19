@@ -15,9 +15,6 @@ class DeleteTest(unittest.TestCase):
     def setUp(self):
         self.delete = sqlpuzzle._queries.delete.Delete()
 
-    def tearDown(self):
-        self.delete = sqlpuzzle._queries.delete.Delete()
-
 
 
 class BaseTest(DeleteTest):
@@ -25,19 +22,19 @@ class BaseTest(DeleteTest):
         self.delete.from_('user')
         self.delete.allowDeleteAll()
         self.assertEqual(str(self.delete), 'DELETE FROM `user`')
-    
+
     def testUnsupportLimit(self):
         self.assertRaises(sqlpuzzle.exceptions.NotSupprotedException, self.delete.limit, 1)
-    
+
     def testUnsupportOffset(self):
         self.assertRaises(sqlpuzzle.exceptions.NotSupprotedException, self.delete.offset, 2)
-    
+
     def testUnsupportInto(self):
         self.assertRaises(sqlpuzzle.exceptions.NotSupprotedException, self.delete.into, 'table')
-    
+
     def testUnsupportValues(self):
         self.assertRaises(sqlpuzzle.exceptions.NotSupprotedException, self.delete.values, name='Alan')
-    
+
     def testUnsupportSet(self):
         self.assertRaises(sqlpuzzle.exceptions.NotSupprotedException, self.delete.set, age=42)
 
@@ -69,4 +66,3 @@ if __name__ == '__main__':
     for testCase in testCases:
         suite.addTests(unittest.TestLoader().loadTestsFromTestCase(testCase))
     unittest.TextTestRunner(verbosity=2).run(suite)
-

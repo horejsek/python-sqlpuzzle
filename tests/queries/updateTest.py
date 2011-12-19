@@ -16,9 +16,6 @@ class UpdateTest(unittest.TestCase):
     def setUp(self):
         self.update = sqlpuzzle._queries.update.Update()
 
-    def tearDown(self):
-        self.update = sqlpuzzle._queries.update.Update()
-
 
 
 class BaseTest(UpdateTest):
@@ -27,19 +24,19 @@ class BaseTest(UpdateTest):
         self.update.set(name='Alan')
         self.update.allowUpdateAll()
         self.assertEqual(str(self.update), 'UPDATE `user` SET `name` = "Alan"')
-    
+
     def testUnsupportedFrom(self):
         self.assertRaises(sqlpuzzle.exceptions.NotSupprotedException, self.update.from_, 'table')
-    
+
     def testUnsupportedLimit(self):
         self.assertRaises(sqlpuzzle.exceptions.NotSupprotedException, self.update.limit, 1)
-    
+
     def testUnsupportedOffset(self):
         self.assertRaises(sqlpuzzle.exceptions.NotSupprotedException, self.update.offset, 2)
-    
+
     def testUnsupportedInto(self):
         self.assertRaises(sqlpuzzle.exceptions.NotSupprotedException, self.update.into, 'table')
-    
+
     def testUnsupportedValues(self):
         self.assertRaises(sqlpuzzle.exceptions.NotSupprotedException, self.update.values, name='Alan')
 
@@ -72,4 +69,3 @@ if __name__ == '__main__':
     for testCase in testCases:
         suite.addTests(unittest.TestLoader().loadTestsFromTestCase(testCase))
     unittest.TextTestRunner(verbosity=2).run(suite)
-

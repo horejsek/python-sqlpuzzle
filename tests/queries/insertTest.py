@@ -15,9 +15,6 @@ class InsertTest(unittest.TestCase):
     def setUp(self):
         self.insert = sqlpuzzle._queries.insert.Insert()
 
-    def tearDown(self):
-        self.insert = sqlpuzzle._queries.insert.Insert()
-
 
 
 class BaseTest(InsertTest):
@@ -25,19 +22,19 @@ class BaseTest(InsertTest):
         self.insert.into('user')
         self.insert.values(name='Alan')
         self.assertEqual(str(self.insert), 'INSERT INTO `user` (`name`) VALUES ("Alan")')
-    
+
     def testUnsupportedFrom(self):
         self.assertRaises(sqlpuzzle.exceptions.NotSupprotedException, self.insert.from_, 'table')
-    
+
     def testUnsupportedWhere(self):
         self.assertRaises(sqlpuzzle.exceptions.NotSupprotedException, self.insert.where, name='Alan')
-    
+
     def testUnsupportedLimit(self):
         self.assertRaises(sqlpuzzle.exceptions.NotSupprotedException, self.insert.limit, 1)
-    
+
     def testUnsupportedOffset(self):
         self.assertRaises(sqlpuzzle.exceptions.NotSupprotedException, self.insert.offset, 2)
-    
+
     def testUnsupportedSet(self):
         self.assertRaises(sqlpuzzle.exceptions.NotSupprotedException, self.insert.set, age=42)
 
@@ -66,4 +63,3 @@ if __name__ == '__main__':
     for testCase in testCases:
         suite.addTests(unittest.TestLoader().loadTestsFromTestCase(testCase))
     unittest.TextTestRunner(verbosity=2).run(suite)
-

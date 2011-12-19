@@ -13,9 +13,6 @@ import sqlpuzzle._features.columns
 
 class ColumnsTest(unittest.TestCase):
     def setUp(self):
-        self.tearDown()
-
-    def tearDown(self):
         self.columns = sqlpuzzle._features.columns.Columns()
 
 
@@ -50,8 +47,8 @@ class BaseTest(ColumnsTest):
 
 
 class CustomSqlTest(ColumnsTest):
-    def tearDown(self):
-        super(CustomSqlTest, self).tearDown()
+    def setUp(self):
+        super(CustomSqlTest, self).setUp()
         self.customSql = sqlpuzzle.customSql('AVG(`custom`) AS "x"')
 
     def testOneColumn(self):

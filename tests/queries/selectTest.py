@@ -16,9 +16,6 @@ class SelectTest(unittest.TestCase):
     def setUp(self):
         self.select = sqlpuzzle._queries.select.Select()
 
-    def tearDown(self):
-        self.select = sqlpuzzle._queries.select.Select()
-
 
 
 class BaseTest(SelectTest):
@@ -129,9 +126,6 @@ class IntoOutfileTest(SelectTest):
         self.select = sqlpuzzle._queries.select.Select()
         self.select.from_('table')
         self.select.intoOutfile('/tmp/file')
-
-    def tearDown(self):
-        self.setUp()
 
     def testIntoOutfile(self):
         self.assertEqual(str(self.select), 'SELECT * FROM `table` INTO OUTFILE "/tmp/file"')
