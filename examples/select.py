@@ -23,3 +23,10 @@ sql.from_('table2')
 print sql
 # output:
 # SELECT `id`, `name`, `first_name` AS "firstName" FROM `table`, `table2`
+
+
+# you can also use dictionary for AS in columns
+sql = sqlpuzzle.select({'user_id': 'userId'}).from_('table')
+print sql
+# output:
+# SELECT `id`, `name`, `first_name` AS "firstName" FROM `table`, `table2`

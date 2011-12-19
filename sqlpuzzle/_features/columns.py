@@ -15,7 +15,7 @@ class Column(sqlpuzzle._features.Feature):
         """Initialization of Column."""
         self._column = column
         self._as = as_
-    
+
     def __str__(self):
         """Print part of query."""
         if self._as:
@@ -25,7 +25,7 @@ class Column(sqlpuzzle._features.Feature):
             )
         else:
             return str(sqlpuzzle._libs.sqlValue.SqlReference(self._column))
-    
+
     def __eq__(self, other):
         """Are columns equivalent?"""
         return (
@@ -39,7 +39,7 @@ class Columns(sqlpuzzle._features.Features):
         """Initialization of Columns."""
         super(Columns, self).__init__()
         self._defaultQueryString = '*'
-    
+
     def columns(self, *args):
         """Set columns."""
 
@@ -51,7 +51,12 @@ class Columns(sqlpuzzle._features.Features):
         )
 
         for columnName, as_ in sqlpuzzle._libs.argsParser.parseArgsToListOfTuples(
-            {'maxItems': 2, 'allowedDataTypes': allowedDataTypes}, *args
+            {
+                'maxItems': 2,
+                'allowDict': True,
+                'allowedDataTypes': allowedDataTypes,
+            },
+            *args
         ):
             if self.isCustumSql(columnName):
                 self.appendFeature(columnName)
@@ -59,6 +64,5 @@ class Columns(sqlpuzzle._features.Features):
                 column = Column(columnName, as_)
                 if column not in self:
                     self.appendFeature(column)
-        
-        return self
 
+        return self
