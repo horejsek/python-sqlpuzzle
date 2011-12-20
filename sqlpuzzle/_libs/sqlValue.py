@@ -6,6 +6,7 @@
 #
 
 import sqlpuzzle._queries
+import sqlpuzzle.exceptions
 import datetime
 import re
 import types
@@ -13,7 +14,7 @@ import types
 
 class SqlValue(object):
     """Wrap value."""
-    
+
     def __init__(self, value):
         """Initialization of SqlValue."""
         self._map = {
@@ -33,7 +34,7 @@ class SqlValue(object):
         }
 
         self.value = value
-    
+
     def _escapeValue(self, value):
         replaceTable = (
             ("\\", "\\\\"),
@@ -44,66 +45,66 @@ class SqlValue(object):
         for old, new in replaceTable:
             value = value.replace(old, new)
         return value
-    
+
     def __str__(self):
         """Convert and print value."""
         return self._getConvertMethod()()
-    
+
     def __repr__(self):
         return "<SqlValue: %s>" % self.__str__()
-    
+
     def _getConvertMethod(self):
         """Get right method to convert of the value."""
         for type_, method in self._map.iteritems():
             if isinstance(self.value, type_):
                 return method
         return self._undefined
-    
+
     def _string(self):
         """Convert as string."""
         # sometime, e.g. in subselect, is needed reference to column instead of self.value
         if self.value.strip() and self.value.strip()[0] == '`':
             return self._backQuotes()
         return '"%s"' % self._escapeValue(self.value)
-    
+
     def _integer(self):
         """Convert as integer."""
         return '%d' % self.value
-    
+
     def _float(self):
         """Convert as float."""
         return '%.5f' % self.value
-    
+
     def _boolean(self):
         """Convert as boolean."""
         return '%d' % self.value
-    
+
     def _date(self):
         """Convert as date."""
         return self._datetime()
-    
+
     def _datetime(self):
         """Convert as datetime."""
         return '"%s"' % self.value.isoformat()
-    
+
     def _list(self):
         """Convert as list of values."""
         if self.value:
             return "(%s)" % ", ".join(str(SqlValue(item)) for item in self.value)
-        return "(NULL)"
-    
+        raise sqlpuzzle.exceptions.InvalidArgumentException('Empty list is not allowed.')
+
     def _subselect(self):
         """Convert as subselect."""
         return "(%s)" % self.value
-    
+
     def _null(self):
         """NULL"""
         return 'NULL'
-    
+
     def _undefined(self):
         """undefined"""
         return 'undefined'
-    
+
     def _backQuotes(self):
         """
         Convert as reference on column.
@@ -129,4 +130,3 @@ class SqlReference(SqlValue):
         }
 
         self.value = value
-
