@@ -49,6 +49,14 @@ class BaseTest(TablesTest):
         self.tables.set(('user', 'u'), ('country', 'c'))
         self.assertEqual(str(self.tables), '`user` AS `u`, `country` AS `c`')
 
+    def testSimpleAsByDictionary(self):
+        self.tables.set({'table': 't1'})
+        self.assertEqual(str(self.tables), '`table` AS `t1`')
+
+    def testMoreTablesWithAsByDictionary(self):
+        self.tables.set({'user': 'u', 'country': 'c'})
+        self.assertEqual(str(self.tables), '`country` AS `c`, `user` AS `u`')
+
 
 
 class CustomSqlTest(TablesTest):
@@ -106,6 +114,10 @@ class SimpleJoinsTest(TablesTest):
 
     def testSimpleAsInnerJoin(self):
         self.tables.set(('user', 'u')).innerJoin(('country', 'c')).on('u.country_id', 'c.id')
+        self.assertEqual(str(self.tables), '`user` AS `u` JOIN `country` AS `c` ON (`u`.`country_id` = `c`.`id`)')
+
+    def testSimpleAsInnerJoinByDictionary(self):
+        self.tables.set({'user': 'u'}).innerJoin({'country': 'c'}).on('u.country_id', 'c.id')
         self.assertEqual(str(self.tables), '`user` AS `u` JOIN `country` AS `c` ON (`u`.`country_id` = `c`.`id`)')
 
     def testMoreInnerJoins(self):

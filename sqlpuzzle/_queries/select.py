@@ -33,7 +33,7 @@ class Select(sqlpuzzle._queries.Query):
             limit = sqlpuzzle._features.limit.Limit(),
             intoOutfile = sqlpuzzle._features.intoOutfile.IntoOutfile(),
         )
-        self._setPrintedFeatures('where', 'groupBy', 'having', 'orderBy', 'limit', 'intoOutfile')
+        self._setKeysOfFeaturesForAutoPrinting('where', 'groupBy', 'having', 'orderBy', 'limit', 'intoOutfile')
 
         self._selectOptions = SelectOptions()
         self.columns(*columns_)
@@ -154,6 +154,7 @@ class Select(sqlpuzzle._queries.Query):
         self._intoOutfile.optionallyEnclosedBy(optionallyEnclosedBy)
         return self
 
+    # Broaden doc strings of functions by useful help.
     sqlpuzzle._libs.doc.doc(columns, 'columns')
     sqlpuzzle._libs.doc.doc(from_, 'tables')
     sqlpuzzle._libs.doc.doc(join, 'join')
@@ -226,7 +227,7 @@ class Select(sqlpuzzle._queries.Query):
 
 
 
-class SelectOptions:
+class SelectOptions(object):
     _options = {
         'sqlCache': {
             'off': '',

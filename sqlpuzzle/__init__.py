@@ -52,6 +52,6 @@ def customSql(text):
     return sqlpuzzle._libs.customSql.CustomSql(text)
 
 
+# Broaden doc strings of functions by useful help.
 sqlpuzzle._libs.doc.doc(select, 'columns')
 sqlpuzzle._libs.doc.doc(selectFrom, 'tables')
-

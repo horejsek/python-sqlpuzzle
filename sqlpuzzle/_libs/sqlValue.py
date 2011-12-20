@@ -13,7 +13,7 @@ import types
 
 
 class SqlValue(object):
-    """Wrap value."""
+    """Object used for SQL values (e.g. value of column, for condition, ...)."""
 
     def __init__(self, value):
         """Initialization of SqlValue."""
@@ -119,6 +119,8 @@ class SqlValue(object):
 
 
 class SqlReference(SqlValue):
+    """Object used for string for SQL reference (e.g. name of tables, columns, ...)."""
+
     def __init__(self, value):
         """Initialization of SqlReference."""
         self._map = {

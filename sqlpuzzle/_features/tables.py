@@ -124,8 +124,12 @@ class Table(sqlpuzzle._features.Feature):
         """Join table."""
         if isinstance(arg, (list, tuple)) and len(arg) == 2:
             table = Table(*arg)
-        else:
+        elif isinstance(arg, dict) and len(arg) == 1:
+            table = Table(*arg.popitem())
+        elif isinstance(arg, (str, unicode)):
             table = Table(arg)
+        else:
+            raise sqlpuzzle.exceptions.InvalidArgumentException('Invalid argument for join.')
 
         self._joins.append({
             'type': joinType,
@@ -165,7 +169,12 @@ class Tables(sqlpuzzle._features.Features):
         )
 
         for table, as_ in sqlpuzzle._libs.argsParser.parseArgsToListOfTuples(
-            {'maxItems': 2, 'allowedDataTypes': allowedDataTypes}, *args
+            {
+                'maxItems': 2,
+                'allowDict': True,
+                'allowedDataTypes': allowedDataTypes
+            },
+            *args
         ):
             if self.isCustumSql(table):
                 self.appendFeature(table)
