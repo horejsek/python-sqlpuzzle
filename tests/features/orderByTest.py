@@ -44,6 +44,10 @@ class BaseTest(OrderByTest):
         self.orderBy.orderBy(1)
         self.assertEqual(str(self.orderBy), 'ORDER BY 1')
 
+    def testByDictionary(self):
+        self.orderBy.orderBy({'id': 'ASC', 'name': 'DESC'})
+        self.assertEqual(str(self.orderBy), 'ORDER BY `id`, `name` DESC')
+
 
 
 class BackQuotesTest(OrderByTest):

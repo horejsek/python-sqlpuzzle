@@ -63,7 +63,12 @@ class Orders(sqlpuzzle._features.Features):
     def order(self, *args):
         """Set Order."""
         for columnName, sort in sqlpuzzle._libs.argsParser.parseArgsToListOfTuples(
-            {'maxItems': 2, 'allowedDataTypes': (str, unicode, int)}, *args
+            {
+                'maxItems': 2,
+                'allowDict': True,
+                'allowedDataTypes': (str, unicode, int)
+            },
+            *args
         ):
             order = self._findOrderByName(columnName)
             if order is None:
