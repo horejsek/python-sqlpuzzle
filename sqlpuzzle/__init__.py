@@ -118,3 +118,8 @@ def concat(*expr):
 def groupConcat(*expr):
     """Function GROUP_CONCAT(expr [ORDER BY [SEPARATOR]])"""
     return sqlpuzzle._features.functions.GroupConcat(*expr)
+
+
+def convert(expr, type_=None):
+    """Function CONVERT(expr, type)"""
+    return sqlpuzzle._features.functions.Convert(expr, type_)

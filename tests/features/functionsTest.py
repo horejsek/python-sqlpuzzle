@@ -133,6 +133,33 @@ class GroupConcat(FunctionsTest):
 
 
 
+class Convert(FunctionsTest):
+    def setUp(self):
+        self.convert = sqlpuzzle._features.functions.Convert('col')
+
+    def testSigned(self):
+        self.convert.to('signed')
+        self.assertEqual(str(self.convert), 'CONVERT(`col`, SIGNED)')
+
+    def testCharWithLength(self):
+        self.convert.to('char(5)')
+        self.assertEqual(str(self.convert), 'CONVERT(`col`, CHAR(5))')
+
+    def testDecimalWithPrecision(self):
+        self.convert.to('decimal(2,5)')
+        self.assertEqual(str(self.convert), 'CONVERT(`col`, DECIMAL(2,5))')
+
+    def testBadType(self):
+        self.assertRaises(sqlpuzzle.exceptions.InvalidArgumentException, self.convert.to, 'hcar')
+
+    def testBadParamOfType(self):
+        self.assertRaises(sqlpuzzle.exceptions.InvalidArgumentException, self.convert.to, 'char(a)')
+
+    def testInvalidType(self):
+        self.assertRaises(sqlpuzzle.exceptions.InvalidArgumentException, self.convert.to, 'char(a')
+
+
+
 testCases = (
     AvgTest,
     CountTest,
@@ -141,6 +168,7 @@ testCases = (
     SumTest,
     Concat,
     GroupConcat,
+    Convert,
 )
 
 

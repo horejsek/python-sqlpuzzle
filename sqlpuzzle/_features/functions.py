@@ -5,6 +5,8 @@
 # https://github.com/horejsek/sqlpuzzle
 #
 
+import re
+
 import sqlpuzzle._libs.object
 import sqlpuzzle._libs.sqlValue
 
@@ -134,3 +136,42 @@ class GroupConcat(Concat):
     def separator(self, separator):
         self._separator = separator
         return self
+
+
+
+class Convert(Function):
+    _functionName = 'CONVERT'
+    _allowedTypes = ('BINARY', 'CHAR', 'DATE', 'DATETIME', 'DECIMAL', 'SIGNED', 'TIME', 'UNSIGNED')
+
+    def __init__(self, expr, type_=None):
+        self._expr = sqlpuzzle._libs.sqlValue.SqlReference(expr)
+        self._type = None
+        if type_:
+            self.to(type_)
+
+    def __str__(self):
+        return '%s(%s, %s)' % (
+            self._functionName,
+            self._expr,
+            self._type,
+        )
+
+    def to(self, type_):
+        type_ = str(type_).upper()
+        self._checkType(type_)
+
+        self._type = type_
+        return self
+
+    def _checkType(self, type_):
+        type_ = type_.split('(')
+
+        typeName = type_[0].strip()
+        if typeName not in self._allowedTypes:
+            raise sqlpuzzle.exceptions.InvalidArgumentException('You can convert value only into this types: %s' % repr(self._allowedTypes))
+
+        if len(type_) > 2 or (len(type_) == 2 and type_[1][-1] != ')'):
+            raise sqlpuzzle.exceptions.InvalidArgumentException('Invalid type in function %s.' % self._functionName)
+
+        if len(type_) == 2 and not re.match('^[0-9]+(,[0-9]+)?\)$', type_[1]):
+            raise sqlpuzzle.exceptions.InvalidArgumentException('In function %s you can set as param of type only the number.' % self._functionName)
