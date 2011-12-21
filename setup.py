@@ -14,7 +14,7 @@
 
 from distutils.core import setup
 
-version = '0.14.3'
+version = '0.15.0'
 
 setup(
     name = 'sqlpuzzle',
@@ -41,4 +41,3 @@ setup(
         'Topic :: Text Processing',
     ],
 )
-

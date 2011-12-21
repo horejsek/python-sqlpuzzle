@@ -1,6 +1,6 @@
 # sqlpuzzle
 
-Python library for ease of writing SQL queries.
+Python library for ease of writing SQL queries. For now only for database MySQL.
 
 ## Requirements
 

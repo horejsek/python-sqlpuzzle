@@ -4,7 +4,7 @@ PYTHON=`which python`
 DESTDIR=/
 BUILDIR=$(CURDIR)/debian/sqlpuzzle
 PROJECT=sqlpuzzle
-VERSION=0.14.3
+VERSION=0.15.0
 
 all:
 	@echo "make source - Create source package"
@@ -38,5 +38,3 @@ clean:
 	$(MAKE) -f $(CURDIR)/debian/rules clean
 	rm -rf build/ MANIFEST
 	find . -name '*.pyc' -delete
-
-
