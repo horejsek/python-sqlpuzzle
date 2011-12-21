@@ -9,6 +9,7 @@ import queries.unionTest
 import queries.updateTest
 
 import features.columnsTest
+import features.functionsTest
 import features.groupByTest
 import features.havingTest
 import features.limitTest
@@ -29,8 +30,9 @@ testModules = (
     queries.selectTest,
     queries.unionTest,
     queries.updateTest,
-    
+
     features.columnsTest,
+    features.functionsTest,
     features.groupByTest,
     features.havingTest,
     features.limitTest,
@@ -38,10 +40,10 @@ testModules = (
     features.tablesTest,
     features.valuesTest,
     features.whereTest,
-    
+
     libs.argsParserTest,
     libs.sqlValueTest,
-    
+
     sqlPuzzleTest,
 )
 
@@ -66,12 +68,9 @@ else:
             self.__inc += 1
             return "uniqName_%d" % self.__inc
     uniqName = UniqName()
-    
+
     # all test objects add to the global scope with unique name
     globals_ = globals()
     for testModule in testModules:
         for testCase in testModule.testCases:
             globals()[str(uniqName)] = testCase
-
-
-

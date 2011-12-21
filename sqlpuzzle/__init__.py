@@ -61,26 +61,50 @@ sqlpuzzle._libs.doc.doc(selectFrom, 'tables')
 
 # Proxy functions.
 def avg(expr):
-    """Function AVG"""
+    """Function AVG(expr)"""
     return sqlpuzzle._features.functions.Avg(expr)
 
 
+def avgDistinct(expr):
+    """Function AVG(DICTINCT expr)"""
+    return avg(expr).distinct()
+
+
 def count(expr=None):
-    """Function COUNT"""
+    """Function COUNT(expr)"""
     return sqlpuzzle._features.functions.Count(expr)
 
 
+def countDistinct(expr=None):
+    """Function COUNT(DISTINCT expr)"""
+    return count(expr).distinct()
+
+
 def max(expr):
-    """Function MAX"""
+    """Function MAX(expr)"""
     return sqlpuzzle._features.functions.Max(expr)
 
 
+def maxDistinct(expr):
+    """Function MAX(DISTINCT expr)"""
+    return max(expr).distinct()
+
+
 def min(expr):
-    """Function MIN"""
+    """Function MIN(expr)"""
     return sqlpuzzle._features.functions.Min(expr)
 
 
+def minDistinct(expr):
+    """Function MIN(DISTINCT expr)"""
+    return min(expr).distinct()
+
+
 def sum(expr):
-    """Function SUM"""
+    """Function SUM(expr)"""
     return sqlpuzzle._features.functions.Sum(expr)
 
+
+def sumDistinct(expr):
+    """Function SUM(DISTINCT expr)"""
+    return sum(expr).distinct()
