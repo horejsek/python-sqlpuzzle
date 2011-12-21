@@ -5,6 +5,7 @@
 # https://github.com/horejsek/sqlpuzzle
 #
 
+import sqlpuzzle._features
 import sqlpuzzle._queries
 import sqlpuzzle.exceptions
 import datetime
@@ -60,6 +61,10 @@ class SqlValue(object):
                 return method
         return self._undefined
 
+    def _raw(self):
+        """No convert."""
+        return str(self.value)
+
     def _string(self):
         """Convert as string."""
         # sometime, e.g. in subselect, is needed reference to column instead of self.value
@@ -103,7 +108,7 @@ class SqlValue(object):
 
     def _undefined(self):
         """undefined"""
-        return 'undefined'
+        return '<undefined value>'
 
     def _backQuotes(self):
         """
@@ -129,6 +134,7 @@ class SqlReference(SqlValue):
             int: self._integer,
             sqlpuzzle._queries.select.Select: self._subselect,
             sqlpuzzle._queries.union.Union: self._subselect,
+            sqlpuzzle._features.functions.Function: self._raw,
         }
 
         self.value = value

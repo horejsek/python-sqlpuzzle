@@ -13,6 +13,7 @@ import sqlpuzzle._queries.select
 import sqlpuzzle._queries.update
 
 
+# Proxy queries.
 def select(*columns):
     """Select. Set column(s) by parameter(s)."""
     return sqlpuzzle._queries.select.Select(*columns)
@@ -59,7 +60,27 @@ sqlpuzzle._libs.doc.doc(selectFrom, 'tables')
 
 
 # Proxy functions.
-def count(arg=None):
-    """COUNT"""
-    return sqlpuzzle._features.functions.Count(arg)
+def avg(expr):
+    """Function AVG"""
+    return sqlpuzzle._features.functions.Avg(expr)
+
+
+def count(expr=None):
+    """Function COUNT"""
+    return sqlpuzzle._features.functions.Count(expr)
+
+
+def max(expr):
+    """Function MAX"""
+    return sqlpuzzle._features.functions.Max(expr)
+
+
+def min(expr):
+    """Function MIN"""
+    return sqlpuzzle._features.functions.Min(expr)
+
+
+def sum(expr):
+    """Function SUM"""
+    return sqlpuzzle._features.functions.Sum(expr)
 

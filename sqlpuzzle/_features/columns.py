@@ -9,6 +9,8 @@ import sqlpuzzle._libs.argsParser
 import sqlpuzzle._libs.sqlValue
 import sqlpuzzle._libs.customSql
 
+import sqlpuzzle._features.functions
+
 
 class Column(sqlpuzzle._features.Feature):
     def __init__(self, column=None, as_=None):
@@ -44,7 +46,7 @@ class Columns(sqlpuzzle._features.Features):
         """Set columns."""
 
         allowedDataTypes = sqlpuzzle._libs.argsParser.AllowedDataTypes().add(
-            (str, unicode, sqlpuzzle._queries.select.Select, sqlpuzzle._queries.union.Union),
+            (str, unicode, sqlpuzzle._queries.select.Select, sqlpuzzle._queries.union.Union, sqlpuzzle._features.functions.Function),
             (str, unicode)
         ).add(
             sqlpuzzle._libs.customSql.CustomSql
