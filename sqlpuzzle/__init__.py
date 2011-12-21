@@ -108,3 +108,8 @@ def sum(expr):
 def sumDistinct(expr):
     """Function SUM(DISTINCT expr)"""
     return sum(expr).distinct()
+
+
+def groupConcat(*expr):
+    """Function GROUP_CONCAT(expr [ORDER BY [SEPARATOR]])"""
+    return sqlpuzzle._features.functions.GroupConcat(*expr)

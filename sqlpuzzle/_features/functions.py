@@ -8,6 +8,8 @@
 import sqlpuzzle._libs.object
 import sqlpuzzle._libs.sqlValue
 
+import sqlpuzzle._features.orderBy
+
 
 
 class Function(sqlpuzzle._libs.object.Object):
@@ -80,3 +82,42 @@ class Min(FunctionWithDistinct):
 
 class Sum(FunctionWithDistinct):
     _functionName = 'SUM'
+
+
+
+class GroupConcat(Function):
+    _functionName = 'GROUP_CONCAT'
+
+    def __init__(self, *expr):
+        self._columns = sqlpuzzle._features.columns.Columns().columns(*expr)
+        if not self._columns.isSet():
+            raise sqlpuzzle.exceptions.InvalidArgumentException('You must specify columns for GROUP_CONCAT.')
+
+        self._orderBy = sqlpuzzle._features.orderBy.OrderBy()
+        self._separator = None
+
+    def __str__(self):
+        return '%s(%s%s%s)' % (
+            self._functionName,
+            self._columns,
+            self._strOrderBy(),
+            self._strSeparator(),
+        )
+
+    def _strOrderBy(self):
+        if self._orderBy.isSet():
+            return ' %s' % self._orderBy
+        return ''
+
+    def _strSeparator(self):
+        if self._separator:
+            return ' SEPARATOR %s' % sqlpuzzle._libs.sqlValue.SqlValue(self._separator)
+        return ''
+
+    def orderBy(self, *args):
+        self._orderBy.orderBy(*args)
+        return self
+
+    def separator(self, separator):
+        self._separator = separator
+        return self
