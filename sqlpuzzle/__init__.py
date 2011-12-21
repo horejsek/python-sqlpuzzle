@@ -110,6 +110,11 @@ def sumDistinct(expr):
     return sum(expr).distinct()
 
 
+def concat(*expr):
+    """Function CONCAT(expr)"""
+    return sqlpuzzle._features.functions.Concat(*expr)
+
+
 def groupConcat(*expr):
     """Function GROUP_CONCAT(expr [ORDER BY [SEPARATOR]])"""
     return sqlpuzzle._features.functions.GroupConcat(*expr)

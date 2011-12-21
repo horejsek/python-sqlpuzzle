@@ -97,12 +97,27 @@ class SumTest(FunctionsTest):
 
 
 
+class Concat(FunctionsTest):
+    def testNormal(self):
+        concat = sqlpuzzle._features.functions.Concat('col')
+        self.assertEqual(str(concat), 'CONCAT(`col`)')
+
+    def testMoreColumns(self):
+        concat = sqlpuzzle._features.functions.Concat('col', 'col2')
+        self.assertEqual(str(concat), 'CONCAT(`col`, `col2`)')
+
+
+
 class GroupConcat(FunctionsTest):
     def setUp(self):
         self.groupConcat = sqlpuzzle._features.functions.GroupConcat('col')
 
     def testNormal(self):
         self.assertEqual(str(self.groupConcat), 'GROUP_CONCAT(`col`)')
+
+    def testMoreColumns(self):
+        groupConcat = sqlpuzzle._features.functions.GroupConcat('col', 'col2')
+        self.assertEqual(str(groupConcat), 'GROUP_CONCAT(`col`, `col2`)')
 
     def testWithOrderBy(self):
         self.groupConcat.orderBy({'name': 'desc'})
@@ -124,6 +139,7 @@ testCases = (
     MaxTest,
     MinTest,
     SumTest,
+    Concat,
     GroupConcat,
 )
 

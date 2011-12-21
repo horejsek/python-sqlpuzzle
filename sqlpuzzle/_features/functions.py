@@ -85,14 +85,27 @@ class Sum(FunctionWithDistinct):
 
 
 
-class GroupConcat(Function):
-    _functionName = 'GROUP_CONCAT'
+class Concat(Function):
+    _functionName = 'CONCAT'
 
     def __init__(self, *expr):
         self._columns = sqlpuzzle._features.columns.Columns().columns(*expr)
         if not self._columns.isSet():
-            raise sqlpuzzle.exceptions.InvalidArgumentException('You must specify columns for GROUP_CONCAT.')
+            raise sqlpuzzle.exceptions.InvalidArgumentException('You must specify columns for %s.' % self._functionName)
 
+    def __str__(self):
+        return '%s(%s)' % (
+            self._functionName,
+            self._columns,
+        )
+
+
+
+class GroupConcat(Concat):
+    _functionName = 'GROUP_CONCAT'
+
+    def __init__(self, *expr):
+        super(GroupConcat, self).__init__(*expr)
         self._orderBy = sqlpuzzle._features.orderBy.OrderBy()
         self._separator = None
 
