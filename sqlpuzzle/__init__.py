@@ -6,6 +6,7 @@
 #
 
 import sqlpuzzle._libs.doc
+import sqlpuzzle._features.functions
 import sqlpuzzle._queries.delete
 import sqlpuzzle._queries.insert
 import sqlpuzzle._queries.select
@@ -55,3 +56,10 @@ def customSql(text):
 # Broaden doc strings of functions by useful help.
 sqlpuzzle._libs.doc.doc(select, 'columns')
 sqlpuzzle._libs.doc.doc(selectFrom, 'tables')
+
+
+# Proxy functions.
+def count(arg=None):
+    """COUNT"""
+    return sqlpuzzle._features.functions.Count(arg)
+
