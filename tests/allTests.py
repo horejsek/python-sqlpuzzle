@@ -1,5 +1,9 @@
 # -*- coding: utf-8 -*-
 
+import sys
+import os
+sys.path.insert(0, os.getcwd())
+
 import unittest
 
 import queries.deleteTest
@@ -57,7 +61,10 @@ if __name__ == '__main__':
     suite = unittest.TestSuite()
     for testCase in testCases:
         suite.addTests(unittest.TestLoader().loadTestsFromTestCase(testCase))
-    unittest.TextTestRunner(verbosity=0).run(suite)
+    result = unittest.TextTestRunner(verbosity=0).run(suite)
+
+    if not result.wasSuccessful():
+        sys.exit(1)
 
 # for tools
 else:

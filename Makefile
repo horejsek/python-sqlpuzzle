@@ -25,7 +25,7 @@ install:
 install-building-packages:
 	apt-get install build-essential dh-make debhelper devscripts
 
-test:	install
+test:
 	$(PYTHON) tests/allTests.py
 
 buildrpm:
