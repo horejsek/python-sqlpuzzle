@@ -5,6 +5,11 @@
 # https://github.com/horejsek/sqlpuzzle
 #
 
+"""
+Library for ease of writing SQL queries. For now only for database MySQL.
+Version: 0.15.0
+"""
+
 import sqlpuzzle._libs.doc
 import sqlpuzzle._features.functions
 import sqlpuzzle._queries.delete
