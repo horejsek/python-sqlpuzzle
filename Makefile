@@ -14,13 +14,19 @@ all:
 	@echo "make clean - Get rid of scratch and byte files"
 
 source:
-	$(PYTHON) setup.py sdist $(COMPILE)
+	$(PYTHON) setup.py sdist
+
+upload:
+	$(PYTHON) setup.py sdist upload
 
 install:
-	$(PYTHON) setup.py install --root $(DESTDIR) $(COMPILE)
+	$(PYTHON) setup.py install --root $(DESTDIR)
 
 install-building-packages:
 	apt-get install build-essential dh-make debhelper devscripts
+
+test:	install
+	$(PYTHON) tests/allTests.py
 
 buildrpm:
 	$(PYTHON) setup.py bdist_rpm --post-install=rpm/postinstall --pre-uninstall=rpm/preuninstall
@@ -28,7 +34,7 @@ buildrpm:
 builddeb:
 	# build the source package in the parent directory
 	# then rename it to project_version.orig.tar.gz
-	$(PYTHON) setup.py sdist $(COMPILE) --dist-dir=../ --prune
+	$(PYTHON) setup.py sdist --dist-dir=../ --prune
 	rename -f 's/$(PROJECT)-(.*)\.tar\.gz/$(PROJECT)_$$1\.orig\.tar\.gz/' ../*
 	# build the package
 	dpkg-buildpackage -i -I -rfakeroot
