@@ -36,7 +36,7 @@ print sql._orderBy
 # * _where
 # * _selectOptions
 
-sql = sqlpuzzle.insertInto('t').values(age=20)
+sql = sqlpuzzle.insertInto('t').values(age=20, name='Michael')
 
 print sql._values
 # output: `age` = 20, `name` = "Michael"
@@ -56,7 +56,5 @@ print sqlpuzzle._features.orderBy.OrderBy().orderBy('id')
 try:
     # only for read ;)
     sql._tables = sqlpuzzle._features.tables.Tables().set('table')
-except:
-    pass
-
-
+except AttributeError, e:
+    print e

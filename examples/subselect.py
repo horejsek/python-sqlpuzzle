@@ -30,3 +30,7 @@ print sqlpuzzle.select('user.*', (subselect, 'parentName')).from_('user')
 # output:
 # SELECT `user`.*, (SELECT `name` FROM `user` AS `parent` WHERE `parent`.`id` = `user`.`parent_id`) AS "parentName" FROM `user`
 
+subselect = sqlpuzzle.select(sqlpuzzle.count()).fromTable('table')
+print sqlpuzzle.select({subselect: 'foo'}).fromTable('table2')
+# output:
+# SELECT (SELECT COUNT(*) FROM `table`) AS "foo" FROM `table2`

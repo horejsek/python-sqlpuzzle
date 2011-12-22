@@ -2,7 +2,7 @@
 
 import sys
 import os
-sys.path.insert(0, os.getcwd())
+sys.path.insert(0, os.path.abspath(os.path.dirname(__file__) + '/../'))
 
 import unittest
 
@@ -80,4 +80,4 @@ else:
     globals_ = globals()
     for testModule in testModules:
         for testCase in testModule.testCases:
-            globals()[str(uniqName)] = testCase
+            globals_[str(uniqName)] = testCase

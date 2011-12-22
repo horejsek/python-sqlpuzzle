@@ -9,6 +9,7 @@
 import sqlpuzzle
 
 sql = sqlpuzzle.selectFrom('table')
+
 sql.groupBy('name')
 print sql
 # output: SELECT * FROM `table` GROUP BY `name`
@@ -20,3 +21,7 @@ print sql
 sql.groupBy(('name', 'asc')) # or only 'name'
 print sql
 # output: SELECT * FROM `table` GROUP BY `name`, `id`
+
+# same as before:
+sql.groupBy({'name': 'asc'}) # dict looks better
+sql.groupBy(name='asc') # also possible

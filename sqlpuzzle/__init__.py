@@ -19,9 +19,9 @@ import sqlpuzzle._queries.update
 
 
 # Proxy queries.
-def select(*columns):
+def select(*args, **kwds):
     """Select. Set column(s) by parameter(s)."""
-    return sqlpuzzle._queries.select.Select(*columns)
+    return sqlpuzzle._queries.select.Select(*args, **kwds)
 
 
 def selectFrom(*tables):

@@ -19,7 +19,7 @@ import sqlpuzzle._features.where
 
 
 class Select(sqlpuzzle._queries.Query):
-    def __init__(self, *columns_):
+    def __init__(self, *args, **kwds):
         """Initialization of Select."""
         super(Select, self).__init__()
 
@@ -36,7 +36,7 @@ class Select(sqlpuzzle._queries.Query):
         self._setKeysOfFeaturesForAutoPrinting('where', 'groupBy', 'having', 'orderBy', 'limit', 'intoOutfile')
 
         self._selectOptions = SelectOptions()
-        self.columns(*columns_)
+        self.columns(*args, **kwds)
 
     def __str__(self):
         """Print query."""

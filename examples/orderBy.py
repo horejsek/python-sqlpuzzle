@@ -9,6 +9,7 @@
 import sqlpuzzle
 
 sql = sqlpuzzle.selectFrom('table')
+
 sql.orderBy('name')
 print sql
 # output: SELECT * FROM `table` ORDER BY `name`
@@ -20,3 +21,7 @@ print sql
 sql.orderBy(('name', 'asc')) # or only 'name'
 print sql
 # output: SELECT * FROM `table` ORDER BY `name`, `id`
+
+# same as before:
+sql.orderBy({'name': 'asc'}) # dict looks better
+sql.orderBy(name='asc') # also possible
