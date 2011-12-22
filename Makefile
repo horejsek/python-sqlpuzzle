@@ -17,7 +17,7 @@ source:
 	$(PYTHON) setup.py sdist
 
 upload:
-	$(PYTHON) setup.py sdist upload
+	$(PYTHON) setup.py register sdist upload
 
 install:
 	$(PYTHON) setup.py install --root $(DESTDIR)
