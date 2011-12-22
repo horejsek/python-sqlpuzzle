@@ -87,7 +87,7 @@ class Query(sqlpuzzle._libs.object.Object):
     def __or__(self, other): self.__raiser('union all')
     def columns(self, *args, **kwds): self.__raiser('columns')
     def from_(self, *args, **kwds): self.__raiser('from')
-    def join(self, *args, **kwds): self.__raiser('from')
+    def join(self, *args, **kwds): self.__raiser('join')
     def innerJoin(self, *args, **kwds): self.__raiser('innerJoin')
     def leftJoin(self, *args, **kwds): self.__raiser('leftJoin')
     def rightJoin(self, *args, **kwds): self.__raiser('rightJoin')

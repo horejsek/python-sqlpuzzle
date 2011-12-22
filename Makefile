@@ -4,7 +4,7 @@ PYTHON=`which python`
 DESTDIR=/
 BUILDIR=$(CURDIR)/debian/sqlpuzzle
 PROJECT=sqlpuzzle
-VERSION=0.15.0
+VERSION=`$(PYTHON) -c "import sqlpuzzle; print sqlpuzzle.version"`
 
 all:
 	@echo "make source - Create source package"

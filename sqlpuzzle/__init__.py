@@ -5,10 +5,11 @@
 # https://github.com/horejsek/sqlpuzzle
 #
 
+version = '0.15.0'
 """
 Library for ease of writing SQL queries. For now only for database MySQL.
-Version: 0.15.0
-"""
+Version: %s
+""" % version
 
 import sqlpuzzle._libs.doc
 import sqlpuzzle._features.functions

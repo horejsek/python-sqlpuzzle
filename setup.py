@@ -14,7 +14,7 @@
 
 from distutils.core import setup
 
-version = '0.15.0'
+from sqlpuzzle import version
 
 setup(
     name = 'sqlpuzzle',
