@@ -157,7 +157,7 @@ class Tables(sqlpuzzle._features.Features):
         """Is set only one table without join?"""
         return len(self._features) == 1 and self._features[0].isSimple()
 
-    def set(self, *args):
+    def set(self, *args, **kwds):
         """Set tables."""
         args = [arg for arg in args if arg]
 
@@ -174,7 +174,8 @@ class Tables(sqlpuzzle._features.Features):
                 'allowDict': True,
                 'allowedDataTypes': allowedDataTypes
             },
-            *args
+            *args,
+            **kwds
         ):
             if self.isCustumSql(table):
                 self.appendFeature(table)

@@ -44,6 +44,10 @@ class BaseTest(ColumnsTest):
         self.columns.columns({'id': 'ID', 'name': 'Name'})
         self.assertEqual(str(self.columns), '`id` AS "ID", `name` AS "Name"')
 
+    def testColumnAsByKwds(self):
+        self.columns.columns(id='ID', name='Name')
+        self.assertEqual(str(self.columns), '`id` AS "ID", `name` AS "Name"')
+
 
 
 class CustomSqlTest(ColumnsTest):

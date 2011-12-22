@@ -59,14 +59,14 @@ class Select(sqlpuzzle._queries.Query):
         """UNION selects."""
         return sqlpuzzle._queries.union.Union(self, other, sqlpuzzle._queries.union.UNION)
 
-    def columns(self, *columns_):
+    def columns(self, *args, **kwds):
         """Set column(s) to query."""
-        self._columns.columns(*columns_)
+        self._columns.columns(*args, **kwds)
         return self
 
-    def from_(self, *tables):
+    def from_(self, *args, **kwds):
         """Set table(s) to query."""
-        self._tables.set(*tables)
+        self._tables.set(*args, **kwds)
         return self
 
     def fromTable(self, table, alias=None):
@@ -74,9 +74,9 @@ class Select(sqlpuzzle._queries.Query):
         self._tables.set((table, alias))
         return self
 
-    def fromTables(self, *tables):
+    def fromTables(self, *args, **kwds):
         """Alias for method `from_`."""
-        self.from_(*tables)
+        self.from_(*args, **kwds)
         return self
 
     def join(self, table):
@@ -114,14 +114,14 @@ class Select(sqlpuzzle._queries.Query):
         self._having.where(*args, **kwds)
         return self
 
-    def groupBy(self, *args):
+    def groupBy(self, *args, **kwds):
         """Set group to query."""
-        self._groupBy.groupBy(*args)
+        self._groupBy.groupBy(*args, **kwds)
         return self
 
-    def orderBy(self, *args):
+    def orderBy(self, *args, **kwds):
         """Set order to query."""
-        self._orderBy.orderBy(*args)
+        self._orderBy.orderBy(*args, **kwds)
         return self
 
     def limit(self, limit, offset=None):

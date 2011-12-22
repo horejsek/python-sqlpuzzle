@@ -57,6 +57,10 @@ class BaseTest(TablesTest):
         self.tables.set({'user': 'u', 'country': 'c'})
         self.assertEqual(str(self.tables), '`country` AS `c`, `user` AS `u`')
 
+    def testMoreTablesWithAsByKwds(self):
+        self.tables.set(user='u', country='c')
+        self.assertEqual(str(self.tables), '`country` AS `c`, `user` AS `u`')
+
 
 
 class CustomSqlTest(TablesTest):

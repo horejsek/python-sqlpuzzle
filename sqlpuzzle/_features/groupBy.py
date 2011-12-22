@@ -13,9 +13,8 @@ class GroupBy(sqlpuzzle._features.order.Orders):
         """Initialization of GroupBy."""
         super(GroupBy, self).__init__()
         self._keywordOfFeature = 'GROUP BY'
-    
-    def groupBy(self, *args):
-        """Set GROUP BY."""
-        self.order(*args)
-        return self
 
+    def groupBy(self, *args, **kwds):
+        """Set GROUP BY."""
+        self.order(*args, **kwds)
+        return self

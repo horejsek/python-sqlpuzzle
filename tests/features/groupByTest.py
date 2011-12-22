@@ -44,6 +44,14 @@ class BaseTest(GroupByTest):
         self.groupBy.groupBy(1)
         self.assertEqual(str(self.groupBy), 'GROUP BY 1')
 
+    def testByDictionary(self):
+        self.groupBy.groupBy({'id': 'ASC', 'name': 'DESC'})
+        self.assertEqual(str(self.groupBy), 'GROUP BY `id`, `name` DESC')
+
+    def testByKwds(self):
+        self.groupBy.groupBy(id='ASC', name='DESC')
+        self.assertEqual(str(self.groupBy), 'GROUP BY `id`, `name` DESC')
+
 
 
 class BackQuotesTest(GroupByTest):

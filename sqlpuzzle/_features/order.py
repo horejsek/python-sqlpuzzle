@@ -21,7 +21,7 @@ class Order(sqlpuzzle._features.Feature):
         """Initialization of Order."""
         self._column = column
         self.sort(sort)
-    
+
     def __str__(self):
         """Print part of query."""
         if self._sort == ASC:
@@ -31,19 +31,19 @@ class Order(sqlpuzzle._features.Feature):
                 sqlpuzzle._libs.sqlValue.SqlReference(self._column),
                 self._sort,
             )
-    
+
     def __eq__(self, other):
         """Are orders equivalent?"""
         return (
             self._column == other._column and
             self._sort == other._sort
         )
-    
+
     def sort(self, sort=None):
         """Set type of sort (ASC or DESC)."""
         if sort is None:
             sort = ASC
-        
+
         sort = sort.upper()
         if sort in ORDERING_TYPES:
             self._sort = sort
@@ -59,8 +59,8 @@ class Orders(sqlpuzzle._features.Features):
             if order._column == columnName:
                 return order
         return None
-    
-    def order(self, *args):
+
+    def order(self, *args, **kwds):
         """Set Order."""
         for columnName, sort in sqlpuzzle._libs.argsParser.parseArgsToListOfTuples(
             {
@@ -68,7 +68,8 @@ class Orders(sqlpuzzle._features.Features):
                 'allowDict': True,
                 'allowedDataTypes': (str, unicode, int)
             },
-            *args
+            *args,
+            **kwds
         ):
             order = self._findOrderByName(columnName)
             if order is None:
@@ -76,6 +77,5 @@ class Orders(sqlpuzzle._features.Features):
                 self.appendFeature(order)
             else:
                 order.sort(sort)
-        
-        return self
 
+        return self

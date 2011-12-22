@@ -13,9 +13,8 @@ class OrderBy(sqlpuzzle._features.order.Orders):
         """Initialization of OrderBy."""
         super(OrderBy, self).__init__()
         self._keywordOfFeature = 'ORDER BY'
-    
-    def orderBy(self, *args):
-        """Set ORDER BY."""
-        self.order(*args)
-        return self
 
+    def orderBy(self, *args, **kwds):
+        """Set ORDER BY."""
+        self.order(*args, **kwds)
+        return self

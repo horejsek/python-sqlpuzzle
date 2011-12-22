@@ -42,7 +42,7 @@ class Columns(sqlpuzzle._features.Features):
         super(Columns, self).__init__()
         self._defaultQueryString = '*'
 
-    def columns(self, *args):
+    def columns(self, *args, **kwds):
         """Set columns."""
 
         allowedDataTypes = sqlpuzzle._libs.argsParser.AllowedDataTypes().add(
@@ -58,7 +58,8 @@ class Columns(sqlpuzzle._features.Features):
                 'allowDict': True,
                 'allowedDataTypes': allowedDataTypes,
             },
-            *args
+            *args,
+            **kwds
         ):
             if self.isCustumSql(columnName):
                 self.appendFeature(columnName)

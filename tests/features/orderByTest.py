@@ -48,6 +48,10 @@ class BaseTest(OrderByTest):
         self.orderBy.orderBy({'id': 'ASC', 'name': 'DESC'})
         self.assertEqual(str(self.orderBy), 'ORDER BY `id`, `name` DESC')
 
+    def testByKwds(self):
+        self.orderBy.orderBy(id='ASC', name='DESC')
+        self.assertEqual(str(self.orderBy), 'ORDER BY `id`, `name` DESC')
+
 
 
 class BackQuotesTest(OrderByTest):
