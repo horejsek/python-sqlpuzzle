@@ -2,12 +2,12 @@ Source: sqlpuzzle
 Section: module
 Priority: optional
 Maintainer: Michal Horejsek <horejsekmichal@gmail.com>
-Build-Depends: 
+Build-Depends:
 XS-Python-Version: >=2.4
 
 Package: sqlpuzzle
 Architecture: all
 Homepage: https://github.com/horejsek/sqlpuzzle
-XB-Python-Version: 
-Depends: 
+XB-Python-Version:
+Depends:
 Description: Python library for writing SQL queries.

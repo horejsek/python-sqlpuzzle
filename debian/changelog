@@ -1,3 +1,10 @@
+sqlpuzzle (0.15.0) UNRELEASED; urgency=low
+
+  * New release with new features. (Closes: #XXXXXX)
+
+ -- Michal Horejsek <horejsekmichal@gmail.com>  Fri, 23 Dec 2011 08:39:31 +0200
+
+
 sqlpuzzle (0.14.2) UNRELEASED; urgency=low
 
   * Initial release. (Closes: #XXXXXX)
