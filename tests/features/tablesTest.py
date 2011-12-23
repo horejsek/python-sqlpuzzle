@@ -76,6 +76,10 @@ class CustomSqlTest(TablesTest):
         self.tables.set(self.customSql, 'id')
         self.assertEqual(str(self.tables), '`custom` JOIN `sql`, `id`')
 
+    def testCustomInColumnWithAs(self):
+        self.tables.set({sqlpuzzle.customSql('`custom`'): 'x'})
+        self.assertEqual(str(self.tables), '`custom` AS `x`')
+
 
 
 class GroupingTest(TablesTest):

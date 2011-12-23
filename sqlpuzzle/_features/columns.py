@@ -46,7 +46,7 @@ class Columns(sqlpuzzle._features.Features):
         """Set columns."""
 
         allowedDataTypes = sqlpuzzle._libs.argsParser.AllowedDataTypes().add(
-            (str, unicode, sqlpuzzle._queries.select.Select, sqlpuzzle._queries.union.Union, sqlpuzzle._features.functions.Function),
+            (str, unicode, sqlpuzzle._queries.select.Select, sqlpuzzle._queries.union.Union, sqlpuzzle._libs.customSql.CustomSql, sqlpuzzle._features.functions.Function),
             (str, unicode)
         ).add(
             sqlpuzzle._libs.customSql.CustomSql
@@ -61,11 +61,8 @@ class Columns(sqlpuzzle._features.Features):
             *args,
             **kwds
         ):
-            if self.isCustumSql(columnName):
-                self.appendFeature(columnName)
-            else:
-                column = Column(columnName, as_)
-                if column not in self:
-                    self.appendFeature(column)
+            column = Column(columnName, as_)
+            if column not in self:
+                self.appendFeature(column)
 
         return self

@@ -135,6 +135,7 @@ class SqlReference(SqlValue):
             sqlpuzzle._queries.select.Select: self._subselect,
             sqlpuzzle._queries.union.Union: self._subselect,
             sqlpuzzle._features.functions.Function: self._raw,
+            sqlpuzzle._libs.customSql.CustomSql: self._raw,
         }
 
         self.value = value

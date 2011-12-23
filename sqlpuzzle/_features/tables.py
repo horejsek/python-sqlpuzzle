@@ -162,7 +162,7 @@ class Tables(sqlpuzzle._features.Features):
         args = [arg for arg in args if arg]
 
         allowedDataTypes = sqlpuzzle._libs.argsParser.AllowedDataTypes().add(
-            (str, unicode, sqlpuzzle._queries.select.Select, sqlpuzzle._queries.union.Union),
+            (str, unicode, sqlpuzzle._queries.select.Select, sqlpuzzle._queries.union.Union, sqlpuzzle._libs.customSql.CustomSql),
             (str, unicode)
         ).add(
             sqlpuzzle._libs.customSql.CustomSql
@@ -177,12 +177,9 @@ class Tables(sqlpuzzle._features.Features):
             *args,
             **kwds
         ):
-            if self.isCustumSql(table):
+            table = Table(table, as_)
+            if table not in self:
                 self.appendFeature(table)
-            else:
-                table = Table(table, as_)
-                if table not in self:
-                    self.appendFeature(table)
 
         return self
 

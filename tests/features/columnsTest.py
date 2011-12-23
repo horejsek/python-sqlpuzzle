@@ -63,6 +63,10 @@ class CustomSqlTest(ColumnsTest):
         self.columns.columns(self.customSql, 'id')
         self.assertEqual(str(self.columns), 'AVG(`custom`) AS "x", `id`')
 
+    def testCustomInColumnWithAs(self):
+        self.columns.columns({sqlpuzzle.customSql('AVG(`custom`)'): 'x'})
+        self.assertEqual(str(self.columns), 'AVG(`custom`) AS "x"')
+
 
 
 class BackQuotesTest(ColumnsTest):
