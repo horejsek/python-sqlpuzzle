@@ -29,10 +29,10 @@ bpython) and try import module `sqlpuzzle`. See for examples below.
 
     >>> print sqlPuzzle.selectFrom('table').\
     ... where(name='Alan').\
-    ... where('age', 20, sqlPuzzle.relations.LE).\
+    ... where('age', sqlPuzzle.relations.LE(20)).\
     ... where({'sex': 'male'}).\
     ... where(
-    ...     ('column', 'value', sqlPuzzle.relations.LIKE),
+    ...     ('column', sqlPuzzle.relations.LIKE('value')),
     ...     ('id', range(5,15,2))
     ... )
     SELECT * FROM `table` WHERE `name` = "Alan" AND `age` <= 20 AND `sex` = "male" AND `column` LIKE "value" AND `id` IN (5, 7, 9, 11, 13)

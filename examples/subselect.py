@@ -20,7 +20,7 @@ print sqlpuzzle.selectFrom(subselect)
 # SELECT * FROM (SELECT * FROM `user`)
 
 subselect = sqlpuzzle.select('id').from_('user').where('name', 'Alan').limit(1)
-print sqlpuzzle.selectFrom('table').where(subselect, 50, sqlpuzzle.relations.GE)
+print sqlpuzzle.selectFrom('table').where(subselect, sqlpuzzle.relations.GE(50))
 # ouput:
 # SELECT * FROM `table` WHERE (SELECT `id` FROM `user` WHERE `name` = "Alan" LIMIT 1) >= 50
 

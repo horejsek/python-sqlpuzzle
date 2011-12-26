@@ -22,16 +22,16 @@ sql.where({
     'right': 'admin',
 })
 
-sql.where('column', 10, sqlpuzzle.relations.LE).where('column', 10, sqlpuzzle.relations.GE)
+sql.where('column', sqlpuzzle.relations.LE(10)).where('column', 10, sqlpuzzle.relations.GE)
 
 sql.where(
-    ('id', range(10, 20, 2), sqlpuzzle.relations.NOT_IN),
+    ('id', sqlpuzzle.relations.NOT_IN(range(10, 20, 2))),
     ('name', 'Alan'),
 )
 
 conditions = (
-    ('salary', 10000, sqlpuzzle.relations.GRATHER_THAN),
-    ('lastname', '%ar%', sqlpuzzle.relations.LIKE)
+    ('salary', sqlpuzzle.relations.GRATHER_THAN(10000)),
+    ('lastname', sqlpuzzle.relations.LIKE('%ar%'))
 )
 sql.where(conditions)
 
@@ -43,15 +43,15 @@ print sql
 #
 # SELECT * FROM `user` WHERE
 # `id` = 42 AND
-# `age` = 20 AND 
-# `enabled` = 1 AND 
+# `age` = 20 AND
+# `enabled` = 1 AND
 # `name` = "Michael" AND
-# `last_modify` = "2011-06-15T22:11:00" AND 
-# `right` = "admin" AND 
-# `column` <= 10 AND 
-# `column` >= 10 AND 
-# `id` NOT IN (10, 12, 14, 16, 18) AND 
-# `name` = "Alan" AND 
-# `salary` > 10000 AND 
+# `last_modify` = "2011-06-15T22:11:00" AND
+# `right` = "admin" AND
+# `column` <= 10 AND
+# `column` >= 10 AND
+# `id` NOT IN (10, 12, 14, 16, 18) AND
+# `name` = "Alan" AND
+# `salary` > 10000 AND
 # `lastname` LIKE "%ar%"
 #
