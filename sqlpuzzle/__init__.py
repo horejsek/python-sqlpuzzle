@@ -55,9 +55,14 @@ def deleteFrom(table):
     return sqlpuzzle._queries.delete.Delete().from_(table)
 
 
-def customSql(text):
+def customSql(sql):
     """Custom SQL."""
-    return sqlpuzzle._libs.customSql.CustomSql(text)
+    return sqlpuzzle._libs.customSql.CustomSql(sql)
+
+
+def custom(sql):
+    """Alias for customSql."""
+    return customSql(sql)
 
 
 # Broaden doc strings of functions by useful help.

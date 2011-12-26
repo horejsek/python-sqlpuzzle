@@ -5,12 +5,13 @@
 # https://github.com/horejsek/sqlpuzzle
 #
 
+import types
+import datetime
+import re
+
 import sqlpuzzle._features
 import sqlpuzzle._queries
 import sqlpuzzle.exceptions
-import datetime
-import re
-import types
 
 
 class SqlValue(object):
@@ -29,30 +30,20 @@ class SqlValue(object):
             datetime.datetime: self._datetime,
             list: self._list,
             tuple: self._list,
+            types.NoneType: self._null,
             sqlpuzzle._queries.select.Select: self._subselect,
             sqlpuzzle._queries.union.Union: self._subselect,
-            types.NoneType: self._null,
+            sqlpuzzle._libs.customSql.CustomSql: self._raw,
         }
 
         self.value = value
 
-    def _escapeValue(self, value):
-        replaceTable = (
-            ("\\", "\\\\"),
-            ('"', '\\"'),
-            ("'", "\\'"),
-            ("\n", "\\n"),
-        )
-        for old, new in replaceTable:
-            value = value.replace(old, new)
-        return value
+    def __repr__(self):
+        return "<SqlValue: %s>" % self.__str__()
 
     def __str__(self):
         """Convert and print value."""
         return self._getConvertMethod()()
-
-    def __repr__(self):
-        return "<SqlValue: %s>" % self.__str__()
 
     def _getConvertMethod(self):
         """Get right method to convert of the value."""
@@ -109,6 +100,17 @@ class SqlValue(object):
     def _undefined(self):
         """undefined"""
         return '<undefined value>'
+
+    def _escapeValue(self, value):
+        replaceTable = (
+            ("\\", "\\\\"),
+            ('"', '\\"'),
+            ("'", "\\'"),
+            ("\n", "\\n"),
+        )
+        for old, new in replaceTable:
+            value = value.replace(old, new)
+        return value
 
     def _backQuotes(self):
         """

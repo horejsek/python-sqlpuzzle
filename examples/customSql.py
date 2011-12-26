@@ -47,3 +47,8 @@ print sqlpuzzle.insertInto(table).values(name='Alan')
 # output:
 # INSERT INTO `user` (`name`) VALUES ("Alan")
 
+
+# or only custom (which is alias for customSql)
+print sqlpuzzle.select(sqlpuzzle.custom('1')).fromTable('t')
+# output:
+# SELECT 1 FROM `t`

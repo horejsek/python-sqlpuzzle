@@ -6,10 +6,10 @@
 # https://github.com/horejsek/sqlpuzzle
 #
 
+import datetime
+
 import sqlpuzzle
 import sqlpuzzle.relations
-
-import datetime
 
 sql = sqlpuzzle.selectFrom('user')
 

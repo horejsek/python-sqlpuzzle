@@ -6,10 +6,10 @@
 # https://github.com/horejsek/sqlpuzzle
 #
 
+import datetime
+
 import sqlpuzzle
 import sqlpuzzle.exceptions
-
-import datetime
 
 sql = sqlpuzzle.update('table')
 sql.set(name='Harry')
