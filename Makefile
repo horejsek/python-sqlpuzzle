@@ -37,6 +37,10 @@ builddeb:
 	# build the package
 	dpkg-buildpackage -i -I -rfakeroot
 
+localdev:
+	cp git-hooks/* .git/hooks/
+	chmod 755 .git/hooks/
+
 clean:
 	$(PYTHON) setup.py clean
 	$(MAKE) -f $(CURDIR)/debian/rules clean
