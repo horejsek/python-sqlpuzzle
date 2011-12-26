@@ -90,7 +90,7 @@ class Conditions(sqlpuzzle._features.Features):
                     'allowList': True,
                     'allowedDataTypes': (
                         (str, unicode, sqlpuzzle._queries.select.Select),
-                        (str, unicode, int, long, float, bool, list, tuple, datetime.date, datetime.datetime, sqlpuzzle.relations._RelationValue),
+                        (str, unicode, int, long, float, bool, list, tuple, datetime.date, datetime.datetime, sqlpuzzle.relations._RelationValue, sqlpuzzle._queries.select.Select),
                         (sqlpuzzle.relations._RelationValue,)
                     ),
                 },
