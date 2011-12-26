@@ -51,6 +51,27 @@ class InlineTest(LimitTest):
 
 
 
+class CopyTest(LimitTest):
+    def testCopy(self):
+        self.limit.limit(3)
+        copy = self.limit.copy()
+        self.limit.offset(12)
+        self.assertEqual(str(copy), 'LIMIT 3')
+        self.assertEqual(str(self.limit), 'LIMIT 3 OFFSET 12')
+
+    def testEquals(self):
+        self.limit.limit(3)
+        copy = self.limit.copy()
+        self.assertTrue(self.limit == copy)
+
+    def testNotEquals(self):
+        self.limit.limit(3)
+        copy = self.limit.copy()
+        self.limit.offset(12)
+        self.assertFalse(self.limit == copy)
+
+
+
 class ExceptionsTest(LimitTest):
     def testLimitStringException(self):
         self.assertRaises(sqlpuzzle.exceptions.InvalidArgumentException, self.limit.limit, 'limit')
@@ -75,6 +96,7 @@ class ExceptionsTest(LimitTest):
 testCases = (
     BaseTest,
     InlineTest,
+    CopyTest,
     ExceptionsTest,
 )
 

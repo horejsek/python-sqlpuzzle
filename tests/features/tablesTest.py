@@ -93,6 +93,27 @@ class GroupingTest(TablesTest):
 
 
 
+class CopyTest(TablesTest):
+    def testCopy(self):
+        self.tables.set('tab')
+        copy = self.tables.copy()
+        self.tables.set('tab2')
+        self.assertEqual(str(copy), '`tab`')
+        self.assertEqual(str(self.tables), '`tab`, `tab2`')
+
+    def testEquals(self):
+        self.tables.set('tab')
+        copy = self.tables.copy()
+        self.assertTrue(self.tables == copy)
+
+    def testNotEquals(self):
+        self.tables.set('tab')
+        copy = self.tables.copy()
+        self.tables.set('tab2')
+        self.assertFalse(self.tables == copy)
+
+
+
 class ExceptionsTest(TablesTest):
     def testNameAsIntegerException(self):
         self.assertRaises(sqlpuzzle.exceptions.InvalidArgumentException, self.tables.set, 42)
@@ -194,6 +215,7 @@ testCases = (
     ExceptionsTest,
     SimpleJoinsTest,
     GroupingJoinsTest,
+    CopyTest,
     BackQuotesJoinsTest,
     ExceptionsJoinTest,
 )

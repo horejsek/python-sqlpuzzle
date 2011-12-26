@@ -91,6 +91,28 @@ class GroupingTest(ColumnsTest):
 
 
 
+class CopyTest(ColumnsTest):
+    def testCopy(self):
+        self.columns.columns('id', 'name')
+        copy = self.columns.copy()
+        self.columns.columns('address')
+        self.assertEqual(str(copy), '`id`, `name`')
+        self.assertEqual(str(self.columns), '`id`, `name`, `address`')
+
+    def testEquals(self):
+        self.columns.columns('id', 'name')
+        copy = self.columns.copy()
+        self.assertTrue(self.columns == copy)
+
+    def testNotEquals(self):
+        self.columns.columns('id', 'name')
+        copy = self.columns.copy()
+        self.columns.columns('address')
+        self.assertFalse(self.columns == copy)
+
+
+
+
 class ExceptionsTest(ColumnsTest):
     def testNameAsIntegerException(self):
         self.assertRaises(sqlpuzzle.exceptions.InvalidArgumentException, self.columns.columns, 42)
@@ -108,6 +130,7 @@ testCases = (
     CustomSqlTest,
     BackQuotesTest,
     GroupingTest,
+    CopyTest,
     ExceptionsTest,
 )
 

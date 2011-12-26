@@ -163,6 +163,27 @@ class AllowedValuesTest(WhereTest):
 
 
 
+class CopyTest(WhereTest):
+    def testCopy(self):
+        self.where.where({'id': 42})
+        copy = self.where.copy()
+        self.where.where({'name': 'Alan'})
+        self.assertEqual(str(copy), 'WHERE `id` = 42')
+        self.assertEqual(str(self.where), 'WHERE `id` = 42 AND `name` = "Alan"')
+
+    def testEquals(self):
+        self.where.where({'id': 42})
+        copy = self.where.copy()
+        self.assertTrue(self.where == copy)
+
+    def testNotEquals(self):
+        self.where.where({'id': 42})
+        copy = self.where.copy()
+        self.where.where({'name': 'Alan'})
+        self.assertFalse(self.where == copy)
+
+
+
 class ExceptionsTest(WhereTest):
     def testColumnAsIntegerException(self):
         self.assertRaises(sqlpuzzle.exceptions.InvalidArgumentException, self.where.where, 42, 'val')
@@ -202,6 +223,7 @@ testCases = (
     CustomSqlTest,
     GroupingTest,
     AllowedValuesTest,
+    CopyTest,
     ExceptionsTest,
 )
 

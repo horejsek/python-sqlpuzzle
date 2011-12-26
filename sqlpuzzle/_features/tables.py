@@ -55,6 +55,12 @@ class Table(sqlpuzzle._features.Feature):
         self._table = table
         self._as = as_
         self._joins = []
+    
+    def copy(self):
+        """Create copy of feature."""
+        newFeature = super(Table, self).copy()
+        newFeature._joins = [j.copy() for j in self._joins]
+        return newFeature
 
     def __str__(self):
         """Print part of query."""

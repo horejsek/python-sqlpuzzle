@@ -15,6 +15,7 @@ class UnionTest(unittest.TestCase):
     def setUp(self):
         self.select1 = sqlpuzzle._queries.select.Select().from_('t1')
         self.select2 = sqlpuzzle._queries.select.Select().from_('t2')
+        self.union = self.select1 | self.select2
 
 
 
@@ -38,8 +39,30 @@ class BaseTest(UnionTest):
 
 
 
+class CopyTest(UnionTest):
+    def testCopy(self):
+        union = self.select1 & self.select2
+        copy = union.copy()
+        union |= self.select1
+        self.assertEqual(str(copy), 'SELECT * FROM `t1` UNION ALL SELECT * FROM `t2`')
+        self.assertEqual(str(union), 'SELECT * FROM `t1` UNION ALL SELECT * FROM `t2` UNION SELECT * FROM `t1`')
+
+    def testEquals(self):
+        union = self.select1 & self.select2
+        copy = union.copy()
+        self.assertTrue(union == copy)
+
+    def testNotEquals(self):
+        union = self.select1 & self.select2
+        copy = union.copy()
+        union |= self.select1
+        self.assertFalse(union == copy)
+
+
+
 testCases = (
     BaseTest,
+    CopyTest,
 )
 
 

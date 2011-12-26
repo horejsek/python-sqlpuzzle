@@ -267,6 +267,27 @@ class SubselectTest(SelectTest):
 
 
 
+class CopyTest(SelectTest):
+    def testCopy(self):
+        self.select.from_('user').where(name='Alan')
+        copy = self.select.copy()
+        self.select.limit(10)
+        self.assertEqual(str(copy), 'SELECT * FROM `user` WHERE `name` = "Alan"')
+        self.assertEqual(str(self.select), 'SELECT * FROM `user` WHERE `name` = "Alan" LIMIT 10')
+
+    def testEquals(self):
+        self.select.from_('user').where(name='Alan')
+        copy = self.select.copy()
+        self.assertTrue(self.select == copy)
+
+    def testNotEquals(self):
+        self.select.from_('user').where(name='Alan')
+        copy = self.select.copy()
+        self.select.limit(10)
+        self.assertFalse(self.select == copy)
+
+
+
 testCases = (
     BaseTest,
     TableTest,
@@ -277,6 +298,7 @@ testCases = (
     SelectOptionsTest,
     UnionTest,
     SubselectTest,
+    CopyTest,
 )
 
 

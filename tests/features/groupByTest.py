@@ -76,6 +76,27 @@ class GroupingTest(GroupByTest):
 
 
 
+class CopyTest(GroupByTest):
+    def testCopy(self):
+        self.groupBy.groupBy('id', 'name')
+        copy = self.groupBy.copy()
+        self.groupBy.groupBy('address')
+        self.assertEqual(str(copy), 'GROUP BY `id`, `name`')
+        self.assertEqual(str(self.groupBy), 'GROUP BY `id`, `name`, `address`')
+
+    def testEquals(self):
+        self.groupBy.groupBy('id', 'name')
+        copy = self.groupBy.copy()
+        self.assertTrue(self.groupBy == copy)
+
+    def testNotEquals(self):
+        self.groupBy.groupBy('id', 'name')
+        copy = self.groupBy.copy()
+        self.groupBy.groupBy('address')
+        self.assertFalse(self.groupBy == copy)
+
+
+
 class ExceptionsTest(GroupByTest):
     def testNameAsFloatException(self):
         self.assertRaises(sqlpuzzle.exceptions.InvalidArgumentException, self.groupBy.groupBy, 42.1)
@@ -92,6 +113,7 @@ testCases = (
     BaseTest,
     BackQuotesTest,
     GroupingTest,
+    CopyTest,
     ExceptionsTest,
 )
 

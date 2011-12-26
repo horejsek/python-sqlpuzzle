@@ -23,9 +23,27 @@ class Query(sqlpuzzle._libs.object.Object):
         self.__features = {}
         self.__keysOfFreaturesForAutoPrinting = ()
 
+    def copy(self):
+        """Create copy."""
+        newFeatures = {}
+        for key, feature in self.__features.iteritems():
+            newFeatures[key] = feature.copy()
+
+        newQuery = self.__class__()
+        newQuery._setFeatures(**newFeatures)
+        return newQuery
+
     def __str__(self):
         """Print query."""
-        return "abstract"
+        return "Abstract Query object"
+
+    def __eq__(self, other):
+        """Are queries equivalent?"""
+        sfs = self._getFeatures()
+        ofs = other._getFeatures()
+        if self.__class__ != other.__class__ or len(sfs) != len(ofs):
+            return False
+        return all(bool(sf == of) for sf, of in zip(sfs.values(), ofs.values()))
 
 
     def _printFeatures(self, prefix=''):
@@ -45,8 +63,12 @@ class Query(sqlpuzzle._libs.object.Object):
         """Set features which is proposed to automatic print."""
         self.__keysOfFreaturesForAutoPrinting = args
 
-    def _getFeature(self, keyOfFeature):
+    def _getFeatures(self):
         """Get features."""
+        return dict(self.__features)
+
+    def _getFeature(self, keyOfFeature):
+        """Get feature."""
         if keyOfFeature in self.__features:
             return self.__features[keyOfFeature]
         self.__raiser(keyOfFeature)
@@ -81,6 +103,9 @@ class Query(sqlpuzzle._libs.object.Object):
 
     @property
     def _intoOutfile(self): return self._getFeature('intoOutfile')
+
+    @property
+    def _selectOptions(self): return self._getFeature('selectOptions')
 
 
     def __and__(self, other): self.__raiser('union')

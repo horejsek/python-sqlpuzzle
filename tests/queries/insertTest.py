@@ -52,9 +52,31 @@ class OnDuplicateKeyUpdateTest(InsertTest):
 
 
 
+class CopyTest(InsertTest):
+    def testCopy(self):
+        self.insert.into('user').values(id=1)
+        copy = self.insert.copy()
+        self.insert.values(name='Alan')
+        self.assertEqual(str(copy), 'INSERT INTO `user` (`id`) VALUES (1)')
+        self.assertEqual(str(self.insert), 'INSERT INTO `user` (`id`, `name`) VALUES (1, "Alan")')
+
+    def testEquals(self):
+        self.insert.into('user').values(id=1)
+        copy = self.insert.copy()
+        self.assertTrue(self.insert == copy)
+
+    def testNotEquals(self):
+        self.insert.into('user').values(id=1)
+        copy = self.insert.copy()
+        self.insert.values(name='Alan')
+        self.assertFalse(self.insert == copy)
+
+
+
 testCases = (
     BaseTest,
     OnDuplicateKeyUpdateTest,
+    CopyTest,
 )
 
 

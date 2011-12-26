@@ -86,6 +86,27 @@ class AllowedValuesTest(ValuesTest):
 
 
 
+class CopyTest(ValuesTest):
+    def testCopy(self):
+        self.values.set({'id': 42})
+        copy = self.values.copy()
+        self.values.set({'name': 'Alan'})
+        self.assertEqual(str(copy), '`id` = 42')
+        self.assertEqual(str(self.values), '`id` = 42, `name` = "Alan"')
+
+    def testEquals(self):
+        self.values.set({'id': 42})
+        copy = self.values.copy()
+        self.assertTrue(self.values == copy)
+
+    def testNotEquals(self):
+        self.values.set({'id': 42})
+        copy = self.values.copy()
+        self.values.set({'name': 'Alan'})
+        self.assertFalse(self.values == copy)
+
+
+
 class ExceptionsTest(ValuesTest):
     def testColumnAsIntegerException(self):
         self.assertRaises(sqlpuzzle.exceptions.InvalidArgumentException, self.values.set, 42, 'val')
@@ -102,6 +123,7 @@ testCases = (
     BaseTest,
     CustomSqlTest,
     AllowedValuesTest,
+    CopyTest,
     ExceptionsTest,
 )
 

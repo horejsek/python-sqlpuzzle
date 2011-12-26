@@ -32,10 +32,10 @@ class Select(sqlpuzzle._queries.Query):
             orderBy = sqlpuzzle._features.orderBy.OrderBy(),
             limit = sqlpuzzle._features.limit.Limit(),
             intoOutfile = sqlpuzzle._features.intoOutfile.IntoOutfile(),
+            selectOptions = SelectOptions(),
         )
         self._setKeysOfFeaturesForAutoPrinting('where', 'groupBy', 'having', 'orderBy', 'limit', 'intoOutfile')
 
-        self._selectOptions = SelectOptions()
         self.columns(*args, **kwds)
 
     def __str__(self):
@@ -227,7 +227,7 @@ class Select(sqlpuzzle._queries.Query):
 
 
 
-class SelectOptions(object):
+class SelectOptions(sqlpuzzle._libs.object.Object):
     _options = {
         'sqlCache': {
             'off': '',
@@ -271,8 +271,20 @@ class SelectOptions(object):
         for optionKey in self._options.keys():
             self._setOptions[optionKey] = 'off'
 
+    def copy(self):
+        """Create copy."""
+        newSelectOptions = self.__class__()
+        newSelectOptions._setOptions = dict(self._setOptions)
+        return newSelectOptions
+
     def __str__(self):
         return ' '.join(self._options[key][val] for key, val in self._setOptions.iteritems() if val != 'off')
+
+    def __eq__(self, other):
+        """Are select options equivalent?"""
+        if self.__class__ != other.__class__ or len(self._setOptions) != len(other._setOptions):
+            return False
+        return all(bool(so == oo) for so, oo in zip(self._setOptions.values(), other._setOptions.values()))
 
     def sqlCache(self): self._setOptions['sqlCache'] = 'cache'
     def sqlNoCache(self): self._setOptions['sqlCache'] = 'noCache'

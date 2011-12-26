@@ -58,9 +58,31 @@ class WhereTest(UpdateTest):
 
 
 
+class CopyTest(UpdateTest):
+    def testCopy(self):
+        self.update.table('user').set(name='Alan').where(id=42)
+        copy = self.update.copy()
+        self.update.set(age=24)
+        self.assertEqual(str(copy), 'UPDATE `user` SET `name` = "Alan" WHERE `id` = 42')
+        self.assertEqual(str(self.update), 'UPDATE `user` SET `name` = "Alan", `age` = 24 WHERE `id` = 42')
+
+    def testEquals(self):
+        self.update.table('user').set(name='Alan').where(id=42)
+        copy = self.update.copy()
+        self.assertTrue(self.update == copy)
+
+    def testNotEquals(self):
+        self.update.table('user').set(name='Alan').where(id=42)
+        copy = self.update.copy()
+        self.update.set(age=24)
+        self.assertFalse(self.update == copy)
+
+
+
 testCases = (
     BaseTest,
     WhereTest,
+    CopyTest,
 )
 
 

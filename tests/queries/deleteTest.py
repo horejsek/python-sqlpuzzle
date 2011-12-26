@@ -55,9 +55,31 @@ class WhereTest(DeleteTest):
 
 
 
+class CopyTest(WhereTest):
+    def testCopy(self):
+        self.delete.from_('user').where(id=42)
+        copy = self.delete.copy()
+        self.delete.where(name='Harry')
+        self.assertEqual(str(copy), 'DELETE FROM `user` WHERE `id` = 42')
+        self.assertEqual(str(self.delete), 'DELETE FROM `user` WHERE `id` = 42 AND `name` = "Harry"')
+
+    def testEquals(self):
+        self.delete.from_('user').where(id=42)
+        copy = self.delete.copy()
+        self.assertTrue(self.delete == copy)
+
+    def testNotEquals(self):
+        self.delete.from_('user').where(id=42)
+        copy = self.delete.copy()
+        self.delete.where(name='Harry')
+        self.assertFalse(self.delete == copy)
+
+
+
 testCases = (
     BaseTest,
     WhereTest,
+    CopyTest,
 )
 
 

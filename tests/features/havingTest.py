@@ -74,6 +74,27 @@ class GroupingTest(HavingTest):
 
 
 
+class CopyTest(HavingTest):
+    def testCopy(self):
+        self.having.where({'id': 42})
+        copy = self.having.copy()
+        self.having.where({'name': 'Alan'})
+        self.assertEqual(str(copy), 'HAVING `id` = 42')
+        self.assertEqual(str(self.having), 'HAVING `id` = 42 AND `name` = "Alan"')
+
+    def testEquals(self):
+        self.having.where({'id': 42})
+        copy = self.having.copy()
+        self.assertTrue(self.having == copy)
+
+    def testNotEquals(self):
+        self.having.where({'id': 42})
+        copy = self.having.copy()
+        self.having.where({'name': 'Alan'})
+        self.assertFalse(self.having == copy)
+
+
+
 class AllowedValuesTest(HavingTest):
     def testValueAsInteger(self):
         self.having.where('col', 42)
@@ -133,6 +154,7 @@ class ExceptionsTest(HavingTest):
 testCases = (
     BaseTest,
     GroupingTest,
+    CopyTest,
     AllowedValuesTest,
     ExceptionsTest,
 )

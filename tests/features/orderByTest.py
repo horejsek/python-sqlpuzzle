@@ -76,6 +76,27 @@ class GroupingTest(OrderByTest):
 
 
 
+class CopyTest(OrderByTest):
+    def testCopy(self):
+        self.orderBy.orderBy('name')
+        copy = self.orderBy.copy()
+        self.orderBy.orderBy('surname')
+        self.assertEqual(str(copy), 'ORDER BY `name`')
+        self.assertEqual(str(self.orderBy), 'ORDER BY `name`, `surname`')
+
+    def testEquals(self):
+        self.orderBy.orderBy('name')
+        copy = self.orderBy.copy()
+        self.assertTrue(self.orderBy == copy)
+
+    def testNotEquals(self):
+        self.orderBy.orderBy('name')
+        copy = self.orderBy.copy()
+        self.orderBy.orderBy('surname')
+        self.assertFalse(self.orderBy == copy)
+
+
+
 class ExceptionsTest(OrderByTest):
     def testNameAsFloatException(self):
         self.assertRaises(sqlpuzzle.exceptions.InvalidArgumentException, self.orderBy.orderBy, 42.1)
@@ -92,6 +113,7 @@ testCases = (
     BaseTest,
     BackQuotesTest,
     GroupingTest,
+    CopyTest,
     ExceptionsTest,
 )
 
