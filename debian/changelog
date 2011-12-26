@@ -1,3 +1,13 @@
+sqlpuzzle (0.16.0) UNRELEASED; urgency=low
+
+  * New release with new features.
+    o Relations is now instances with value.
+    o Method copy().
+    o Allowed customSql as value.
+    o Allowed subselect in right position of conditions.
+
+ -- Michal Horejsek <horejsekmichal@gmail.com>  Fri, 23 Dec 2011 12:57:06 +0200
+
 sqlpuzzle (0.15.1) UNRELEASED; urgency=low
 
   * New minor release with new features.
