@@ -9,6 +9,7 @@ import datetime
 
 import sqlpuzzle._libs.argsParser
 import sqlpuzzle._libs.sqlValue
+import sqlpuzzle._queries
 import sqlpuzzle.exceptions
 import sqlpuzzle.relations
 
@@ -26,6 +27,7 @@ class Condition(sqlpuzzle._features.Feature):
         datetime.date: sqlpuzzle.relations.EQ,
         datetime.datetime: sqlpuzzle.relations.EQ,
         type(None): sqlpuzzle.relations.IS,
+        sqlpuzzle._queries.Query: sqlpuzzle.relations.EQ,
     }
 
     def __init__(self, column, value, relation=None):

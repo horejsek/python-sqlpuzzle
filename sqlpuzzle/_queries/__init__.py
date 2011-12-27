@@ -8,14 +8,6 @@
 import sqlpuzzle._libs.object
 import sqlpuzzle.exceptions
 
-import sqlpuzzle._features.columns
-import sqlpuzzle._features.conditions
-import sqlpuzzle._features.groupBy
-import sqlpuzzle._features.limit
-import sqlpuzzle._features.orderBy
-import sqlpuzzle._features.tables
-import sqlpuzzle._features.values
-
 
 class Query(sqlpuzzle._libs.object.Object):
     def __init__(self):
