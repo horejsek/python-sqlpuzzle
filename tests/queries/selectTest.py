@@ -198,25 +198,49 @@ class SelectOptionsTest(SelectTest):
         self.select.from_('table').sqlSmallResult()
         self.assertEqual(str(self.select), 'SELECT SQL_SMALL_RESULT * FROM `table`')
 
+    def testSqlSmallResultOff(self):
+        self.select.from_('table').sqlSmallResult().sqlSmallResult(False)
+        self.assertEqual(str(self.select), 'SELECT * FROM `table`')
+
     def testSqlBigResult(self):
         self.select.from_('table').sqlBigResult()
         self.assertEqual(str(self.select), 'SELECT SQL_BIG_RESULT * FROM `table`')
+
+    def testSqlBigResultOff(self):
+        self.select.from_('table').sqlBigResult().sqlBigResult(False)
+        self.assertEqual(str(self.select), 'SELECT * FROM `table`')
 
     def testSqlBufferResult(self):
         self.select.from_('table').sqlBufferResult()
         self.assertEqual(str(self.select), 'SELECT SQL_BUFFER_RESULT * FROM `table`')
 
+    def testSqlBufferResultOff(self):
+        self.select.from_('table').sqlBufferResult().sqlBufferResult(False)
+        self.assertEqual(str(self.select), 'SELECT * FROM `table`')
+
     def testSqlCalcFoundRows(self):
         self.select.from_('table').sqlCalcFoundRows()
         self.assertEqual(str(self.select), 'SELECT SQL_CALC_FOUND_ROWS * FROM `table`')
+
+    def testSqlCalcFoundRowsOff(self):
+        self.select.from_('table').sqlCalcFoundRows().sqlCalcFoundRows(False)
+        self.assertEqual(str(self.select), 'SELECT * FROM `table`')
 
     def testStraightJoin(self):
         self.select.from_('table').straightJoin()
         self.assertEqual(str(self.select), 'SELECT STRAIGHT_JOIN * FROM `table`')
 
+    def testStraightJoinOff(self):
+        self.select.from_('table').straightJoin().straightJoin(False)
+        self.assertEqual(str(self.select), 'SELECT * FROM `table`')
+
     def testHighPriority(self):
         self.select.from_('table').highPriority()
         self.assertEqual(str(self.select), 'SELECT HIGH_PRIORITY * FROM `table`')
+
+    def testHighPriorityOff(self):
+        self.select.from_('table').highPriority().highPriority(False)
+        self.assertEqual(str(self.select), 'SELECT * FROM `table`')
 
     def testMoreOptions(self):
         self.select.from_('table').distinct().sqlCalcFoundRows().sqlNoCache()

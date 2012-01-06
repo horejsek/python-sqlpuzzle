@@ -195,34 +195,34 @@ class Select(sqlpuzzle._queries.Query):
         self._selectOptions.distinctrow()
         return self
 
-    def sqlSmallResult(self):
+    def sqlSmallResult(self, allow=True):
         """SQL_SMALL_RESULT"""
-        self._selectOptions.sqlSmallResult()
+        self._selectOptions.sqlSmallResult(allow)
         return self
 
-    def sqlBigResult(self):
+    def sqlBigResult(self, allow=True):
         """SQL_BIG_RESULT"""
-        self._selectOptions.sqlBigResult()
+        self._selectOptions.sqlBigResult(allow)
         return self
 
-    def sqlBufferResult(self):
+    def sqlBufferResult(self, allow=True):
         """SQL_BUFFER_RESULT"""
-        self._selectOptions.sqlBufferResult()
+        self._selectOptions.sqlBufferResult(allow)
         return self
 
-    def sqlCalcFoundRows(self):
+    def sqlCalcFoundRows(self, allow=True):
         """SQL_CALC_FOUND_ROWS"""
-        self._selectOptions.sqlCalcFoundRows()
+        self._selectOptions.sqlCalcFoundRows(allow)
         return self
 
-    def straightJoin(self):
+    def straightJoin(self, allow=True):
         """STRAIGHT_JOIN"""
-        self._selectOptions.straightJoin()
+        self._selectOptions.straightJoin(allow)
         return self
 
-    def highPriority(self):
+    def highPriority(self, allow=True):
         """HIGH_PRIORITY"""
-        self._selectOptions.highPriority()
+        self._selectOptions.highPriority(allow)
         return self
 
 
@@ -291,9 +291,9 @@ class SelectOptions(sqlpuzzle._libs.object.Object):
     def all(self): self._setOptions['duplicated'] = 'all'
     def distinct(self): self._setOptions['duplicated'] = 'distinct'
     def distinctrow(self): self._setOptions['duplicated'] = 'distinctrow'
-    def sqlSmallResult(self): self._setOptions['sqlSmallResult'] = 'on'
-    def sqlBigResult(self): self._setOptions['sqlBigResult'] = 'on'
-    def sqlBufferResult(self): self._setOptions['sqlBufferResult'] = 'on'
-    def sqlCalcFoundRows(self): self._setOptions['sqlCalcFoundRows'] = 'on'
-    def straightJoin(self): self._setOptions['straightJoin'] = 'on'
-    def highPriority(self): self._setOptions['highPriority'] = 'on'
+    def sqlSmallResult(self, allow=True): self._setOptions['sqlSmallResult'] = 'on' if allow else 'off'
+    def sqlBigResult(self, allow=True): self._setOptions['sqlBigResult'] = 'on' if allow else 'off'
+    def sqlBufferResult(self, allow=True): self._setOptions['sqlBufferResult'] = 'on' if allow else 'off'
+    def sqlCalcFoundRows(self, allow=True): self._setOptions['sqlCalcFoundRows'] = 'on' if allow else 'off'
+    def straightJoin(self, allow=True): self._setOptions['straightJoin'] = 'on' if allow else 'off'
+    def highPriority(self, allow=True): self._setOptions['highPriority'] = 'on' if allow else 'off'
