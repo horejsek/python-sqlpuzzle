@@ -25,6 +25,9 @@ class Query(sqlpuzzle._libs.object.Object):
         newQuery._setFeatures(**newFeatures)
         return newQuery
 
+    def __hash__(self):
+        return id(self)
+
     def __str__(self):
         """Print query."""
         return "Abstract Query object"
