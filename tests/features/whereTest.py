@@ -35,8 +35,8 @@ class BaseTest(WhereTest):
 
     def testWhereByList(self):
         self.where.where([
-            ['name', 'Harry', sqlpuzzle.relations.LIKE],
-            ['sex', 'female', sqlpuzzle.relations.NOT_EQUAL_TO],
+            ['name', sqlpuzzle.relations.LIKE('Harry')],
+            ['sex', sqlpuzzle.relations.NOT_EQUAL_TO('female')],
             ['age', sqlpuzzle.relations.LESS_TAHN_OR_EQUAL_TO(20)],
         ])
         self.assertEqual(str(self.where), 'WHERE `name` LIKE "Harry" AND `sex` != "female" AND `age` <= 20')

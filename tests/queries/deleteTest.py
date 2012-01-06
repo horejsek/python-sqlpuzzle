@@ -44,7 +44,7 @@ class WhereTest(DeleteTest):
     def testWhere(self):
         self.delete.from_('user')
         self.delete.where(age=42)
-        self.delete.where('name', 'Harry', sqlpuzzle.relations.LIKE)
+        self.delete.where('name', sqlpuzzle.relations.LIKE('Harry'))
         self.delete.where({
             'sex': 'male',
         })

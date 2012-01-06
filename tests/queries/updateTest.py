@@ -47,7 +47,7 @@ class WhereTest(UpdateTest):
         self.update.table('user')
         self.update.set(name='Alan')
         self.update.where(age=42)
-        self.update.where('name', 'Harry', sqlpuzzle.relations.LIKE)
+        self.update.where('name', sqlpuzzle.relations.LIKE('Harry'))
         self.update.where({
             'sex': 'male',
         })

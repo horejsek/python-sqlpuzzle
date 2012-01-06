@@ -99,7 +99,7 @@ class WhereTest(SelectTest):
     def testWhere(self):
         self.select.from_('user')
         self.select.where(age=42)
-        self.select.where('name', 'Harry', sqlpuzzle.relations.LIKE)
+        self.select.where('name', sqlpuzzle.relations.LIKE('Harry'))
         self.select.where({
             'sex': 'male',
         })
@@ -256,7 +256,7 @@ class SubselectTest(SelectTest):
     def testSubselectInCondition(self):
         subselect = sqlpuzzle._queries.select.Select('col').from_('tab')
         self.select.from_('tab')
-        self.select.where(subselect, 42, sqlpuzzle.relations.LE)
+        self.select.where(subselect, sqlpuzzle.relations.LE(42))
         self.assertEqual(str(self.select), 'SELECT * FROM `tab` WHERE (SELECT `col` FROM `tab`) <= 42')
 
     def testSubselectReference(self):
