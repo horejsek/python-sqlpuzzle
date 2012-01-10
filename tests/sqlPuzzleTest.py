@@ -12,6 +12,10 @@ import sqlpuzzle.relations
 
 
 class SqlPuzzleTest(unittest.TestCase):
+    def testSelectTest(self):
+        sql = sqlpuzzle.select(1)
+        self.assertEqual(str(sql), 'SELECT 1')
+
     def testSelectWithoutColumns(self):
         sql = sqlpuzzle.select().from_('user')
         self.assertEqual(str(sql), 'SELECT * FROM `user`')

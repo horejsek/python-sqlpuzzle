@@ -46,7 +46,7 @@ class Columns(sqlpuzzle._features.Features):
         """Set columns."""
 
         allowedDataTypes = sqlpuzzle._libs.argsParser.AllowedDataTypes().add(
-            (str, unicode, sqlpuzzle._queries.select.Select, sqlpuzzle._queries.union.Union, sqlpuzzle._libs.customSql.CustomSql, sqlpuzzle._features.functions.Function),
+            (int, str, unicode, sqlpuzzle._queries.select.Select, sqlpuzzle._queries.union.Union, sqlpuzzle._libs.customSql.CustomSql, sqlpuzzle._features.functions.Function),
             (str, unicode)
         ).add(
             sqlpuzzle._libs.customSql.CustomSql

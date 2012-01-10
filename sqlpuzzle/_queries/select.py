@@ -24,7 +24,7 @@ class Select(sqlpuzzle._queries.Query):
         super(Select, self).__init__()
 
         self._setFeatures(
-            tables = sqlpuzzle._features.tables.Tables(),
+            tables = sqlpuzzle._features.tables.TablesForSelect(),
             columns = sqlpuzzle._features.columns.Columns(),
             where = sqlpuzzle._features.where.Where(),
             groupBy = sqlpuzzle._features.groupBy.GroupBy(),
@@ -34,7 +34,7 @@ class Select(sqlpuzzle._queries.Query):
             intoOutfile = sqlpuzzle._features.intoOutfile.IntoOutfile(),
             selectOptions = SelectOptions(),
         )
-        self._setKeysOfFeaturesForAutoPrinting('where', 'groupBy', 'having', 'orderBy', 'limit', 'intoOutfile')
+        self._setKeysOfFeaturesForAutoPrinting('tables', 'where', 'groupBy', 'having', 'orderBy', 'limit', 'intoOutfile')
 
         self.columns(*args, **kwds)
 
@@ -44,10 +44,9 @@ class Select(sqlpuzzle._queries.Query):
         if selectOptions:
             selectOptions += ' '
 
-        select = "SELECT %s%s FROM %s" % (
+        select = "SELECT %s%s" % (
             selectOptions,
             str(self._columns),
-            str(self._tables),
         )
         return super(Select, self)._printFeatures(select)
 

@@ -19,6 +19,10 @@ class SelectTest(unittest.TestCase):
 
 
 class BaseTest(SelectTest):
+    def testTest(self):
+        self.select.columns(1)
+        self.assertEqual(str(self.select), 'SELECT 1')
+
     def testSimply(self):
         self.select.columns('id', 'name')
         self.select.from_('user')

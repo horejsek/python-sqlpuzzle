@@ -114,9 +114,6 @@ class CopyTest(ColumnsTest):
 
 
 class ExceptionsTest(ColumnsTest):
-    def testNameAsIntegerException(self):
-        self.assertRaises(sqlpuzzle.exceptions.InvalidArgumentException, self.columns.columns, 42)
-
     def testNameAsFloatException(self):
         self.assertRaises(sqlpuzzle.exceptions.InvalidArgumentException, self.columns.columns, 42.1)
 

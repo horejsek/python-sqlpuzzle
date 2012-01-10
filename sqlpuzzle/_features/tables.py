@@ -55,7 +55,7 @@ class Table(sqlpuzzle._features.Feature):
         self._table = table
         self._as = as_
         self._joins = []
-    
+
     def copy(self):
         """Create copy of feature."""
         newFeature = super(Table, self).copy()
@@ -224,3 +224,11 @@ class Tables(sqlpuzzle._features.Features):
 
         self.lastTable().on(*args, **kwds)
         return self
+
+
+
+class TablesForSelect(Tables):
+    def __init__(self):
+        """Initialization of TablesForSelect."""
+        super(Tables, self).__init__()
+        self._keywordOfFeature = 'FROM'
