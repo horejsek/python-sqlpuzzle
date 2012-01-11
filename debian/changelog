@@ -1,3 +1,12 @@
+sqlpuzzle (0.16.1) UNRELEASED; urgency=low
+
+  * New minor release with new features.
+    o Flag in select option for disable it.
+    o Allowed sqlpuzzle in relation.
+    o Better writing of sql 'connection test'.
+
+ -- Michal Horejsek <horejsekmichal@gmail.com>  Tue, 11 Jan 2012 09:33:32 +0200
+
 sqlpuzzle (0.16.0) UNRELEASED; urgency=low
 
   * New release with new features.
