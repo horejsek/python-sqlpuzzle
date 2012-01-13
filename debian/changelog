@@ -1,4 +1,4 @@
-sqlpuzzle (0.16.1) UNRELEASED; urgency=low
+python-sqlpuzzle (0.16.1) UNRELEASED; urgency=low
 
   * New minor release with new features.
     o Flag in select option for disable it.
@@ -7,7 +7,7 @@ sqlpuzzle (0.16.1) UNRELEASED; urgency=low
 
  -- Michal Horejsek <horejsekmichal@gmail.com>  Tue, 11 Jan 2012 09:33:32 +0200
 
-sqlpuzzle (0.16.0) UNRELEASED; urgency=low
+python-sqlpuzzle (0.16.0) UNRELEASED; urgency=low
 
   * New release with new features.
     o Relations is now instances with value.
@@ -17,19 +17,19 @@ sqlpuzzle (0.16.0) UNRELEASED; urgency=low
 
  -- Michal Horejsek <horejsekmichal@gmail.com>  Tue, 27 Dec 2011 08:12:32 +0200
 
-sqlpuzzle (0.15.1) UNRELEASED; urgency=low
+python-sqlpuzzle (0.15.1) UNRELEASED; urgency=low
 
   * New minor release with new features.
 
  -- Michal Horejsek <horejsekmichal@gmail.com>  Fri, 23 Dec 2011 12:57:06 +0200
 
-sqlpuzzle (0.15.0) UNRELEASED; urgency=low
+python-sqlpuzzle (0.15.0) UNRELEASED; urgency=low
 
   * New release with new features.
 
  -- Michal Horejsek <horejsekmichal@gmail.com>  Fri, 23 Dec 2011 08:39:31 +0200
 
-sqlpuzzle (0.14.2) UNRELEASED; urgency=low
+python-sqlpuzzle (0.14.2) UNRELEASED; urgency=low
 
   * Initial release.
 

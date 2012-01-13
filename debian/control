@@ -1,11 +1,11 @@
-Source: sqlpuzzle
+Source: python-sqlpuzzle
 Section: module
 Priority: optional
 Maintainer: Michal Horejsek <horejsekmichal@gmail.com>
 Build-Depends:
 XS-Python-Version: >=2.4
 
-Package: sqlpuzzle
+Package: python-sqlpuzzle
 Architecture: all
 Homepage: https://github.com/horejsek/sqlpuzzle
 XB-Python-Version:
