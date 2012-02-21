@@ -1,3 +1,9 @@
+python-sqlpuzzle (0.16.2) UNRELEASED; urgency=low
+
+  * Remove bad depend on Python 2.4.
+
+ -- Michal Horejsek <horejsekmichal@gmail.com>  Tue, 21 Feb 2012 08:09:50 +0200
+
 python-sqlpuzzle (0.16.1) UNRELEASED; urgency=low
 
   * New minor release with new features.
