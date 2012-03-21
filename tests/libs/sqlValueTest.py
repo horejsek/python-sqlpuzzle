@@ -55,6 +55,12 @@ class SqlValueTest(unittest.TestCase):
     def testEmptyTuple(self):
         self.assertRaises(sqlpuzzle.exceptions.InvalidArgumentException, str, SqlValue(()))
 
+    def testGenerator(self):
+        self.assertEqual(str(SqlValue(x for x in (12, 23, 34))), '(12, 23, 34)')
+
+    def testXrange(self):
+        self.assertEqual(str(SqlValue(xrange(5))), '(0, 1, 2, 3, 4)')
+
     def testNone(self):
         self.assertEqual(str(SqlValue(None)), 'NULL')
 

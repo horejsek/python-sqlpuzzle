@@ -31,6 +31,8 @@ class SqlValue(object):
             list: self._list,
             tuple: self._list,
             types.NoneType: self._null,
+            xrange: self._list,
+            types.GeneratorType: self._list,
             sqlpuzzle._queries.select.Select: self._subselect,
             sqlpuzzle._queries.union.Union: self._subselect,
             sqlpuzzle._libs.customSql.CustomSql: self._raw,

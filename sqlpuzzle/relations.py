@@ -105,7 +105,7 @@ class REGEXP(_RelationValue):
 
 class IN(_RelationValue):
     _stringRepresntation = 'IN'
-    _allowedTypes = (list, tuple, sqlpuzzle._queries.Query)
+    _allowedTypes = (list, tuple, xrange, types.GeneratorType, sqlpuzzle._queries.Query)
 
     def __init__(self, *args):
         if len(args) > 1:

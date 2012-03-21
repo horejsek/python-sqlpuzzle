@@ -209,6 +209,14 @@ class AllowedValuesTest(WhereTest):
         self.where.where('id', sqlpuzzle.relations.NOT_IN(23, 34, 45))
         self.assertEqual(str(self.where), 'WHERE `id` NOT IN (23, 34, 45)')
 
+    def testValueAsGenerator(self):
+        self.where.where('id', (x for x in (23, 34, 45)))
+        self.assertEqual(str(self.where), 'WHERE `id` IN (23, 34, 45)')
+
+    def testValueAsXrange(self):
+        self.where.where('id', xrange(3))
+        self.assertEqual(str(self.where), 'WHERE `id` IN (0, 1, 2)')
+
     def testValueAsNone(self):
         self.where.where('country', sqlpuzzle.relations.IS_NOT(None))
         self.assertEqual(str(self.where), 'WHERE `country` IS NOT NULL')

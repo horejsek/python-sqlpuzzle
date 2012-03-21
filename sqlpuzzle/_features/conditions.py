@@ -5,6 +5,7 @@
 # https://github.com/horejsek/python-sqlpuzzle
 #
 
+import types
 import datetime
 
 import sqlpuzzle._libs.argsParser
@@ -24,6 +25,8 @@ class Condition(sqlpuzzle._features.Feature):
         bool: sqlpuzzle.relations.EQ,
         list: sqlpuzzle.relations.IN,
         tuple: sqlpuzzle.relations.IN,
+        xrange: sqlpuzzle.relations.IN,
+        types.GeneratorType: sqlpuzzle.relations.IN,
         datetime.date: sqlpuzzle.relations.EQ,
         datetime.datetime: sqlpuzzle.relations.EQ,
         type(None): sqlpuzzle.relations.IS,
@@ -92,7 +95,7 @@ class Conditions(sqlpuzzle._features.Features):
                     'allowList': True,
                     'allowedDataTypes': (
                         (str, unicode, sqlpuzzle._queries.select.Select),
-                        (str, unicode, int, long, float, bool, list, tuple, datetime.date, datetime.datetime, sqlpuzzle.relations._RelationValue, sqlpuzzle._queries.select.Select),
+                        (str, unicode, int, long, float, bool, list, tuple, xrange, types.GeneratorType, datetime.date, datetime.datetime, sqlpuzzle.relations._RelationValue, sqlpuzzle._queries.select.Select),
                         (sqlpuzzle.relations._RelationValue,)
                     ),
                 },
