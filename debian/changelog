@@ -1,3 +1,9 @@
+python-sqlpuzzle (0.17.0) UNRELEASED; urgency=low
+
+  * Support for generator objects.
+
+ -- Michal Horejsek <horejsekmichal@gmail.com>  Tue, 21 Mar 2012 17:34:50 +0200
+
 python-sqlpuzzle (0.16.2) UNRELEASED; urgency=low
 
   * Remove bad depend on Python 2.4.
