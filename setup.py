@@ -2,7 +2,7 @@
 #
 # sqlpuzzle
 # Michal Horejsek <horejsekmichal@gmail.com>
-# https://github.com/horejsek/sqlpuzzle
+# https://github.com/horejsek/python-sqlpuzzle
 #
 # This application is released under the GNU General Public License
 # v3 (or, at your option, any later version). You can find the full
@@ -25,7 +25,7 @@ setup(
         'sqlpuzzle/_libs',
     ],
     version = version,
-    url = 'https://github.com/horejsek/sqlpuzzle',
+    url = 'https://github.com/horejsek/python-sqlpuzzle',
     description = 'Python library for writing SQL queries.',
     author = 'Michal Horejsek',
     author_email = 'horejsekmichal@gmail.com',

@@ -2,7 +2,7 @@
 #
 # sqlpuzzle
 # Michal Horejsek <horejsekmichal@gmail.com>
-# https://github.com/horejsek/sqlpuzzle
+# https://github.com/horejsek/python-sqlpuzzle
 #
 
 import sqlpuzzle._features.conditions
