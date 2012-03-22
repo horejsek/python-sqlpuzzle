@@ -23,7 +23,10 @@ class _RelationValue(sqlpuzzle._libs.object.Object):
         self._value = value
 
     def __str__(self):
-        return self._stringRepresntation
+        return '"%s %s"' % (
+            self._stringRepresntation,
+            self._value,
+        )
 
     def __eq__(self, other):
         """Are relations equivalent?"""
