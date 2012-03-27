@@ -28,6 +28,14 @@ class Function(sqlpuzzle._libs.object.Object):
             self._expr,
         )
 
+    @property
+    def _expr(self):
+        return self.__expr
+
+    @_expr.setter
+    def _expr(self, expr):
+        self.__expr = expr
+
 
 
 class FunctionWithDistinct(Function):
@@ -66,9 +74,16 @@ class Count(FunctionWithDistinct):
         if not expr or expr == '*':
             self._expr = '*'
         else:
-            self._expr = sqlpuzzle._libs.sqlValue.SqlReference(expr)
+            if not isinstance(expr, (list, tuple)):
+                expr = (expr,)
+            self._expr = (sqlpuzzle._libs.sqlValue.SqlReference(e) for e in expr)
 
         self.distinct(distinct)
+
+    @Function._expr.getter
+    def _expr(self):
+        expr = Function._expr.fget(self)
+        return ', '.join(str(e) for e in expr)
 
 
 

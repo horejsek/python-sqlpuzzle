@@ -35,6 +35,12 @@ class CountTest(FunctionsTest):
     def testNormal(self):
         self.assertEqual(str(sqlpuzzle._features.functions.Count('col')), 'COUNT(`col`)')
 
+    def testCountWithStar(self):
+        self.assertEqual(str(sqlpuzzle._features.functions.Count('*')), 'COUNT(*)')
+
+    def testCountWithoutParam(self):
+        self.assertEqual(str(sqlpuzzle._features.functions.Count()), 'COUNT(*)')
+
     def testDistinct(self):
         self.assertEqual(str(sqlpuzzle._features.functions.Count('col', True)), 'COUNT(DISTINCT `col`)')
 
@@ -44,11 +50,9 @@ class CountTest(FunctionsTest):
     def testDistinctByMethodWithParam(self):
         self.assertEqual(str(sqlpuzzle._features.functions.Count('col').distinct(False)), 'COUNT(`col`)')
 
-    def testCountWithStar(self):
-        self.assertEqual(str(sqlpuzzle._features.functions.Count('*')), 'COUNT(*)')
+    def testDistinctMoreExprs(self):
+        self.assertEqual(str(sqlpuzzle._features.functions.Count(('col1', 'col2')).distinct()), 'COUNT(DISTINCT `col1`, `col2`)')
 
-    def testCountWithoutParam(self):
-        self.assertEqual(str(sqlpuzzle._features.functions.Count()), 'COUNT(*)')
 
 
 
