@@ -73,6 +73,9 @@ class Query(sqlpuzzle._libs.object.Object):
     def _tables(self): return self._getFeature('tables')
 
     @property
+    def _references(self): return self._getFeature('references')
+
+    @property
     def _columns(self): return self._getFeature('columns')
 
     @property

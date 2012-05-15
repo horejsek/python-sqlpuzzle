@@ -40,6 +40,25 @@ class BaseTest(DeleteTest):
 
 
 
+class MoreReferencesTest(DeleteTest):
+    def setUp(self):
+        super(MoreReferencesTest, self).setUp()
+        self.delete.allowDeleteAll()
+
+    def testMoreTables(self):
+        self.delete.delete('user').from_('user', 'user2')
+        self.assertEqual(str(self.delete), 'DELETE `user` FROM `user`, `user2`')
+
+    def testMoreTablesWithAlias(self):
+        self.delete.delete('u').from_({'user': 'u', 'user2': 'u2'})
+        self.assertEqual(str(self.delete), 'DELETE `u` FROM `user2` AS `u2`, `user` AS `u`')
+
+    def testJoin(self):
+        self.delete.delete('user').from_('user').leftJoin('role').on('role.id', 'user.role_id').where('role.name', ('a', 'b'))
+        self.assertEqual(str(self.delete), 'DELETE `user` FROM `user` LEFT JOIN `role` ON (`role`.`id` = `user`.`role_id`) WHERE `role`.`name` IN ("a", "b")')
+
+
+
 class WhereTest(DeleteTest):
     def testWhere(self):
         self.delete.from_('user')
@@ -78,6 +97,7 @@ class CopyTest(WhereTest):
 
 testCases = (
     BaseTest,
+    MoreReferencesTest,
     WhereTest,
     CopyTest,
 )

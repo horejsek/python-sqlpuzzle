@@ -45,14 +45,14 @@ def update(table):
     return sqlpuzzle._queries.update.Update(table)
 
 
-def delete():
+def delete(*tables):
     """Delete."""
-    return sqlpuzzle._queries.delete.Delete()
+    return sqlpuzzle._queries.delete.Delete(*tables)
 
 
-def deleteFrom(table):
+def deleteFrom(*args, **kwds):
     """Delete. Set table by parameter."""
-    return sqlpuzzle._queries.delete.Delete().from_(table)
+    return sqlpuzzle._queries.delete.Delete().from_(*args, **kwds)
 
 
 def customSql(sql):

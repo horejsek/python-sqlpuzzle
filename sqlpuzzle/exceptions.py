@@ -11,7 +11,7 @@
 class SqlPuzzleException(Exception):
     def __init__(self, message):
         self.message = message
-    
+
     def __str__(self):
         return "SqlPuzzleException: %s" % self.message
 
@@ -24,6 +24,7 @@ class SqlPuzzleError(SqlPuzzleException):
 class SqlPuzzleNotImplemeted(SqlPuzzleException):
     def __str__(self):
         return "SqlPuzzleNotImplemeted: %s" % self.message
+
 
 #### Confirms
 
@@ -49,7 +50,7 @@ class ConfirmDeleteAllException(ConfirmException):
 class InvalidArgumentException(SqlPuzzleException):
     def __init__(self, message=''):
         self.message = message
-    
+
     def __str__(self):
         if self.message:
             return "Invalid argument: %s" % self.message
@@ -67,13 +68,9 @@ class NotSupprotedException(SqlPuzzleException):
     def __init__(self, method, typeOfQuery):
         self.method = method
         self.typeOfQuery = typeOfQuery
-    
+
     def __str__(self):
         return "Method '%s' is not supported for type of query '%s'." % (
             self.method,
             self.typeOfQuery,
         )
-
-
-
-
