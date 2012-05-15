@@ -113,9 +113,21 @@ class IN(_RelationValue):
     def __init__(self, *args):
         if len(args) > 1:
             value = args
-        else:
+        elif len(args) == 1:
             value = args[0]
+        else:
+            value = []
         super(IN, self).__init__(value)
+
+
+
+class IN_WITH_NONE(IN):
+    _allowedTypes = IN._allowedTypes + (None,)
+
+    def __init__(self, *args):
+        if len(args) == 1 and args[0] is None:
+            args = ([],)
+        super(IN_WITH_NONE, self).__init__(*args)
 
 
 
