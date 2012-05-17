@@ -58,7 +58,7 @@ class _RelationValue(sqlpuzzle._libs.object.Object):
 
 class EQ(_RelationValue):
     _stringRepresntation = '='
-    _allowedTypes = (str, unicode, int, long, float, bool, sqlpuzzle._queries.Query)
+    _allowedTypes = (str, unicode, int, long, float, bool, datetime.date, sqlpuzzle._queries.Query)
 EQUAL_TO = EQ
 
 
@@ -71,7 +71,7 @@ NOT_EQUAL_TO = NE
 
 class GT(_RelationValue):
     _stringRepresntation = '>'
-    _allowedTypes = (int, long, float, datetime.date, datetime.datetime, sqlpuzzle._queries.Query)
+    _allowedTypes = (int, long, float, datetime.date, sqlpuzzle._queries.Query)
 GRATHER_THAN = GT
 
 
@@ -144,3 +144,4 @@ class IS(_RelationValue):
 
 class IS_NOT(IS):
     _stringRepresntation = 'IS NOT'
+
