@@ -1,3 +1,11 @@
+python-sqlpuzzle (0.19.0) UNRELEASED; urgency=low
+
+  * New release with new features.
+    o Support None in IN relation.
+    o Fix support of GeneratorType.
+
+ -- Michal Horejsek <horejsekmichal@gmail.com>  Tue, 10 Sep 2012 13:52:31 +0200
+
 python-sqlpuzzle (0.18.0) UNRELEASED; urgency=low
 
   * New release with new features.
