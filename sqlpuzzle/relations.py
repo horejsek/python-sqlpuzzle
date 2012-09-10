@@ -117,6 +117,12 @@ class IN(_RelationValue):
             value = args[0]
         else:
             value = []
+        try:
+            #  Make list copy of value (if it is possible) because generators
+            #+ give value only once.
+            value = list(value)
+        except TypeError:
+            pass
         super(IN, self).__init__(value)
 
 

@@ -166,6 +166,15 @@ class RelationsTest(WhereTest):
 
 
 
+class RelationGeneratorTest(WhereTest):
+    def test(self):
+        self.where.where('col', (x for x in range(5)))
+        self.assertEqual(str(self.where), 'WHERE `col` IN (0, 1, 2, 3, 4)')
+        # Second printed version must be same. Generator give values only once!
+        self.assertEqual(str(self.where), 'WHERE `col` IN (0, 1, 2, 3, 4)')
+
+
+
 class CustomSqlTest(WhereTest):
     def setUp(self):
         super(CustomSqlTest, self).setUp()
@@ -276,7 +285,9 @@ class ExceptionsTest(WhereTest):
 
 testCases = (
     BaseTest,
+    #OldRelationsTest,
     RelationsTest,
+    RelationGeneratorTest,
     CustomSqlTest,
     GroupingTest,
     AllowedValuesTest,
