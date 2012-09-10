@@ -52,11 +52,16 @@ class Condition(sqlpuzzle._features.Feature):
 
     def __str__(self):
         """Print condition (part of WHERE)."""
-        return '%s %s %s' % (
-            sqlpuzzle._libs.sqlValue.SqlReference(self._column),
-            self._relation,
-            sqlpuzzle._libs.sqlValue.SqlValue(self._value),
-        )
+        foo = '%(col)s %(rel)s %(val)s'
+        value = self._value
+        if isinstance(value, (list, tuple, xrange)) and None in value:
+            foo = '(' + foo + ' OR %(col)s IS NULL)'
+            value = filter(lambda x: x is not None, value)
+        return foo % {
+            'col': sqlpuzzle._libs.sqlValue.SqlReference(self._column),
+            'rel': self._relation,
+            'val': sqlpuzzle._libs.sqlValue.SqlValue(value),
+        }
 
     def __eq__(self, other):
         """Are conditions equivalent?"""

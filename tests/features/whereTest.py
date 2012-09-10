@@ -175,6 +175,13 @@ class RelationGeneratorTest(WhereTest):
 
 
 
+class RelationInWithNoneTest(WhereTest):
+    def test(self):
+        self.where.where('col', ('a', 'b', None))
+        self.assertEqual(str(self.where), 'WHERE (`col` IN ("a", "b") OR `col` IS NULL)')
+
+
+
 class CustomSqlTest(WhereTest):
     def setUp(self):
         super(CustomSqlTest, self).setUp()
@@ -288,6 +295,7 @@ testCases = (
     #OldRelationsTest,
     RelationsTest,
     RelationGeneratorTest,
+    RelationInWithNoneTest,
     CustomSqlTest,
     GroupingTest,
     AllowedValuesTest,
