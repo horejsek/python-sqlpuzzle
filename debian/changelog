@@ -1,3 +1,9 @@
+python-sqlpuzzle (0.19.1) UNRELEASED; urgency=low
+
+  * Fix support of None in IN relation.
+
+ -- Michal Horejsek <horejsekmichal@gmail.com>  Tue, 11 Sep 2012 07:54:01 +0200
+
 python-sqlpuzzle (0.19.0) UNRELEASED; urgency=low
 
   * New release with new features.
