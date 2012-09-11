@@ -176,7 +176,11 @@ class RelationGeneratorTest(WhereTest):
 
 
 class RelationInWithNoneTest(WhereTest):
-    def test(self):
+    def testOneValue(self):
+        self.where.where('col', (None,))
+        self.assertEqual(str(self.where), 'WHERE `col` IS NULL')
+
+    def testMoreValues(self):
         self.where.where('col', ('a', 'b', None))
         self.assertEqual(str(self.where), 'WHERE (`col` IN ("a", "b") OR `col` IS NULL)')
 

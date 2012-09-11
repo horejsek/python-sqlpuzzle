@@ -55,8 +55,9 @@ class Condition(sqlpuzzle._features.Feature):
         foo = '%(col)s %(rel)s %(val)s'
         value = self._value
         if isinstance(value, (list, tuple, xrange)) and None in value:
-            foo = '(' + foo + ' OR %(col)s IS NULL)'
             value = filter(lambda x: x is not None, value)
+            # If list of values is empty, there must be only condition for NULL.
+            foo = '(' + foo + ' OR %(col)s IS NULL)' if value else '%(col)s IS NULL'
         return foo % {
             'col': sqlpuzzle._libs.sqlValue.SqlReference(self._column),
             'rel': self._relation,
