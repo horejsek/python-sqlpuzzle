@@ -90,7 +90,7 @@ class ListOfFeatures(list):
         return newListOfFeatures
 
     def append(self, feature):
-        if not isinstance(feature, Feature):
+        if not isinstance(feature, (Feature, Features)):
             raise sqlpuzzle.exceptions.SqlPuzzleError('Appended item must be instance of Feature.')
         super(ListOfFeatures, self).append(feature)
 

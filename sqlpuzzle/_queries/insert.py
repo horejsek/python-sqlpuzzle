@@ -18,17 +18,16 @@ class Insert(sqlpuzzle._queries.Query):
 
         self._setFeatures(
             tables = sqlpuzzle._features.tables.Tables(),
-            values = sqlpuzzle._features.values.Values(),
+            values = sqlpuzzle._features.values.MultipleValues(),
             onDuplicateKeyUpdate = sqlpuzzle._features.onDuplicateKeyUpdate.OnDuplicateKeyUpdate(),
         )
         self._setKeysOfFeaturesForAutoPrinting('onDuplicateKeyUpdate')
 
     def __str__(self):
         """Print query."""
-        insert = "INSERT INTO %s (%s) VALUES (%s)" % (
+        insert = "INSERT INTO %s %s" % (
             str(self._tables),
-            self._values.columns(),
-            self._values.values(),
+            str(self._values),
         )
         return super(Insert, self)._printFeatures(insert)
 
@@ -39,7 +38,7 @@ class Insert(sqlpuzzle._queries.Query):
 
     def values(self, *args, **kwds):
         """Set columns and values."""
-        self._values.set(*args, **kwds)
+        self._values.add(*args, **kwds)
         return self
 
     def onDuplicateKeyUpdate(self, *args, **kwds):

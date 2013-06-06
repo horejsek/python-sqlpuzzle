@@ -46,7 +46,7 @@ class OnDuplicateKeyUpdateTest(InsertTest):
         values = {
             'name': 'Alan',
         }
-        self.insert.values(id=1).values(values)
+        self.insert.values(id=1, **values)
         self.insert.onDuplicateKeyUpdate(values)
         self.assertEqual(str(self.insert), 'INSERT INTO `user` (`id`, `name`) VALUES (1, "Alan") ON DUPLICATE KEY UPDATE `name` = "Alan"')
 
@@ -56,9 +56,9 @@ class CopyTest(InsertTest):
     def testCopy(self):
         self.insert.into('user').values(id=1)
         copy = self.insert.copy()
-        self.insert.values(name='Alan')
+        self.insert.values(id=2)
         self.assertEqual(str(copy), 'INSERT INTO `user` (`id`) VALUES (1)')
-        self.assertEqual(str(self.insert), 'INSERT INTO `user` (`id`, `name`) VALUES (1, "Alan")')
+        self.assertEqual(str(self.insert), 'INSERT INTO `user` (`id`) VALUES (1), (2)')
 
     def testEquals(self):
         self.insert.into('user').values(id=1)
@@ -73,10 +73,18 @@ class CopyTest(InsertTest):
 
 
 
+class MultipleInsertTest(InsertTest):
+    def test(self):
+        self.insert.into('table').values(id=1).values(id=2).values(id=3)
+        self.assertEqual(str(self.insert), 'INSERT INTO `table` (`id`) VALUES (1), (2), (3)')
+
+
+
 testCases = (
     BaseTest,
     OnDuplicateKeyUpdateTest,
     CopyTest,
+    MultipleInsertTest,
 )
 
 
