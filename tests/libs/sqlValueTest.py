@@ -55,6 +55,18 @@ class SqlValueTest(unittest.TestCase):
     def testEmptyTuple(self):
         self.assertRaises(sqlpuzzle.exceptions.InvalidArgumentException, str, SqlValue(()))
 
+    def testSet(self):
+        self.assertEqual(str(SqlValue(set([12, 23]))), '(12, 23)')
+
+    def testEmptySet(self):
+        self.assertRaises(sqlpuzzle.exceptions.InvalidArgumentException, str, SqlValue(set()))
+
+    def testFrozenSet(self):
+        self.assertEqual(str(SqlValue(frozenset([12, 23]))), '(12, 23)')
+
+    def testEmptyFrozenSet(self):
+        self.assertRaises(sqlpuzzle.exceptions.InvalidArgumentException, str, SqlValue(frozenset()))
+
     def testGenerator(self):
         self.assertEqual(str(SqlValue(x for x in (12, 23, 34))), '(12, 23, 34)')
 

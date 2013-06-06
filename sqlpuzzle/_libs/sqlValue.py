@@ -30,6 +30,8 @@ class SqlValue(object):
             datetime.datetime: self._datetime,
             list: self._list,
             tuple: self._list,
+            set: self._list,
+            frozenset: self._list,
             types.NoneType: self._null,
             xrange: self._list,
             types.GeneratorType: self._list,
