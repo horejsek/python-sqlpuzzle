@@ -17,20 +17,20 @@ from distutils.core import setup
 from sqlpuzzle import version
 
 setup(
-    name = 'sqlpuzzle',
-    packages = [
+    name='sqlpuzzle',
+    packages=[
         'sqlpuzzle',
         'sqlpuzzle/_features',
         'sqlpuzzle/_queries',
         'sqlpuzzle/_libs',
     ],
-    version = version,
-    url = 'https://github.com/horejsek/python-sqlpuzzle',
-    description = 'Python library for writing SQL queries.',
-    author = 'Michal Horejsek',
-    author_email = 'horejsekmichal@gmail.com',
-    license = 'GNU General Public License (GPL)',
-    classifiers = [
+    version=version,
+    url='https://github.com/horejsek/python-sqlpuzzle',
+    description='Python library for writing SQL queries.',
+    author='Michal Horejsek',
+    author_email='horejsekmichal@gmail.com',
+    license='GNU General Public License (GPL)',
+    classifiers=[
         'Programming Language :: Python',
         'Programming Language :: Python :: 2',
         'License :: OSI Approved :: GNU General Public License (GPL)',

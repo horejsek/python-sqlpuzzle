@@ -1,9 +1,3 @@
-# -*- coding: utf-8 -*-
-#
-# sqlpuzzle
-# Michal Horejsek <horejsekmichal@gmail.com>
-# https://github.com/horejsek/python-sqlpuzzle
-#
 
 import unittest
 
@@ -16,16 +10,15 @@ class HavingTest(unittest.TestCase):
         self.having = sqlpuzzle._features.having.Having()
 
 
-
 class BaseTest(HavingTest):
-    def testIsNotSet(self):
-        self.assertEqual(self.having.isSet(), False)
+    def test_is_not_set(self):
+        self.assertEqual(self.having.is_set(), False)
 
-    def testIsSet(self):
+    def test_is_set(self):
         self.having.where(name='Alan')
-        self.assertEqual(self.having.isSet(), True)
+        self.assertEqual(self.having.is_set(), True)
 
-    def testWhereByTuple(self):
+    def test_where_by_tuple(self):
         self.having.where((
             ('name', 'Harry'),
             ('sex', sqlpuzzle.relations.NOT_EQUAL_TO('female')),
@@ -33,7 +26,7 @@ class BaseTest(HavingTest):
         ))
         self.assertEqual(str(self.having), 'HAVING `name` = "Harry" AND `sex` != "female" AND `age` > 20')
 
-    def testWhereByList(self):
+    def test_where_by_list(self):
         self.having.where([
             ['name', sqlpuzzle.relations.LIKE('Harry')],
             ['sex', sqlpuzzle.relations.NOT_EQUAL_TO('female')],
@@ -41,106 +34,85 @@ class BaseTest(HavingTest):
         ])
         self.assertEqual(str(self.having), 'HAVING `name` LIKE "Harry" AND `sex` != "female" AND `age` <= 20')
 
-    def testWhereByDictionary(self):
+    def test_where_by_dictionary(self):
         self.having.where({
             'name': 'Alan',
             'age': 20,
         })
         self.assertEqual(str(self.having), 'HAVING `age` = 20 AND `name` = "Alan"')
 
-    def testWhereByArgs(self):
+    def test_where_by_args(self):
         self.having.where('age', sqlpuzzle.relations.LESS_THAN(20))
         self.assertEqual(str(self.having), 'HAVING `age` < 20')
 
-    def testWhereByKwargs(self):
+    def test_where_by_kwargs(self):
         self.having.where(name='Alan')
         self.assertEqual(str(self.having), 'HAVING `name` = "Alan"')
 
-    def testSerialWhere(self):
+    def test_serial_where(self):
         self.having.where(name='Alan')
         self.having.where(age=42)
         self.assertEqual(str(self.having), 'HAVING `name` = "Alan" AND `age` = 42')
 
 
-
 class GroupingTest(HavingTest):
-    def testMoreSameConditionsPrintAsOne(self):
+    def test_more_same_conditions_print_as_one(self):
         self.having.where(('age', 20), ('age', 20))
         self.assertEqual(str(self.having), 'HAVING `age` = 20')
 
-    def testMoreSameConditionsWithDiffRelationPrintAsMore(self):
+    def test_more_same_conditions_with_diff_relation_print_as_more(self):
         self.having.where(('age', 20), ('age', sqlpuzzle.relations.NE(20)))
         self.assertEqual(str(self.having), 'HAVING `age` = 20 AND `age` != 20')
 
 
-
 class CopyTest(HavingTest):
-    def testCopy(self):
+    def test_copy(self):
         self.having.where({'id': 42})
         copy = self.having.copy()
         self.having.where({'name': 'Alan'})
         self.assertEqual(str(copy), 'HAVING `id` = 42')
         self.assertEqual(str(self.having), 'HAVING `id` = 42 AND `name` = "Alan"')
 
-    def testEquals(self):
+    def test_equals(self):
         self.having.where({'id': 42})
         copy = self.having.copy()
         self.assertTrue(self.having == copy)
 
-    def testNotEquals(self):
+    def test_not_equals(self):
         self.having.where({'id': 42})
         copy = self.having.copy()
         self.having.where({'name': 'Alan'})
         self.assertFalse(self.having == copy)
 
 
-
 class AllowedValuesTest(HavingTest):
-    def testValueAsInteger(self):
+    def test_value_as_integer(self):
         self.having.where('col', 42)
         self.assertEqual(str(self.having), 'HAVING `col` = 42')
 
-    def testValueAsFloat(self):
+    def test_value_as_float(self):
         self.having.where('col', 42.1)
         self.assertEqual(str(self.having), 'HAVING `col` = 42.10000')
 
-    def testValueAsBoolean(self):
+    def test_value_as_boolean(self):
         self.having.where('col', True)
         self.assertEqual(str(self.having), 'HAVING `col` = 1')
 
-    def testValueAsList(self):
+    def test_value_as_list(self):
         self.having.where(id=(23, 34, 45))
         self.assertEqual(str(self.having), 'HAVING `id` IN (23, 34, 45)')
 
-    def testValueAsListNotIn(self):
+    def test_value_as_list_not_in(self):
         self.having.where('id', sqlpuzzle.relations.NOT_IN(23, 34, 45))
         self.assertEqual(str(self.having), 'HAVING `id` NOT IN (23, 34, 45)')
 
 
-
 class ExceptionsTest(HavingTest):
-    def testColumnAsIntegerException(self):
+    def test_column_as_integer_exception(self):
         self.assertRaises(sqlpuzzle.exceptions.InvalidArgumentException, self.having.where, 42, 'val')
 
-    def testColumnAsFloatException(self):
+    def test_column_as_float_exception(self):
         self.assertRaises(sqlpuzzle.exceptions.InvalidArgumentException, self.having.where, 42.1, 'val')
 
-    def testColumnAsBooleanException(self):
+    def test_column_as_boolean_exception(self):
         self.assertRaises(sqlpuzzle.exceptions.InvalidArgumentException, self.having.where, True, 'val')
-
-
-
-testCases = (
-    BaseTest,
-    GroupingTest,
-    CopyTest,
-    AllowedValuesTest,
-    ExceptionsTest,
-)
-
-
-if __name__ == '__main__':
-    suite = unittest.TestSuite()
-    for testCase in testCases:
-        suite.addTests(unittest.TestLoader().loadTestsFromTestCase(testCase))
-    unittest.TextTestRunner(verbosity=2).run(suite)

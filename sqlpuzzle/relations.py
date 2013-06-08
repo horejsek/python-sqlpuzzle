@@ -1,9 +1,4 @@
 # -*- coding: utf-8 -*-
-#
-# sqlpuzzle
-# Michal Horejsek <horejsekmichal@gmail.com>
-# https://github.com/horejsek/python-sqlpuzzle
-#
 
 import types
 import datetime
@@ -13,18 +8,18 @@ import sqlpuzzle._queries
 import sqlpuzzle.exceptions
 
 
-
 class _RelationValue(sqlpuzzle._libs.object.Object):
-    _stringRepresntation = 'Abstract Relation'
-    _allowedTypes = ()
+    _string_representation = 'Abstract Relation'
+    _allowed_types = ()
 
     def __init__(self, value):
-        self._checkValueType(value)
+        super(_RelationValue, self).__init__()
+        self._check_value_type(value)
         self._value = value
 
     def __str__(self):
         return '"%s %s"' % (
-            self._stringRepresntation,
+            self._string_representation,
             self._value,
         )
 
@@ -35,80 +30,74 @@ class _RelationValue(sqlpuzzle._libs.object.Object):
             self._value == other._value
         )
 
-    def _checkValueType(self, value):
+    def _check_value_type(self, value):
         # isinstance(True, (int, long)) is True => must be special condition
         if (
-            (bool not in self._allowedTypes and isinstance(value, types.BooleanType)) or
-            not isinstance(value, self._allowedTypes)
+            (bool not in self._allowed_types and isinstance(value, bool)) or
+            not isinstance(value, self._allowed_types)
         ):
             raise sqlpuzzle.exceptions.InvalidArgumentException(
                 'Relation "%s" is not allowed for data type "%s".' % (
-                    self._stringRepresntation,
+                    self._string_representation,
                     type(value)
                 )
             )
 
-    def getRelation(self):
-        return self._stringRepresntation
+    @property
+    def relation(self):
+        return self._string_representation
 
-    def getValue(self):
+    @property
+    def value(self):
         return self._value
 
 
-
 class EQ(_RelationValue):
-    _stringRepresntation = '='
-    _allowedTypes = (str, unicode, int, long, float, bool, datetime.date, sqlpuzzle._queries.Query)
+    _string_representation = '='
+    _allowed_types = (str, unicode, int, long, float,
+                     bool, datetime.date, sqlpuzzle._queries.Query)
 EQUAL_TO = EQ
 
 
-
 class NE(EQ):
-    _stringRepresntation = '!='
+    _string_representation = '!='
 NOT_EQUAL_TO = NE
 
 
-
 class GT(_RelationValue):
-    _stringRepresntation = '>'
-    _allowedTypes = (int, long, float, datetime.date, sqlpuzzle._queries.Query)
+    _string_representation = '>'
+    _allowed_types = (int, long, float, datetime.date, sqlpuzzle._queries.Query)
 GRATHER_THAN = GT
 
 
-
 class GE(GT):
-    _stringRepresntation = '>='
+    _string_representation = '>='
 GRATHER_THAN_OR_EQUAL_TO = GE
 
 
-
 class LT(GT):
-    _stringRepresntation = '<'
+    _string_representation = '<'
 LESS_THAN = LT
 
 
-
 class LE(GT):
-    _stringRepresntation = '<='
+    _string_representation = '<='
 LESS_TAHN_OR_EQUAL_TO = LE
 
 
-
 class LIKE(_RelationValue):
-    _stringRepresntation = 'LIKE'
-    _allowedTypes = (str, unicode, sqlpuzzle._queries.Query)
-
+    _string_representation = 'LIKE'
+    _allowed_types = (str, unicode, sqlpuzzle._queries.Query)
 
 
 class REGEXP(_RelationValue):
-    _stringRepresntation = 'REGEXP'
-    _allowedTypes = (str, unicode, sqlpuzzle._queries.Query)
-
+    _string_representation = 'REGEXP'
+    _allowed_types = (str, unicode, sqlpuzzle._queries.Query)
 
 
 class IN(_RelationValue):
-    _stringRepresntation = 'IN'
-    _allowedTypes = (list, tuple, xrange, types.GeneratorType, sqlpuzzle._queries.Query)
+    _string_representation = 'IN'
+    _allowed_types = (list, tuple, xrange, types.GeneratorType, sqlpuzzle._queries.Query)
 
     def __init__(self, *args):
         if len(args) > 1:
@@ -126,9 +115,8 @@ class IN(_RelationValue):
         super(IN, self).__init__(value)
 
 
-
 class IN_WITH_NONE(IN):
-    _allowedTypes = IN._allowedTypes + (None,)
+    _allowed_types = IN._allowed_types + (None,)
 
     def __init__(self, *args):
         if len(args) == 1 and args[0] is None:
@@ -136,18 +124,14 @@ class IN_WITH_NONE(IN):
         super(IN_WITH_NONE, self).__init__(*args)
 
 
-
 class NOT_IN(IN):
-    _stringRepresntation = 'NOT IN'
-
+    _string_representation = 'NOT IN'
 
 
 class IS(_RelationValue):
-    _stringRepresntation = 'IS'
-    _allowedTypes = (bool, types.NoneType,)
-
+    _string_representation = 'IS'
+    _allowed_types = (bool, type(None),)
 
 
 class IS_NOT(IS):
-    _stringRepresntation = 'IS NOT'
-
+    _string_representation = 'IS NOT'

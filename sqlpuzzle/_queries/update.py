@@ -1,9 +1,4 @@
 # -*- coding: utf-8 -*-
-#
-# sqlpuzzle
-# Michal Horejsek <horejsekmichal@gmail.com>
-# https://github.com/horejsek/python-sqlpuzzle
-#
 
 import sqlpuzzle.exceptions
 
@@ -18,44 +13,44 @@ class Update(sqlpuzzle._queries.Query):
         """Initialization of Update."""
         super(Update, self).__init__()
 
-        self._setFeatures(
-            tables = sqlpuzzle._features.tables.Tables(),
-            values = sqlpuzzle._features.values.Values(),
-            where = sqlpuzzle._features.where.Where(),
+        self._set_features(
+            tables=sqlpuzzle._features.tables.Tables(),
+            values=sqlpuzzle._features.values.Values(),
+            where=sqlpuzzle._features.where.Where(),
         )
-        self._setKeysOfFeaturesForAutoPrinting('where')
+        self._set_keys_of_features_for_auto_printing('where')
 
-        self.__allowUpdateAll = False
+        self.__allow_update_all = False
         self.table(table)
 
     def copy(self):
         """Create copy."""
-        newQuery = super(Update, self).copy()
-        if self.__allowUpdateAll:
-            newQuery.allowUpdateAll()
+        new_query = super(Update, self).copy()
+        if self.__allow_update_all:
+            new_query.allow_update_all()
         else:
-            newQuery.forbidUpdateAll()
-        return newQuery
+            new_query.forbid_update_all()
+        return new_query
 
     def __str__(self):
         """Print query."""
-        if not self._where.isSet() and not self.__allowUpdateAll:
+        if not self._where.is_set() and not self.__allow_update_all:
             raise sqlpuzzle.exceptions.ConfirmUpdateAllException()
 
         update = "UPDATE %s SET %s" % (
             str(self._tables),
             str(self._values),
         )
-        return super(Update, self)._printFeatures(update)
+        return super(Update, self)._print_features(update)
 
-    def allowUpdateAll(self):
+    def allow_update_all(self):
         """Allow update all records."""
-        self.__allowUpdateAll = True
+        self.__allow_update_all = True
         return self
 
-    def forbidUpdateAll(self):
+    def forbid_update_all(self):
         """Forbid update all records."""
-        self.__allowUpdateAll = False
+        self.__allow_update_all = False
         return self
 
     def table(self, table):

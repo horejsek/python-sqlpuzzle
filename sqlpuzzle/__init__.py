@@ -1,9 +1,4 @@
 # -*- coding: utf-8 -*-
-#
-# sqlpuzzle
-# Michal Horejsek <horejsekmichal@gmail.com>
-# https://github.com/horejsek/python-sqlpuzzle
-#
 
 version = '0.19.1'
 """
@@ -25,7 +20,7 @@ def select(*args, **kwds):
     return sqlpuzzle._queries.select.Select(*args, **kwds)
 
 
-def selectFrom(*tables):
+def select_from(*tables):
     """Select. Columns is set to *. Set table(s) by parameter(s)."""
     return sqlpuzzle._queries.select.Select().from_(*tables)
 
@@ -35,7 +30,7 @@ def insert():
     return sqlpuzzle._queries.insert.Insert()
 
 
-def insertInto(table):
+def insert_into(table):
     """Insert. Set table by parameter."""
     return sqlpuzzle._queries.insert.Insert().into(table)
 
@@ -50,24 +45,19 @@ def delete(*tables):
     return sqlpuzzle._queries.delete.Delete(*tables)
 
 
-def deleteFrom(*args, **kwds):
+def delete_from(*args, **kwds):
     """Delete. Set table by parameter."""
     return sqlpuzzle._queries.delete.Delete().from_(*args, **kwds)
 
 
-def customSql(sql):
+def customsql(sql):
     """Custom SQL."""
-    return sqlpuzzle._libs.customSql.CustomSql(sql)
-
-
-def custom(sql):
-    """Alias for customSql."""
-    return customSql(sql)
+    return sqlpuzzle._libs.customsql.CustomSql(sql)
 
 
 # Broaden doc strings of functions by useful help.
 sqlpuzzle._libs.doc.doc(select, 'columns')
-sqlpuzzle._libs.doc.doc(selectFrom, 'tables')
+sqlpuzzle._libs.doc.doc(select_from, 'tables')
 
 
 # Proxy functions.
@@ -76,7 +66,7 @@ def avg(expr):
     return sqlpuzzle._features.functions.Avg(expr)
 
 
-def avgDistinct(expr):
+def avg_distinct(expr):
     """Function AVG(DICTINCT expr)"""
     return avg(expr).distinct()
 
@@ -86,7 +76,7 @@ def count(expr=None):
     return sqlpuzzle._features.functions.Count(expr)
 
 
-def countDistinct(expr=None):
+def count_distinct(expr=None):
     """Function COUNT(DISTINCT expr)"""
     return count(expr).distinct()
 
@@ -96,7 +86,7 @@ def max(expr):
     return sqlpuzzle._features.functions.Max(expr)
 
 
-def maxDistinct(expr):
+def max_distinct(expr):
     """Function MAX(DISTINCT expr)"""
     return max(expr).distinct()
 
@@ -106,7 +96,7 @@ def min(expr):
     return sqlpuzzle._features.functions.Min(expr)
 
 
-def minDistinct(expr):
+def min_distinct(expr):
     """Function MIN(DISTINCT expr)"""
     return min(expr).distinct()
 
@@ -116,7 +106,7 @@ def sum(expr):
     return sqlpuzzle._features.functions.Sum(expr)
 
 
-def sumDistinct(expr):
+def sum_distinct(expr):
     """Function SUM(DISTINCT expr)"""
     return sum(expr).distinct()
 
@@ -126,7 +116,7 @@ def concat(*expr):
     return sqlpuzzle._features.functions.Concat(*expr)
 
 
-def groupConcat(*expr):
+def group_concat(*expr):
     """Function GROUP_CONCAT(expr [ORDER BY [SEPARATOR]])"""
     return sqlpuzzle._features.functions.GroupConcat(*expr)
 

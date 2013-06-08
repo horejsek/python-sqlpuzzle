@@ -1,9 +1,4 @@
 # -*- coding: utf-8 -*-
-#
-# sqlpuzzle
-# Michal Horejsek <horejsekmichal@gmail.com>
-# https://github.com/horejsek/python-sqlpuzzle
-#
 
 import sqlpuzzle.exceptions
 
@@ -17,45 +12,45 @@ class Delete(sqlpuzzle._queries.Query):
         """Initialization of Delete."""
         super(Delete, self).__init__()
 
-        self._setFeatures(
-            tables = sqlpuzzle._features.tables.Tables(),
-            references = sqlpuzzle._features.tables.Tables(),
-            where = sqlpuzzle._features.where.Where(),
+        self._set_features(
+            tables=sqlpuzzle._features.tables.Tables(),
+            references=sqlpuzzle._features.tables.Tables(),
+            where=sqlpuzzle._features.where.Where(),
         )
-        self._setKeysOfFeaturesForAutoPrinting('where')
+        self._set_keys_of_features_for_auto_printing('where')
 
-        self.__allowDeleteAll = False
+        self.__allow_delete_all = False
 
         self._tables.set(*tables)
 
     def copy(self):
         """Create copy."""
-        newQuery = super(Delete, self).copy()
-        if self.__allowDeleteAll:
-            newQuery.allowDeleteAll()
+        new_query = super(Delete, self).copy()
+        if self.__allow_delete_all:
+            new_query.allow_delete_all()
         else:
-            newQuery.forbidDeleteAll()
-        return newQuery
+            new_query.forbid_delete_all()
+        return new_query
 
     def __str__(self):
         """Print query."""
-        if not self._where.isSet() and not self.__allowDeleteAll:
+        if not self._where.is_set() and not self.__allow_delete_all:
             raise sqlpuzzle.exceptions.ConfirmDeleteAllException()
 
         delete = "DELETE %sFROM %s" % (
-            '%s ' % self._tables if self._tables.isSet() else '',
+            '%s ' % self._tables if self._tables.is_set() else '',
             str(self._references),
         )
-        return super(Delete, self)._printFeatures(delete)
+        return super(Delete, self)._print_features(delete)
 
-    def allowDeleteAll(self):
+    def allow_delete_all(self):
         """Allow delete all records."""
-        self.__allowDeleteAll = True
+        self.__allow_delete_all = True
         return self
 
-    def forbidDeleteAll(self):
+    def forbid_delete_all(self):
         """Forbid delete all records."""
-        self.__allowDeleteAll = False
+        self.__allow_delete_all = False
         return self
 
     def delete(self, *tables):
@@ -68,12 +63,12 @@ class Delete(sqlpuzzle._queries.Query):
         self._references.set(*args, **kwds)
         return self
 
-    def fromTable(self, table, alias=None):
+    def from_table(self, table, alias=None):
         """Set reference table to query."""
         self._references.set((table, alias))
         return self
 
-    def fromTables(self, *args, **kwds):
+    def from_tables(self, *args, **kwds):
         """Alias for method `from_`."""
         self.from_(*args, **kwds)
         return self
@@ -83,19 +78,19 @@ class Delete(sqlpuzzle._queries.Query):
         self._references.join(table)
         return self
 
-    def innerJoin(self, table):
+    def inner_join(self, table):
         """Inner join reference table."""
-        self._references.innerJoin(table)
+        self._references.inner_join(table)
         return self
 
-    def leftJoin(self, table):
+    def left_join(self, table):
         """Left join reference table."""
-        self._references.leftJoin(table)
+        self._references.left_join(table)
         return self
 
-    def rightJoin(self, table):
+    def right_join(self, table):
         """Right join reference table."""
-        self._references.rightJoin(table)
+        self._references.right_join(table)
         return self
 
     def on(self, *args, **kwds):

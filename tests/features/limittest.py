@@ -1,9 +1,3 @@
-# -*- coding: utf-8 -*-
-#
-# sqlpuzzle
-# Michal Horejsek <horejsekmichal@gmail.com>
-# https://github.com/horejsek/python-sqlpuzzle
-#
 
 import unittest
 
@@ -16,93 +10,73 @@ class LimitTest(unittest.TestCase):
         self.limit = sqlpuzzle._features.limit.Limit()
 
 
-
 class BaseTest(LimitTest):
-    def testIsNotSet(self):
-        self.assertEqual(self.limit.isSet(), False)
+    def test_is_not_set(self):
+        self.assertEqual(self.limit.is_set(), False)
 
-    def testIsSet(self):
+    def test_is_set(self):
         self.limit.limit(42)
-        self.assertEqual(self.limit.isSet(), True)
+        self.assertEqual(self.limit.is_set(), True)
 
-    def testLimit(self):
+    def test_limit(self):
         self.limit.limit(10)
         self.assertEqual(str(self.limit), 'LIMIT 10')
 
-    def testLimitAndOffset(self):
+    def test_limit_and_offset(self):
         self.limit.limit(10)
         self.limit.offset(50)
         self.assertEqual(str(self.limit), 'LIMIT 10 OFFSET 50')
 
-    def testLimitAndOffsetInOne(self):
+    def test_limit_and_offset_in_one(self):
         self.limit.limit(5, 15)
         self.assertEqual(str(self.limit), 'LIMIT 5 OFFSET 15')
 
 
-
 class InlineTest(LimitTest):
-    def testInline(self):
+    def test_inline(self):
         self.limit.limit(3).offset(12)
         self.assertEqual(str(self.limit), 'LIMIT 3 OFFSET 12')
 
-    def testInlineInvert(self):
+    def test_inline_invert(self):
         self.limit.offset(16).limit(4)
         self.assertEqual(str(self.limit), 'LIMIT 4 OFFSET 16')
 
 
-
 class CopyTest(LimitTest):
-    def testCopy(self):
+    def test_copy(self):
         self.limit.limit(3)
         copy = self.limit.copy()
         self.limit.offset(12)
         self.assertEqual(str(copy), 'LIMIT 3')
         self.assertEqual(str(self.limit), 'LIMIT 3 OFFSET 12')
 
-    def testEquals(self):
+    def test_equals(self):
         self.limit.limit(3)
         copy = self.limit.copy()
         self.assertTrue(self.limit == copy)
 
-    def testNotEquals(self):
+    def test_not_equals(self):
         self.limit.limit(3)
         copy = self.limit.copy()
         self.limit.offset(12)
         self.assertFalse(self.limit == copy)
 
 
-
 class ExceptionsTest(LimitTest):
-    def testLimitStringException(self):
+    def test_limit_string_exception(self):
         self.assertRaises(sqlpuzzle.exceptions.InvalidArgumentException, self.limit.limit, 'limit')
 
-    def testLimitFloatException(self):
+    def test_limit_float_exception(self):
         self.assertRaises(sqlpuzzle.exceptions.InvalidArgumentException, self.limit.limit, 1.2)
 
-    def testLimitBooleanException(self):
+    def test_limit_boolean_exception(self):
         self.assertRaises(sqlpuzzle.exceptions.InvalidArgumentException, self.limit.limit, False)
 
-    def testOffsetStringException(self):
+    def test_offset_string_exception(self):
         self.assertRaises(sqlpuzzle.exceptions.InvalidArgumentException, self.limit.offset, 'offset')
 
-    def testOffsetFloatException(self):
+    def test_offset_float_exception(self):
         self.assertRaises(sqlpuzzle.exceptions.InvalidArgumentException, self.limit.offset, 1.2)
 
-    def testOffsetBooleanException(self):
+    def test_offset_boolean_exception(self):
         self.assertRaises(sqlpuzzle.exceptions.InvalidArgumentException, self.limit.offset, False)
-
-
-
-testCases = (
-    BaseTest,
-    InlineTest,
-    CopyTest,
-    ExceptionsTest,
-)
-
-
-if __name__ == '__main__':
-    suite = unittest.TestSuite()
-    for testCase in testCases:
-        suite.addTests(unittest.TestLoader().loadTestsFromTestCase(testCase))
-    unittest.TextTestRunner(verbosity=2).run(suite)

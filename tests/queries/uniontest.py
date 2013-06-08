@@ -1,9 +1,3 @@
-# -*- coding: utf-8 -*-
-#
-# sqlpuzzle
-# Michal Horejsek <horejsekmichal@gmail.com>
-# https://github.com/horejsek/python-sqlpuzzle
-#
 
 import unittest
 
@@ -18,56 +12,40 @@ class UnionTest(unittest.TestCase):
         self.union = self.select1 | self.select2
 
 
-
 class BaseTest(UnionTest):
-    def testUnion(self):
+    def test_union(self):
         self.assertEqual(str(self.select1 | self.select2), 'SELECT * FROM `t1` UNION SELECT * FROM `t2`')
 
-    def testUnionAll(self):
+    def test_union_all(self):
         self.assertEqual(str(self.select1 & self.select2), 'SELECT * FROM `t1` UNION ALL SELECT * FROM `t2`')
 
-    def testCombine(self):
+    def test_combine(self):
         self.assertEqual(str(self.select1 & self.select2 | self.select1), 'SELECT * FROM `t1` UNION ALL SELECT * FROM `t2` UNION SELECT * FROM `t1`')
 
-    def testSubselectInColumnAsUnion(self):
+    def test_subselect_in_column_as_union(self):
         select = sqlpuzzle.select(self.select1 & self.select2).from_('t')
         self.assertEqual(str(select), 'SELECT (SELECT * FROM `t1` UNION ALL SELECT * FROM `t2`) FROM `t`')
 
-    def testSubselectInTableAsUnion(self):
-        select = sqlpuzzle.selectFrom(self.select1 | self.select2)
+    def test_subselect_in_table_as_union(self):
+        select = sqlpuzzle.select_from(self.select1 | self.select2)
         self.assertEqual(str(select), 'SELECT * FROM (SELECT * FROM `t1` UNION SELECT * FROM `t2`)')
 
 
-
 class CopyTest(UnionTest):
-    def testCopy(self):
+    def test_copy(self):
         union = self.select1 & self.select2
         copy = union.copy()
         union |= self.select1
         self.assertEqual(str(copy), 'SELECT * FROM `t1` UNION ALL SELECT * FROM `t2`')
         self.assertEqual(str(union), 'SELECT * FROM `t1` UNION ALL SELECT * FROM `t2` UNION SELECT * FROM `t1`')
 
-    def testEquals(self):
+    def test_equals(self):
         union = self.select1 & self.select2
         copy = union.copy()
         self.assertTrue(union == copy)
 
-    def testNotEquals(self):
+    def test_not_equals(self):
         union = self.select1 & self.select2
         copy = union.copy()
         union |= self.select1
         self.assertFalse(union == copy)
-
-
-
-testCases = (
-    BaseTest,
-    CopyTest,
-)
-
-
-if __name__ == '__main__':
-    suite = unittest.TestSuite()
-    for testCase in testCases:
-        suite.addTests(unittest.TestLoader().loadTestsFromTestCase(testCase))
-    unittest.TextTestRunner(verbosity=2).run(suite)

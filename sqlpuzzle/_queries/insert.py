@@ -1,13 +1,8 @@
 # -*- coding: utf-8 -*-
-#
-# sqlpuzzle
-# Michal Horejsek <horejsekmichal@gmail.com>
-# https://github.com/horejsek/python-sqlpuzzle
-#
 
 import sqlpuzzle._libs.doc
 import sqlpuzzle._features.tables
-import sqlpuzzle._features.onDuplicateKeyUpdate
+import sqlpuzzle._features.onduplicatekeyupdate
 import sqlpuzzle._features.values
 
 
@@ -16,12 +11,13 @@ class Insert(sqlpuzzle._queries.Query):
         """Initialization of Insert."""
         super(Insert, self).__init__()
 
-        self._setFeatures(
-            tables = sqlpuzzle._features.tables.Tables(),
-            values = sqlpuzzle._features.values.MultipleValues(),
-            onDuplicateKeyUpdate = sqlpuzzle._features.onDuplicateKeyUpdate.OnDuplicateKeyUpdate(),
+        self._set_features(
+            tables=sqlpuzzle._features.tables.Tables(),
+            values=sqlpuzzle._features.values.MultipleValues(),
+            on_duplicate_key_update=sqlpuzzle._features.onduplicatekeyupdate.OnDuplicateKeyUpdate(
+            ),
         )
-        self._setKeysOfFeaturesForAutoPrinting('onDuplicateKeyUpdate')
+        self._set_keys_of_features_for_auto_printing('on_duplicate_key_update')
 
     def __str__(self):
         """Print query."""
@@ -29,7 +25,7 @@ class Insert(sqlpuzzle._queries.Query):
             str(self._tables),
             str(self._values),
         )
-        return super(Insert, self)._printFeatures(insert)
+        return super(Insert, self)._print_features(insert)
 
     def into(self, table):
         """Set table for insert."""
@@ -41,9 +37,9 @@ class Insert(sqlpuzzle._queries.Query):
         self._values.add(*args, **kwds)
         return self
 
-    def onDuplicateKeyUpdate(self, *args, **kwds):
+    def on_duplicate_key_update(self, *args, **kwds):
         """Set on duplicate key update."""
-        self._onDuplicateKeyUpdate.set(*args, **kwds)
+        self._on_duplicate_key_update.set(*args, **kwds)
         return self
 
     # Broaden doc strings of functions by useful help.

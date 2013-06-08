@@ -1,9 +1,4 @@
 # -*- coding: utf-8 -*-
-#
-# sqlpuzzle
-# Michal Horejsek <horejsekmichal@gmail.com>
-# https://github.com/horejsek/python-sqlpuzzle
-#
 
 import types
 import datetime
@@ -32,12 +27,12 @@ class SqlValue(object):
             tuple: self._list,
             set: self._list,
             frozenset: self._list,
-            types.NoneType: self._null,
+            type(None): self._null,
             xrange: self._list,
             types.GeneratorType: self._list,
             sqlpuzzle._queries.select.Select: self._subselect,
             sqlpuzzle._queries.union.Union: self._subselect,
-            sqlpuzzle._libs.customSql.CustomSql: self._raw,
+            sqlpuzzle._libs.customsql.CustomSql: self._raw,
         }
 
         self.value = value
@@ -47,9 +42,9 @@ class SqlValue(object):
 
     def __str__(self):
         """Convert and print value."""
-        return self._getConvertMethod()()
+        return self._get_convert_method()()
 
-    def _getConvertMethod(self):
+    def _get_convert_method(self):
         """Get right method to convert of the value."""
         for type_, method in self._map.iteritems():
             if isinstance(self.value, type_):
@@ -62,10 +57,11 @@ class SqlValue(object):
 
     def _string(self):
         """Convert as string."""
-        # sometime, e.g. in subselect, is needed reference to column instead of self.value
+        # sometime, e.g. in subselect, is needed reference to column instead of
+        # self.value
         if self.value.strip() and self.value.strip()[0] == '`':
-            return self._backQuotes()
-        return '"%s"' % self._escapeValue(self.value)
+            return self._back_quotes()
+        return '"%s"' % self._escape_value(self.value)
 
     def _integer(self):
         """Convert as integer."""
@@ -91,7 +87,8 @@ class SqlValue(object):
         """Convert as list of values."""
         if self.value:
             return "(%s)" % ", ".join(str(SqlValue(item)) for item in self.value)
-        raise sqlpuzzle.exceptions.InvalidArgumentException('Empty list is not allowed.')
+        raise sqlpuzzle.exceptions.InvalidArgumentException(
+            'Empty list is not allowed.')
 
     def _subselect(self):
         """Convert as subselect."""
@@ -105,18 +102,18 @@ class SqlValue(object):
         """undefined"""
         return '<undefined value>'
 
-    def _escapeValue(self, value):
-        replaceTable = (
+    def _escape_value(self, value):
+        replace_table = (
             ("\\", "\\\\"),
             ('"', '\\"'),
             ("'", "\\'"),
             ("\n", "\\n"),
         )
-        for old, new in replaceTable:
+        for old, new in replace_table:
             value = value.replace(old, new)
         return value
 
-    def _backQuotes(self):
+    def _back_quotes(self):
         """
         Convert as reference on column.
         "table" => "`table`"
@@ -128,20 +125,19 @@ class SqlValue(object):
         return '.'.join('`%s`' % i if i != '*' else i for i in re.split('`([^`]+)`|\.', self.value) if i)
 
 
-
 class SqlReference(SqlValue):
     """Object used for string for SQL reference (e.g. name of tables, columns, ...)."""
 
     def __init__(self, value):
         """Initialization of SqlReference."""
         self._map = {
-            str: self._backQuotes,
-            unicode: self._backQuotes,
+            str: self._back_quotes,
+            unicode: self._back_quotes,
             int: self._integer,
             sqlpuzzle._queries.select.Select: self._subselect,
             sqlpuzzle._queries.union.Union: self._subselect,
             sqlpuzzle._features.functions.Function: self._raw,
-            sqlpuzzle._libs.customSql.CustomSql: self._raw,
+            sqlpuzzle._libs.customsql.CustomSql: self._raw,
         }
 
         self.value = value

@@ -1,11 +1,6 @@
 # -*- coding: utf-8 -*-
-#
-# sqlpuzzle
-# Michal Horejsek <horejsekmichal@gmail.com>
-# https://github.com/horejsek/python-sqlpuzzle
-#
 
-docStrings = {
+DOC_STRINGS = {
     'columns': """
         method('id', 'name', ...)
         method(('id', 'asId'), ('name', 'asName'))
@@ -53,11 +48,12 @@ docStrings = {
     """,
 }
 
+
 def doc(method, feature):
-    newDocString = '%s\n%s' % (method.__doc__, docStrings.get(feature, ''))
-    newDocString = _stripDocString(newDocString)
-    method.__doc__ = newDocString
+    new_doc_string = '%s\n%s' % (method.__doc__, DOC_STRINGS.get(feature, ''))
+    new_doc_string = _strip_doc_string(new_doc_string)
+    method.__doc__ = new_doc_string
 
 
-def _stripDocString(text):
+def _strip_doc_string(text):
     return "\n".join(line.strip() for line in text.strip().splitlines())

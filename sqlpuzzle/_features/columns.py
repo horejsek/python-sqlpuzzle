@@ -1,13 +1,8 @@
 # -*- coding: utf-8 -*-
-#
-# sqlpuzzle
-# Michal Horejsek <horejsekmichal@gmail.com>
-# https://github.com/horejsek/python-sqlpuzzle
-#
 
-import sqlpuzzle._libs.argsParser
-import sqlpuzzle._libs.sqlValue
-import sqlpuzzle._libs.customSql
+import sqlpuzzle._libs.argsparser
+import sqlpuzzle._libs.sqlvalue
+import sqlpuzzle._libs.customsql
 
 import sqlpuzzle._features.functions
 
@@ -15,6 +10,7 @@ import sqlpuzzle._features.functions
 class Column(sqlpuzzle._features.Feature):
     def __init__(self, column=None, as_=None):
         """Initialization of Column."""
+        super(Column, self).__init__()
         self._column = column
         self._as = as_
 
@@ -22,11 +18,11 @@ class Column(sqlpuzzle._features.Feature):
         """Print part of query."""
         if self._as:
             return '%s AS "%s"' % (
-                sqlpuzzle._libs.sqlValue.SqlReference(self._column),
+                sqlpuzzle._libs.sqlvalue.SqlReference(self._column),
                 self._as,
             )
         else:
-            return str(sqlpuzzle._libs.sqlValue.SqlReference(self._column))
+            return str(sqlpuzzle._libs.sqlvalue.SqlReference(self._column))
 
     def __eq__(self, other):
         """Are columns equivalent?"""
@@ -40,29 +36,29 @@ class Columns(sqlpuzzle._features.Features):
     def __init__(self):
         """Initialization of Columns."""
         super(Columns, self).__init__()
-        self._defaultQueryString = '*'
+        self._default_query_string = '*'
 
     def columns(self, *args, **kwds):
         """Set columns."""
-
-        allowedDataTypes = sqlpuzzle._libs.argsParser.AllowedDataTypes().add(
-            (int, str, unicode, sqlpuzzle._queries.select.Select, sqlpuzzle._queries.union.Union, sqlpuzzle._libs.customSql.CustomSql, sqlpuzzle._features.functions.Function),
+        allowed_data_types = sqlpuzzle._libs.argsparser.AllowedDataTypes().add(
+            (int, str, unicode, sqlpuzzle._queries.select.Select, sqlpuzzle._queries.union.Union,
+             sqlpuzzle._libs.customsql.CustomSql, sqlpuzzle._features.functions.Function),
             (str, unicode)
         ).add(
-            sqlpuzzle._libs.customSql.CustomSql
+            sqlpuzzle._libs.customsql.CustomSql
         )
 
-        for columnName, as_ in sqlpuzzle._libs.argsParser.parseArgsToListOfTuples(
+        for column_name, as_ in sqlpuzzle._libs.argsparser.parse_args_to_list_of_tuples(
             {
-                'maxItems': 2,
-                'allowDict': True,
-                'allowedDataTypes': allowedDataTypes,
+                'max_items': 2,
+                'allow_dict': True,
+                'allowed_data_types': allowed_data_types,
             },
             *args,
             **kwds
         ):
-            column = Column(columnName, as_)
+            column = Column(column_name, as_)
             if column not in self:
-                self.appendFeature(column)
+                self.append_feature(column)
 
         return self

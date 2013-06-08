@@ -1,9 +1,4 @@
 # -*- coding: utf-8 -*-
-#
-# sqlpuzzle
-# Michal Horejsek <horejsekmichal@gmail.com>
-# https://github.com/horejsek/python-sqlpuzzle
-#
 
 import inspect
 
@@ -11,53 +6,47 @@ import sqlpuzzle._libs.object
 import sqlpuzzle.exceptions
 
 
-
 class Feature(sqlpuzzle._libs.object.Object):
     def copy(self):
         """Create copy."""
         args = inspect.getargspec(self.__class__.__init__)[0][1:]
-        attributes = [a.strip('_') for a in args]
+        new_args = [getattr(self, '_%s' % arg.strip('_')) for arg in args]
+        new_feature = self.__class__(*new_args)
+        return new_feature
 
-        newArgs = []
-        for attribute in attributes:
-            newArgs.append(getattr(self, '_%s' % attribute))
-
-        newFeature = self.__class__(*newArgs)
-        return newFeature
-
-    def isSet(self):
+    def is_set(self):
         """Is feature set?"""
         return True
-
 
 
 class Features(sqlpuzzle._libs.object.Object):
     def __init__(self):
         """Initialization of Features."""
+        super(Features, self).__init__()
         self._features = ListOfFeatures()
-        self._separatorOfFeatures = ', '
-        self._keywordOfFeature = ''
-        self._defaultQueryString = ''
+        self._separator_of_features = ', '
+        self._keyword_of_feature = ''
+        self._default_query_string = ''
 
     def copy(self):
         """Create copy of features."""
-        newFeatures = self.__class__()
-        newFeatures._features = self._features.copy()
-        return newFeatures
+        new_features = self.__class__()
+        new_features._features = self._features.copy()
+        return new_features
 
     def __str__(self):
         """Print features."""
-        if self.isSet():
-            self._features.setSeparator(self._separatorOfFeatures)
-            if self._keywordOfFeature:
-                return '%s %s' % (self._keywordOfFeature, str(self._features))
+        if self.is_set():
+            self._features.set_separator(self._separator_of_features)
+            if self._keyword_of_feature:
+                return '%s %s' % (self._keyword_of_feature, str(self._features))
             return str(self._features)
-        return self._defaultQueryString
+        return self._default_query_string
 
-    def __contains__(self, otherFeature):
+    def __contains__(self, other_feature):
         """Is item (column) in columns?"""
         for feature in self._features:
-            if feature == otherFeature:
+            if feature == other_feature:
                 return True
         return False
 
@@ -67,34 +56,34 @@ class Features(sqlpuzzle._libs.object.Object):
             return False
         return all(bool(sf == of) for sf, of in zip(self._features, other._features))
 
-    def isSet(self):
+    def is_set(self):
         """Is feature set?"""
         return self._features != []
 
-    def appendFeature(self, feature):
+    def append_feature(self, feature):
         """Append feature into list of features."""
         self._features.append(feature)
 
-    def isCustumSql(self, args):
+    def is_custum_sql(self, args):
         """Is custom sql?"""
-        return isinstance(args, sqlpuzzle._libs.customSql.CustomSql)
-
+        return isinstance(args, sqlpuzzle._libs.customsql.CustomSql)
 
 
 class ListOfFeatures(list):
     def copy(self):
         """Create copy of list of features."""
-        newListOfFeatures = self.__class__()
+        new_list_of_features = self.__class__()
         for feature in self:
-            newListOfFeatures.append(feature.copy())
-        return newListOfFeatures
+            new_list_of_features.append(feature.copy())
+        return new_list_of_features
 
     def append(self, feature):
         if not isinstance(feature, (Feature, Features)):
-            raise sqlpuzzle.exceptions.SqlPuzzleError('Appended item must be instance of Feature.')
+            raise sqlpuzzle.exceptions.SqlPuzzleError(
+                'Appended item must be instance of Feature.')
         super(ListOfFeatures, self).append(feature)
 
-    def setSeparator(self, separator):
+    def set_separator(self, separator):
         self._separator = separator
 
     def __str__(self):

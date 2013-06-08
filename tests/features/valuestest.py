@@ -1,9 +1,3 @@
-# -*- coding: utf-8 -*-
-#
-# sqlpuzzle
-# Michal Horejsek <horejsekmichal@gmail.com>
-# https://github.com/horejsek/python-sqlpuzzle
-#
 
 import unittest
 
@@ -16,16 +10,15 @@ class ValuesTest(unittest.TestCase):
         self.values = sqlpuzzle._features.values.Values()
 
 
-
 class BaseTest(ValuesTest):
-    def testIsNotSet(self):
-        self.assertEqual(self.values.isSet(), False)
+    def test_is_not_set(self):
+        self.assertEqual(self.values.is_set(), False)
 
-    def testIsSet(self):
+    def test_is_set(self):
         self.values.set(id=23)
-        self.assertEqual(self.values.isSet(), True)
+        self.assertEqual(self.values.is_set(), True)
 
-    def testValuesByTuple(self):
+    def test_values_by_tuple(self):
         self.values.set((
             ('name', 'Harry'),
             ('sex', 'female'),
@@ -34,7 +27,7 @@ class BaseTest(ValuesTest):
         ))
         self.assertEqual(str(self.values), '`name` = "Harry", `sex` = "female", `age` = 20, `country` = NULL')
 
-    def testValuesByList(self):
+    def test_values_by_list(self):
         self.values.set([
             ['name', 'Harry'],
             ['sex', 'female'],
@@ -43,93 +36,72 @@ class BaseTest(ValuesTest):
         ])
         self.assertEqual(str(self.values), '`name` = "Harry", `sex` = "female", `age` = 20, `country` = NULL')
 
-    def testValuesByDictionary(self):
+    def test_values_by_dictionary(self):
         self.values.set({
             'name': 'Alan',
             'age': 20,
         })
         self.assertEqual(str(self.values), '`age` = 20, `name` = "Alan"')
 
-    def testValuesByArgs(self):
+    def test_values_by_args(self):
         self.values.set('age', 20)
         self.assertEqual(str(self.values), '`age` = 20')
 
-    def testValuesByKwargs(self):
+    def test_values_by_kwargs(self):
         self.values.set(name='Alan')
         self.assertEqual(str(self.values), '`name` = "Alan"')
-
 
 
 class CustomSqlTest(ValuesTest):
     def setUp(self):
         super(CustomSqlTest, self).setUp()
-        self.customSql = sqlpuzzle.customSql('`age` = `age` + 1')
+        self.customsql = sqlpuzzle.customsql('`age` = `age` + 1')
 
-    def testSimple(self):
-        self.values.set(self.customSql)
+    def test_simple(self):
+        self.values.set(self.customsql)
         self.assertEqual(str(self.values), '`age` = `age` + 1')
 
 
-
 class AllowedValuesTest(ValuesTest):
-    def testValueAsInteger(self):
+    def test_value_as_integer(self):
         self.values.set('col', 42)
         self.assertEqual(str(self.values), '`col` = 42')
 
-    def testValueAsFloat(self):
+    def test_value_as_float(self):
         self.values.set('col', 42.1)
         self.assertEqual(str(self.values), '`col` = 42.10000')
 
-    def testValueAsBoolean(self):
+    def test_value_as_boolean(self):
         self.values.set('col', True)
         self.assertEqual(str(self.values), '`col` = 1')
 
 
-
 class CopyTest(ValuesTest):
-    def testCopy(self):
+    def test_copy(self):
         self.values.set({'id': 42})
         copy = self.values.copy()
         self.values.set({'name': 'Alan'})
         self.assertEqual(str(copy), '`id` = 42')
         self.assertEqual(str(self.values), '`id` = 42, `name` = "Alan"')
 
-    def testEquals(self):
+    def test_equals(self):
         self.values.set({'id': 42})
         copy = self.values.copy()
         self.assertTrue(self.values == copy)
 
-    def testNotEquals(self):
+    def test_not_equals(self):
         self.values.set({'id': 42})
         copy = self.values.copy()
         self.values.set({'name': 'Alan'})
         self.assertFalse(self.values == copy)
 
 
-
 class ExceptionsTest(ValuesTest):
-    def testColumnAsIntegerException(self):
+    def test_column_as_integer_exception(self):
         self.assertRaises(sqlpuzzle.exceptions.InvalidArgumentException, self.values.set, 42, 'val')
 
-    def testColumnAsFloatException(self):
+    def test_column_as_float_exception(self):
         self.assertRaises(sqlpuzzle.exceptions.InvalidArgumentException, self.values.set, 42.1, 'val')
 
-    def testColumnAsBooleanException(self):
+    def test_column_as_boolean_exception(self):
         self.assertRaises(sqlpuzzle.exceptions.InvalidArgumentException, self.values.set, True, 'val')
-
-
-
-testCases = (
-    BaseTest,
-    CustomSqlTest,
-    AllowedValuesTest,
-    CopyTest,
-    ExceptionsTest,
-)
-
-
-if __name__ == '__main__':
-    suite = unittest.TestSuite()
-    for testCase in testCases:
-        suite.addTests(unittest.TestLoader().loadTestsFromTestCase(testCase))
-    unittest.TextTestRunner(verbosity=2).run(suite)

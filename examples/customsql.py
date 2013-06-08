@@ -1,21 +1,16 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-#
-# sqlpuzzle
-# Michal Horejsek <horejsekmichal@gmail.com>
-# https://github.com/horejsek/sqlpuzzle
-#
 
 import sqlpuzzle
 
 
-avg = sqlpuzzle.customSql('AVG(`age`) AS "avgAge"')
-table = sqlpuzzle.customSql('`user` LEFT JOIN `country` ON `user`.`country_id`=`country`.`id`')
-where = sqlpuzzle.customSql('(`enable` = 1 OR `vip` = 1)')
+avg = sqlpuzzle.customsql('AVG(`age`) AS "avgAge"')
+table = sqlpuzzle.customsql('`user` LEFT JOIN `country` ON `user`.`country_id`=`country`.`id`')
+where = sqlpuzzle.customsql('(`enable` = 1 OR `vip` = 1)')
 
 sql = sqlpuzzle.select('country.name', avg).from_(table)
 sql.where(where).where(planet='Earth')
-sql.groupBy('user.country_id')
+sql.group_by('user.country_id')
 
 print sql
 #
@@ -29,8 +24,8 @@ print sql
 #
 
 
-table = sqlpuzzle.customSql('`user`')
-set_ = sqlpuzzle.customSql('`age` = `age` + 1')
+table = sqlpuzzle.customsql('`user`')
+set_ = sqlpuzzle.customsql('`age` = `age` + 1')
 
 sql = sqlpuzzle.update(table).set(set_).where(where)
 print sql
@@ -38,17 +33,11 @@ print sql
 # UPDATE `user` SET `age` = `age` + 1 WHERE (`enable` = 1 OR `vip` = 1)
 
 
-print sqlpuzzle.deleteFrom(table).where(where)
+print sqlpuzzle.delete_from(table).where(where)
 # output:
 # DELETE FROM `user` WHERE (`enable` = 1 OR `vip` = 1)
 
 
-print sqlpuzzle.insertInto(table).values(name='Alan')
+print sqlpuzzle.insert_into(table).values(name='Alan')
 # output:
 # INSERT INTO `user` (`name`) VALUES ("Alan")
-
-
-# or only custom (which is alias for customSql)
-print sqlpuzzle.select(sqlpuzzle.custom('1')).fromTable('t')
-# output:
-# SELECT 1 FROM `t`

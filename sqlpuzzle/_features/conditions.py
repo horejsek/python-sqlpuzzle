@@ -1,22 +1,17 @@
 # -*- coding: utf-8 -*-
-#
-# sqlpuzzle
-# Michal Horejsek <horejsekmichal@gmail.com>
-# https://github.com/horejsek/python-sqlpuzzle
-#
 
 import types
 import datetime
 
-import sqlpuzzle._libs.argsParser
-import sqlpuzzle._libs.sqlValue
+import sqlpuzzle._libs.argsparser
+import sqlpuzzle._libs.sqlvalue
 import sqlpuzzle._queries
 import sqlpuzzle.exceptions
 import sqlpuzzle.relations
 
 
 class Condition(sqlpuzzle._features.Feature):
-    _defaultRelations = {
+    _default_relations = {
         str: sqlpuzzle.relations.EQ,
         unicode: sqlpuzzle.relations.EQ,
         int: sqlpuzzle.relations.EQ,
@@ -35,73 +30,74 @@ class Condition(sqlpuzzle._features.Feature):
 
     def __init__(self, column, value, relation=None):
         """Initialization of Condition."""
+        super(Condition, self).__init__()
         self._column = column
-        self._setRelationValue(value, relation)
+        self._set_relation_value(value, relation)
 
-    def _setRelationValue(self, value, relation):
+    def _set_relation_value(self, value, relation):
         if isinstance(relation, type) and issubclass(relation, sqlpuzzle.relations._RelationValue):
-            relationValue = relation(value)
+            relation_value = relation(value)
         elif not isinstance(value, sqlpuzzle.relations._RelationValue):
-            relationValue = self._createDefaultRelationValue(value)
+            relation_value = self._create_default_relation_value(value)
         else:
-            relationValue = value
-        self._relationValue = relationValue
+            relation_value = value
+        self._relation_value = relation_value
 
-    def _createDefaultRelationValue(self, value):
-        return self._defaultRelations[type(value)](value)
+    def _create_default_relation_value(self, value):
+        return self._default_relations[type(value)](value)
 
     def __str__(self):
         """Print condition (part of WHERE)."""
         foo = '%(col)s %(rel)s %(val)s'
         value = self._value
         if isinstance(value, (list, tuple, xrange)) and None in value:
-            value = filter(lambda x: x is not None, value)
+            value = [v for v in value if v is not None]
             # If list of values is empty, there must be only condition for NULL.
             foo = '(' + foo + ' OR %(col)s IS NULL)' if value else '%(col)s IS NULL'
         return foo % {
-            'col': sqlpuzzle._libs.sqlValue.SqlReference(self._column),
+            'col': sqlpuzzle._libs.sqlvalue.SqlReference(self._column),
             'rel': self._relation,
-            'val': sqlpuzzle._libs.sqlValue.SqlValue(value),
+            'val': sqlpuzzle._libs.sqlvalue.SqlValue(value),
         }
 
     def __eq__(self, other):
         """Are conditions equivalent?"""
         return (
             self._column == other._column and
-            self._relationValue == other._relationValue
+            self._relation_value == other._relation_value
         )
 
     @property
     def _value(self):
-        return self._relationValue.getValue()
+        return self._relation_value.value
 
     @property
     def _relation(self):
-        return self._relationValue.getRelation()
-
+        return self._relation_value.relation
 
 
 class Conditions(sqlpuzzle._features.Features):
-    def __init__(self, conditionObject=Condition):
+    def __init__(self, condition_object=Condition):
         """Initialization of Conditions."""
         super(Conditions, self).__init__()
-        self._conditionObject = conditionObject
+        self._condition_object = condition_object
 
     def where(self, *args, **kwds):
         """Set condition(s)."""
-        if args and self.isCustumSql(args[0]):
-            self.appendFeature(args[0])
+        if args and self.is_custum_sql(args[0]):
+            self.append_feature(args[0])
 
         else:
-            for column, value, relation in sqlpuzzle._libs.argsParser.parseArgsToListOfTuples(
+            for column, value, relation in sqlpuzzle._libs.argsparser.parse_args_to_list_of_tuples(
                 {
-                    'minItems': 2,
-                    'maxItems': 3, # TODO: In version 1.0 third param will be removed.
-                    'allowDict': True,
-                    'allowList': True,
-                    'allowedDataTypes': (
+                    'min_items': 2,
+                    'max_items': 3,  # TODO: In version 1.0 third param will be removed.
+                    'allow_dict': True,
+                    'allow_list': True,
+                    'allowed_data_types': (
                         (str, unicode, sqlpuzzle._queries.select.Select),
-                        (str, unicode, int, long, float, bool, list, tuple, xrange, types.GeneratorType, datetime.date, datetime.datetime, sqlpuzzle.relations._RelationValue, sqlpuzzle._queries.select.Select),
+                        (str, unicode, int, long, float, bool, list, tuple, xrange, types.GeneratorType, datetime.date,
+                         datetime.datetime, sqlpuzzle.relations._RelationValue, sqlpuzzle._queries.select.Select),
                         (sqlpuzzle.relations._RelationValue,)
                     ),
                 },
@@ -112,8 +108,8 @@ class Conditions(sqlpuzzle._features.Features):
                 if relation is not None:
                     print 'Third param in condition (relation) is deprecated. Instead use relation as instance with value - e.g. sqlpuzzle.relation.LIKE("Harry").'
 
-                condition = self._conditionObject(column, value, relation)
+                condition = self._condition_object(column, value, relation)
                 if condition not in self:
-                    self.appendFeature(condition)
+                    self.append_feature(condition)
 
         return self

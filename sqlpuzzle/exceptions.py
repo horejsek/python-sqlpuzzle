@@ -1,11 +1,6 @@
 # -*- coding: utf-8 -*-
-#
-# sqlpuzzle
-# Michal Horejsek <horejsekmichal@gmail.com>
-# https://github.com/horejsek/python-sqlpuzzle
-#
 
-#### Main exceptions
+# Main exceptions
 
 
 class SqlPuzzleException(Exception):
@@ -26,7 +21,7 @@ class SqlPuzzleNotImplemeted(SqlPuzzleException):
         return "SqlPuzzleNotImplemeted: %s" % self.message
 
 
-#### Confirms
+# Confirms
 
 
 class ConfirmException(SqlPuzzleException):
@@ -44,7 +39,7 @@ class ConfirmDeleteAllException(ConfirmException):
         return "Are you sure, that you want delete all records?"
 
 
-#### Wrong input
+# Wrong input
 
 
 class InvalidArgumentException(SqlPuzzleException):

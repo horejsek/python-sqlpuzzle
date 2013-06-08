@@ -21,13 +21,13 @@ bpython) and try import module `sqlpuzzle`. See for examples below.
 
     >>> import sqlPuzzle
 
-    >>> print sqlPuzzle.selectFrom('table')
+    >>> print sqlPuzzle.select_from('table')
     SELECT * FROM `table`
 
     >>> print sqlPuzzle.select('id', ('user_name', 'userName')).from_('table')
     SELECT `id`, `user_name` AS "userName" FROM `table`
 
-    >>> print sqlPuzzle.selectFrom('table').\
+    >>> print sqlPuzzle.select_from('table').\
     ... where(name='Alan').\
     ... where('age', sqlPuzzle.relations.LE(20)).\
     ... where({'sex': 'male'}).\
@@ -37,10 +37,10 @@ bpython) and try import module `sqlpuzzle`. See for examples below.
     ... )
     SELECT * FROM `table` WHERE `name` = "Alan" AND `age` <= 20 AND `sex` = "male" AND `column` LIKE "value" AND `id` IN (5, 7, 9, 11, 13)
 
-    >>> print sqlPuzzle.selectFrom('table').limit(5, 20)
+    >>> print sqlPuzzle.select_from('table').limit(5, 20)
     SELECT * FROM `table` LIMIT 5 OFFSET 20
 
-    >>> print sqlPuzzle.insertInto('table').values(name='Michael', age=20)
+    >>> print sqlPuzzle.insert_into('table').values(name='Michael', age=20)
     INSERT INTO `table` (`age`, `name`) VALUES (20, "Michael")
 
     >>> print sqlPuzzle.update('table').set(name='Michale').where(id=42)
@@ -51,10 +51,10 @@ bpython) and try import module `sqlpuzzle`. See for examples below.
       ...
     ConfirmUpdateAllException: Are you sure, that you want update all records?
 
-    >>> print sqlPuzzle.deleteFrom('table').where(id=42)
+    >>> print sqlPuzzle.delete_from('table').where(id=42)
     DELETE FROM `table` WHERE `id` = 42
 
-    >>> print sqlPuzzle.deleteFrom('table')
+    >>> print sqlPuzzle.delete_from('table')
     Traceback (most recent call last):
       ...
     ConfirmDeleteAllException: Are you sure, that you want delete all records?

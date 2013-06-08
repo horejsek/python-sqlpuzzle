@@ -1,15 +1,11 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-#
-# sqlpuzzle
-# Michal Horejsek <horejsekmichal@gmail.com>
-# https://github.com/horejsek/sqlpuzzle
-#
 
 import datetime
 
 import sqlpuzzle
 import sqlpuzzle.exceptions
+
 
 sql = sqlpuzzle.insert().into('table')
 
@@ -40,6 +36,6 @@ print sql
 # (12345.67000, "2011-06-15T00:00:00", "alan", "Alan", 21, 1)
 #
 
-print sqlpuzzle.insertInto('table').values(values)
+print sqlpuzzle.insert_into('table').values(values)
 # output:
 # INSERT INTO `table` (`age`, `loginname`) VALUES (21, "alan")

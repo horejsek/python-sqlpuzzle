@@ -1,15 +1,8 @@
 # -*- coding: utf-8 -*-
-#
-# sqlpuzzle
-# Michal Horejsek <horejsekmichal@gmail.com>
-# https://github.com/horejsek/python-sqlpuzzle
-#
-
 
 import sqlpuzzle.exceptions
 
 import sqlpuzzle._queries.select
-
 
 
 UNION = 0
@@ -21,30 +14,30 @@ UNION_TYPES = {
 }
 
 
-
 class Union(sqlpuzzle._queries.Query):
-    def __init__(self, query1, query2, unionType):
+    def __init__(self, query1, query2, union_type):
         """Initialization of Union."""
-        self._setQuery1(query1)
-        self._setQuery2(query2)
-        self._setType(unionType)
+        super(Union, self).__init__()
+        self._set_query1(query1)
+        self._set_query2(query2)
+        self._set_type(union_type)
 
-    def _setQuery1(self, query):
+    def _set_query1(self, query):
         """Set first query."""
-        self._checkInstance(query)
+        self._check_instance(query)
         self._query1 = query
 
-    def _setQuery2(self, query):
+    def _set_query2(self, query):
         """Set second query."""
-        self._checkInstance(query)
+        self._check_instance(query)
         self._query2 = query
 
-    def _checkInstance(self, query):
+    def _check_instance(self, query):
         """Check instance of query."""
         if not isinstance(query, (Union, sqlpuzzle._queries.select.Select)):
             raise sqlpuzzle.exceptions.InvalidArgumentException()
 
-    def _setType(self, type):
+    def _set_type(self, type):
         """Set type of union."""
         if not type in UNION_TYPES.keys():
             raise sqlpuzzle.exceptions.InvalidArgumentException()
@@ -52,8 +45,8 @@ class Union(sqlpuzzle._queries.Query):
 
     def copy(self):
         """Create copy."""
-        newQuery = self.__class__(self._query1, self._query2, self._type)
-        return newQuery
+        new_query = self.__class__(self._query1, self._query2, self._type)
+        return new_query
 
     def __str__(self):
         """Print query."""

@@ -1,18 +1,15 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-#
-# sqlpuzzle
-# Michal Horejsek <horejsekmichal@gmail.com>
-# https://github.com/horejsek/sqlpuzzle
-#
 
 import sqlpuzzle
+
 
 ###########################################################################
 # !!! Use only if you must, because it can be changed without notice. !!! #
 ###########################################################################
 
-sql = sqlpuzzle.selectFrom('t').where(name='Alan').limit(5).offset(10).orderBy('id̈́')
+
+sql = sqlpuzzle.select_from('t').where(name='Alan').limit(5).offset(10).order_by('id̈́')
 
 print sql._limit
 # output: LIMIT 5 OFFSET 10
@@ -20,7 +17,7 @@ print sql._limit
 print sql._where
 # output: WHERE `name` = "Alan"
 
-print sql._orderBy
+print sql._order_by
 # output: ORDER BY `id̈́`
 
 # all parts throw all queries:
@@ -30,13 +27,13 @@ print sql._orderBy
 # * _intoOutfile
 # * _limit
 # * _onDuplicateKeyUpdate
-# * _orderBy
+# * _order_by
 # * _tables
 # * _values
 # * _where
 # * _selectOptions
 
-sql = sqlpuzzle.insertInto('t').values(age=20, name='Michael')
+sql = sqlpuzzle.insert_into('t').values(age=20, name='Michael')
 
 print sql._values
 # output: `age` = 20, `name` = "Michael"
@@ -49,7 +46,7 @@ print "(%s) VALUES (%s)" % (sql._values.columns(), sql._values.values())
 
 # !! This is not to use! But it's possible. !!
 print sqlpuzzle._features.limit.Limit().limit(10)
-print sqlpuzzle._features.orderBy.OrderBy().orderBy('id')
+print sqlpuzzle._features.orderby.OrderBy().order_by('id')
 # etc..
 
 

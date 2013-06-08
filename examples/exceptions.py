@@ -1,10 +1,5 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-#
-# sqlpuzzle
-# Michal Horejsek <horejsekmichal@gmail.com>
-# https://github.com/horejsek/sqlpuzzle
-#
 
 import sqlpuzzle
 import sqlpuzzle.exceptions
@@ -29,12 +24,12 @@ except sqlpuzzle.exceptions.InvalidArgumentException, e:
     print "catched:", e
 
 try:
-    print sqlpuzzle.selectFrom('t').join('t2')
+    print sqlpuzzle.select_from('t').join('t2')
 except sqlpuzzle.exceptions.InvalidQueryException, e:
     print "catched:", e
 
 try:
-    sqlpuzzle.select().set(name='Alan')
+    sqlpuzzle.select()._values
 except sqlpuzzle.exceptions.NotSupprotedException, e:
     print "catched:", e
 
@@ -57,6 +52,6 @@ except sqlpuzzle.exceptions.SqlPuzzleException, e:
 
 # InvalidQueryException is inherit from InvalidArgumentException
 try:
-    print sqlpuzzle.selectFrom('t').join('t2')
+    print sqlpuzzle.select_from('t').join('t2')
 except sqlpuzzle.exceptions.InvalidArgumentException, e:
     print "catched:", e

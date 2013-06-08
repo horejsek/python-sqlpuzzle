@@ -1,13 +1,7 @@
 # -*- coding: utf-8 -*-
-#
-# sqlpuzzle
-# Michal Horejsek <horejsekmichal@gmail.com>
-# https://github.com/horejsek/python-sqlpuzzle
-#
 
-import sqlpuzzle._libs.argsParser
-import sqlpuzzle._libs.sqlValue
-
+import sqlpuzzle._libs.argsparser
+import sqlpuzzle._libs.sqlvalue
 
 
 ASC = 'ASC'
@@ -15,20 +9,20 @@ DESC = 'DESC'
 ORDERING_TYPES = (ASC, DESC)
 
 
-
 class Order(sqlpuzzle._features.Feature):
     def __init__(self, column=None, sort=None):
         """Initialization of Order."""
+        super(Order, self).__init__()
         self._column = column
         self.sort(sort)
 
     def __str__(self):
         """Print part of query."""
         if self._sort == ASC:
-            return str(sqlpuzzle._libs.sqlValue.SqlReference(self._column))
+            return str(sqlpuzzle._libs.sqlvalue.SqlReference(self._column))
         else:
             return '%s %s' % (
-                sqlpuzzle._libs.sqlValue.SqlReference(self._column),
+                sqlpuzzle._libs.sqlvalue.SqlReference(self._column),
                 self._sort,
             )
 
@@ -48,33 +42,33 @@ class Order(sqlpuzzle._features.Feature):
         if sort in ORDERING_TYPES:
             self._sort = sort
         else:
-            raise sqlpuzzle.exceptions.InvalidArgumentException('Type of order can be only %s.' % ' or '.join(ORDERING_TYPES))
-
+            raise sqlpuzzle.exceptions.InvalidArgumentException(
+                'Type of order can be only %s.' % ' or '.join(ORDERING_TYPES))
 
 
 class Orders(sqlpuzzle._features.Features):
-    def _findOrderByName(self, columnName):
+    def _find_order_by_name(self, column_name):
         """Find Order instance by column name."""
         for order in self._features:
-            if order._column == columnName:
+            if order._column == column_name:
                 return order
         return None
 
     def order(self, *args, **kwds):
         """Set Order."""
-        for columnName, sort in sqlpuzzle._libs.argsParser.parseArgsToListOfTuples(
+        for column_name, sort in sqlpuzzle._libs.argsparser.parse_args_to_list_of_tuples(
             {
-                'maxItems': 2,
-                'allowDict': True,
-                'allowedDataTypes': (str, unicode, int)
+                'max_items': 2,
+                'allow_dict': True,
+                'allowed_data_types': (str, unicode, int),
             },
             *args,
             **kwds
         ):
-            order = self._findOrderByName(columnName)
+            order = self._find_order_by_name(column_name)
             if order is None:
-                order = Order(columnName, sort)
-                self.appendFeature(order)
+                order = Order(column_name, sort)
+                self.append_feature(order)
             else:
                 order.sort(sort)
 

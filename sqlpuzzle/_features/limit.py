@@ -1,19 +1,12 @@
 # -*- coding: utf-8 -*-
-#
-# sqlpuzzle
-# Michal Horejsek <horejsekmichal@gmail.com>
-# https://github.com/horejsek/python-sqlpuzzle
-#
 
-import types
-
-import sqlpuzzle._libs.argsParser
 import sqlpuzzle.exceptions
 
 
 class Limit(sqlpuzzle._features.Feature):
     def __init__(self, limit=None, offset=None):
         """Initialization of Limit."""
+        super(Limit, self).__init__()
         self._limit = limit
         self._offset = offset
 
@@ -36,13 +29,13 @@ class Limit(sqlpuzzle._features.Feature):
             self._offset == other._offset
         )
 
-    def isSet(self):
+    def is_set(self):
         """Is limit set?"""
         return self._limit is not None
 
     def limit(self, limit, offset=None):
         """Set LIMIT (and OFFSET)."""
-        if not type(limit) in (int, long, types.NoneType):
+        if not type(limit) in (int, long, type(None)):
             raise sqlpuzzle.exceptions.InvalidArgumentException()
 
         if limit is None:
@@ -56,7 +49,7 @@ class Limit(sqlpuzzle._features.Feature):
 
     def offset(self, offset):
         """Set OFFSET."""
-        if not type(offset) in (int, long, types.NoneType):
+        if not type(offset) in (int, long, type(None)):
             raise sqlpuzzle.exceptions.InvalidArgumentException()
 
         self._offset = int(offset) if offset is not None else None

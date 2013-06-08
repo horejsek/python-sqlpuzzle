@@ -1,30 +1,25 @@
 # -*- coding: utf-8 -*-
-#
-# sqlpuzzle
-# Michal Horejsek <horejsekmichal@gmail.com>
-# https://github.com/horejsek/python-sqlpuzzle
-#
 
 import re
 
 import sqlpuzzle._libs.object
-import sqlpuzzle._libs.sqlValue
+import sqlpuzzle._libs.sqlvalue
 
-import sqlpuzzle._features.orderBy
-
+import sqlpuzzle._features.orderby
 
 
 class Function(sqlpuzzle._libs.object.Object):
-    _functionName = None
+    _function_name = None
 
     def __init__(self, expr):
-        self._expr = sqlpuzzle._libs.sqlValue.SqlReference(expr)
+        super(Function, self).__init__()
+        self._expr = sqlpuzzle._libs.sqlvalue.SqlReference(expr)
 
     def __str__(self):
-        if not self._functionName:
+        if not self._function_name:
             return '<Function>'
         return '%s(%s)' % (
-            self._functionName,
+            self._function_name,
             self._expr,
         )
 
@@ -35,7 +30,6 @@ class Function(sqlpuzzle._libs.object.Object):
     @_expr.setter
     def _expr(self, expr):
         self.__expr = expr
-
 
 
 class FunctionWithDistinct(Function):
@@ -49,10 +43,10 @@ class FunctionWithDistinct(Function):
         return self
 
     def __str__(self):
-        if not self._functionName:
+        if not self._function_name:
             return '<FunctionWithDistinct>'
         return '%s(%s%s)' % (
-            self._functionName,
+            self._function_name,
             self._strDistinct(),
             self._expr,
         )
@@ -61,14 +55,12 @@ class FunctionWithDistinct(Function):
         return 'DISTINCT ' if self._distinct else ''
 
 
-
 class Avg(FunctionWithDistinct):
-    _functionName = 'AVG'
-
+    _function_name = 'AVG'
 
 
 class Count(FunctionWithDistinct):
-    _functionName = 'COUNT'
+    _function_name = 'COUNT'
 
     def __init__(self, expr=None, distinct=False):
         if not expr or expr == '*':
@@ -76,7 +68,8 @@ class Count(FunctionWithDistinct):
         else:
             if not isinstance(expr, (list, tuple)):
                 expr = (expr,)
-            self._expr = (sqlpuzzle._libs.sqlValue.SqlReference(e) for e in expr)
+            self._expr = (sqlpuzzle._libs.sqlvalue.SqlReference(e)
+                          for e in expr)
 
         self.distinct(distinct)
 
@@ -86,66 +79,62 @@ class Count(FunctionWithDistinct):
         return ', '.join(str(e) for e in expr)
 
 
-
 class Max(FunctionWithDistinct):
-    _functionName = 'MAX'
-
+    _function_name = 'MAX'
 
 
 class Min(FunctionWithDistinct):
-    _functionName = 'MIN'
-
+    _function_name = 'MIN'
 
 
 class Sum(FunctionWithDistinct):
-    _functionName = 'SUM'
-
+    _function_name = 'SUM'
 
 
 class Concat(Function):
-    _functionName = 'CONCAT'
+    _function_name = 'CONCAT'
 
     def __init__(self, *expr):
         self._columns = sqlpuzzle._features.columns.Columns().columns(*expr)
-        if not self._columns.isSet():
-            raise sqlpuzzle.exceptions.InvalidArgumentException('You must specify columns for %s.' % self._functionName)
+        if not self._columns.is_set():
+            raise sqlpuzzle.exceptions.InvalidArgumentException(
+                'You must specify columns for %s.' % self._function_name)
 
     def __str__(self):
         return '%s(%s)' % (
-            self._functionName,
+            self._function_name,
             self._columns,
         )
 
 
-
 class GroupConcat(Concat):
-    _functionName = 'GROUP_CONCAT'
+    _function_name = 'GROUP_CONCAT'
 
     def __init__(self, *expr):
         super(GroupConcat, self).__init__(*expr)
-        self._orderBy = sqlpuzzle._features.orderBy.OrderBy()
+        self._order_by = sqlpuzzle._features.orderby.OrderBy()
         self._separator = None
 
     def __str__(self):
         return '%s(%s%s%s)' % (
-            self._functionName,
+            self._function_name,
             self._columns,
-            self._strOrderBy(),
-            self._strSeparator(),
+            self._str_order_by(),
+            self._str_separator(),
         )
 
-    def _strOrderBy(self):
-        if self._orderBy.isSet():
-            return ' %s' % self._orderBy
+    def _str_order_by(self):
+        if self._order_by.is_set():
+            return ' %s' % self._order_by
         return ''
 
-    def _strSeparator(self):
+    def _str_separator(self):
         if self._separator:
-            return ' SEPARATOR %s' % sqlpuzzle._libs.sqlValue.SqlValue(self._separator)
+            return ' SEPARATOR %s' % sqlpuzzle._libs.sqlvalue.SqlValue(self._separator)
         return ''
 
-    def orderBy(self, *args):
-        self._orderBy.orderBy(*args)
+    def order_by(self, *args):
+        self._order_by.order_by(*args)
         return self
 
     def separator(self, separator):
@@ -153,40 +142,42 @@ class GroupConcat(Concat):
         return self
 
 
-
 class Convert(Function):
-    _functionName = 'CONVERT'
-    _allowedTypes = ('BINARY', 'CHAR', 'DATE', 'DATETIME', 'DECIMAL', 'SIGNED', 'TIME', 'UNSIGNED')
+    _function_name = 'CONVERT'
+    _allowed_types = ('BINARY', 'CHAR', 'DATE', 'DATETIME', 'DECIMAL', 'SIGNED', 'TIME', 'UNSIGNED')
 
     def __init__(self, expr, type_=None):
-        self._expr = sqlpuzzle._libs.sqlValue.SqlReference(expr)
+        super(Convert, self).__init__(expr)
         self._type = None
         if type_:
             self.to(type_)
 
     def __str__(self):
         return '%s(%s, %s)' % (
-            self._functionName,
+            self._function_name,
             self._expr,
             self._type,
         )
 
     def to(self, type_):
         type_ = str(type_).upper()
-        self._checkType(type_)
+        self._check_type(type_)
 
         self._type = type_
         return self
 
-    def _checkType(self, type_):
+    def _check_type(self, type_):
         type_ = type_.split('(')
 
-        typeName = type_[0].strip()
-        if typeName not in self._allowedTypes:
-            raise sqlpuzzle.exceptions.InvalidArgumentException('You can convert value only into this types: %s' % repr(self._allowedTypes))
+        type_name = type_[0].strip()
+        if type_name not in self._allowed_types:
+            raise sqlpuzzle.exceptions.InvalidArgumentException(
+                'You can convert value only into this types: %s' % repr(self._allowed_types))
 
         if len(type_) > 2 or (len(type_) == 2 and type_[1][-1] != ')'):
-            raise sqlpuzzle.exceptions.InvalidArgumentException('Invalid type in function %s.' % self._functionName)
+            raise sqlpuzzle.exceptions.InvalidArgumentException(
+                'Invalid type in function %s.' % self._function_name)
 
         if len(type_) == 2 and not re.match('^[0-9]+(,[0-9]+)?\)$', type_[1]):
-            raise sqlpuzzle.exceptions.InvalidArgumentException('In function %s you can set as param of type only the number.' % self._functionName)
+            raise sqlpuzzle.exceptions.InvalidArgumentException(
+                'In function %s you can set as param of type only the number.' % self._function_name)

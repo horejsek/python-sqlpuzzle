@@ -1,17 +1,13 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-#
-# sqlpuzzle
-# Michal Horejsek <horejsekmichal@gmail.com>
-# https://github.com/horejsek/sqlpuzzle
-#
 
 import datetime
 
 import sqlpuzzle
 import sqlpuzzle.relations
 
-sql = sqlpuzzle.selectFrom('user')
+
+sql = sqlpuzzle.select_from('user')
 
 sql.where(id=42)
 
@@ -22,7 +18,7 @@ sql.where({
     'right': 'admin',
 })
 
-sql.where('column', sqlpuzzle.relations.LE(10)).where('column', 10, sqlpuzzle.relations.GE)
+sql.where('column', sqlpuzzle.relations.LE(10)).where('column', sqlpuzzle.relations.GE(10))
 
 sql.where(
     ('id', sqlpuzzle.relations.NOT_IN(range(10, 20, 2))),

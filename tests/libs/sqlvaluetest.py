@@ -1,132 +1,109 @@
-# -*- coding: utf-8 -*-
-#
-# sqlpuzzle
-# Michal Horejsek <horejsekmichal@gmail.com>
-# https://github.com/horejsek/python-sqlpuzzle
-#
 
 import datetime
 import unittest
 
 import sqlpuzzle
-from sqlpuzzle._libs.sqlValue import SqlValue, SqlReference
+from sqlpuzzle._libs.sqlvalue import SqlValue, SqlReference
 
 
 class SqlValueTest(unittest.TestCase):
-    def testString(self):
+    def test_string(self):
         self.assertEqual(str(SqlValue('Hello World!')), '"Hello World!"')
 
-    def testUnicode(self):
+    def test_unicode(self):
         self.assertEqual(str(SqlValue(u'Hello World!')), '"Hello World!"')
 
-    def testInteger(self):
+    def test_integer(self):
         self.assertEqual(str(SqlValue(42)), '42')
 
-    def testLongInteger(self):
+    def test_long_integer(self):
         self.assertEqual(str(SqlValue(123456789012345)), '123456789012345')
 
-    def testFloat(self):
+    def test_float(self):
         self.assertEqual(str(SqlValue(23.456)), '23.45600')
 
-    def testBoolean(self):
+    def test_boolean(self):
         self.assertEqual(str(SqlValue(True)), '1')
 
-    def testDate(self):
+    def test_date(self):
         self.assertEqual(str(SqlValue(datetime.date(2011, 5, 25))), '"2011-05-25"')
 
-    def testDatetime(self):
+    def test_datetime(self):
         self.assertEqual(str(SqlValue(datetime.datetime(2011, 5, 25, 19, 33, 20))), '"2011-05-25T19:33:20"')
 
-    def testListWithString(self):
+    def test_list_with_string(self):
         self.assertEqual(str(SqlValue(['a', 'b', 'c'])), '("a", "b", "c")')
 
-    def testListWithInteger(self):
+    def test_list_with_integer(self):
         self.assertEqual(str(SqlValue([12,23,34])), '(12, 23, 34)')
 
-    def testEmptyList(self):
+    def test_empty_list(self):
         self.assertRaises(sqlpuzzle.exceptions.InvalidArgumentException, str, SqlValue([]))
 
-    def testTupleWithInteger(self):
+    def test_tuple_with_integer(self):
         self.assertEqual(str(SqlValue(('a', 'b', 'c'))), '("a", "b", "c")')
 
-    def testTupleWithInteger(self):
+    def test_tuple_with_integer(self):
         self.assertEqual(str(SqlValue((12,23,34))), '(12, 23, 34)')
 
-    def testEmptyTuple(self):
+    def test_empty_tuple(self):
         self.assertRaises(sqlpuzzle.exceptions.InvalidArgumentException, str, SqlValue(()))
 
-    def testSet(self):
+    def test_set(self):
         self.assertEqual(str(SqlValue(set([12, 23]))), '(12, 23)')
 
-    def testEmptySet(self):
+    def test_empty_set(self):
         self.assertRaises(sqlpuzzle.exceptions.InvalidArgumentException, str, SqlValue(set()))
 
-    def testFrozenSet(self):
+    def test_frozen_set(self):
         self.assertEqual(str(SqlValue(frozenset([12, 23]))), '(12, 23)')
 
-    def testEmptyFrozenSet(self):
+    def test_empty_frozen_set(self):
         self.assertRaises(sqlpuzzle.exceptions.InvalidArgumentException, str, SqlValue(frozenset()))
 
-    def testGenerator(self):
+    def test_generator(self):
         self.assertEqual(str(SqlValue(x for x in (12, 23, 34))), '(12, 23, 34)')
 
-    def testXrange(self):
+    def test_xrange(self):
         self.assertEqual(str(SqlValue(xrange(5))), '(0, 1, 2, 3, 4)')
 
-    def testNone(self):
+    def test_none(self):
         self.assertEqual(str(SqlValue(None)), 'NULL')
 
-    def testSubselect(self):
-        select = sqlpuzzle.selectFrom('table')
+    def test_subselect(self):
+        select = sqlpuzzle.select_from('table')
         self.assertEqual(str(SqlValue(select)), '(SELECT * FROM `table`)')
 
 
-
 class SqlReferenceTest(unittest.TestCase):
-    def testString(self):
+    def test_string(self):
         self.assertEqual(str(SqlReference('test')), '`test`')
 
-    def testUnicode(self):
+    def test_unicode(self):
         self.assertEqual(str(SqlReference(u'test')), '`test`')
 
-    def testSubselect(self):
-        select = sqlpuzzle.selectFrom('table')
+    def test_subselect(self):
+        select = sqlpuzzle.select_from('table')
         self.assertEqual(str(SqlReference(select)), '(SELECT * FROM `table`)')
 
-    def testTableColumn(self):
+    def test_table_column(self):
         self.assertEqual(str(SqlReference('table.column')), '`table`.`column`')
 
-    def testDatabaseTableColumn(self):
+    def test_database_table_column(self):
         self.assertEqual(str(SqlReference('db.table.column')), '`db`.`table`.`column`')
 
 
-
 class SecurityTest(unittest.TestCase):
-    def testSingleQuotes(self):
+    def test_single_quotes(self):
         self.assertEqual(str(SqlValue('test\'test')), '"test\\\'test"')
 
-    def testQuotes(self):
+    def test_quotes(self):
         self.assertEqual(str(SqlValue('test"test')), '"test\\"test"')
 
-    def testSlash(self):
+    def test_slash(self):
         self.assertEqual(str(SqlValue('test\\test')), '"test\\\\test"')
 
-    def testNewLine(self):
+    def test_new_line(self):
         value = """first line
 second line"""
         self.assertEqual(str(SqlValue(value)), '"first line\\nsecond line"')
-
-
-
-testCases = (
-    SqlValueTest,
-    SqlReferenceTest,
-    SecurityTest,
-)
-
-
-if __name__ == '__main__':
-    suite = unittest.TestSuite()
-    for testCase in testCases:
-        suite.addTests(unittest.TestLoader().loadTestsFromTestCase(testCase))
-    unittest.TextTestRunner(verbosity=2).run(suite)

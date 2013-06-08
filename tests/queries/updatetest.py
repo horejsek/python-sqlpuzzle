@@ -1,9 +1,3 @@
-# -*- coding: utf-8 -*-
-#
-# sqlpuzzle
-# Michal Horejsek <horejsekmichal@gmail.com>
-# https://github.com/horejsek/python-sqlpuzzle
-#
 
 import unittest
 
@@ -17,33 +11,16 @@ class UpdateTest(unittest.TestCase):
         self.update = sqlpuzzle._queries.update.Update()
 
 
-
 class BaseTest(UpdateTest):
-    def testSimply(self):
+    def test_simply(self):
         self.update.table('user')
         self.update.set(name='Alan')
-        self.update.allowUpdateAll()
+        self.update.allow_update_all()
         self.assertEqual(str(self.update), 'UPDATE `user` SET `name` = "Alan"')
-
-    def testUnsupportedFrom(self):
-        self.assertRaises(sqlpuzzle.exceptions.NotSupprotedException, self.update.from_, 'table')
-
-    def testUnsupportedLimit(self):
-        self.assertRaises(sqlpuzzle.exceptions.NotSupprotedException, self.update.limit, 1)
-
-    def testUnsupportedOffset(self):
-        self.assertRaises(sqlpuzzle.exceptions.NotSupprotedException, self.update.offset, 2)
-
-    def testUnsupportedInto(self):
-        self.assertRaises(sqlpuzzle.exceptions.NotSupprotedException, self.update.into, 'table')
-
-    def testUnsupportedValues(self):
-        self.assertRaises(sqlpuzzle.exceptions.NotSupprotedException, self.update.values, name='Alan')
-
 
 
 class WhereTest(UpdateTest):
-    def testWhere(self):
+    def test_where(self):
         self.update.table('user')
         self.update.set(name='Alan')
         self.update.where(age=42)
@@ -57,37 +34,21 @@ class WhereTest(UpdateTest):
         self.assertEqual(str(self.update), 'UPDATE `user` SET `name` = "Alan" WHERE `age` = 42 AND `name` LIKE "Harry" AND `sex` = "male" AND `enabled` = 1')
 
 
-
 class CopyTest(UpdateTest):
-    def testCopy(self):
+    def test_copy(self):
         self.update.table('user').set(name='Alan').where(id=42)
         copy = self.update.copy()
         self.update.set(age=24)
         self.assertEqual(str(copy), 'UPDATE `user` SET `name` = "Alan" WHERE `id` = 42')
         self.assertEqual(str(self.update), 'UPDATE `user` SET `name` = "Alan", `age` = 24 WHERE `id` = 42')
 
-    def testEquals(self):
+    def test_equals(self):
         self.update.table('user').set(name='Alan').where(id=42)
         copy = self.update.copy()
         self.assertTrue(self.update == copy)
 
-    def testNotEquals(self):
+    def test_not_equals(self):
         self.update.table('user').set(name='Alan').where(id=42)
         copy = self.update.copy()
         self.update.set(age=24)
         self.assertFalse(self.update == copy)
-
-
-
-testCases = (
-    BaseTest,
-    WhereTest,
-    CopyTest,
-)
-
-
-if __name__ == '__main__':
-    suite = unittest.TestSuite()
-    for testCase in testCases:
-        suite.addTests(unittest.TestLoader().loadTestsFromTestCase(testCase))
-    unittest.TextTestRunner(verbosity=2).run(suite)

@@ -1,9 +1,4 @@
 # -*- coding: utf-8 -*-
-#
-# sqlpuzzle
-# Michal Horejsek <horejsekmichal@gmail.com>
-# https://github.com/horejsek/python-sqlpuzzle
-#
 
 import sqlpuzzle._libs.object
 import sqlpuzzle.exceptions
@@ -12,18 +7,19 @@ import sqlpuzzle.exceptions
 class Query(sqlpuzzle._libs.object.Object):
     def __init__(self):
         """Initialization of Query."""
+        super(Query, self).__init__()
         self.__features = {}
-        self.__keysOfFreaturesForAutoPrinting = ()
+        self.__keys_of_features_for_auto_printing = ()
 
     def copy(self):
         """Create copy."""
-        newFeatures = {}
+        new_features = {}
         for key, feature in self.__features.iteritems():
-            newFeatures[key] = feature.copy()
+            new_features[key] = feature.copy()
 
-        newQuery = self.__class__()
-        newQuery._setFeatures(**newFeatures)
-        return newQuery
+        new_query = self.__class__()
+        new_query._set_features(**new_features)
+        return new_query
 
     def __hash__(self):
         return id(self)
@@ -34,98 +30,85 @@ class Query(sqlpuzzle._libs.object.Object):
 
     def __eq__(self, other):
         """Are queries equivalent?"""
-        sfs = self._getFeatures()
-        ofs = other._getFeatures()
-        if self.__class__ != other.__class__ or len(sfs) != len(ofs):
+        if self.__class__ != other.__class__:
+            return False
+        sfs = self._get_features()
+        ofs = other._get_features()
+        if len(sfs) != len(ofs):
             return False
         return all(bool(sf == of) for sf, of in zip(sfs.values(), ofs.values()))
 
-
-    def _printFeatures(self, prefix=''):
+    def _print_features(self, prefix=''):
         """Append features into query."""
         query = str(prefix)
-        for keyOfFeature in self.__keysOfFreaturesForAutoPrinting:
-            object_ = self._getFeature(keyOfFeature)
-            if object_.isSet():
+        for key_of_feature in self.__keys_of_features_for_auto_printing:
+            object_ = self._get_feature(key_of_feature)
+            if object_.is_set():
                 query = '%s %s' % (query, object_)
         return query
 
-    def _setFeatures(self, **kwds):
+    def _set_features(self, **kwds):
         """Set features."""
         self.__features = kwds
 
-    def _setKeysOfFeaturesForAutoPrinting(self, *args):
+    def _set_keys_of_features_for_auto_printing(self, *args):
         """Set features which is proposed to automatic print."""
-        self.__keysOfFreaturesForAutoPrinting = args
+        self.__keys_of_features_for_auto_printing = args
 
-    def _getFeatures(self):
+    def _get_features(self):
         """Get features."""
         return dict(self.__features)
 
-    def _getFeature(self, keyOfFeature):
+    def _get_feature(self, key_of_feature):
         """Get feature."""
-        if keyOfFeature in self.__features:
-            return self.__features[keyOfFeature]
-        self.__raiser(keyOfFeature)
-
-
-    @property
-    def _tables(self): return self._getFeature('tables')
+        if key_of_feature in self.__features:
+            return self.__features[key_of_feature]
+        raise sqlpuzzle.exceptions.NotSupprotedException(key_of_feature, self.__class__.__name__)
 
     @property
-    def _references(self): return self._getFeature('references')
+    def _tables(self):
+        return self._get_feature('tables')
 
     @property
-    def _columns(self): return self._getFeature('columns')
+    def _references(self):
+        return self._get_feature('references')
 
     @property
-    def _values(self): return self._getFeature('values')
+    def _columns(self):
+        return self._get_feature('columns')
 
     @property
-    def _onDuplicateKeyUpdate(self): return self._getFeature('onDuplicateKeyUpdate')
+    def _values(self):
+        return self._get_feature('values')
 
     @property
-    def _where(self): return self._getFeature('where')
+    def _on_duplicate_key_update(self):
+        return self._get_feature('on_duplicate_key_update')
 
     @property
-    def _groupBy(self): return self._getFeature('groupBy')
+    def _where(self):
+        return self._get_feature('where')
 
     @property
-    def _having(self): return self._getFeature('having')
+    def _group_by(self):
+        return self._get_feature('group_by')
 
     @property
-    def _orderBy(self): return self._getFeature('orderBy')
+    def _having(self):
+        return self._get_feature('having')
 
     @property
-    def _limit(self): return self._getFeature('limit')
+    def _order_by(self):
+        return self._get_feature('order_by')
 
     @property
-    def _intoOutfile(self): return self._getFeature('intoOutfile')
+    def _limit(self):
+        return self._get_feature('limit')
 
     @property
-    def _selectOptions(self): return self._getFeature('selectOptions')
+    def _into_outfile(self):
+        return self._get_feature('into_outfile')
 
-
-    def __and__(self, other): self.__raiser('union')
-    def __or__(self, other): self.__raiser('union all')
-    def columns(self, *args, **kwds): self.__raiser('columns')
-    def from_(self, *args, **kwds): self.__raiser('from')
-    def join(self, *args, **kwds): self.__raiser('join')
-    def innerJoin(self, *args, **kwds): self.__raiser('innerJoin')
-    def leftJoin(self, *args, **kwds): self.__raiser('leftJoin')
-    def rightJoin(self, *args, **kwds): self.__raiser('rightJoin')
-    def on(self, *args, **kwds): self.__raiser('on')
-    def where(self, *args, **kwds): self.__raiser('where')
-    def groupBy(self, *args, **kwds): self.__raiser('group by')
-    def orderBy(self, *args, **kwds): self.__raiser('order by')
-    def limit(self, *args, **kwds): self.__raiser('limit')
-    def offset(self, *args, **kwds): self.__raiser('offset')
-    def into(self, *args, **kwds): self.__raiser('into')
-    def values(self, *args, **kwds): self.__raiser('values')
-    def table(self, *args, **kwds): self.__raiser('table')
-    def set(self, *args, **kwds): self.__raiser('set')
-
-
-    def __raiser(self, method):
-        """Raise if method is not implemented in actual instance."""
-        raise sqlpuzzle.exceptions.NotSupprotedException(method, self.__class__.__name__)
+    @property
+    def _select_options(self):
+        return self._get_feature('select_options')
