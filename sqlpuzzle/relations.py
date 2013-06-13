@@ -9,8 +9,8 @@ import types
 import datetime
 
 import sqlpuzzle._libs.object
-import sqlpuzzle._queries
-import sqlpuzzle.exceptions
+from sqlpuzzle._libs.customSql import CustomSql
+from sqlpuzzle._queries import Query
 
 
 
@@ -58,7 +58,7 @@ class _RelationValue(sqlpuzzle._libs.object.Object):
 
 class EQ(_RelationValue):
     _stringRepresntation = '='
-    _allowedTypes = (str, unicode, int, long, float, bool, datetime.date, sqlpuzzle._queries.Query)
+    _allowedTypes = (str, unicode, int, long, float, bool, datetime.date, Query, CustomSql)
 EQUAL_TO = EQ
 
 
@@ -71,7 +71,7 @@ NOT_EQUAL_TO = NE
 
 class GT(_RelationValue):
     _stringRepresntation = '>'
-    _allowedTypes = (int, long, float, datetime.date, sqlpuzzle._queries.Query)
+    _allowedTypes = (int, long, float, datetime.date, Query, CustomSql)
 GRATHER_THAN = GT
 
 
@@ -96,19 +96,19 @@ LESS_TAHN_OR_EQUAL_TO = LE
 
 class LIKE(_RelationValue):
     _stringRepresntation = 'LIKE'
-    _allowedTypes = (str, unicode, sqlpuzzle._queries.Query)
+    _allowedTypes = (str, unicode, Query, CustomSql)
 
 
 
 class REGEXP(_RelationValue):
     _stringRepresntation = 'REGEXP'
-    _allowedTypes = (str, unicode, sqlpuzzle._queries.Query)
+    _allowedTypes = (str, unicode, Query, CustomSql)
 
 
 
 class IN(_RelationValue):
     _stringRepresntation = 'IN'
-    _allowedTypes = (list, tuple, xrange, types.GeneratorType, sqlpuzzle._queries.Query)
+    _allowedTypes = (list, tuple, xrange, types.GeneratorType, Query, CustomSql)
 
     def __init__(self, *args):
         if len(args) > 1:
@@ -144,7 +144,7 @@ class NOT_IN(IN):
 
 class IS(_RelationValue):
     _stringRepresntation = 'IS'
-    _allowedTypes = (bool, types.NoneType,)
+    _allowedTypes = (bool, types.NoneType, CustomSql)
 
 
 

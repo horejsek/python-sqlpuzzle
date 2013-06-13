@@ -53,16 +53,36 @@ class SqlPuzzleTest(unittest.TestCase):
         self.assertEqual(str(sql), 'DELETE FROM `user` WHERE `id` = 42')
 
 
-class CopyText(unittest.TestCase):
+class CopyTest(unittest.TestCase):
     def testCopy1(self):
         query1 = sqlpuzzle.selectFrom('t').where('c', sqlpuzzle.relations.GT(1))
         query2 = query1.copy()
         self.assertEquals(str(query1), str(query2))
 
 
+class RelationTest(unittest.TestCase):
+    def testCustomSql(self):
+        # Not throw exception InvalidArgumentException.
+        sqlpuzzle.relations.EQ(sqlpuzzle.customSql('custom'))
+        sqlpuzzle.relations.NE(sqlpuzzle.customSql('custom'))
+        sqlpuzzle.relations.GT(sqlpuzzle.customSql('custom'))
+        sqlpuzzle.relations.GE(sqlpuzzle.customSql('custom'))
+        sqlpuzzle.relations.LT(sqlpuzzle.customSql('custom'))
+        sqlpuzzle.relations.LE(sqlpuzzle.customSql('custom'))
+        sqlpuzzle.relations.LIKE(sqlpuzzle.customSql('custom'))
+        sqlpuzzle.relations.REGEXP(sqlpuzzle.customSql('custom'))
+        sqlpuzzle.relations.IN(sqlpuzzle.customSql('custom'))
+        sqlpuzzle.relations.IN_WITH_NONE(sqlpuzzle.customSql('custom'))
+        sqlpuzzle.relations.NOT_IN(sqlpuzzle.customSql('custom'))
+        sqlpuzzle.relations.IS(sqlpuzzle.customSql('custom'))
+        sqlpuzzle.relations.IS_NOT(sqlpuzzle.customSql('custom'))
+
+
+
 testCases = (
     SqlPuzzleTest,
-    CopyText,
+    CopyTest,
+    RelationTest,
 )
 
 
