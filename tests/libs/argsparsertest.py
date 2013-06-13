@@ -1,4 +1,5 @@
 
+import six
 import unittest
 
 import sqlpuzzle.exceptions
@@ -98,13 +99,13 @@ class OptionAllowListTest(ArgsParserTest):
 
 class OptionAllowedDataTypesTest(ArgsParserTest):
     def test_simple(self):
-        self.assertEqual(parser({'allowed_data_types': (int, long, float)}, 2), [(2,)])
+        self.assertEqual(parser({'allowed_data_types': six.integer_types + (float,)}, 2), [(2,)])
 
     def test_simple_exceptions(self):
-        self.assertRaises(sqlpuzzle.exceptions.InvalidArgumentException, parser, {'allowed_data_types': (int, long, float)}, "string")
+        self.assertRaises(sqlpuzzle.exceptions.InvalidArgumentException, parser, {'allowed_data_types': six.integer_types}, "string")
 
     def test_set_for_each_argument(self):
-        self.assertEqual(parser({'allowed_data_types': ((int, long, float), (str, unicode)), 'max_items': 2}, (2, "string")), [(2, "string")])
+        self.assertEqual(parser({'allowed_data_types': (six.integer_types, six.string_types), 'max_items': 2}, (2, "string")), [(2, "string")])
 
     def test_set_for_each_argument_exception(self):
-        self.assertRaises(sqlpuzzle.exceptions.InvalidArgumentException, parser, {'allowed_data_types': ((int, long, float), (str, unicode)), 'max_items': 2}, ("string", 2))
+        self.assertRaises(sqlpuzzle.exceptions.InvalidArgumentException, parser, {'allowed_data_types': (six.integer_types, six.string_types), 'max_items': 2}, ("string", 2))

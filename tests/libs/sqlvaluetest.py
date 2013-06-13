@@ -1,4 +1,7 @@
 
+import six
+from six.moves import xrange
+
 import datetime
 import unittest
 
@@ -11,7 +14,7 @@ class SqlValueTest(unittest.TestCase):
         self.assertEqual(str(SqlValue('Hello World!')), '"Hello World!"')
 
     def test_unicode(self):
-        self.assertEqual(str(SqlValue(u'Hello World!')), '"Hello World!"')
+        self.assertEqual(str(SqlValue(six.u('Hello World!'))), '"Hello World!"')
 
     def test_integer(self):
         self.assertEqual(str(SqlValue(42)), '42')
@@ -80,7 +83,7 @@ class SqlReferenceTest(unittest.TestCase):
         self.assertEqual(str(SqlReference('test')), '`test`')
 
     def test_unicode(self):
-        self.assertEqual(str(SqlReference(u'test')), '`test`')
+        self.assertEqual(str(SqlReference(six.u('test'))), '`test`')
 
     def test_subselect(self):
         select = sqlpuzzle.select_from('table')

@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+import six
+
 import sqlpuzzle.exceptions
 
 
@@ -55,7 +57,7 @@ class ParserOptions(object):
         self.max_items = options.get('max_items', 1)
         self.allow_dict = options.get('allow_dict', False)
         self.allow_list = options.get('allow_list', False)
-        self.allowed_data_types = options.get('allowed_data_types', (str, unicode, int, long, float, bool))
+        self.allowed_data_types = options.get('allowed_data_types', six.string_types + six.integer_types + (float, bool))
 
     def check(self):
         if self.min_items > self.max_items:
@@ -131,7 +133,7 @@ class Parser(object):
             self.__parse_list(self.input_data.get_arguments())
 
     def __parse_dictionary(self, dict_):
-        for item in dict_.iteritems():
+        for item in six.iteritems(dict_):
             self.__parse_item(item)
 
     def __parse_list(self, list_):

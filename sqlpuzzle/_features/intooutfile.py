@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+import six
+
 import sqlpuzzle._libs.sqlvalue
 import sqlpuzzle.exceptions
 
@@ -54,7 +56,7 @@ class IntoOutfile(sqlpuzzle._features.Feature):
 
     def _setter(self, key, value):
         """Helper for seting options."""
-        if not isinstance(value, (str, unicode)):
+        if not isinstance(value, six.string_types):
             raise sqlpuzzle.exceptions.InvalidArgumentException()
         setattr(self, '_%s' % key, value)
         return self

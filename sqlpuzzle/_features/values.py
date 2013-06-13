@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+import six
 import datetime
 
 import sqlpuzzle._libs.argsparser
@@ -55,9 +56,10 @@ class Values(sqlpuzzle._features.Features):
                     'max_items': 2,
                     'allow_dict': True,
                     'allow_list': True,
-                    'allowed_data_types':
-                    ((str, unicode), (
-                        str, unicode, int, long, float, bool, datetime.date)),
+                    'allowed_data_types': (
+                        six.string_types,
+                        six.string_types + six.integer_types + (float, bool, datetime.date),
+                    ),
                 },
                 *args, **kwds
             ):

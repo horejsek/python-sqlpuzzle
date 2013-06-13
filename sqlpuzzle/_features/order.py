@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+import six
+
 import sqlpuzzle._libs.argsparser
 import sqlpuzzle._libs.sqlvalue
 
@@ -60,7 +62,7 @@ class Orders(sqlpuzzle._features.Features):
             {
                 'max_items': 2,
                 'allow_dict': True,
-                'allowed_data_types': (str, unicode, int),
+                'allowed_data_types': six.string_types + (int,),
             },
             *args,
             **kwds

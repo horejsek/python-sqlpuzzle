@@ -1,5 +1,8 @@
 # -*- coding: utf-8 -*-
 
+import six
+from six.moves import xrange
+
 import types
 import datetime
 
@@ -54,8 +57,7 @@ class _RelationValue(sqlpuzzle._libs.object.Object):
 
 class EQ(_RelationValue):
     _string_representation = '='
-    _allowed_types = (str, unicode, int, long, float,
-                     bool, datetime.date, Query, CustomSql)
+    _allowed_types = six.string_types + six.integer_types + (float, bool, datetime.date, Query, CustomSql)
 EQUAL_TO = EQ
 
 
@@ -66,7 +68,7 @@ NOT_EQUAL_TO = NE
 
 class GT(_RelationValue):
     _string_representation = '>'
-    _allowed_types = (int, long, float, datetime.date, Query, CustomSql)
+    _allowed_types = six.integer_types + (float, datetime.date, Query, CustomSql)
 GRATHER_THAN = GT
 
 
@@ -87,12 +89,12 @@ LESS_TAHN_OR_EQUAL_TO = LE
 
 class LIKE(_RelationValue):
     _string_representation = 'LIKE'
-    _allowed_types = (str, unicode, Query, CustomSql)
+    _allowed_types = six.string_types + (Query, CustomSql)
 
 
 class REGEXP(_RelationValue):
     _string_representation = 'REGEXP'
-    _allowed_types = (str, unicode, Query, CustomSql)
+    _allowed_types = six.string_types + (Query, CustomSql)
 
 
 class IN(_RelationValue):

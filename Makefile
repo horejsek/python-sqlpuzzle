@@ -1,5 +1,6 @@
 
 PYTHON=`which python`
+PYTHON3=`which python3`
 DESTDIR=/
 BUILDIR=$(CURDIR)/debian/sqlpuzzle
 PROJECT=sqlpuzzle
@@ -19,12 +20,19 @@ upload:
 
 install:
 	$(PYTHON) setup.py install --root $(DESTDIR)
+	$(PYTHON3) setup.py install --root $(DESTDIR)
 
 install-building-packages:
 	apt-get install build-essential dh-make debhelper devscripts
+	curl http://python-distribute.org/distribute_setup.py | $(PYTHON3)
+	curl https://raw.github.com/pypa/pip/master/contrib/get-pip.py | $(PYTHON3)
+	curl https://raw.github.com/pypa/pip/master/contrib/get-pip.py | $(PYTHON)
+	pip install nose
+	pip-3.2 install nose
 
 test:
 	$(PYTHON) tests/alltests.py
+	$(PYTHON3) tests/alltests.py
 
 buildrpm:
 	$(PYTHON) setup.py bdist_rpm --post-install=rpm/postinstall --pre-uninstall=rpm/preuninstall

@@ -1,4 +1,6 @@
 
+from six.moves import xrange
+
 import unittest
 
 import sqlpuzzle._features.where

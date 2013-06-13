@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+import six
+
 import sqlpuzzle.exceptions
 
 
@@ -35,7 +37,7 @@ class Limit(sqlpuzzle._features.Feature):
 
     def limit(self, limit, offset=None):
         """Set LIMIT (and OFFSET)."""
-        if not type(limit) in (int, long, type(None)):
+        if not type(limit) in six.integer_types + (type(None),):
             raise sqlpuzzle.exceptions.InvalidArgumentException()
 
         if limit is None:
@@ -49,7 +51,7 @@ class Limit(sqlpuzzle._features.Feature):
 
     def offset(self, offset):
         """Set OFFSET."""
-        if not type(offset) in (int, long, type(None)):
+        if not type(offset) in six.integer_types + (type(None),):
             raise sqlpuzzle.exceptions.InvalidArgumentException()
 
         self._offset = int(offset) if offset is not None else None

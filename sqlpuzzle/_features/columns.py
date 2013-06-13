@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+import six
+
 import sqlpuzzle._libs.argsparser
 import sqlpuzzle._libs.sqlvalue
 import sqlpuzzle._libs.customsql
@@ -41,9 +43,11 @@ class Columns(sqlpuzzle._features.Features):
     def columns(self, *args, **kwds):
         """Set columns."""
         allowed_data_types = sqlpuzzle._libs.argsparser.AllowedDataTypes().add(
-            (int, str, unicode, sqlpuzzle._queries.select.Select, sqlpuzzle._queries.union.Union,
-             sqlpuzzle._libs.customsql.CustomSql, sqlpuzzle._features.functions.Function),
-            (str, unicode)
+            six.string_types + (
+                int, sqlpuzzle._queries.select.Select, sqlpuzzle._queries.union.Union,
+                sqlpuzzle._libs.customsql.CustomSql, sqlpuzzle._features.functions.Function
+            ),
+            six.string_types
         ).add(
             sqlpuzzle._libs.customsql.CustomSql
         )

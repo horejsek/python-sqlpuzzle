@@ -1,5 +1,12 @@
 # -*- coding: utf-8 -*-
 
+import six
+from six.moves import xrange
+try:
+    long
+except NameError:
+    long = int
+
 import types
 import datetime
 import re
@@ -16,7 +23,7 @@ class SqlValue(object):
         """Initialization of SqlValue."""
         self._map = {
             str: self._string,
-            unicode: self._string,
+            six.text_type: self._string,
             int: self._integer,
             long: self._integer,
             float: self._float,
@@ -46,7 +53,7 @@ class SqlValue(object):
 
     def _get_convert_method(self):
         """Get right method to convert of the value."""
-        for type_, method in self._map.iteritems():
+        for type_, method in six.iteritems(self._map):
             if isinstance(self.value, type_):
                 return method
         return self._undefined
@@ -132,7 +139,7 @@ class SqlReference(SqlValue):
         """Initialization of SqlReference."""
         self._map = {
             str: self._back_quotes,
-            unicode: self._back_quotes,
+            six.text_type: self._back_quotes,
             int: self._integer,
             sqlpuzzle._queries.select.Select: self._subselect,
             sqlpuzzle._queries.union.Union: self._subselect,

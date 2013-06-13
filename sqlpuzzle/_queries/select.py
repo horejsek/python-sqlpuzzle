@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+import six
+
 import sqlpuzzle._queries.union
 
 import sqlpuzzle._libs.doc
@@ -268,7 +270,7 @@ class SelectOptions(sqlpuzzle._libs.object.Object):
             self._set_options[option_key] = 'off'
 
     def __str__(self):
-        return ' '.join(self._options[key][val] for key, val in self._set_options.iteritems() if val != 'off')
+        return ' '.join(self._options[key][val] for key, val in six.iteritems(self._set_options) if val != 'off')
 
     def __eq__(self, other):
         """Are select options equivalent?"""

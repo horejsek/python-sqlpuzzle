@@ -1,5 +1,12 @@
 # -*- coding: utf-8 -*-
 
+import six
+from six.moves import xrange
+try:
+    long
+except NameError:
+    long = int
+
 import types
 import datetime
 
@@ -13,7 +20,7 @@ import sqlpuzzle.relations
 class Condition(sqlpuzzle._features.Feature):
     _default_relations = {
         str: sqlpuzzle.relations.EQ,
-        unicode: sqlpuzzle.relations.EQ,
+        six.text_type: sqlpuzzle.relations.EQ,
         int: sqlpuzzle.relations.EQ,
         long: sqlpuzzle.relations.EQ,
         float: sqlpuzzle.relations.EQ,
@@ -95,9 +102,11 @@ class Conditions(sqlpuzzle._features.Features):
                     'allow_dict': True,
                     'allow_list': True,
                     'allowed_data_types': (
-                        (str, unicode, sqlpuzzle._queries.select.Select),
-                        (str, unicode, int, long, float, bool, list, tuple, xrange, types.GeneratorType, datetime.date,
-                         datetime.datetime, sqlpuzzle.relations._RelationValue, sqlpuzzle._queries.select.Select),
+                        six.string_types + (sqlpuzzle._queries.select.Select,),
+                        six.string_types + six.integer_types + (
+                            float, bool, list, tuple, xrange, types.GeneratorType, datetime.date,
+                            datetime.datetime, sqlpuzzle.relations._RelationValue, sqlpuzzle._queries.select.Select,
+                        ),
                         (sqlpuzzle.relations._RelationValue,)
                     ),
                 },
@@ -106,7 +115,7 @@ class Conditions(sqlpuzzle._features.Features):
             ):
                 # TODO: Remove in version 1.0.
                 if relation is not None:
-                    print 'Third param in condition (relation) is deprecated. Instead use relation as instance with value - e.g. sqlpuzzle.relation.LIKE("Harry").'
+                    print('Third param in condition (relation) is deprecated. Instead use relation as instance with value - e.g. sqlpuzzle.relation.LIKE("Harry").')
 
                 condition = self._condition_object(column, value, relation)
                 if condition not in self:

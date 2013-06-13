@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+import six
+
 import sqlpuzzle._libs.argsparser
 import sqlpuzzle._libs.sqlvalue
 import sqlpuzzle._libs.customsql
@@ -119,7 +121,7 @@ class Table(sqlpuzzle._features.Feature):
             table = Table(*arg)
         elif isinstance(arg, dict) and len(arg) == 1:
             table = Table(*arg.popitem())
-        elif isinstance(arg, (str, unicode)):
+        elif isinstance(arg, six.string_types):
             table = Table(arg)
         else:
             raise sqlpuzzle.exceptions.InvalidArgumentException(
@@ -157,9 +159,8 @@ class Tables(sqlpuzzle._features.Features):
         args = [arg for arg in args if arg]
 
         allowed_data_types = sqlpuzzle._libs.argsparser.AllowedDataTypes().add(
-            (str, unicode, sqlpuzzle._queries.select.Select,
-             sqlpuzzle._queries.union.Union, sqlpuzzle._libs.customsql.CustomSql),
-            (str, unicode)
+            six.string_types + (sqlpuzzle._queries.select.Select, sqlpuzzle._queries.union.Union, sqlpuzzle._libs.customsql.CustomSql),
+            six.string_types,
         ).add(
             sqlpuzzle._libs.customsql.CustomSql
         )
