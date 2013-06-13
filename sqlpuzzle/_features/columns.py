@@ -21,9 +21,9 @@ class Column(sqlpuzzle._features.Feature):
     def __str__(self):
         """Print part of query."""
         if self._as:
-            return '%s AS "%s"' % (
+            return '%s AS %s' % (
                 sqlpuzzle._libs.sqlValue.SqlReference(self._column),
-                self._as,
+                sqlpuzzle._libs.sqlValue.SqlReference(self._as),
             )
         else:
             return str(sqlpuzzle._libs.sqlValue.SqlReference(self._column))

@@ -268,13 +268,13 @@ class SubselectTest(SelectTest):
         subselect = sqlpuzzle._queries.select.Select('col').from_('tab')
         self.select.columns((subselect, 'c'))
         self.select.from_('tab')
-        self.assertEqual(str(self.select), 'SELECT (SELECT `col` FROM `tab`) AS "c" FROM `tab`')
+        self.assertEqual(str(self.select), 'SELECT (SELECT `col` FROM `tab`) AS `c` FROM `tab`')
 
     def testSubselectInColumnsByDictionary(self):
         subselect = sqlpuzzle._queries.select.Select('col').from_('tab')
         self.select.columns({subselect: 'c'})
         self.select.from_('tab')
-        self.assertEqual(str(self.select), 'SELECT (SELECT `col` FROM `tab`) AS "c" FROM `tab`')
+        self.assertEqual(str(self.select), 'SELECT (SELECT `col` FROM `tab`) AS `c` FROM `tab`')
 
     def testSubselectInTables(self):
         subselect = sqlpuzzle._queries.select.Select('col').from_('tab')

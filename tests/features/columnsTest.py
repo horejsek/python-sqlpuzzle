@@ -38,34 +38,34 @@ class BaseTest(ColumnsTest):
 
     def testColumnAs(self):
         self.columns.columns(('id', 'ID'), 'name')
-        self.assertEqual(str(self.columns), '`id` AS "ID", `name`')
+        self.assertEqual(str(self.columns), '`id` AS `ID`, `name`')
 
     def testColumnAsByDictionary(self):
         self.columns.columns({'id': 'ID', 'name': 'Name'})
-        self.assertEqual(str(self.columns), '`id` AS "ID", `name` AS "Name"')
+        self.assertEqual(str(self.columns), '`id` AS `ID`, `name` AS `Name`')
 
     def testColumnAsByKwds(self):
         self.columns.columns(id='ID', name='Name')
-        self.assertEqual(str(self.columns), '`id` AS "ID", `name` AS "Name"')
+        self.assertEqual(str(self.columns), '`id` AS `ID`, `name` AS `Name`')
 
 
 
 class CustomSqlTest(ColumnsTest):
     def setUp(self):
         super(CustomSqlTest, self).setUp()
-        self.customSql = sqlpuzzle.customSql('AVG(`custom`) AS "x"')
+        self.customSql = sqlpuzzle.customSql('AVG(`custom`) AS `x`')
 
     def testOneColumn(self):
         self.columns.columns(self.customSql)
-        self.assertEqual(str(self.columns), 'AVG(`custom`) AS "x"')
+        self.assertEqual(str(self.columns), 'AVG(`custom`) AS `x`')
 
     def testMoreColumns(self):
         self.columns.columns(self.customSql, 'id')
-        self.assertEqual(str(self.columns), 'AVG(`custom`) AS "x", `id`')
+        self.assertEqual(str(self.columns), 'AVG(`custom`) AS `x`, `id`')
 
     def testCustomInColumnWithAs(self):
         self.columns.columns({sqlpuzzle.customSql('AVG(`custom`)'): 'x'})
-        self.assertEqual(str(self.columns), 'AVG(`custom`) AS "x"')
+        self.assertEqual(str(self.columns), 'AVG(`custom`) AS `x`')
 
 
 
@@ -87,7 +87,7 @@ class GroupingTest(ColumnsTest):
 
     def testMoreSameColumnsWithDiffAsPrintAsMore(self):
         self.columns.columns('col', ('col', 'col2'))
-        self.assertEqual(str(self.columns), '`col`, `col` AS "col2"')
+        self.assertEqual(str(self.columns), '`col`, `col` AS `col2`')
 
 
 
