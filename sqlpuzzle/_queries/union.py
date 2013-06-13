@@ -50,11 +50,6 @@ class Union(sqlpuzzle._queries.Query):
             raise sqlpuzzle.exceptions.InvalidArgumentException()
         self._type = type
 
-    def copy(self):
-        """Create copy."""
-        newQuery = self.__class__(self._query1, self._query2, self._type)
-        return newQuery
-
     def __str__(self):
         """Print query."""
         return '%s %s %s' % (

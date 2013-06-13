@@ -306,7 +306,7 @@ class CopyTest(SelectTest):
     def testEquals(self):
         self.select.from_('user').where(name='Alan')
         copy = self.select.copy()
-        self.assertTrue(self.select == copy)
+        self.assertEqual(str(self.select), str(copy))
 
     def testNotEquals(self):
         self.select.from_('user').where(name='Alan')

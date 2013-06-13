@@ -13,18 +13,6 @@ import sqlpuzzle.exceptions
 
 
 class Feature(sqlpuzzle._libs.object.Object):
-    def copy(self):
-        """Create copy."""
-        args = inspect.getargspec(self.__class__.__init__)[0][1:]
-        attributes = [a.strip('_') for a in args]
-
-        newArgs = []
-        for attribute in attributes:
-            newArgs.append(getattr(self, '_%s' % attribute))
-
-        newFeature = self.__class__(*newArgs)
-        return newFeature
-
     def isSet(self):
         """Is feature set?"""
         return True
@@ -38,12 +26,6 @@ class Features(sqlpuzzle._libs.object.Object):
         self._separatorOfFeatures = ', '
         self._keywordOfFeature = ''
         self._defaultQueryString = ''
-
-    def copy(self):
-        """Create copy of features."""
-        newFeatures = self.__class__()
-        newFeatures._features = self._features.copy()
-        return newFeatures
 
     def __str__(self):
         """Print features."""
@@ -82,13 +64,6 @@ class Features(sqlpuzzle._libs.object.Object):
 
 
 class ListOfFeatures(list):
-    def copy(self):
-        """Create copy of list of features."""
-        newListOfFeatures = self.__class__()
-        for feature in self:
-            newListOfFeatures.append(feature.copy())
-        return newListOfFeatures
-
     def append(self, feature):
         if not isinstance(feature, (Feature, Features)):
             raise sqlpuzzle.exceptions.SqlPuzzleError('Appended item must be instance of Feature.')

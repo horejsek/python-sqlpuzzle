@@ -270,12 +270,6 @@ class SelectOptions(sqlpuzzle._libs.object.Object):
         for optionKey in self._options.keys():
             self._setOptions[optionKey] = 'off'
 
-    def copy(self):
-        """Create copy."""
-        newSelectOptions = self.__class__()
-        newSelectOptions._setOptions = dict(self._setOptions)
-        return newSelectOptions
-
     def __str__(self):
         return ' '.join(self._options[key][val] for key, val in self._setOptions.iteritems() if val != 'off')
 

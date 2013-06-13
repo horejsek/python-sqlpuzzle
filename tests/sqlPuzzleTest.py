@@ -53,9 +53,16 @@ class SqlPuzzleTest(unittest.TestCase):
         self.assertEqual(str(sql), 'DELETE FROM `user` WHERE `id` = 42')
 
 
+class CopyText(unittest.TestCase):
+    def testCopy1(self):
+        query1 = sqlpuzzle.selectFrom('t').where('c', sqlpuzzle.relations.GT(1))
+        query2 = query1.copy()
+        self.assertEquals(str(query1), str(query2))
+
 
 testCases = (
     SqlPuzzleTest,
+    CopyText,
 )
 
 
