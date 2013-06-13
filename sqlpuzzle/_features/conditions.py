@@ -95,10 +95,10 @@ class Conditions(sqlpuzzle._features.Features):
             self.append_feature(args[0])
 
         else:
-            for column, value, relation in sqlpuzzle._libs.argsparser.parse_args_to_list_of_tuples(
+            for column, value in sqlpuzzle._libs.argsparser.parse_args_to_list_of_tuples(
                 {
                     'min_items': 2,
-                    'max_items': 3,  # TODO: In version 1.0 third param will be removed.
+                    'max_items': 2,
                     'allow_dict': True,
                     'allow_list': True,
                     'allowed_data_types': (
@@ -113,11 +113,7 @@ class Conditions(sqlpuzzle._features.Features):
                 *args,
                 **kwds
             ):
-                # TODO: Remove in version 1.0.
-                if relation is not None:
-                    print('Third param in condition (relation) is deprecated. Instead use relation as instance with value - e.g. sqlpuzzle.relation.LIKE("Harry").')
-
-                condition = self._condition_object(column, value, relation)
+                condition = self._condition_object(column, value)
                 if condition not in self:
                     self.append_feature(condition)
 

@@ -98,7 +98,7 @@ class HavingTest(SelectTest):
     def test_where(self):
         self.select.from_('user')
         self.select.having(age=42)
-        self.select.having('name', 'Harry', sqlpuzzle.relations.LIKE)
+        self.select.having('name', sqlpuzzle.relations.LIKE('Harry'))
         self.select.having({
             'sex': 'male',
         })
