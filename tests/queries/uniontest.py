@@ -42,7 +42,7 @@ class CopyTest(UnionTest):
     def test_equals(self):
         union = self.select1 & self.select2
         copy = union.copy()
-        self.assertTrue(union == copy)
+        self.assertEqual(str(union), str(copy))
 
     def test_not_equals(self):
         union = self.select1 & self.select2

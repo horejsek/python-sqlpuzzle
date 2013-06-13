@@ -23,15 +23,6 @@ class Update(sqlpuzzle._queries.Query):
         self.__allow_update_all = False
         self.table(table)
 
-    def copy(self):
-        """Create copy."""
-        new_query = super(Update, self).copy()
-        if self.__allow_update_all:
-            new_query.allow_update_all()
-        else:
-            new_query.forbid_update_all()
-        return new_query
-
     def __str__(self):
         """Print query."""
         if not self._where.is_set() and not self.__allow_update_all:

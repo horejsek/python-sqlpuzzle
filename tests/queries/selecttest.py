@@ -243,13 +243,13 @@ class SubselectTest(SelectTest):
         subselect = sqlpuzzle._queries.select.Select('col').from_('tab')
         self.select.columns((subselect, 'c'))
         self.select.from_('tab')
-        self.assertEqual(str(self.select), 'SELECT (SELECT `col` FROM `tab`) AS "c" FROM `tab`')
+        self.assertEqual(str(self.select), 'SELECT (SELECT `col` FROM `tab`) AS `c` FROM `tab`')
 
     def test_subselect_in_columns_by_dictionary(self):
         subselect = sqlpuzzle._queries.select.Select('col').from_('tab')
         self.select.columns({subselect: 'c'})
         self.select.from_('tab')
-        self.assertEqual(str(self.select), 'SELECT (SELECT `col` FROM `tab`) AS "c" FROM `tab`')
+        self.assertEqual(str(self.select), 'SELECT (SELECT `col` FROM `tab`) AS `c` FROM `tab`')
 
     def test_subselect_in_tables(self):
         subselect = sqlpuzzle._queries.select.Select('col').from_('tab')
@@ -280,7 +280,7 @@ class CopyTest(SelectTest):
     def test_equals(self):
         self.select.from_('user').where(name='Alan')
         copy = self.select.copy()
-        self.assertTrue(self.select == copy)
+        self.assertEqual(str(self.select), str(copy))
 
     def test_not_equals(self):
         self.select.from_('user').where(name='Alan')

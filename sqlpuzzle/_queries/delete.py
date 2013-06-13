@@ -23,15 +23,6 @@ class Delete(sqlpuzzle._queries.Query):
 
         self._tables.set(*tables)
 
-    def copy(self):
-        """Create copy."""
-        new_query = super(Delete, self).copy()
-        if self.__allow_delete_all:
-            new_query.allow_delete_all()
-        else:
-            new_query.forbid_delete_all()
-        return new_query
-
     def __str__(self):
         """Print query."""
         if not self._where.is_set() and not self.__allow_delete_all:

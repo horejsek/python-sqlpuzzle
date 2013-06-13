@@ -31,33 +31,33 @@ class BaseTest(ColumnsTest):
 
     def test_column_as(self):
         self.columns.columns(('id', 'ID'), 'name')
-        self.assertEqual(str(self.columns), '`id` AS "ID", `name`')
+        self.assertEqual(str(self.columns), '`id` AS `ID`, `name`')
 
     def test_column_as_by_dictionary(self):
         self.columns.columns({'id': 'ID', 'name': 'Name'})
-        self.assertEqual(str(self.columns), '`id` AS "ID", `name` AS "Name"')
+        self.assertEqual(str(self.columns), '`id` AS `ID`, `name` AS `Name`')
 
     def test_column_as_by_kwds(self):
         self.columns.columns(id='ID', name='Name')
-        self.assertEqual(str(self.columns), '`id` AS "ID", `name` AS "Name"')
+        self.assertEqual(str(self.columns), '`id` AS `ID`, `name` AS `Name`')
 
 
 class CustomSqlTest(ColumnsTest):
     def setUp(self):
         super(CustomSqlTest, self).setUp()
-        self.customsql = sqlpuzzle.customsql('AVG(`custom`) AS "x"')
+        self.customsql = sqlpuzzle.customsql('AVG(`custom`) AS `x`')
 
     def test_one_column(self):
         self.columns.columns(self.customsql)
-        self.assertEqual(str(self.columns), 'AVG(`custom`) AS "x"')
+        self.assertEqual(str(self.columns), 'AVG(`custom`) AS `x`')
 
     def test_more_columns(self):
         self.columns.columns(self.customsql, 'id')
-        self.assertEqual(str(self.columns), 'AVG(`custom`) AS "x", `id`')
+        self.assertEqual(str(self.columns), 'AVG(`custom`) AS `x`, `id`')
 
     def test_custom_in_column_with_as(self):
         self.columns.columns({sqlpuzzle.customsql('AVG(`custom`)'): 'x'})
-        self.assertEqual(str(self.columns), 'AVG(`custom`) AS "x"')
+        self.assertEqual(str(self.columns), 'AVG(`custom`) AS `x`')
 
 
 class BackQuotesTest(ColumnsTest):
@@ -77,7 +77,7 @@ class GroupingTest(ColumnsTest):
 
     def test_more_same_columns_with_diff_as_print_as_more(self):
         self.columns.columns('col', ('col', 'col2'))
-        self.assertEqual(str(self.columns), '`col`, `col` AS "col2"')
+        self.assertEqual(str(self.columns), '`col`, `col` AS `col2`')
 
 
 class CopyTest(ColumnsTest):

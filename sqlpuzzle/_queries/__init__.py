@@ -11,16 +11,6 @@ class Query(sqlpuzzle._libs.object.Object):
         self.__features = {}
         self.__keys_of_features_for_auto_printing = ()
 
-    def copy(self):
-        """Create copy."""
-        new_features = {}
-        for key, feature in self.__features.iteritems():
-            new_features[key] = feature.copy()
-
-        new_query = self.__class__()
-        new_query._set_features(**new_features)
-        return new_query
-
     def __hash__(self):
         return id(self)
 
