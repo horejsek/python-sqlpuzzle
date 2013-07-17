@@ -177,6 +177,37 @@ class GroupingJoinsTest(TablesTest):
 
 
 
+class JoinWithRelationsTest(TablesTest):
+    def testIN(self):
+        self.tables.set('t1')
+        self.tables.join('t2').on('t2.id', [3, 4])
+        self.assertEqual(str(self.tables), '`t1` JOIN `t2` ON (`t2`.`id` IN (3, 4))')
+
+    def testGT(self):
+        self.tables.set('t1')
+        self.tables.join('t2').on('t2.id', sqlpuzzle.relations.GE(42))
+        self.assertEqual(str(self.tables), '`t1` JOIN `t2` ON (`t2`.`id` >= 42)')
+
+
+
+class JoinWithSubselect(TablesTest):
+    def testInJoin(self):
+        self.tables.set('t1')
+        self.tables.join({sqlpuzzle.selectFrom('t2'): 't'}).on('t1.id', 't.id')
+        self.assertEqual(str(self.tables), '`t1` JOIN (SELECT * FROM `t2`) AS `t` ON (`t1`.`id` = `t`.`id`)')
+
+    def testInCondition(self):
+        self.tables.set('t1')
+        self.tables.join('t2').on('t2.id', sqlpuzzle.select('id').from_('t3'))
+        self.assertEqual(str(self.tables), '`t1` JOIN `t2` ON (`t2`.`id` = (SELECT `id` FROM `t3`))')
+
+    def testInConditionWithRelationIN(self):
+        self.tables.set('t1')
+        self.tables.join('t2').on('t2.id', sqlpuzzle.relations.IN(sqlpuzzle.select('id').from_('t3')))
+        self.assertEqual(str(self.tables), '`t1` JOIN `t2` ON (`t2`.`id` IN (SELECT `id` FROM `t3`))')
+
+
+
 class BackQuotesJoinsTest(TablesTest):
     def testSimpleJoinNameWithDot1(self):
         self.tables.set('t')
@@ -212,10 +243,12 @@ testCases = (
     BaseTest,
     CustomSqlTest,
     GroupingTest,
+    CopyTest,
     ExceptionsTest,
     SimpleJoinsTest,
     GroupingJoinsTest,
-    CopyTest,
+    JoinWithRelationsTest,
+    JoinWithSubselect,
     BackQuotesJoinsTest,
     ExceptionsJoinTest,
 )

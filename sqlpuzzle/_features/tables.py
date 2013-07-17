@@ -25,12 +25,11 @@ JOIN_TYPES = {
 
 
 class OnCondition(sqlpuzzle._features.conditions.Condition):
-    def __str__(self):
-        """Print part of query."""
-        return '%s = %s' % (
-            sqlpuzzle._libs.sqlValue.SqlReference(self._column),
-            sqlpuzzle._libs.sqlValue.SqlReference(self._value),
-        )
+    @staticmethod
+    def _get_value_for_str(value):
+        if isinstance(value, (str, unicode)):
+            return sqlpuzzle._libs.sqlValue.SqlReference(value)
+        return sqlpuzzle._libs.sqlValue.SqlValue(value)
 
     def __eq__(self, other):
         """Are on codntions equivalent?"""

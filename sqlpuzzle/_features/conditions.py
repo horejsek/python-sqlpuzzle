@@ -48,7 +48,11 @@ class Condition(sqlpuzzle._features.Feature):
         self._relationValue = relationValue
 
     def _createDefaultRelationValue(self, value):
-        return self._defaultRelations[type(value)](value)
+        if isinstance(value, sqlpuzzle._queries.Query):
+            value_type = sqlpuzzle._queries.Query
+        else:
+            value_type = type(value)
+        return self._defaultRelations[value_type](value)
 
     def __str__(self):
         """Print condition (part of WHERE)."""
@@ -61,8 +65,12 @@ class Condition(sqlpuzzle._features.Feature):
         return foo % {
             'col': sqlpuzzle._libs.sqlValue.SqlReference(self._column),
             'rel': self._relation,
-            'val': sqlpuzzle._libs.sqlValue.SqlValue(value),
+            'val': self._get_value_for_str(value),
         }
+
+    @staticmethod
+    def _get_value_for_str(value):
+        return sqlpuzzle._libs.sqlValue.SqlValue(value)
 
     def __eq__(self, other):
         """Are conditions equivalent?"""
