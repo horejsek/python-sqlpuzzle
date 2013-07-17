@@ -21,7 +21,7 @@ install:
 	$(PYTHON) setup.py install --root $(DESTDIR)
 
 install-building-packages:
-	apt-get install build-essential dh-make debhelper devscripts
+	apt-get install build-essential dh-make debhelper devscripts cdbs
 
 test:
 	$(PYTHON) tests/allTests.py
