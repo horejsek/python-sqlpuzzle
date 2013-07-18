@@ -160,6 +160,11 @@ class SimpleJoinsTest(TablesTest):
         self.tables.leftJoin('table2').on('table.id', 'table2.id').on('table.id2', 'table2.id2')
         self.assertEqual(str(self.tables), '`table` LEFT JOIN `table2` ON (`table`.`id` = `table2`.`id` AND `table`.`id2` = `table2`.`id2`)')
 
+    def _testCustomSqls(self):
+        self.tables.set('t')
+        self.tables.join('u').on('col', sqlpuzzle.custom('x'))
+        self.assertEqual(str(self.tables), '`t` JOIN `u` ON (`col` = x')
+
 
 
 class GroupingJoinsTest(TablesTest):
