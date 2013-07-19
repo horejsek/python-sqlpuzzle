@@ -180,6 +180,25 @@ class GroupingJoinsTest(TablesTest):
         self.tables.join('t2').on('t2.id', 't1.id')
         self.assertEqual(str(self.tables), '`t1` JOIN `t2` ON (`t1`.`id` = `t2`.`id`)')
 
+    def testGroupSameJoins(self):
+        self.tables.set('t1')
+        self.tables.join({'t2': 't'}).on('a', 'b')
+        self.tables.join({'t2': 't'}).on('a', 'b')
+        self.assertEqual(str(self.tables), '`t1` JOIN `t2` AS `t` ON (`a` = `b`)')
+
+    def testGroupSameLeftJoins(self):
+        self.tables.set('t1')
+        self.tables.leftJoin({'t2': 't'}).on('a', 'b')
+        self.tables.leftJoin({'t2': 't'}).on('a', 'b')
+        self.assertEqual(str(self.tables), '`t1` LEFT JOIN `t2` AS `t` ON (`a` = `b`)')
+
+    def testNotGroupWhenConditionIsDifferent(self):
+        # When it's different, I don't know what to use. Leave raising exception on database.
+        self.tables.set('t1')
+        self.tables.join({'t2': 't'}).on('a', 'b')
+        self.tables.join({'t2': 't'}).on('c', 'd')
+        self.assertEqual(str(self.tables), '`t1` JOIN `t2` AS `t` ON (`a` = `b`) JOIN `t2` AS `t` ON (`c` = `d`)')
+
 
 
 class JoinWithRelationsTest(TablesTest):
