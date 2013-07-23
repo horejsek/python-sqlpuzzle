@@ -35,6 +35,7 @@ class Order(sqlpuzzle._features.Feature):
     def __eq__(self, other):
         """Are orders equivalent?"""
         return (
+            type(self) == type(other) and
             self._column == other._column and
             self._sort == other._sort
         )

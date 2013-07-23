@@ -5,7 +5,7 @@
 # https://github.com/horejsek/python-sqlpuzzle
 #
 
-version = '0.20.2'
+version = '0.20.3'
 """
 Library for ease of writing SQL queries. For now only for database MySQL.
 Version: %s

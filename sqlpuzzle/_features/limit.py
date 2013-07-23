@@ -32,6 +32,7 @@ class Limit(sqlpuzzle._features.Feature):
     def __eq__(self, other):
         """Are limits equivalent?"""
         return (
+            type(self) == type(other) and
             self._limit == other._limit and
             self._offset == other._offset
         )

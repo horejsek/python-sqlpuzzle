@@ -31,6 +31,7 @@ class IntoOutfile(sqlpuzzle._features.Feature):
     def __eq__(self, other):
         """Are INTO OUTFILE equivalent?"""
         return (
+            type(self) == type(other) and
             self._intoOutfile == other._intoOutfile and
             self._fieldsTerminatedBy == other._fieldsTerminatedBy and
             self._linesTerminatedBy == other._linesTerminatedBy and

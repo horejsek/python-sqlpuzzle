@@ -65,6 +65,13 @@ class CopyTest(unittest.TestCase):
         self.assertEquals(str(query1), str(query2))
 
 
+class CompareTest(unittest.TestCase):
+    def testCompareColumnWithCustom(self):
+        custom = sqlpuzzle.custom('custom')
+        column = sqlpuzzle._features.columns.Column('column')
+        column == custom  # no exception
+
+
 class RelationTest(unittest.TestCase):
     def testCustomSql(self):
         # Not throw exception InvalidArgumentException.
@@ -87,6 +94,7 @@ class RelationTest(unittest.TestCase):
 testCases = (
     SqlPuzzleTest,
     CopyTest,
+    CompareTest,
     RelationTest,
 )
 

@@ -75,6 +75,7 @@ class Condition(sqlpuzzle._features.Feature):
     def __eq__(self, other):
         """Are conditions equivalent?"""
         return (
+            type(self) == type(other) and
             self._column == other._column and
             self._relationValue == other._relationValue
         )

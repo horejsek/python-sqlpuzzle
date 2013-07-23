@@ -31,6 +31,7 @@ class Column(sqlpuzzle._features.Feature):
     def __eq__(self, other):
         """Are columns equivalent?"""
         return (
+            type(self) == type(other) and
             self._column == other._column and
             self._as == other._as
         )

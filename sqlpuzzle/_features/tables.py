@@ -86,6 +86,7 @@ class Table(sqlpuzzle._features.Feature):
     def __eq__(self, other):
         """Are tables equivalent?"""
         return (
+            type(self) == type(other) and
             self._table == other._table and
             self._as == other._as and
             self._joins == other._joins

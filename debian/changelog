@@ -1,3 +1,9 @@
+python-sqlpuzzle (0.20.3) UNRELEASED; urgency=low
+
+  * Fix of comparing.
+
+ -- Michal Horejsek <horejsekmichal@gmail.com>  Tue, 23 Jul 2013 14:46:39 +0200
+
 python-sqlpuzzle (0.20.2) UNRELEASED; urgency=low
 
   * Fix of copy with custom SQL.
