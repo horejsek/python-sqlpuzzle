@@ -59,6 +59,11 @@ class CopyTest(unittest.TestCase):
         query2 = query1.copy()
         self.assertEquals(str(query1), str(query2))
 
+    def testCopyWithCustom(self):
+        query1 = sqlpuzzle.selectFrom('t').where(sqlpuzzle.custom('x'))
+        query2 = query1.copy()
+        self.assertEquals(str(query1), str(query2))
+
 
 class RelationTest(unittest.TestCase):
     def testCustomSql(self):
