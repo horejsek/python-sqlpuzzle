@@ -1,3 +1,31 @@
+python-sqlpuzzle (0.20.3) UNRELEASED; urgency=low
+
+  * Fix of comparing.
+
+ -- Michal Horejsek <horejsekmichal@gmail.com>  Tue, 23 Jul 2013 14:46:39 +0200
+
+python-sqlpuzzle (0.20.2) UNRELEASED; urgency=low
+
+  * Fix of copy with custom SQL.
+
+ -- Michal Horejsek <horejsekmichal@gmail.com>  Tue, 23 Jul 2013 13:31:20 +0200
+
+python-sqlpuzzle (0.20.1) UNRELEASED; urgency=low
+
+  * Fix grouping of JOINS.
+
+ -- Michal Horejsek <horejsekmichal@gmail.com>  Tue, 19 Jul 2013 9:43:51 +0200
+
+python-sqlpuzzle (0.20.0) UNRELEASED; urgency=low
+
+  * Support set & frozenset
+  * Support of multiple insert
+  * Copy uses copy.deepcopy
+  * Allowed custom SQL in relations
+  * Allowed subselect and relation in JOINs
+
+ -- Michal Horejsek <horejsekmichal@gmail.com>  Tue, 17 Jul 2013 10:32:01 +0200
+
 python-sqlpuzzle (0.19.1) UNRELEASED; urgency=low
 
   * Fix support of None in IN relation.

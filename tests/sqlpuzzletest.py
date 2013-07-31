@@ -48,10 +48,22 @@ class SqlPuzzleTest(unittest.TestCase):
 
 
 class CopyTest(unittest.TestCase):
-    def testCopy1(self):
+    def test_copy1(self):
         query1 = sqlpuzzle.select_from('t').where('c', sqlpuzzle.relations.GT(1))
         query2 = query1.copy()
         self.assertEquals(str(query1), str(query2))
+
+    def test_copy_with_custom(self):
+        query1 = sqlpuzzle.select_from('t').where(sqlpuzzle.customsql('x'))
+        query2 = query1.copy()
+        self.assertEquals(str(query1), str(query2))
+
+
+class CompareTest(unittest.TestCase):
+    def test_compare_column_with_custom(self):
+        custom = sqlpuzzle.customsql('custom')
+        column = sqlpuzzle._features.columns.Column('column')
+        column == custom  # no exception
 
 
 class RelationTest(unittest.TestCase):

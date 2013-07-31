@@ -54,7 +54,7 @@ class Union(sqlpuzzle._queries.Query):
     def __eq__(self, other):
         """Are queries equivalent?"""
         return (
-            self.__class__ == other.__class__ and
+            type(self) == type(other) and
             self._query1 == other._query1 and
             self._query2 == other._query2 and
             self._type == other._type

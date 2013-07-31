@@ -84,7 +84,7 @@ LESS_THAN = LT
 
 class LE(GT):
     _string_representation = '<='
-LESS_TAHN_OR_EQUAL_TO = LE
+LESS_THAN_OR_EQUAL_TO = LE
 
 
 class LIKE(_RelationValue):

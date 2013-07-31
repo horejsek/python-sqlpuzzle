@@ -149,6 +149,11 @@ class SimpleJoinsTest(TablesTest):
         self.tables.left_join('table2').on('table.id', 'table2.id').on('table.id2', 'table2.id2')
         self.assertEqual(str(self.tables), '`table` LEFT JOIN `table2` ON (`table`.`id` = `table2`.`id` AND `table`.`id2` = `table2`.`id2`)')
 
+    def _testCustomSqls(self):
+        self.tables.set('t')
+        self.tables.join('u').on('col', sqlpuzzle.custom('x'))
+        self.assertEqual(str(self.tables), '`t` JOIN `u` ON (`col` = x')
+
 
 class GroupingJoinsTest(TablesTest):
     def test_left_and_inner_is_inner(self):
@@ -162,6 +167,56 @@ class GroupingJoinsTest(TablesTest):
         self.tables.left_join('t2').on('t1.id', 't2.id')
         self.tables.join('t2').on('t2.id', 't1.id')
         self.assertEqual(str(self.tables), '`t1` JOIN `t2` ON (`t1`.`id` = `t2`.`id`)')
+
+    def testGroupSameJoins(self):
+        self.tables.set('t1')
+        self.tables.join({'t2': 't'}).on('a', 'b')
+        self.tables.join({'t2': 't'}).on('a', 'b')
+        self.assertEqual(str(self.tables), '`t1` JOIN `t2` AS `t` ON (`a` = `b`)')
+
+    def testGroupSameLeftJoins(self):
+        self.tables.set('t1')
+        self.tables.left_join({'t2': 't'}).on('a', 'b')
+        self.tables.left_join({'t2': 't'}).on('a', 'b')
+        self.assertEqual(str(self.tables), '`t1` LEFT JOIN `t2` AS `t` ON (`a` = `b`)')
+
+    def testNotGroupWhenConditionIsDifferent(self):
+        # When it's different, I don't know what to use. Leave raising exception on database.
+        self.tables.set('t1')
+        self.tables.join({'t2': 't'}).on('a', 'b')
+        self.tables.join({'t2': 't'}).on('c', 'd')
+        self.assertEqual(str(self.tables), '`t1` JOIN `t2` AS `t` ON (`a` = `b`) JOIN `t2` AS `t` ON (`c` = `d`)')
+
+
+
+class JoinWithRelationsTest(TablesTest):
+    def testIN(self):
+        self.tables.set('t1')
+        self.tables.join('t2').on('t2.id', [3, 4])
+        self.assertEqual(str(self.tables), '`t1` JOIN `t2` ON (`t2`.`id` IN (3, 4))')
+
+    def testGT(self):
+        self.tables.set('t1')
+        self.tables.join('t2').on('t2.id', sqlpuzzle.relations.GE(42))
+        self.assertEqual(str(self.tables), '`t1` JOIN `t2` ON (`t2`.`id` >= 42)')
+
+
+
+class JoinWithSubselect(TablesTest):
+    def testInJoin(self):
+        self.tables.set('t1')
+        self.tables.join({sqlpuzzle.select_from('t2'): 't'}).on('t1.id', 't.id')
+        self.assertEqual(str(self.tables), '`t1` JOIN (SELECT * FROM `t2`) AS `t` ON (`t1`.`id` = `t`.`id`)')
+
+    def testInCondition(self):
+        self.tables.set('t1')
+        self.tables.join('t2').on('t2.id', sqlpuzzle.select('id').from_('t3'))
+        self.assertEqual(str(self.tables), '`t1` JOIN `t2` ON (`t2`.`id` = (SELECT `id` FROM `t3`))')
+
+    def testInConditionWithRelationIN(self):
+        self.tables.set('t1')
+        self.tables.join('t2').on('t2.id', sqlpuzzle.relations.IN(sqlpuzzle.select('id').from_('t3')))
+        self.assertEqual(str(self.tables), '`t1` JOIN `t2` ON (`t2`.`id` IN (SELECT `id` FROM `t3`))')
 
 
 class BackQuotesJoinsTest(TablesTest):
@@ -191,3 +246,4 @@ class ExceptionsJoinTest(TablesTest):
 
     def test_on_without_table_exception(self):
         self.assertRaises(sqlpuzzle.exceptions.InvalidQueryException, self.tables.on, 'a', 'b')
+

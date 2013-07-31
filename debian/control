@@ -3,7 +3,7 @@ Section: module
 Priority: optional
 Maintainer: Michal Horejsek <horejsekmichal@gmail.com>
 Build-Depends:
-XS-Python-Version: >=2.5
+XS-Python-Version: >=2.6
 
 Package: python-sqlpuzzle
 Architecture: all

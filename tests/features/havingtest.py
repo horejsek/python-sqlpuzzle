@@ -30,7 +30,7 @@ class BaseTest(HavingTest):
         self.having.where([
             ['name', sqlpuzzle.relations.LIKE('Harry')],
             ['sex', sqlpuzzle.relations.NOT_EQUAL_TO('female')],
-            ['age', sqlpuzzle.relations.LESS_TAHN_OR_EQUAL_TO(20)],
+            ['age', sqlpuzzle.relations.LESS_THAN_OR_EQUAL_TO(20)],
         ])
         self.assertEqual(str(self.having), 'HAVING `name` LIKE "Harry" AND `sex` != "female" AND `age` <= 20')
 

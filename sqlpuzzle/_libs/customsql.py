@@ -13,6 +13,3 @@ class CustomSql(sqlpuzzle._features.Feature):
         """Print custom SQL"""
         return self._custom_sql_string
 
-    def __getattr__(self, attr):
-        """Fake method for camparison"""
-        return None

@@ -23,7 +23,7 @@ install:
 	$(PYTHON3) setup.py install --root $(DESTDIR)
 
 install-building-packages:
-	apt-get install build-essential dh-make debhelper devscripts
+	apt-get install build-essential dh-make debhelper devscripts cdbs
 	curl http://python-distribute.org/distribute_setup.py | $(PYTHON3)
 	curl https://raw.github.com/pypa/pip/master/contrib/get-pip.py | $(PYTHON3)
 	curl https://raw.github.com/pypa/pip/master/contrib/get-pip.py | $(PYTHON)

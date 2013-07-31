@@ -24,6 +24,7 @@ class Value(sqlpuzzle._features.Feature):
     def __eq__(self, other):
         """Are values equivalent?"""
         return (
+            type(self) == type(other) and
             self._column == other._column and
             self._value == other._value
         )

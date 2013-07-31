@@ -20,12 +20,11 @@ JOIN_TYPES = {
 
 
 class OnCondition(sqlpuzzle._features.conditions.Condition):
-    def __str__(self):
-        """Print part of query."""
-        return '%s = %s' % (
-            sqlpuzzle._libs.sqlvalue.SqlReference(self._column),
-            sqlpuzzle._libs.sqlvalue.SqlReference(self._value),
-        )
+    @staticmethod
+    def _get_value_for_str(value):
+        if isinstance(value, six.string_types):
+            return sqlpuzzle._libs.sqlvalue.SqlReference(value)
+        return sqlpuzzle._libs.sqlvalue.SqlValue(value)
 
     def __eq__(self, other):
         """Are on codntions equivalent?"""
@@ -82,6 +81,7 @@ class Table(sqlpuzzle._features.Feature):
     def __eq__(self, other):
         """Are tables equivalent?"""
         return (
+            type(self) == type(other) and
             self._table == other._table and
             self._as == other._as and
             self._joins == other._joins
@@ -107,6 +107,8 @@ class Table(sqlpuzzle._features.Feature):
         for joins in joins_group:
             if len(joins) > 1 and any(bool(join['type'] == INNER_JOIN) for join in joins):
                 joins[0]['type'] = INNER_JOIN
+                self._joins.append(joins[0])
+            elif len(joins) > 1 and all(join['type'] == joins[0]['type'] for join in joins):
                 self._joins.append(joins[0])
             else:
                 self._joins.extend(joins)
