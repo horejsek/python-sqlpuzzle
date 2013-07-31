@@ -90,7 +90,7 @@ LESS_THAN = LT
 
 class LE(GT):
     _stringRepresntation = '<='
-LESS_TAHN_OR_EQUAL_TO = LE
+LESS_THAN_OR_EQUAL_TO = LE
 
 
 
