@@ -63,12 +63,12 @@ class CompareTest(unittest.TestCase):
     def test_compare_column_with_custom(self):
         custom = sqlpuzzle.customsql('custom')
         column = sqlpuzzle._features.columns.Column('column')
-        column == custom  # no exception
+        self.assertFalse(column == custom)  # Do not throw exception.
 
 
 class RelationTest(unittest.TestCase):
-    def testCustomSql(self):
-        # Not throw exception InvalidArgumentException.
+    def test_custom_sql(self):
+        # Do not throw exception InvalidArgumentException.
         sqlpuzzle.relations.EQ(sqlpuzzle.customsql('custom'))
         sqlpuzzle.relations.NE(sqlpuzzle.customsql('custom'))
         sqlpuzzle.relations.GT(sqlpuzzle.customsql('custom'))
