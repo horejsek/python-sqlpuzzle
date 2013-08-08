@@ -61,6 +61,10 @@ class BaseTest(WhereTest):
         self.where.where(age=42)
         self.assertEqual(str(self.where), 'WHERE `name` = "Alan" AND `age` = 42')
 
+    def testUnicode(self):
+        self.where.where(name=u'ščřž')
+        self.assertEqual(str(self.where), 'WHERE `name` = "ščřž"')
+
 
 
 # In version 1.0 will be removed.

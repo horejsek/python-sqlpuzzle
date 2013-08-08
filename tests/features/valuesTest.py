@@ -58,6 +58,10 @@ class BaseTest(ValuesTest):
         self.values.set(name='Alan')
         self.assertEqual(str(self.values), '`name` = "Alan"')
 
+    def testUnicode(self):
+        self.values.set(name=u'ščřž')
+        self.assertEqual(str(self.values), '`name` = "ščřž"')
+
 
 
 class CustomSqlTest(ValuesTest):
