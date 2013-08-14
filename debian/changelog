@@ -1,3 +1,10 @@
+python-sqlpuzzle (0.20.4) UNRELEASED; urgency=low
+
+  * Fix spelling of LESS_THAN_OR_EQUAL_TO.
+  * Fix of unicode.
+
+ -- Michal Horejsek <horejsekmichal@gmail.com>  Tue, 14 Aug 2013 13:15:17 +0200
+
 python-sqlpuzzle (0.20.3) UNRELEASED; urgency=low
 
   * Fix of comparing.
