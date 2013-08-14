@@ -40,6 +40,8 @@ class SqlValue(object):
             sqlpuzzle._libs.customSql.CustomSql: self._raw,
         }
 
+        if isinstance(value, unicode):
+            value = value.encode('utf-8')
         self.value = value
 
     def __repr__(self):
