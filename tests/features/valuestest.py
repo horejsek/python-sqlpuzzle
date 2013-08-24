@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+import six
+
 import unittest
 
 import sqlpuzzle
@@ -51,6 +53,18 @@ class BaseTest(ValuesTest):
     def test_values_by_kwargs(self):
         self.values.set(name='Alan')
         self.assertEqual(str(self.values), '`name` = "Alan"')
+
+    def test_str(self):
+        self.values.set(name='ščřž')
+        self.assertEqual(str(self.values), '`name` = "ščřž"')
+
+    def test_unicode(self):
+        if six.PY3:
+            name = 'ščřž'
+        else:
+            name = unicode('ščřž', 'utf-8')
+        self.values.set(name=name)
+        self.assertEqual(str(self.values), '`name` = "ščřž"')
 
 
 class CustomSqlTest(ValuesTest):

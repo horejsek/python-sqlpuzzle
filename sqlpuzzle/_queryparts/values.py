@@ -2,8 +2,9 @@
 
 from __future__ import absolute_import
 
-import datetime
 import six
+
+import datetime
 
 from sqlpuzzle._common import SqlValue, SqlReference, is_sql_instance, check_type_decorator
 from .queryparts import QueryPart, QueryParts, append_custom_sql_decorator
@@ -18,7 +19,7 @@ class Value(QueryPart):
         self.value = value
 
     def __unicode__(self):
-        return '%s = %s' % (
+        return six.u('%s = %s') % (
             SqlReference(self.column_name),
             SqlValue(self.value),
         )

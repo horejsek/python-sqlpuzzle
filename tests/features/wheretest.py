@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+import six
 from six.moves import xrange
 
 import unittest
@@ -56,6 +57,18 @@ class BaseTest(WhereTest):
         self.where.where(name='Alan')
         self.where.where(age=42)
         self.assertEqual(str(self.where), 'WHERE `name` = "Alan" AND `age` = 42')
+
+    def test_str(self):
+        self.where.where(name='ščřž')
+        self.assertEqual(str(self.where), 'WHERE `name` = "ščřž"')
+
+    def test_unicode(self):
+        if six.PY3:
+            name = 'ščřž'
+        else:
+            name = unicode('ščřž', 'utf-8')
+        self.where.where(name=name)
+        self.assertEqual(str(self.where), 'WHERE `name` = "ščřž"')
 
 
 class RelationsTest(WhereTest):
