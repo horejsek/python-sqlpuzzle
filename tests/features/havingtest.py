@@ -1,13 +1,14 @@
+# -*- coding: utf-8 -*-
 
 import unittest
 
-import sqlpuzzle._features.having
-import sqlpuzzle.relations
+import sqlpuzzle
+from sqlpuzzle._queryparts import Having
 
 
 class HavingTest(unittest.TestCase):
     def setUp(self):
-        self.having = sqlpuzzle._features.having.Having()
+        self.having = Having()
 
 
 class BaseTest(HavingTest):
@@ -21,16 +22,16 @@ class BaseTest(HavingTest):
     def test_where_by_tuple(self):
         self.having.where((
             ('name', 'Harry'),
-            ('sex', sqlpuzzle.relations.NOT_EQUAL_TO('female')),
-            ('age', sqlpuzzle.relations.GRATHER_THAN(20)),
+            ('sex', sqlpuzzle.relations.NE('female')),
+            ('age', sqlpuzzle.relations.GT(20)),
         ))
         self.assertEqual(str(self.having), 'HAVING `name` = "Harry" AND `sex` != "female" AND `age` > 20')
 
     def test_where_by_list(self):
         self.having.where([
             ['name', sqlpuzzle.relations.LIKE('Harry')],
-            ['sex', sqlpuzzle.relations.NOT_EQUAL_TO('female')],
-            ['age', sqlpuzzle.relations.LESS_THAN_OR_EQUAL_TO(20)],
+            ['sex', sqlpuzzle.relations.NE('female')],
+            ['age', sqlpuzzle.relations.LE(20)],
         ])
         self.assertEqual(str(self.having), 'HAVING `name` LIKE "Harry" AND `sex` != "female" AND `age` <= 20')
 
@@ -42,7 +43,7 @@ class BaseTest(HavingTest):
         self.assertEqual(str(self.having), 'HAVING `age` = 20 AND `name` = "Alan"')
 
     def test_where_by_args(self):
-        self.having.where('age', sqlpuzzle.relations.LESS_THAN(20))
+        self.having.where('age', sqlpuzzle.relations.LT(20))
         self.assertEqual(str(self.having), 'HAVING `age` < 20')
 
     def test_where_by_kwargs(self):

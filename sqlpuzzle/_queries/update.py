@@ -1,65 +1,65 @@
 # -*- coding: utf-8 -*-
 
-import sqlpuzzle.exceptions
+from __future__ import absolute_import
 
-import sqlpuzzle._libs.doc
-import sqlpuzzle._features.tables
-import sqlpuzzle._features.values
-import sqlpuzzle._features.where
+import six
+
+from sqlpuzzle.exceptions import ConfirmUpdateAllException
+from sqlpuzzle._queryparts import Tables, Values, Where
+from .query import Query
+
+__all__ = ('Update',)
 
 
-class Update(sqlpuzzle._queries.Query):
+class Update(Query):
+    _queryparts = {
+        'tables': Tables,
+        'values': Values,
+        'where': Where,
+    }
+    _query_template = six.u('UPDATE%(tables)s SET%(values)s%(where)s')
+
     def __init__(self, table=None):
-        """Initialization of Update."""
         super(Update, self).__init__()
-
-        self._set_features(
-            tables=sqlpuzzle._features.tables.Tables(),
-            values=sqlpuzzle._features.values.Values(),
-            where=sqlpuzzle._features.where.Where(),
-        )
-        self._set_keys_of_features_for_auto_printing('where')
-
-        self.__allow_update_all = False
+        self._allow_update_all = False
         self.table(table)
 
-    def __str__(self):
-        """Print query."""
-        if not self._where.is_set() and not self.__allow_update_all:
-            raise sqlpuzzle.exceptions.ConfirmUpdateAllException()
-
-        update = "UPDATE %s SET %s" % (
-            str(self._tables),
-            str(self._values),
-        )
-        return super(Update, self)._print_features(update)
+    def __unicode__(self):
+        if not self._where.is_set() and not self._allow_update_all:
+            raise ConfirmUpdateAllException()
+        return super(Update, self).__unicode__()
 
     def allow_update_all(self):
-        """Allow update all records."""
-        self.__allow_update_all = True
+        """Allow query without WHERE condition."""
+        self._allow_update_all = True
         return self
 
     def forbid_update_all(self):
-        """Forbid update all records."""
-        self.__allow_update_all = False
+        """Forbid query without WHERE condition."""
+        self._allow_update_all = False
         return self
 
     def table(self, table):
-        """Set table."""
         self._tables.set(table)
         return self
 
     def set(self, *args, **kwds):
-        """Set columns and values."""
+        """
+        set(name='Michael', country=None)
+        set({'age': 20, 'enabled': True})
+        set('last_modify', datetime.datetime(2011, 6, 15, 22, 11, 00))
+        set([('id', 20), ('name', 'Harry')])
+        """
         self._values.set(*args, **kwds)
         return self
 
     def where(self, *args, **kwds):
-        """Set condition(s) to query."""
+        """
+        where(name='Michael', country=None)
+        where({'age': 20, 'enabled': True})
+        where('last_modify', datetime.datetime(2011, 6, 15, 22, 11, 00))
+        where('id', range(10, 20, 2))
+        where([('id', 20), ('name', sqlpuzzle.relation.LIKE('%ch%'))])
+        """
         self._where.where(*args, **kwds)
         return self
-
-    # Broaden doc strings of functions by useful help.
-    sqlpuzzle._libs.doc.doc(table, 'tables')
-    sqlpuzzle._libs.doc.doc(set, 'values')
-    sqlpuzzle._libs.doc.doc(where, 'where')

@@ -1,12 +1,14 @@
+# -*- coding: utf-8 -*-
 
 import unittest
 
-import sqlpuzzle._features.groupby
+import sqlpuzzle
+from sqlpuzzle._queryparts import GroupBy
 
 
 class GroupByTest(unittest.TestCase):
     def setUp(self):
-        self.group_by = sqlpuzzle._features.groupby.GroupBy()
+        self.group_by = GroupBy()
 
 
 class BaseTest(GroupByTest):

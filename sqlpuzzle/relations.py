@@ -6,12 +6,13 @@ from six.moves import xrange
 import types
 import datetime
 
-import sqlpuzzle._libs.object
-from sqlpuzzle._libs.customsql import CustomSql
-from sqlpuzzle._queries import Query
+from sqlpuzzle._common.object import Object
+from sqlpuzzle._common.utils import force_text, is_sql_instance
+
+from sqlpuzzle.exceptions import InvalidArgumentException
 
 
-class _RelationValue(sqlpuzzle._libs.object.Object):
+class _RelationValue(Object):
     _string_representation = 'Abstract Relation'
     _allowed_types = ()
 
@@ -23,8 +24,11 @@ class _RelationValue(sqlpuzzle._libs.object.Object):
     def __str__(self):
         return '"%s %s"' % (
             self._string_representation,
-            self._value,
+            force_text(self._value),
         )
+
+    def tosql(self):
+        return self.__str__()
 
     def __eq__(self, other):
         """Are relations equivalent?"""
@@ -36,15 +40,16 @@ class _RelationValue(sqlpuzzle._libs.object.Object):
     def _check_value_type(self, value):
         # isinstance(True, (int, long)) is True => must be special condition
         if (
-            (bool not in self._allowed_types and isinstance(value, bool)) or
-            not isinstance(value, self._allowed_types)
-        ):
-            raise sqlpuzzle.exceptions.InvalidArgumentException(
-                'Relation "%s" is not allowed for data type "%s".' % (
-                    self._string_representation,
-                    type(value)
+                not is_sql_instance(value)
+                and (
+                    (bool not in self._allowed_types and isinstance(value, bool))
+                    or not isinstance(value, self._allowed_types)
                 )
-            )
+        ):
+            raise InvalidArgumentException('Relation "%s" is not allowed for data type "%s".' % (
+                self._string_representation,
+                type(value)
+            ))
 
     @property
     def relation(self):
@@ -57,7 +62,7 @@ class _RelationValue(sqlpuzzle._libs.object.Object):
 
 class EQ(_RelationValue):
     _string_representation = '='
-    _allowed_types = six.string_types + six.integer_types + (float, bool, datetime.date, Query, CustomSql)
+    _allowed_types = six.string_types + six.integer_types + (float, bool, datetime.date)
 EQUAL_TO = EQ
 
 
@@ -68,7 +73,7 @@ NOT_EQUAL_TO = NE
 
 class GT(_RelationValue):
     _string_representation = '>'
-    _allowed_types = six.integer_types + (float, datetime.date, Query, CustomSql)
+    _allowed_types = six.string_types + six.integer_types + (float, datetime.date)
 GRATHER_THAN = GT
 
 
@@ -89,17 +94,17 @@ LESS_THAN_OR_EQUAL_TO = LE
 
 class LIKE(_RelationValue):
     _string_representation = 'LIKE'
-    _allowed_types = six.string_types + (Query, CustomSql)
+    _allowed_types = six.string_types
 
 
 class REGEXP(_RelationValue):
     _string_representation = 'REGEXP'
-    _allowed_types = six.string_types + (Query, CustomSql)
+    _allowed_types = six.string_types
 
 
 class IN(_RelationValue):
     _string_representation = 'IN'
-    _allowed_types = (list, tuple, xrange, types.GeneratorType, Query, CustomSql)
+    _allowed_types = (list, tuple, xrange, types.GeneratorType)
 
     def __init__(self, *args):
         if len(args) > 1:
@@ -132,7 +137,7 @@ class NOT_IN(IN):
 
 class IS(_RelationValue):
     _string_representation = 'IS'
-    _allowed_types = (bool, type(None), CustomSql)
+    _allowed_types = (bool, type(None))
 
 
 class IS_NOT(IS):

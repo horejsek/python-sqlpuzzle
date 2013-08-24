@@ -1,12 +1,14 @@
+# -*- coding: utf-8 -*-
 
 import unittest
 
-import sqlpuzzle._features.orderby
+from sqlpuzzle.exceptions import InvalidArgumentException
+from sqlpuzzle._queryparts import OrderBy
 
 
 class OrderByTest(unittest.TestCase):
     def setUp(self):
-        self.order_by = sqlpuzzle._features.orderby.OrderBy()
+        self.order_by = OrderBy()
 
 
 class BaseTest(OrderByTest):
@@ -88,10 +90,10 @@ class CopyTest(OrderByTest):
 
 class ExceptionsTest(OrderByTest):
     def test_name_as_float_exception(self):
-        self.assertRaises(sqlpuzzle.exceptions.InvalidArgumentException, self.order_by.order_by, 42.1)
+        self.assertRaises(InvalidArgumentException, self.order_by.order_by, 42.1)
 
     def test_name_as_boolean_exception(self):
-        self.assertRaises(sqlpuzzle.exceptions.InvalidArgumentException, self.order_by.order_by, True)
+        self.assertRaises(InvalidArgumentException, self.order_by.order_by, True)
 
     def test_not_asc_or_desc_exception(self):
-        self.assertRaises(sqlpuzzle.exceptions.InvalidArgumentException, self.order_by.order_by, ('col', 'AAA'))
+        self.assertRaises(InvalidArgumentException, self.order_by.order_by, ('col', 'AAA'))

@@ -3,6 +3,9 @@
 import six
 
 import sqlpuzzle.exceptions
+from sqlpuzzle._common.utils import is_sql_instance
+
+__all__ = ('parse_args_to_list_of_tuples',)
 
 
 def parse_args_to_list_of_tuples(options={}, *args, **kwds):
@@ -57,17 +60,14 @@ class ParserOptions(object):
         self.max_items = options.get('max_items', 1)
         self.allow_dict = options.get('allow_dict', False)
         self.allow_list = options.get('allow_list', False)
-        self.allowed_data_types = options.get('allowed_data_types', six.string_types + six.integer_types + (float, bool))
+        self.allowed_data_types = options.get('allowed_data_types', ())
 
     def check(self):
         if self.min_items > self.max_items:
-            raise sqlpuzzle.exceptions.SqlPuzzleError('max_items must be bigger, than min_items.')
+            raise sqlpuzzle.exceptions.SqlPuzzleException('max_items must be bigger, than min_items.')
 
         if self.allow_dict and self.max_items <= 1:
-            raise sqlpuzzle.exceptions.SqlPuzzleError('For allow_dict must be max_items bigger or equal to 2.')
-
-        if not isinstance(self.allowed_data_types, (tuple, list, AllowedDataTypes)):
-            raise sqlpuzzle.exceptions.SqlPuzzleError('Invalid options for argsparser.')
+            raise sqlpuzzle.exceptions.SqlPuzzleException('For allow_dict must be max_items bigger or equal to 2.')
 
 
 class ParserInput(object):
@@ -148,7 +148,7 @@ class Parser(object):
 
     def __parse_item(self, item):
         batch = self.__create_batch(item)
-        self.__append_batch_to_output_if_ok(batch)
+        self.output_data.append(batch)
 
     def __create_batch(self, values):
         if len(values) > self.options.max_items:
@@ -160,43 +160,3 @@ class Parser(object):
         count_of_nones = self.options.max_items - len(tuple_with_values)
         tuple_with_nones = (None,) * count_of_nones
         return tuple_with_values + tuple_with_nones
-
-    def __append_batch_to_output_if_ok(self, batch):
-        if self.__validate_batch(batch):
-            self.output_data.append(batch)
-        else:
-            raise sqlpuzzle.exceptions.InvalidArgumentException()
-
-    def __validate_batch(self, batch):
-        if isinstance(self.options.allowed_data_types, AllowedDataTypes):
-            return self.options.allowed_data_types.validate_batch(batch)
-        return AllowedDataTypes()._validate_batch(batch, self.options.allowed_data_types)
-
-
-class AllowedDataTypes(object):
-    def __init__(self):
-        self._allowed_data_types = []
-
-    def add(self, *args):
-        self._allowed_data_types.append(args)
-        return self
-
-    def validate_batch(self, batch):
-        for allowed_data_types in self._allowed_data_types:
-            if self._validate_batch(batch, allowed_data_types):
-                return True
-        return False
-
-    def _validate_batch(self, batch, allowed_data_types):
-        for x, item in enumerate(batch):
-            data_types = allowed_data_types
-            if isinstance(allowed_data_types[0], (tuple, list)):
-                data_types = allowed_data_types[x]
-            # TODO: Temporary, class object will be disabled in version 1.0.
-            if item is not None and not (isinstance(item, data_types) or (isinstance(item, type) and issubclass(item, data_types))):
-                return False
-            # isinstance(True, (int, long)) is True => must be special
-            # condition
-            if bool not in data_types and isinstance(item, bool):
-                return False
-        return True

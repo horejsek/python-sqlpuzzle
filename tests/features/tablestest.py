@@ -1,12 +1,14 @@
+# -*- coding: utf-8 -*-
 
 import unittest
 
-import sqlpuzzle._features.tables
+import sqlpuzzle
+from sqlpuzzle._queryparts import Tables
 
 
 class TablesTest(unittest.TestCase):
     def setUp(self):
-        self.tables = sqlpuzzle._features.tables.Tables()
+        self.tables = Tables()
 
 
 class BaseTest(TablesTest):
@@ -116,6 +118,10 @@ class ExceptionsTest(TablesTest):
 
 
 class SimpleJoinsTest(TablesTest):
+    def test_join_without_condition(self):
+        self.tables.set('user').join('user')
+        self.assertEqual(str(self.tables), '`user` JOIN `user`')
+
     def test_inner_join(self):
         self.tables.set('user').inner_join('country').on('user.country_id', 'country.id')
         self.assertEqual(str(self.tables), '`user` JOIN `country` ON (`user`.`country_id` = `country`.`id`)')
@@ -168,6 +174,18 @@ class GroupingJoinsTest(TablesTest):
         self.tables.join('t2').on('t2.id', 't1.id')
         self.assertEqual(str(self.tables), '`t1` JOIN `t2` ON (`t1`.`id` = `t2`.`id`)')
 
+    def test_left_and_inner_is_inner_with_reverse_condition_and_relation(self):
+        self.tables.set('t1')
+        self.tables.left_join('t2').on('t1.id', sqlpuzzle.relations.LE('t2.id'))
+        self.tables.join('t2').on('t2.id', sqlpuzzle.relations.GE('t1.id'))
+        self.assertEqual(str(self.tables), '`t1` JOIN `t2` ON (`t1`.`id` <= `t2`.`id`)')
+
+    def test_left_and_inner_is_inner_with_reverse_condition_but_not_relation(self):
+        self.tables.set('t1')
+        self.tables.left_join('t2').on('t1.id', sqlpuzzle.relations.LE('t2.id'))
+        self.tables.join('t2').on('t2.id', sqlpuzzle.relations.LE('t1.id'))
+        self.assertEqual(str(self.tables), '`t1` LEFT JOIN `t2` ON (`t1`.`id` <= `t2`.`id`) JOIN `t2` ON (`t2`.`id` <= `t1`.`id`)')
+
     def testGroupSameJoins(self):
         self.tables.set('t1')
         self.tables.join({'t2': 't'}).on('a', 'b')
@@ -188,7 +206,6 @@ class GroupingJoinsTest(TablesTest):
         self.assertEqual(str(self.tables), '`t1` JOIN `t2` AS `t` ON (`a` = `b`) JOIN `t2` AS `t` ON (`c` = `d`)')
 
 
-
 class JoinWithRelationsTest(TablesTest):
     def testIN(self):
         self.tables.set('t1')
@@ -199,7 +216,6 @@ class JoinWithRelationsTest(TablesTest):
         self.tables.set('t1')
         self.tables.join('t2').on('t2.id', sqlpuzzle.relations.GE(42))
         self.assertEqual(str(self.tables), '`t1` JOIN `t2` ON (`t2`.`id` >= 42)')
-
 
 
 class JoinWithSubselect(TablesTest):
@@ -232,11 +248,6 @@ class BackQuotesJoinsTest(TablesTest):
 
 
 class ExceptionsJoinTest(TablesTest):
-    def test_join_without_on_exception(self):
-        self.tables.set('table1')
-        self.tables.join('table2')
-        self.assertRaises(sqlpuzzle.exceptions.InvalidQueryException, str, self.tables)
-
     def test_join_without_table_exception(self):
         self.assertRaises(sqlpuzzle.exceptions.InvalidQueryException, self.tables.join, 'table')
 
@@ -246,4 +257,3 @@ class ExceptionsJoinTest(TablesTest):
 
     def test_on_without_table_exception(self):
         self.assertRaises(sqlpuzzle.exceptions.InvalidQueryException, self.tables.on, 'a', 'b')
-

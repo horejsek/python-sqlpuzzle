@@ -1,13 +1,14 @@
+# -*- coding: utf-8 -*-
 
 import unittest
 
-import sqlpuzzle.exceptions
-import sqlpuzzle._features.values
+import sqlpuzzle
+from sqlpuzzle._queryparts import Values
 
 
 class ValuesTest(unittest.TestCase):
     def setUp(self):
-        self.values = sqlpuzzle._features.values.Values()
+        self.values = Values()
 
 
 class BaseTest(ValuesTest):

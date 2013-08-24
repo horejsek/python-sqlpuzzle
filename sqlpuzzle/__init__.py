@@ -1,69 +1,98 @@
 # -*- coding: utf-8 -*-
 
-version = '0.20.3'
+from __future__ import absolute_import
+
+VERSION = '0.20.3'
 """
 Library for ease of writing SQL queries. For now only for database MySQL.
 Version: %s
-""" % version
+""" % VERSION
 
-import sqlpuzzle._libs.doc
-import sqlpuzzle._features.functions
-import sqlpuzzle._queries.delete
-import sqlpuzzle._queries.insert
-import sqlpuzzle._queries.select
-import sqlpuzzle._queries.update
+from ._common import CustomSql
+from ._queryparts.functions import Avg, Concat, Convert, Count, GroupConcat, Max, Min, Sum
+from ._queries import Delete, Insert, Select, Update
+
+__all__ = (
+    'select'
+    'select_from',
+    'insert',
+    'insert_into',
+    'update',
+    'delete',
+    'delete_from',
+    'customsql',
+
+    'avg',
+    'avg_distinct',
+    'count',
+    'count_distinct',
+    'max',
+    'max_distinct',
+    'min',
+    'min_distinct',
+    'sum',
+    'sum_distinct',
+    'concat',
+    'group_concat',
+    'convert',
+)
 
 
-# Proxy queries.
 def select(*args, **kwds):
-    """Select. Set column(s) by parameter(s)."""
-    return sqlpuzzle._queries.select.Select(*args, **kwds)
+    """Select. Set column(s) by parameter(s).
+    select('id', 'name', ...)
+    select(('id', 'asId'), ('name', 'asName'))
+    select({'id': 'asId', 'name': 'asName'})
+    """
+    return Select(*args, **kwds)
 
 
 def select_from(*tables):
-    """Select. Columns is set to *. Set table(s) by parameter(s)."""
-    return sqlpuzzle._queries.select.Select().from_(*tables)
+    """Select. Columns is set to *. Set table(s) by parameter(s).
+    select_from('user', 'country', ...)
+    select_from(('user', 'asUser'), ('user', 'asParent'))
+    select_from({'user': 'asUser', 'user', 'asParent'})
+    """
+    return Select().from_(*tables)
 
 
 def insert():
     """Insert."""
-    return sqlpuzzle._queries.insert.Insert()
+    return Insert()
 
 
 def insert_into(table):
     """Insert. Set table by parameter."""
-    return sqlpuzzle._queries.insert.Insert().into(table)
+    return Insert().into(table)
 
 
 def update(table):
     """Update. Set table by parameter."""
-    return sqlpuzzle._queries.update.Update(table)
+    return Update(table)
 
 
 def delete(*tables):
     """Delete."""
-    return sqlpuzzle._queries.delete.Delete(*tables)
+    return Delete(*tables)
 
 
 def delete_from(*args, **kwds):
-    """Delete. Set table by parameter."""
-    return sqlpuzzle._queries.delete.Delete().from_(*args, **kwds)
+    """Delete. Set table by parameter.
+    delete_from('user', 'country', ...)
+    delete_from(('user', 'asUser'), ('user', 'asParent'))
+    delete_from({'user': 'asUser', 'user', 'asParent'})
+    """
+    return Delete().from_(*args, **kwds)
 
 
 def customsql(sql):
     """Custom SQL."""
-    return sqlpuzzle._libs.customsql.CustomSql(sql)
+    return CustomSql(sql)
 
 
-# Broaden doc strings of functions by useful help.
-sqlpuzzle._libs.doc.doc(select, 'columns')
-sqlpuzzle._libs.doc.doc(select_from, 'tables')
-
-
-# Proxy functions.
 def avg(expr):
     """Function AVG(expr)"""
-    return sqlpuzzle._features.functions.Avg(expr)
+    return Avg(expr)
 
 
 def avg_distinct(expr):
@@ -73,7 +102,7 @@ def avg_distinct(expr):
 
 def count(expr=None):
     """Function COUNT(expr)"""
-    return sqlpuzzle._features.functions.Count(expr)
+    return Count(expr)
 
 
 def count_distinct(expr=None):
@@ -83,7 +112,7 @@ def count_distinct(expr=None):
 
 def max(expr):
     """Function MAX(expr)"""
-    return sqlpuzzle._features.functions.Max(expr)
+    return Max(expr)
 
 
 def max_distinct(expr):
@@ -93,7 +122,7 @@ def max_distinct(expr):
 
 def min(expr):
     """Function MIN(expr)"""
-    return sqlpuzzle._features.functions.Min(expr)
+    return Min(expr)
 
 
 def min_distinct(expr):
@@ -103,7 +132,7 @@ def min_distinct(expr):
 
 def sum(expr):
     """Function SUM(expr)"""
-    return sqlpuzzle._features.functions.Sum(expr)
+    return Sum(expr)
 
 
 def sum_distinct(expr):
@@ -113,14 +142,14 @@ def sum_distinct(expr):
 
 def concat(*expr):
     """Function CONCAT(expr)"""
-    return sqlpuzzle._features.functions.Concat(*expr)
+    return Concat(*expr)
 
 
 def group_concat(*expr):
     """Function GROUP_CONCAT(expr [ORDER BY [SEPARATOR]])"""
-    return sqlpuzzle._features.functions.GroupConcat(*expr)
+    return GroupConcat(*expr)
 
 
 def convert(expr, type_=None):
     """Function CONVERT(expr, type)"""
-    return sqlpuzzle._features.functions.Convert(expr, type_)
+    return Convert(expr, type_)

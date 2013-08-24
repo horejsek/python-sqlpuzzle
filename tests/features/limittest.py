@@ -1,13 +1,14 @@
+# -*- coding: utf-8 -*-
 
 import unittest
 
-import sqlpuzzle.exceptions
-import sqlpuzzle._features.limit
+from sqlpuzzle.exceptions import InvalidArgumentException
+from sqlpuzzle._queryparts import Limit
 
 
 class LimitTest(unittest.TestCase):
     def setUp(self):
-        self.limit = sqlpuzzle._features.limit.Limit()
+        self.limit = Limit()
 
 
 class BaseTest(LimitTest):
@@ -64,19 +65,19 @@ class CopyTest(LimitTest):
 
 class ExceptionsTest(LimitTest):
     def test_limit_string_exception(self):
-        self.assertRaises(sqlpuzzle.exceptions.InvalidArgumentException, self.limit.limit, 'limit')
+        self.assertRaises(InvalidArgumentException, self.limit.limit, 'limit')
 
     def test_limit_float_exception(self):
-        self.assertRaises(sqlpuzzle.exceptions.InvalidArgumentException, self.limit.limit, 1.2)
+        self.assertRaises(InvalidArgumentException, self.limit.limit, 1.2)
 
     def test_limit_boolean_exception(self):
-        self.assertRaises(sqlpuzzle.exceptions.InvalidArgumentException, self.limit.limit, False)
+        self.assertRaises(InvalidArgumentException, self.limit.limit, False)
 
     def test_offset_string_exception(self):
-        self.assertRaises(sqlpuzzle.exceptions.InvalidArgumentException, self.limit.offset, 'offset')
+        self.assertRaises(InvalidArgumentException, self.limit.offset, 'offset')
 
     def test_offset_float_exception(self):
-        self.assertRaises(sqlpuzzle.exceptions.InvalidArgumentException, self.limit.offset, 1.2)
+        self.assertRaises(InvalidArgumentException, self.limit.offset, 1.2)
 
     def test_offset_boolean_exception(self):
-        self.assertRaises(sqlpuzzle.exceptions.InvalidArgumentException, self.limit.offset, False)
+        self.assertRaises(InvalidArgumentException, self.limit.offset, False)

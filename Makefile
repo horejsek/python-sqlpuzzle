@@ -30,8 +30,12 @@ install-building-packages:
 	pip install nose
 	pip-3.2 install nose
 
-test:
+test: test2 test3
+
+test2:
 	$(PYTHON) tests/alltests.py
+
+test3:
 	$(PYTHON3) tests/alltests.py
 
 buildrpm:

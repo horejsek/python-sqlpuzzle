@@ -2,9 +2,9 @@
 import unittest
 
 import sqlpuzzle.exceptions
-import sqlpuzzle._queries
+from sqlpuzzle._queries import Query
 
 
 class QueryTest(unittest.TestCase):
     def test_eq(self):
-        self.assertFalse(sqlpuzzle._queries.Query() == 'string')
+        self.assertFalse(Query() == 'string')

@@ -22,16 +22,16 @@ print sql._order_by
 
 # all parts throw all queries:
 # * _columns
-# * _groupBy
+# * _group_by
 # * _having
-# * _intoOutfile
+# * _into_outfile
 # * _limit
-# * _onDuplicateKeyUpdate
+# * _on_duplicate_key_update
 # * _order_by
 # * _tables
 # * _values
 # * _where
-# * _selectOptions
+# * _select_options
 
 sql = sqlpuzzle.insert_into('t').values(age=20, name='Michael')
 

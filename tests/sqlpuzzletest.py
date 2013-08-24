@@ -1,8 +1,9 @@
+# -*- coding: utf-8 -*-
 
 import unittest
 
 import sqlpuzzle
-import sqlpuzzle.relations
+from sqlpuzzle._queryparts import Column
 
 
 class SqlPuzzleTest(unittest.TestCase):
@@ -62,7 +63,7 @@ class CopyTest(unittest.TestCase):
 class CompareTest(unittest.TestCase):
     def test_compare_column_with_custom(self):
         custom = sqlpuzzle.customsql('custom')
-        column = sqlpuzzle._features.columns.Column('column')
+        column = Column('column')
         self.assertFalse(column == custom)  # Do not throw exception.
 
 

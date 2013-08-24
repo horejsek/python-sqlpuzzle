@@ -1,15 +1,16 @@
+# -*- coding: utf-8 -*-
 
 from six.moves import xrange
 
 import unittest
 
-import sqlpuzzle._features.where
-import sqlpuzzle.relations
+import sqlpuzzle
+from sqlpuzzle._queryparts import Where
 
 
 class WhereTest(unittest.TestCase):
     def setUp(self):
-        self.where = sqlpuzzle._features.where.Where()
+        self.where = Where()
 
 
 class BaseTest(WhereTest):

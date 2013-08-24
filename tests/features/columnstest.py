@@ -1,18 +1,19 @@
+# -*- coding: utf-8 -*-
 
 import unittest
 
-import sqlpuzzle.exceptions
-import sqlpuzzle._features.columns
+import sqlpuzzle
+from sqlpuzzle._queryparts import Columns
 
 
 class ColumnsTest(unittest.TestCase):
     def setUp(self):
-        self.columns = sqlpuzzle._features.columns.Columns()
+        self.columns = Columns()
 
 
 class BaseTest(ColumnsTest):
     def test_is_not_set(self):
-        self.assertEqual(self.columns.is_set(), False)
+        self.assertEqual(self.columns.is_set(), True)
 
     def test_is_set(self):
         self.columns.columns('id')
