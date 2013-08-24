@@ -23,6 +23,10 @@ class BaseTest(LimitTest):
         self.limit.limit(10)
         self.assertEqual(str(self.limit), 'LIMIT 10')
 
+    def test_offset(self):
+        self.limit.offset(50)
+        self.assertEqual(str(self.limit), 'OFFSET 50')
+
     def test_limit_and_offset(self):
         self.limit.limit(10)
         self.limit.offset(50)

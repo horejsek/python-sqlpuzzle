@@ -17,10 +17,14 @@ class Limit(QueryPart):
         self._offset = offset
 
     def __unicode__(self):
-        limit = six.u('LIMIT %s') % self._limit
+        res = ''
+        if self._limit is not None:
+            res += six.u('LIMIT %s') % self._limit
         if self._offset is not None:
-            limit = six.u('%s OFFSET %s') % (limit, self._offset)
-        return limit
+            if res:
+                res += ' '
+            res += six.u('OFFSET %s') % self._offset
+        return res
 
     def __eq__(self, other):
         return (
