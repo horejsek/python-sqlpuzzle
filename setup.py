@@ -7,17 +7,18 @@
 
 from distutils.core import setup
 
-from sqlpuzzle import version
+from sqlpuzzle import VERSION
 
 setup(
     name='sqlpuzzle',
     packages=[
         'sqlpuzzle',
-        'sqlpuzzle/_features',
-        'sqlpuzzle/_queries',
+        'sqlpuzzle/_common',
         'sqlpuzzle/_libs',
+        'sqlpuzzle/_queries',
+        'sqlpuzzle/_queryparts',
     ],
-    version=version,
+    version=VERSION,
     url='https://github.com/horejsek/python-sqlpuzzle',
     description='Python library for writing SQL queries.',
     author='Michal Horejsek',
