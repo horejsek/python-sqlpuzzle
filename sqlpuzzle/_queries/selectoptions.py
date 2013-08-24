@@ -63,20 +63,20 @@ class SelectOptions(Object):
     def is_set(self):
         return str(self) != ''
 
-    def sql_cache(self):
-        self._set_options['sql_cache'] = 'cache'
+    def sql_cache(self, allow=True):
+        self._set_options['sql_cache'] = 'cache' if allow else 'off'
 
-    def sql_no_cache(self):
-        self._set_options['sql_cache'] = 'noCache'
+    def sql_no_cache(self, allow=True):
+        self._set_options['sql_cache'] = 'noCache' if allow else 'off'
 
-    def all(self):
-        self._set_options['duplicated'] = 'all'
+    def all(self, allow=True):
+        self._set_options['duplicated'] = 'all' if allow else 'off'
 
-    def distinct(self):
-        self._set_options['duplicated'] = 'distinct'
+    def distinct(self, allow=True):
+        self._set_options['duplicated'] = 'distinct' if allow else 'off'
 
-    def distinctrow(self):
-        self._set_options['duplicated'] = 'distinctrow'
+    def distinctrow(self, allow=True):
+        self._set_options['duplicated'] = 'distinctrow' if allow else 'off'
 
     def sql_small_result(self, allow=True):
         self._set_options['sql_small_result'] = 'on' if allow else 'off'

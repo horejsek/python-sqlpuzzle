@@ -159,21 +159,41 @@ class SelectOptionsTest(SelectTest):
         self.select.from_('table').sql_cache()
         self.assertEqual(str(self.select), 'SELECT SQL_CACHE * FROM `table`')
 
+    def test_sql_cache_off(self):
+        self.select.from_('table').sql_cache().sql_cache(False)
+        self.assertEqual(str(self.select), 'SELECT * FROM `table`')
+
     def test_sql_no_cache(self):
         self.select.from_('table').sql_no_cache()
         self.assertEqual(str(self.select), 'SELECT SQL_NO_CACHE * FROM `table`')
+
+    def test_sql_no_cache_off(self):
+        self.select.from_('table').sql_no_cache().sql_no_cache(False)
+        self.assertEqual(str(self.select), 'SELECT * FROM `table`')
 
     def test_all(self):
         self.select.from_('table').all()
         self.assertEqual(str(self.select), 'SELECT ALL * FROM `table`')
 
+    def test_all_off(self):
+        self.select.from_('table').all().all(False)
+        self.assertEqual(str(self.select), 'SELECT * FROM `table`')
+
     def test_distinct(self):
         self.select.from_('table').distinct()
         self.assertEqual(str(self.select), 'SELECT DISTINCT * FROM `table`')
 
+    def test_distinct_off(self):
+        self.select.from_('table').distinct().distinct(False)
+        self.assertEqual(str(self.select), 'SELECT * FROM `table`')
+
     def test_distinctrow(self):
         self.select.from_('table').distinctrow()
         self.assertEqual(str(self.select), 'SELECT DISTINCTROW * FROM `table`')
+
+    def test_distinctrow_off(self):
+        self.select.from_('table').distinctrow().distinctrow(False)
+        self.assertEqual(str(self.select), 'SELECT * FROM `table`')
 
     def test_sql_small_result(self):
         self.select.from_('table').sql_small_result()

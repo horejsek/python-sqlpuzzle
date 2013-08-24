@@ -193,24 +193,24 @@ class Select(Query):
 
     # SELECT OPTIONS
 
-    def sql_cache(self):
-        self._select_options.sql_cache()
+    def sql_cache(self, allow=True):
+        self._select_options.sql_cache(allow)
         return self
 
-    def sql_no_cache(self):
-        self._select_options.sql_no_cache()
+    def sql_no_cache(self, allow=True):
+        self._select_options.sql_no_cache(allow)
         return self
 
-    def all(self):
-        self._select_options.all()
+    def all(self, allow=True):
+        self._select_options.all(allow)
         return self
 
-    def distinct(self):
-        self._select_options.distinct()
+    def distinct(self, allow=True):
+        self._select_options.distinct(allow)
         return self
 
-    def distinctrow(self):
-        self._select_options.distinctrow()
+    def distinctrow(self, allow=True):
+        self._select_options.distinctrow(allow)
         return self
 
     def sql_small_result(self, allow=True):
