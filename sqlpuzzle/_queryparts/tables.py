@@ -4,8 +4,8 @@ from __future__ import absolute_import
 
 import six
 
-import sqlpuzzle._libs.argsparser
-from sqlpuzzle._common import CustomSql, SqlValue, SqlReference, force_text, check_type_decorator
+import sqlpuzzle
+from sqlpuzzle._common import SqlValue, SqlReference, force_text, check_type_decorator, parse_args
 from sqlpuzzle.exceptions import InvalidArgumentException, InvalidQueryException
 from .queryparts import QueryPart, QueryParts
 from .conditions import Condition, Conditions
@@ -179,15 +179,12 @@ class Tables(QueryParts):
     def set(self, *args, **kwds):
         args = [arg for arg in args if arg]
 
-        for table, as_ in sqlpuzzle._libs.argsparser.parse_args_to_list_of_tuples(
-            {
-                'max_items': 2,
-                'allow_dict': True,
-            },
-            *args,
-            **kwds
-        ):
-            self.append_unique_part(Table(table, as_))
+        options = {
+            'max_items': 2,
+            'allow_dict': True,
+        }
+        for table_name, as_ in parse_args(options, *args, **kwds):
+            self.append_unique_part(Table(table_name, as_))
 
         return self
 

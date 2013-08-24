@@ -4,8 +4,7 @@ from __future__ import absolute_import
 
 import six
 
-import sqlpuzzle._libs.argsparser
-from sqlpuzzle._common import SqlReference, check_type_decorator
+from sqlpuzzle._common import SqlReference, check_type_decorator, parse_args
 from .queryparts import QueryPart, QueryParts
 
 __all__ = ('Column', 'Columns')
@@ -56,14 +55,11 @@ class Columns(QueryParts):
     _default_query_string = '*'
 
     def columns(self, *args, **kwds):
-        for column_name, alias in sqlpuzzle._libs.argsparser.parse_args_to_list_of_tuples(
-            {
-                'max_items': 2,
-                'allow_dict': True,
-            },
-            *args,
-            **kwds
-        ):
+        options = {
+            'max_items': 2,
+            'allow_dict': True,
+        }
+        for column_name, alias in parse_args(options, *args, **kwds):
             column = Column(column_name, alias)
             if column not in self:
                 self.append_part(column)

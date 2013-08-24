@@ -14,7 +14,6 @@ setup(
     packages=[
         'sqlpuzzle',
         'sqlpuzzle/_common',
-        'sqlpuzzle/_libs',
         'sqlpuzzle/_queries',
         'sqlpuzzle/_queryparts',
     ],

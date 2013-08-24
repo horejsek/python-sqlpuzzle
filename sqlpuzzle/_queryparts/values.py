@@ -6,10 +6,8 @@ import six
 
 import datetime
 
-from sqlpuzzle._common import SqlValue, SqlReference, is_sql_instance, check_type_decorator
+from sqlpuzzle._common import SqlValue, SqlReference, check_type_decorator, parse_args
 from .queryparts import QueryPart, QueryParts, append_custom_sql_decorator
-
-import sqlpuzzle._libs.argsparser
 
 
 class Value(QueryPart):
@@ -53,15 +51,13 @@ class Value(QueryPart):
 class Values(QueryParts):
     @append_custom_sql_decorator
     def set(self, *args, **kwds):
-        for column_name, value in sqlpuzzle._libs.argsparser.parse_args_to_list_of_tuples(
-            {
-                'min_items': 2,
-                'max_items': 2,
-                'allow_dict': True,
-                'allow_list': True,
-            },
-            *args, **kwds
-        ):
+        options = {
+            'min_items': 2,
+            'max_items': 2,
+            'allow_dict': True,
+            'allow_list': True,
+        }
+        for column_name, value in parse_args(options, *args, **kwds):
             self.append_unique_part(Value(column_name, value))
 
         return self

@@ -4,8 +4,7 @@ from __future__ import absolute_import
 
 import six
 
-import sqlpuzzle._libs.argsparser
-from sqlpuzzle._common import SqlReference, check_type_decorator
+from sqlpuzzle._common import SqlReference, check_type_decorator, parse_args
 from sqlpuzzle.exceptions import InvalidArgumentException
 from .queryparts import QueryPart, QueryParts
 
@@ -64,14 +63,11 @@ class Order(QueryPart):
 
 class Orders(QueryParts):
     def order(self, *args, **kwds):
-        for column_name, sort in sqlpuzzle._libs.argsparser.parse_args_to_list_of_tuples(
-            {
-                'max_items': 2,
-                'allow_dict': True,
-            },
-            *args,
-            **kwds
-        ):
+        options = {
+            'max_items': 2,
+            'allow_dict': True,
+        }
+        for column_name, sort in parse_args(options, *args, **kwds):
             order = self._find_order_by_column_name(column_name)
             if order is None:
                 order = Order(column_name, sort)

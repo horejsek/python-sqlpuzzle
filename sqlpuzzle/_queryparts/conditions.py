@@ -12,8 +12,7 @@ except NameError:
 import types
 import datetime
 
-import sqlpuzzle._libs.argsparser
-from sqlpuzzle._common import SqlValue, SqlReference, force_text, is_sql_instance, check_type_decorator
+from sqlpuzzle._common import SqlValue, SqlReference, check_type_decorator, parse_args
 from .queryparts import QueryPart, QueryParts, append_custom_sql_decorator
 from sqlpuzzle import relations
 
@@ -112,16 +111,13 @@ class Conditions(QueryParts):
 
     @append_custom_sql_decorator
     def where(self, *args, **kwds):
-        for column, value in sqlpuzzle._libs.argsparser.parse_args_to_list_of_tuples(
-            {
-                'min_items': 2,
-                'max_items': 2,
-                'allow_dict': True,
-                'allow_list': True,
-            },
-            *args,
-            **kwds
-        ):
-            self.append_unique_part(self._condition_class(column, value))
+        options = {
+            'min_items': 2,
+            'max_items': 2,
+            'allow_dict': True,
+            'allow_list': True,
+        }
+        for column_name, value in parse_args(options, *args, **kwds):
+            self.append_unique_part(self._condition_class(column_name, value))
 
         return self
