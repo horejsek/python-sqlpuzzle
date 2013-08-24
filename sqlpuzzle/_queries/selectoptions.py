@@ -56,7 +56,7 @@ class SelectOptions(Object):
         return ' '.join(self._options[key][val] for key, val in six.iteritems(self._set_options) if val != 'off')
 
     def __eq__(self, other):
-        if self.__class__ != other.__class__ or len(self._set_options) != len(other._set_options):
+        if type(self) != type(other) or len(self._set_options) != len(other._set_options):
             return False
         return all(bool(so == oo) for so, oo in zip(self._set_options.values(), other._set_options.values()))
 
@@ -95,3 +95,26 @@ class SelectOptions(Object):
 
     def high_priority(self, allow=True):
         self._set_options['high_priority'] = 'on' if allow else 'off'
+
+
+class SelectForUpdate(Object):
+    def __init__(self, ):
+        super(SelectForUpdate, self).__init__()
+        self._for_update = False
+
+    def __unicode__(self):
+        if self._for_update:
+            return 'FOR UPDATE'
+        return ''
+
+    def __eq__(self, other):
+        return (
+            type(self) == type(other)
+            and self._for_update == other._for_update
+        )
+
+    def is_set(self):
+        return self._for_update
+
+    def for_update(self, allow=True):
+        self._for_update = bool(allow)

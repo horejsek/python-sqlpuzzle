@@ -4,11 +4,10 @@ from __future__ import absolute_import
 
 import six
 
-from sqlpuzzle._common import Object
 from sqlpuzzle._queryparts import Columns, TablesForSelect, Where, GroupBy, Having, OrderBy, Limit, IntoOutfile
 from .query import Query
 from .union import Union, UNION, UNION_ALL
-from .selectoptions import SelectOptions
+from .selectoptions import SelectOptions, SelectForUpdate
 
 __all__ = ('Select',)
 
@@ -24,11 +23,12 @@ class Select(Query):
         'order_by': OrderBy,
         'limit': Limit,
         'into_outfile': IntoOutfile,
+        'select_for_update': SelectForUpdate,
     }
     _query_template = six.u(
         'SELECT%(select_options)s%(columns)s%(tables)s'
         '%(where)s%(group_by)s%(having)s'
-        '%(order_by)s%(limit)s%(into_outfile)s'
+        '%(order_by)s%(limit)s%(into_outfile)s%(select_for_update)s'
     )
 
     def __init__(self, *args, **kwds):
@@ -235,4 +235,8 @@ class Select(Query):
 
     def high_priority(self, allow=True):
         self._select_options.high_priority(allow)
+        return self
+
+    def for_update(self, allow=True):
+        self._select_for_update.for_update(allow)
         return self

@@ -227,6 +227,10 @@ class SelectOptionsTest(SelectTest):
         self.select.from_('table').distinct().sql_calc_found_rows().sql_no_cache()
         self.assertEqual(str(self.select), 'SELECT SQL_CALC_FOUND_ROWS SQL_NO_CACHE DISTINCT * FROM `table`')
 
+    def test_select_for_update(self):
+        self.select.from_('table').for_update()
+        self.assertEqual(str(self.select), 'SELECT * FROM `table` FOR UPDATE')
+
 
 class UnionTest(SelectTest):
     def test_union(self):
