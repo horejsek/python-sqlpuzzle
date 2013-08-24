@@ -8,7 +8,7 @@ __all__ = ('SelectOptions',)
 
 
 class SelectOptions(Object):
-    _options = {
+    _definition_of_options = {
         'sql_cache': {
             'off': '',
             'cache': 'SQL_CACHE',
@@ -48,53 +48,59 @@ class SelectOptions(Object):
 
     def __init__(self):
         super(SelectOptions, self).__init__()
-        self._set_options = {}
-        for option_key in self._options.keys():
-            self._set_options[option_key] = 'off'
+        self._options = {}
+        for option_key in self._definition_of_options.keys():
+            self._options[option_key] = 'off'
 
     def __unicode__(self):
-        return ' '.join(self._options[key][val] for key, val in six.iteritems(self._set_options) if val != 'off')
+        return six.u(' ').join(
+            self._definition_of_options[key][val]
+            for key, val in six.iteritems(self._options)
+            if val != 'off'
+        )
 
     def __eq__(self, other):
-        if type(self) != type(other) or len(self._set_options) != len(other._set_options):
-            return False
-        return all(bool(so == oo) for so, oo in zip(self._set_options.values(), other._set_options.values()))
+        return (
+            type(self) == type(other)
+            and len(self._options) == len(other._options)
+            and all(bool(so == oo) for so, oo in zip(self._options.values(), other._options.values()))
+        )
 
     def is_set(self):
-        return str(self) != ''
+        return any(item != 'off' for item in six.itervalues(self._options))
 
     def sql_cache(self, allow=True):
-        self._set_options['sql_cache'] = 'cache' if allow else 'off'
+        self._options['sql_cache'] = 'cache' if allow else 'off'
 
     def sql_no_cache(self, allow=True):
-        self._set_options['sql_cache'] = 'noCache' if allow else 'off'
+        self._options['sql_cache'] = 'noCache' if allow else 'off'
 
     def all(self, allow=True):
-        self._set_options['duplicated'] = 'all' if allow else 'off'
+        self._options['duplicated'] = 'all' if allow else 'off'
 
     def distinct(self, allow=True):
-        self._set_options['duplicated'] = 'distinct' if allow else 'off'
+        self._options['duplicated'] = 'distinct' if allow else 'off'
 
     def distinctrow(self, allow=True):
-        self._set_options['duplicated'] = 'distinctrow' if allow else 'off'
+        self._options['duplicated'] = 'distinctrow' if allow else 'off'
 
     def sql_small_result(self, allow=True):
-        self._set_options['sql_small_result'] = 'on' if allow else 'off'
+        self._options['sql_small_result'] = 'on' if allow else 'off'
 
     def sql_big_result(self, allow=True):
-        self._set_options['sql_big_result'] = 'on' if allow else 'off'
+        self._options['sql_big_result'] = 'on' if allow else 'off'
 
     def sql_buffer_result(self, allow=True):
-        self._set_options['sql_buffer_result'] = 'on' if allow else 'off'
+        self._options['sql_buffer_result'] = 'on' if allow else 'off'
 
     def sql_calc_found_rows(self, allow=True):
-        self._set_options['sql_calc_found_rows'] = 'on' if allow else 'off'
+        self._options['sql_calc_found_rows'] = 'on' if allow else 'off'
 
     def straight_join(self, allow=True):
-        self._set_options['straight_join'] = 'on' if allow else 'off'
+        self._options['straight_join'] = 'on' if allow else 'off'
 
     def high_priority(self, allow=True):
-        self._set_options['high_priority'] = 'on' if allow else 'off'
+        self._options['high_priority'] = 'on' if allow else 'off'
 
 
 class SelectForUpdate(Object):
