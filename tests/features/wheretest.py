@@ -28,7 +28,7 @@ class BaseTest(WhereTest):
             ('sex', sqlpuzzle.relations.NOT_EQUAL_TO('female')),
             ('age', sqlpuzzle.relations.GRATHER_THAN(20)),
         ))
-        self.assertEqual(str(self.where), 'WHERE `name` = "Harry" AND `sex` != "female" AND `age` > 20')
+        self.assertEqual(str(self.where), 'WHERE `name` = \'Harry\' AND `sex` != \'female\' AND `age` > 20')
 
     def test_where_by_list(self):
         self.where.where([
@@ -36,14 +36,14 @@ class BaseTest(WhereTest):
             ['sex', sqlpuzzle.relations.NOT_EQUAL_TO('female')],
             ['age', sqlpuzzle.relations.LESS_THAN_OR_EQUAL_TO(20)],
         ])
-        self.assertEqual(str(self.where), 'WHERE `name` LIKE "Harry" AND `sex` != "female" AND `age` <= 20')
+        self.assertEqual(str(self.where), 'WHERE `name` LIKE \'Harry\' AND `sex` != \'female\' AND `age` <= 20')
 
     def test_where_by_dictionary(self):
         self.where.where({
             'name': sqlpuzzle.relations.LIKE('Alan'),
             'age': 20,
         })
-        self.assertEqual(str(self.where), 'WHERE `age` = 20 AND `name` LIKE "Alan"')
+        self.assertEqual(str(self.where), 'WHERE `age` = 20 AND `name` LIKE \'Alan\'')
 
     def test_where_by_args(self):
         self.where.where('age', sqlpuzzle.relations.LESS_THAN(20))
@@ -51,16 +51,16 @@ class BaseTest(WhereTest):
 
     def test_where_by_kwargs(self):
         self.where.where(name='Alan')
-        self.assertEqual(str(self.where), 'WHERE `name` = "Alan"')
+        self.assertEqual(str(self.where), 'WHERE `name` = \'Alan\'')
 
     def test_serial_where(self):
         self.where.where(name='Alan')
         self.where.where(age=42)
-        self.assertEqual(str(self.where), 'WHERE `name` = "Alan" AND `age` = 42')
+        self.assertEqual(str(self.where), 'WHERE `name` = \'Alan\' AND `age` = 42')
 
     def test_str(self):
         self.where.where(name='ščřž')
-        self.assertEqual(str(self.where), 'WHERE `name` = "ščřž"')
+        self.assertEqual(str(self.where), 'WHERE `name` = \'ščřž\'')
 
     def test_unicode(self):
         if six.PY3:
@@ -68,7 +68,7 @@ class BaseTest(WhereTest):
         else:
             name = unicode('ščřž', 'utf-8')
         self.where.where(name=name)
-        self.assertEqual(str(self.where), 'WHERE `name` = "ščřž"')
+        self.assertEqual(str(self.where), 'WHERE `name` = \'ščřž\'')
 
 
 class RelationsTest(WhereTest):
@@ -98,11 +98,11 @@ class RelationsTest(WhereTest):
 
     def testLIKE(self):
         self.where.where('col', sqlpuzzle.relations.LIKE('val'))
-        self.assertEqual(str(self.where), 'WHERE `col` LIKE "val"')
+        self.assertEqual(str(self.where), 'WHERE `col` LIKE \'val\'')
 
     def testREGEXP(self):
         self.where.where('col', sqlpuzzle.relations.REGEXP('val'))
-        self.assertEqual(str(self.where), 'WHERE `col` REGEXP "val"')
+        self.assertEqual(str(self.where), 'WHERE `col` REGEXP \'val\'')
 
     def testIN(self):
         self.where.where('col', sqlpuzzle.relations.IN(range(3)))
@@ -136,7 +136,7 @@ class RelationInWithNoneTest(WhereTest):
 
     def test_more_values(self):
         self.where.where('col', ('a', 'b', None))
-        self.assertEqual(str(self.where), 'WHERE (`col` IN ("a", "b") OR `col` IS NULL)')
+        self.assertEqual(str(self.where), 'WHERE (`col` IN (\'a\', \'b\') OR `col` IS NULL)')
 
 
 class CustomSqlTest(WhereTest):
@@ -199,7 +199,7 @@ class CopyTest(WhereTest):
         copy = self.where.copy()
         self.where.where({'name': 'Alan'})
         self.assertEqual(str(copy), 'WHERE `id` = 42')
-        self.assertEqual(str(self.where), 'WHERE `id` = 42 AND `name` = "Alan"')
+        self.assertEqual(str(self.where), 'WHERE `id` = 42 AND `name` = \'Alan\'')
 
     def test_equals(self):
         self.where.where({'id': 42})

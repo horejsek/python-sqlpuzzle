@@ -14,7 +14,7 @@ class BaseTest(InsertTest):
     def test_simply(self):
         self.insert.into('user')
         self.insert.values(name='Alan')
-        self.assertEqual(str(self.insert), 'INSERT INTO `user` (`name`) VALUES ("Alan")')
+        self.assertEqual(str(self.insert), 'INSERT INTO `user` (`name`) VALUES (\'Alan\')')
 
 
 class OnDuplicateKeyUpdateTest(InsertTest):
@@ -25,7 +25,7 @@ class OnDuplicateKeyUpdateTest(InsertTest):
         }
         self.insert.values(id=1, **values)
         self.insert.on_duplicate_key_update(values)
-        self.assertEqual(str(self.insert), 'INSERT INTO `user` (`id`, `name`) VALUES (1, "Alan") ON DUPLICATE KEY UPDATE `name` = "Alan"')
+        self.assertEqual(str(self.insert), 'INSERT INTO `user` (`id`, `name`) VALUES (1, \'Alan\') ON DUPLICATE KEY UPDATE `name` = \'Alan\'')
 
 
 class CopyTest(InsertTest):

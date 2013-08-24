@@ -29,15 +29,15 @@ class SqlPuzzleTest(unittest.TestCase):
 
     def test_insert(self):
         sql = sqlpuzzle.insert().into('user').values(name='Harry')
-        self.assertEqual(str(sql), 'INSERT INTO `user` (`name`) VALUES ("Harry")')
+        self.assertEqual(str(sql), 'INSERT INTO `user` (`name`) VALUES (\'Harry\')')
 
     def test_insert_into(self):
         sql = sqlpuzzle.insert_into('user').values(name='Harry')
-        self.assertEqual(str(sql), 'INSERT INTO `user` (`name`) VALUES ("Harry")')
+        self.assertEqual(str(sql), 'INSERT INTO `user` (`name`) VALUES (\'Harry\')')
 
     def test_update(self):
         sql = sqlpuzzle.update('user').set(name='Alan').where(id=42)
-        self.assertEqual(str(sql), 'UPDATE `user` SET `name` = "Alan" WHERE `id` = 42')
+        self.assertEqual(str(sql), 'UPDATE `user` SET `name` = \'Alan\' WHERE `id` = 42')
 
     def test_delete(self):
         sql = sqlpuzzle.delete().from_('user').where(id=42)

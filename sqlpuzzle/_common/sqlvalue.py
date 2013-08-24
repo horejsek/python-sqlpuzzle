@@ -67,7 +67,7 @@ class SqlValue(Object):
         # Sometimes, e.g. in subselect, is needed reference to column instead of self.value.
         if self.value.strip() and self.value.strip()[0] == '`':
             return self._back_quotes()
-        return six.u('"%s"') % self._escape_value(force_text(self.value))
+        return six.u("'%s'") % self._escape_value(force_text(self.value))
 
     def _integer(self):
         return six.u('%d') % self.value
@@ -82,7 +82,7 @@ class SqlValue(Object):
         return self._datetime()
 
     def _datetime(self):
-        return six.u('"%s"') % self.value.isoformat()
+        return six.u("'%s'") % self.value.isoformat()
 
     def _list(self):
         if self.value:
@@ -117,7 +117,6 @@ class SqlValue(Object):
     def _escape_value(self, value):
         replace_table = (
             ("\\", "\\\\"),
-            ('"', '\\"'),
             ("'", "\\'"),
             ("\n", "\\n"),
         )

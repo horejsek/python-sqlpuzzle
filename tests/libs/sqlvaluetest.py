@@ -11,10 +11,10 @@ from sqlpuzzle._common import SqlValue, SqlReference
 
 class SqlValueTest(unittest.TestCase):
     def test_string(self):
-        self.assertEqual(str(SqlValue('Hello World!')), '"Hello World!"')
+        self.assertEqual(str(SqlValue('Hello World!')), "'Hello World!'")
 
     def test_unicode(self):
-        self.assertEqual(str(SqlValue(six.u('Hello World!'))), '"Hello World!"')
+        self.assertEqual(str(SqlValue(six.u('Hello World!'))), "'Hello World!'")
 
     def test_integer(self):
         self.assertEqual(str(SqlValue(42)), '42')
@@ -29,13 +29,13 @@ class SqlValueTest(unittest.TestCase):
         self.assertEqual(str(SqlValue(True)), '1')
 
     def test_date(self):
-        self.assertEqual(str(SqlValue(datetime.date(2011, 5, 25))), '"2011-05-25"')
+        self.assertEqual(str(SqlValue(datetime.date(2011, 5, 25))), "'2011-05-25'")
 
     def test_datetime(self):
-        self.assertEqual(str(SqlValue(datetime.datetime(2011, 5, 25, 19, 33, 20))), '"2011-05-25T19:33:20"')
+        self.assertEqual(str(SqlValue(datetime.datetime(2011, 5, 25, 19, 33, 20))), "'2011-05-25T19:33:20'")
 
     def test_list_with_string(self):
-        self.assertEqual(str(SqlValue(['a', 'b', 'c'])), '("a", "b", "c")')
+        self.assertEqual(str(SqlValue(['a', 'b', 'c'])), "('a', 'b', 'c')")
 
     def test_list_with_integer(self):
         self.assertEqual(str(SqlValue([12,23,34])), '(12, 23, 34)')
@@ -44,7 +44,7 @@ class SqlValueTest(unittest.TestCase):
         self.assertRaises(sqlpuzzle.exceptions.InvalidArgumentException, str, SqlValue([]))
 
     def test_tuple_with_integer(self):
-        self.assertEqual(str(SqlValue(('a', 'b', 'c'))), '("a", "b", "c")')
+        self.assertEqual(str(SqlValue(('a', 'b', 'c'))), "('a', 'b', 'c')")
 
     def test_tuple_with_integer(self):
         self.assertEqual(str(SqlValue((12,23,34))), '(12, 23, 34)')
@@ -98,15 +98,15 @@ class SqlReferenceTest(unittest.TestCase):
 
 class SecurityTest(unittest.TestCase):
     def test_single_quotes(self):
-        self.assertEqual(str(SqlValue('test\'test')), '"test\\\'test"')
+        self.assertEqual(str(SqlValue('test\'test')), "'test\\'test'")
 
     def test_quotes(self):
-        self.assertEqual(str(SqlValue('test"test')), '"test\\"test"')
+        self.assertEqual(str(SqlValue('test"test')), "'test\"test'")
 
     def test_slash(self):
-        self.assertEqual(str(SqlValue('test\\test')), '"test\\\\test"')
+        self.assertEqual(str(SqlValue('test\\test')), "'test\\\\test'")
 
     def test_new_line(self):
         value = """first line
 second line"""
-        self.assertEqual(str(SqlValue(value)), '"first line\\nsecond line"')
+        self.assertEqual(str(SqlValue(value)), "'first line\\nsecond line'")

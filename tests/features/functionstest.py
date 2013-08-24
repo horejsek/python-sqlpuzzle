@@ -116,11 +116,11 @@ class GroupConcatTest(FunctionsTest):
 
     def test_with_separator(self):
         self.group_concat.separator('|||')
-        self.assertEqual(str(self.group_concat), 'GROUP_CONCAT(`col` SEPARATOR "|||")')
+        self.assertEqual(str(self.group_concat), 'GROUP_CONCAT(`col` SEPARATOR \'|||\')')
 
     def test_with_order_by_and_separator(self):
         self.group_concat.order_by({'name': 'desc'}).separator('|||')
-        self.assertEqual(str(self.group_concat), 'GROUP_CONCAT(`col` ORDER BY `name` DESC SEPARATOR "|||")')
+        self.assertEqual(str(self.group_concat), 'GROUP_CONCAT(`col` ORDER BY `name` DESC SEPARATOR \'|||\')')
 
 
 class ConvertTest(FunctionsTest):

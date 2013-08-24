@@ -25,7 +25,7 @@ class BaseTest(HavingTest):
             ('sex', sqlpuzzle.relations.NE('female')),
             ('age', sqlpuzzle.relations.GT(20)),
         ))
-        self.assertEqual(str(self.having), 'HAVING `name` = "Harry" AND `sex` != "female" AND `age` > 20')
+        self.assertEqual(str(self.having), 'HAVING `name` = \'Harry\' AND `sex` != \'female\' AND `age` > 20')
 
     def test_where_by_list(self):
         self.having.where([
@@ -33,14 +33,14 @@ class BaseTest(HavingTest):
             ['sex', sqlpuzzle.relations.NE('female')],
             ['age', sqlpuzzle.relations.LE(20)],
         ])
-        self.assertEqual(str(self.having), 'HAVING `name` LIKE "Harry" AND `sex` != "female" AND `age` <= 20')
+        self.assertEqual(str(self.having), 'HAVING `name` LIKE \'Harry\' AND `sex` != \'female\' AND `age` <= 20')
 
     def test_where_by_dictionary(self):
         self.having.where({
             'name': 'Alan',
             'age': 20,
         })
-        self.assertEqual(str(self.having), 'HAVING `age` = 20 AND `name` = "Alan"')
+        self.assertEqual(str(self.having), 'HAVING `age` = 20 AND `name` = \'Alan\'')
 
     def test_where_by_args(self):
         self.having.where('age', sqlpuzzle.relations.LT(20))
@@ -48,12 +48,12 @@ class BaseTest(HavingTest):
 
     def test_where_by_kwargs(self):
         self.having.where(name='Alan')
-        self.assertEqual(str(self.having), 'HAVING `name` = "Alan"')
+        self.assertEqual(str(self.having), 'HAVING `name` = \'Alan\'')
 
     def test_serial_where(self):
         self.having.where(name='Alan')
         self.having.where(age=42)
-        self.assertEqual(str(self.having), 'HAVING `name` = "Alan" AND `age` = 42')
+        self.assertEqual(str(self.having), 'HAVING `name` = \'Alan\' AND `age` = 42')
 
 
 class GroupingTest(HavingTest):
@@ -72,7 +72,7 @@ class CopyTest(HavingTest):
         copy = self.having.copy()
         self.having.where({'name': 'Alan'})
         self.assertEqual(str(copy), 'HAVING `id` = 42')
-        self.assertEqual(str(self.having), 'HAVING `id` = 42 AND `name` = "Alan"')
+        self.assertEqual(str(self.having), 'HAVING `id` = 42 AND `name` = \'Alan\'')
 
     def test_equals(self):
         self.having.where({'id': 42})

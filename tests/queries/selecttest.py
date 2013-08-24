@@ -91,7 +91,7 @@ class WhereTest(SelectTest):
         self.select.where((
             ('enabled', 1),
         ))
-        self.assertEqual(str(self.select), 'SELECT * FROM `user` WHERE `age` = 42 AND `name` LIKE "Harry" AND `sex` = "male" AND `enabled` = 1')
+        self.assertEqual(str(self.select), 'SELECT * FROM `user` WHERE `age` = 42 AND `name` LIKE \'Harry\' AND `sex` = \'male\' AND `enabled` = 1')
 
 
 class HavingTest(SelectTest):
@@ -105,7 +105,7 @@ class HavingTest(SelectTest):
         self.select.having((
             ('enabled', 1),
         ))
-        self.assertEqual(str(self.select), 'SELECT * FROM `user` HAVING `age` = 42 AND `name` LIKE "Harry" AND `sex` = "male" AND `enabled` = 1')
+        self.assertEqual(str(self.select), 'SELECT * FROM `user` HAVING `age` = 42 AND `name` LIKE \'Harry\' AND `sex` = \'male\' AND `enabled` = 1')
 
 
 class LimitTest(SelectTest):
@@ -133,25 +133,25 @@ class IntoOutfileTest(SelectTest):
         self.select.into_outfile('/tmp/file')
 
     def test_into_outfile(self):
-        self.assertEqual(str(self.select), 'SELECT * FROM `table` INTO OUTFILE "/tmp/file"')
+        self.assertEqual(str(self.select), "SELECT * FROM `table` INTO OUTFILE '/tmp/file'")
 
     def test_fields_terminated_by(self):
         self.select.fields_terminated_by(',')
-        self.assertEqual(str(self.select), 'SELECT * FROM `table` INTO OUTFILE "/tmp/file" FIELDS TERMINATED BY ","')
+        self.assertEqual(str(self.select), "SELECT * FROM `table` INTO OUTFILE '/tmp/file' FIELDS TERMINATED BY ','")
 
     def test_lines_terminated_by(self):
         self.select.lines_terminated_by('"')
-        self.assertEqual(str(self.select), 'SELECT * FROM `table` INTO OUTFILE "/tmp/file" LINES TERMINATED BY "\\""')
+        self.assertEqual(str(self.select), "SELECT * FROM `table` INTO OUTFILE '/tmp/file' LINES TERMINATED BY '\"'")
 
     def test_optionally_enclosed_by(self):
         self.select.optionally_enclosed_by('\n')
-        self.assertEqual(str(self.select), 'SELECT * FROM `table` INTO OUTFILE "/tmp/file" OPTIONALLY ENCLOSED BY "\\n"')
+        self.assertEqual(str(self.select), "SELECT * FROM `table` INTO OUTFILE '/tmp/file' OPTIONALLY ENCLOSED BY '\\n'")
 
     def test_all_in_one(self):
         self.select.fields_terminated_by(',')
         self.select.lines_terminated_by('"')
         self.select.optionally_enclosed_by('\n')
-        self.assertEqual(str(self.select), 'SELECT * FROM `table` INTO OUTFILE "/tmp/file" FIELDS TERMINATED BY "," LINES TERMINATED BY "\\"" OPTIONALLY ENCLOSED BY "\\n"')
+        self.assertEqual(str(self.select), "SELECT * FROM `table` INTO OUTFILE '/tmp/file' FIELDS TERMINATED BY ',' LINES TERMINATED BY '\"' OPTIONALLY ENCLOSED BY '\\n'")
 
 
 class SelectOptionsTest(SelectTest):
@@ -274,8 +274,8 @@ class CopyTest(SelectTest):
         self.select.from_('user').where(name='Alan')
         copy = self.select.copy()
         self.select.limit(10)
-        self.assertEqual(str(copy), 'SELECT * FROM `user` WHERE `name` = "Alan"')
-        self.assertEqual(str(self.select), 'SELECT * FROM `user` WHERE `name` = "Alan" LIMIT 10')
+        self.assertEqual(str(copy), 'SELECT * FROM `user` WHERE `name` = \'Alan\'')
+        self.assertEqual(str(self.select), 'SELECT * FROM `user` WHERE `name` = \'Alan\' LIMIT 10')
 
     def test_equals(self):
         self.select.from_('user').where(name='Alan')

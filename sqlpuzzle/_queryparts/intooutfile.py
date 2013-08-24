@@ -4,7 +4,7 @@ from __future__ import absolute_import
 
 import six
 
-from sqlpuzzle._common import SqlValue, force_text, check_type_decorator
+from sqlpuzzle._common import SqlValue, check_type_decorator
 from .queryparts import QueryPart
 
 __all__ = ('IntoOutfile',)
@@ -24,7 +24,7 @@ class IntoOutfile(QueryPart):
         self._optionally_enclosed_by = optionally_enclosed_by
 
     def __unicode__(self):
-        into_outfile = six.u('INTO OUTFILE "%s"') % force_text(self._into_outfile)
+        into_outfile = six.u('INTO OUTFILE %s') % SqlValue(self._into_outfile)
         if self._fields_terminated_by is not None:
             into_outfile += six.u(' FIELDS TERMINATED BY %s') % SqlValue(self._fields_terminated_by)
         if self._lines_terminated_by is not None:

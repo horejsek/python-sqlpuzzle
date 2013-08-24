@@ -28,7 +28,7 @@ class BaseTest(ValuesTest):
             ('age', 20),
             ('country', None),
         ))
-        self.assertEqual(str(self.values), '`name` = "Harry", `sex` = "female", `age` = 20, `country` = NULL')
+        self.assertEqual(str(self.values), '`name` = \'Harry\', `sex` = \'female\', `age` = 20, `country` = NULL')
 
     def test_values_by_list(self):
         self.values.set([
@@ -37,14 +37,14 @@ class BaseTest(ValuesTest):
             ['age', 20],
             ['country', None],
         ])
-        self.assertEqual(str(self.values), '`name` = "Harry", `sex` = "female", `age` = 20, `country` = NULL')
+        self.assertEqual(str(self.values), '`name` = \'Harry\', `sex` = \'female\', `age` = 20, `country` = NULL')
 
     def test_values_by_dictionary(self):
         self.values.set({
             'name': 'Alan',
             'age': 20,
         })
-        self.assertEqual(str(self.values), '`age` = 20, `name` = "Alan"')
+        self.assertEqual(str(self.values), '`age` = 20, `name` = \'Alan\'')
 
     def test_values_by_args(self):
         self.values.set('age', 20)
@@ -52,11 +52,11 @@ class BaseTest(ValuesTest):
 
     def test_values_by_kwargs(self):
         self.values.set(name='Alan')
-        self.assertEqual(str(self.values), '`name` = "Alan"')
+        self.assertEqual(str(self.values), '`name` = \'Alan\'')
 
     def test_str(self):
         self.values.set(name='ščřž')
-        self.assertEqual(str(self.values), '`name` = "ščřž"')
+        self.assertEqual(str(self.values), '`name` = \'ščřž\'')
 
     def test_unicode(self):
         if six.PY3:
@@ -64,7 +64,7 @@ class BaseTest(ValuesTest):
         else:
             name = unicode('ščřž', 'utf-8')
         self.values.set(name=name)
-        self.assertEqual(str(self.values), '`name` = "ščřž"')
+        self.assertEqual(str(self.values), '`name` = \'ščřž\'')
 
 
 class CustomSqlTest(ValuesTest):
@@ -97,7 +97,7 @@ class CopyTest(ValuesTest):
         copy = self.values.copy()
         self.values.set({'name': 'Alan'})
         self.assertEqual(str(copy), '`id` = 42')
-        self.assertEqual(str(self.values), '`id` = 42, `name` = "Alan"')
+        self.assertEqual(str(self.values), '`id` = 42, `name` = \'Alan\'')
 
     def test_equals(self):
         self.values.set({'id': 42})
