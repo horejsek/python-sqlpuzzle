@@ -9,7 +9,7 @@ import sqlpuzzle
 ###########################################################################
 
 
-sql = sqlpuzzle.select_from('t').where(name='Alan').limit(5).offset(10).order_by('id̈́')
+sql = sqlpuzzle.select_from('t').where(name='Alan').limit(5).offset(10).order_by('id')
 
 print sql._limit
 # output: LIMIT 5 OFFSET 10
@@ -18,7 +18,7 @@ print sql._where
 # output: WHERE `name` = "Alan"
 
 print sql._order_by
-# output: ORDER BY `id̈́`
+# output: ORDER BY `id`
 
 # all parts throw all queries:
 # * _columns
@@ -45,13 +45,13 @@ print "(%s) VALUES (%s)" % (sql._values.columns(), sql._values.values())
 
 
 # !! This is not to use! But it's possible. !!
-print sqlpuzzle._features.limit.Limit().limit(10)
-print sqlpuzzle._features.orderby.OrderBy().order_by('id')
+print sqlpuzzle._queryparts.Limit().limit(10)
+print sqlpuzzle._queryparts.orderby.OrderBy().order_by('id')
 # etc..
 
 
 try:
     # only for read ;)
-    sql._tables = sqlpuzzle._features.tables.Tables().set('table')
+    sql._tables = sqlpuzzle._queryparts.Tables().set('table')
 except AttributeError, e:
     print e

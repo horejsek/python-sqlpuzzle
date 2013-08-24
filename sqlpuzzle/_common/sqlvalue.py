@@ -20,6 +20,17 @@ from .utils import force_text, is_sql_instance
 __all__ = ('SqlValue', 'SqlReference')
 
 
+def _escape_value(value):
+    replace_table = (
+        ("\\", "\\\\"),
+        ("'", "\\'"),
+        ("\n", "\\n"),
+    )
+    for old, new in replace_table:
+        value = value.replace(old, new)
+    return value
+
+
 class SqlValue(Object):
     """Object used for SQL values (e.g. value of column, for condition, ...)."""
 
@@ -67,7 +78,7 @@ class SqlValue(Object):
         # Sometimes, e.g. in subselect, is needed reference to column instead of self.value.
         if self.value.strip() and self.value.strip()[0] == '`':
             return self._back_quotes()
-        return six.u("'%s'") % self._escape_value(force_text(self.value))
+        return six.u("'%s'") % _escape_value(force_text(self.value))
 
     def _integer(self):
         return six.u('%d') % self.value
@@ -110,19 +121,10 @@ class SqlValue(Object):
         "table.`col.umn`" => "`table`.`col.umn`"
         "`table`.`col.umn`" => "`table`.`col.umn`"
         """
-        parts = re.split('`([^`]+)`|\.', self.value)
+        value = force_text(self.value)
+        parts = re.split('`([^`]+)`|\.', value)
         parts = (six.u('`%s`') % i if i != '*' else i for i in parts if i)
         return six.u('.').join(parts)
-
-    def _escape_value(self, value):
-        replace_table = (
-            ("\\", "\\\\"),
-            ("'", "\\'"),
-            ("\n", "\\n"),
-        )
-        for old, new in replace_table:
-            value = value.replace(old, new)
-        return value
 
 
 class SqlReference(SqlValue):

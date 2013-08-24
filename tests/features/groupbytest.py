@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+import six
+
 import unittest
 
 import sqlpuzzle
@@ -46,6 +48,18 @@ class BaseTest(GroupByTest):
     def test_by_kwds(self):
         self.group_by.group_by(id='ASC', name='DESC')
         self.assertEqual(str(self.group_by), 'GROUP BY `id`, `name` DESC')
+
+    def test_str(self):
+        self.group_by.group_by('ščřž')
+        self.assertEqual(str(self.group_by), 'GROUP BY `ščřž`')
+
+    def test_unicode(self):
+        if six.PY3:
+            name = 'ščřž'
+        else:
+            name = unicode('ščřž', 'utf-8')
+        self.group_by.group_by(name)
+        self.assertEqual(str(self.group_by), 'GROUP BY `ščřž`')
 
 
 class BackQuotesTest(GroupByTest):

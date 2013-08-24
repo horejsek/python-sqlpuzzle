@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+import six
+
 import unittest
 
 import sqlpuzzle
@@ -54,6 +56,18 @@ class BaseTest(HavingTest):
         self.having.where(name='Alan')
         self.having.where(age=42)
         self.assertEqual(str(self.having), 'HAVING `name` = \'Alan\' AND `age` = 42')
+
+    def test_str(self):
+        self.having.where(name='ščřž')
+        self.assertEqual(str(self.having), 'HAVING `name` = \'ščřž\'')
+
+    def test_unicode(self):
+        if six.PY3:
+            name = 'ščřž'
+        else:
+            name = unicode('ščřž', 'utf-8')
+        self.having.where(name=name)
+        self.assertEqual(str(self.having), 'HAVING `name` = \'ščřž\'')
 
 
 class GroupingTest(HavingTest):

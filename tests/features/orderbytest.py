@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+import six
+
 import unittest
 
 from sqlpuzzle.exceptions import InvalidArgumentException
@@ -46,6 +48,18 @@ class BaseTest(OrderByTest):
     def test_by_kwds(self):
         self.order_by.order_by(id='ASC', name='DESC')
         self.assertEqual(str(self.order_by), 'ORDER BY `id`, `name` DESC')
+
+    def test_str(self):
+        self.order_by.order_by('ščřž')
+        self.assertEqual(str(self.order_by), 'ORDER BY `ščřž`')
+
+    def test_unicode(self):
+        if six.PY3:
+            name = 'ščřž'
+        else:
+            name = unicode('ščřž', 'utf-8')
+        self.order_by.order_by(name)
+        self.assertEqual(str(self.order_by), 'ORDER BY `ščřž`')
 
 
 class BackQuotesTest(OrderByTest):

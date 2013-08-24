@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+import six
+
 import unittest
 
 import sqlpuzzle
@@ -41,6 +43,18 @@ class BaseTest(ColumnsTest):
     def test_column_as_by_kwds(self):
         self.columns.columns(id='ID', name='Name')
         self.assertEqual(str(self.columns), '`id` AS `ID`, `name` AS `Name`')
+
+    def test_str(self):
+        self.columns.columns('ščřž')
+        self.assertEqual(str(self.columns), '`ščřž`')
+
+    def test_unicode(self):
+        if six.PY3:
+            name = 'ščřž'
+        else:
+            name = unicode('ščřž', 'utf-8')
+        self.columns.columns(name)
+        self.assertEqual(str(self.columns), '`ščřž`')
 
 
 class CustomSqlTest(ColumnsTest):

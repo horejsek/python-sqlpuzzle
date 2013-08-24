@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+import six
+
 import unittest
 
 import sqlpuzzle
@@ -55,6 +57,18 @@ class BaseTest(TablesTest):
     def test_more_tables_with_as_by_kwds(self):
         self.tables.set(user='u', country='c')
         self.assertEqual(str(self.tables), '`country` AS `c`, `user` AS `u`')
+
+    def test_str(self):
+        self.tables.set('ščřž')
+        self.assertEqual(str(self.tables), '`ščřž`')
+
+    def test_unicode(self):
+        if six.PY3:
+            name = 'ščřž'
+        else:
+            name = unicode('ščřž', 'utf-8')
+        self.tables.set(name)
+        self.assertEqual(str(self.tables), '`ščřž`')
 
 
 class CustomSqlTest(TablesTest):
