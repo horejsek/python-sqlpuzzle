@@ -5,6 +5,7 @@ import six
 import unittest
 
 import sqlpuzzle
+from sqlpuzzle import Q
 from sqlpuzzle._queryparts import Having
 
 
@@ -131,3 +132,21 @@ class ExceptionsTest(HavingTest):
 
     def test_column_as_boolean_exception(self):
         self.assertRaises(sqlpuzzle.exceptions.InvalidArgumentException, self.having.where, True, 'val')
+
+
+class QObjectTest(HavingTest):
+    def test_simple_or(self):
+        self.having.where(Q(x='y') | Q(y='x'))
+        self.assertEqual(str(self.having), "HAVING (`x` = 'y' OR `y` = 'x')")
+
+    def test_simple_and(self):
+        self.having.where(Q(x='y') & Q(y='x'))
+        self.assertEqual(str(self.having), "HAVING (`x` = 'y' AND `y` = 'x')")
+
+    def test_more_complicated(self):
+        self.having.where((Q(a=1) & Q(b=2)) | Q(c=3))
+        self.assertEqual(str(self.having), "HAVING ((`a` = 1 AND `b` = 2) OR `c` = 3)")
+
+    def test_more_conditions_in_q(self):
+        self.having.where(Q(a=42, b=24) | Q(x='y'))
+        self.assertEqual(str(self.having), "HAVING ((`a` = 42 AND `b` = 24) OR `x` = 'y')")

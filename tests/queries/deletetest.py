@@ -32,7 +32,7 @@ class MoreReferencesTest(DeleteTest):
 
     def test_join(self):
         self.delete.delete('user').from_('user').left_join('role').on('role.id', 'user.role_id').where('role.name', ('a', 'b'))
-        self.assertEqual(str(self.delete), 'DELETE `user` FROM `user` LEFT JOIN `role` ON (`role`.`id` = `user`.`role_id`) WHERE `role`.`name` IN (\'a\', \'b\')')
+        self.assertEqual(str(self.delete), 'DELETE `user` FROM `user` LEFT JOIN `role` ON `role`.`id` = `user`.`role_id` WHERE `role`.`name` IN (\'a\', \'b\')')
 
 
 class WhereTest(DeleteTest):

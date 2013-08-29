@@ -53,6 +53,10 @@ class QueryParts(Object):
             return False
         return all(sp == op for sp, op in zip(self._parts, other._parts))
 
+    @property
+    def count_of_parts(self):
+        return len(self._parts)
+
     def is_set(self):
         return bool(self._parts != [] or self._default_query_string)
 

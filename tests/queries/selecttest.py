@@ -65,19 +65,19 @@ class TableTest(SelectTest):
 class JoinTest(SelectTest):
     def test_join(self):
         self.select.from_('user').join('country').on('user.country_id', 'country.id')
-        self.assertEqual(str(self.select), 'SELECT * FROM `user` JOIN `country` ON (`user`.`country_id` = `country`.`id`)')
+        self.assertEqual(str(self.select), 'SELECT * FROM `user` JOIN `country` ON `user`.`country_id` = `country`.`id`')
 
     def test_inner_join(self):
         self.select.from_('user').inner_join('country').on('user.country_id', 'country.id')
-        self.assertEqual(str(self.select), 'SELECT * FROM `user` JOIN `country` ON (`user`.`country_id` = `country`.`id`)')
+        self.assertEqual(str(self.select), 'SELECT * FROM `user` JOIN `country` ON `user`.`country_id` = `country`.`id`')
 
     def test_left_join(self):
         self.select.from_('user').left_join('country').on('user.country_id', 'country.id')
-        self.assertEqual(str(self.select), 'SELECT * FROM `user` LEFT JOIN `country` ON (`user`.`country_id` = `country`.`id`)')
+        self.assertEqual(str(self.select), 'SELECT * FROM `user` LEFT JOIN `country` ON `user`.`country_id` = `country`.`id`')
 
     def test_right_join(self):
         self.select.from_('user').right_join('country').on('user.country_id', 'country.id')
-        self.assertEqual(str(self.select), 'SELECT * FROM `user` RIGHT JOIN `country` ON (`user`.`country_id` = `country`.`id`)')
+        self.assertEqual(str(self.select), 'SELECT * FROM `user` RIGHT JOIN `country` ON `user`.`country_id` = `country`.`id`')
 
 
 class WhereTest(SelectTest):

@@ -10,6 +10,7 @@ Version: %s
 
 from ._common import CustomSql
 from ._queryparts.functions import Avg, Concat, Convert, Count, GroupConcat, Max, Min, Sum
+from ._queryparts.conditions import Conditions as Q
 from ._queries import Delete, Insert, Select, Update
 
 __all__ = (
@@ -21,6 +22,7 @@ __all__ = (
     'delete',
     'delete_from',
     'customsql',
+    'Q',
 
     'avg',
     'avg_distinct',

@@ -12,14 +12,29 @@ except NameError:
 import types
 import datetime
 
-from sqlpuzzle._common import SqlValue, SqlReference, check_type_decorator, parse_args
+from sqlpuzzle._common import Object, SqlValue, SqlReference, check_type_decorator, parse_args
 from .queryparts import QueryPart, QueryParts, append_custom_sql_decorator
 from sqlpuzzle import relations
 
 __all__ = ('Condition', 'Conditions')
 
 
-class Condition(QueryPart):
+class BinaryOperationMixin(object):
+    AND = 'AND'
+    OR = 'OR'
+
+    def __and__(self, other):
+        if not isinstance(other, (Condition, Conditions, ConditionsOfConditions)):
+            raise TypeError(other)
+        return ConditionsOfConditions(self, other, self.AND)
+
+    def __or__(self, other):
+        if not isinstance(other, (Condition, Conditions, ConditionsOfConditions)):
+            raise TypeError(other)
+        return ConditionsOfConditions(self, other, self.OR)
+
+
+class Condition(BinaryOperationMixin, QueryPart):
     _default_relations = {
         str: relations.EQ,
         six.text_type: relations.EQ,
@@ -103,11 +118,13 @@ class Condition(QueryPart):
         return self._value
 
 
+class Conditions(BinaryOperationMixin, QueryParts):
+    _separator_of_parts = ' AND '
+    _condition_class = Condition
 
-class Conditions(QueryParts):
-    def __init__(self, condition_class=Condition):
+    def __init__(self, **kwds):
         super(Conditions, self).__init__()
-        self._condition_class = condition_class
+        self.where(**kwds)
 
     @append_custom_sql_decorator
     def where(self, *args, **kwds):
@@ -121,3 +138,22 @@ class Conditions(QueryParts):
             self.append_unique_part(self._condition_class(column_name, value))
 
         return self
+
+
+class ConditionsOfConditions(BinaryOperationMixin, Object):
+    def __init__(self, left, right, type):
+        self.left = left
+        self.right = right
+        self.type = type
+
+    def __unicode__(self):
+        template = six.u('(')
+        template += '(%s)' if self._needs_brackets(self.left) else '%s'
+        template += ' %s '
+        template += '(%s)' if self._needs_brackets(self.right) else '%s'
+        template += ')'
+        return template % (self.left, self.type, self.right)
+
+    @staticmethod
+    def _needs_brackets(value):
+        return isinstance(value, QueryParts) and value.count_of_parts > 1

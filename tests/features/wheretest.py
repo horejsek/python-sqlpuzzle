@@ -6,6 +6,7 @@ from six.moves import xrange
 import unittest
 
 import sqlpuzzle
+from sqlpuzzle import Q
 from sqlpuzzle._queryparts import Where
 
 
@@ -240,3 +241,21 @@ class ExceptionsTest(WhereTest):
     def test_value_as_string_wrong_relation_exception(self):
         self.assertRaises(sqlpuzzle.exceptions.InvalidArgumentException, sqlpuzzle.relations.NOT_IN, 67)
         self.assertRaises(sqlpuzzle.exceptions.InvalidArgumentException, sqlpuzzle.relations.IN, 67)
+
+
+class QObjectTest(WhereTest):
+    def test_simple_or(self):
+        self.where.where(Q(x='y') | Q(y='x'))
+        self.assertEqual(str(self.where), "WHERE (`x` = 'y' OR `y` = 'x')")
+
+    def test_simple_and(self):
+        self.where.where(Q(x='y') & Q(y='x'))
+        self.assertEqual(str(self.where), "WHERE (`x` = 'y' AND `y` = 'x')")
+
+    def test_more_complicated(self):
+        self.where.where((Q(a=1) & Q(b=2)) | Q(c=3))
+        self.assertEqual(str(self.where), "WHERE ((`a` = 1 AND `b` = 2) OR `c` = 3)")
+
+    def test_more_conditions_in_q(self):
+        self.where.where(Q(a=42, b=24) | Q(x='y'))
+        self.assertEqual(str(self.where), "WHERE ((`a` = 42 AND `b` = 24) OR `x` = 'y')")
