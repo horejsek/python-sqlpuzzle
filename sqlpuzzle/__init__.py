@@ -10,7 +10,7 @@ Version: %s
 
 from ._common import CustomSql
 from ._queryparts.functions import Avg, Concat, Convert, Count, GroupConcat, Max, Min, Sum
-from ._queryparts.conditions import Conditions as Q
+from ._queryparts.conditions import Conditions
 from ._queries import Delete, Insert, Select, Update
 
 __all__ = (
@@ -90,6 +90,17 @@ def delete_from(*args, **kwds):
 def customsql(sql):
     """Custom SQL."""
     return CustomSql(sql)
+
+
+def Q(**kwds):
+    """
+    Use as condition (where, having, ...) and pass it to condition. Works like
+    Q object in Django, so you can use it with logical operands (& and |).
+
+    Fro example:
+    sqlpuzzle.where(Q(name='Michael', country=None) | Q(name='Alan'))
+    """
+    return Conditions(**kwds)
 
 
 def avg(expr):
