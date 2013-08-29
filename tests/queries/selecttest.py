@@ -114,6 +114,11 @@ class LimitTest(SelectTest):
         self.select.limit(10)
         self.assertEqual(str(self.select), 'SELECT * FROM `user` LIMIT 10')
 
+    def test_offset(self):
+        self.select.from_('user')
+        self.select.offset(40)
+        self.assertEqual(str(self.select), 'SELECT * FROM `user` OFFSET 40')
+
     def test_limit_with_offset(self):
         self.select.from_('user')
         self.select.limit(10, 40)

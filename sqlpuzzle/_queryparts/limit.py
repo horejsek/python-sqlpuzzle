@@ -34,7 +34,7 @@ class Limit(QueryPart):
         )
 
     def is_set(self):
-        return self._limit is not None
+        return self._limit is not None or self._offset is not None
 
     @check_type_decorator(six.integer_types + (type(None),))
     def limit(self, limit, offset=None):
