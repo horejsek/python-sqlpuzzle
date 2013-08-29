@@ -4,7 +4,6 @@
 import datetime
 
 import sqlpuzzle
-import sqlpuzzle.relations
 
 
 sql = sqlpuzzle.select_from('user')
@@ -31,6 +30,8 @@ conditions = (
 )
 sql.where(conditions)
 
+sql.where(sqlpuzzle.Q(answer=42) | sqlpuzzle.Q(answer=24))
+
 print sql
 
 #
@@ -41,13 +42,14 @@ print sql
 # `id` = 42 AND
 # `age` = 20 AND
 # `enabled` = 1 AND
-# `name` = "Michael" AND
-# `last_modify` = "2011-06-15T22:11:00" AND
-# `right` = "admin" AND
+# `name` = 'Michael' AND
+# `last_modify` = '2011-06-15T22:11:00' AND
+# `right` = 'admin' AND
 # `column` <= 10 AND
 # `column` >= 10 AND
 # `id` NOT IN (10, 12, 14, 16, 18) AND
-# `name` = "Alan" AND
+# `name` = 'Alan' AND
 # `salary` > 10000 AND
-# `lastname` LIKE "%ar%"
+# `lastname` LIKE '%ar%' AND
+# (`answer` = 42 OR `answer` = 24)
 #
