@@ -63,10 +63,7 @@ class OnCondition(Condition):
 
 
 class OnConditions(Conditions):
-    _separator_of_parts = ' AND '
-
-    def __init__(self):
-        super(OnConditions, self).__init__(OnCondition)
+    _condition_class = OnCondition
 
 
 class Table(QueryPart):
@@ -91,7 +88,7 @@ class Table(QueryPart):
                 six.u('%s %s%s') % (
                     JOIN_TYPES[join['type']],
                     join['table'],
-                    six.u(' ON (%s)') % join['ons'] if join['ons'].is_set() else '',
+                    six.u(' ON %s') % join['ons'] if join['ons'].is_set() else '',
                 ) for join in self._joins
             )
 
