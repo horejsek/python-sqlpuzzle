@@ -8,26 +8,27 @@ Python library for ease of writing SQL queries. For now only for database MySQL.
 
 ## Installation
 
-Installation of Python module `sqlpuzzle` is very simple - just extract archive
-and then from created directory sqlpuzzle run this command:
+Installation of Python module `sqlpuzzle` is very simple by PyPI:
+
+    $ sudo pip install sqlpuzzle
+
+Or you can install development version by extracting archive and run:
 
     $ sudo make install
 
-That's all! After this step you can start your favorite Python interpret (perhaps
-bpython) and try import module `sqlpuzzle`. See for examples below.
-
-
 ## Examples:
 
-    >>> import sqlPuzzle
+More examples in directory examples.
 
-    >>> print sqlPuzzle.select_from('table')
+    >>> import sqlpuzzle
+
+    >>> print sqlpuzzle.select_from('table')
     SELECT * FROM `table`
 
-    >>> print sqlPuzzle.select('id', ('user_name', 'userName')).from_('table')
+    >>> print sqlpuzzle.select('id', ('user_name', 'userName')).from_('table')
     SELECT `id`, `user_name` AS "userName" FROM `table`
 
-    >>> print sqlPuzzle.select_from('table').\
+    >>> print sqlpuzzle.select_from('table').\
     ... where(name='Alan').\
     ... where('age', sqlPuzzle.relations.LE(20)).\
     ... where({'sex': 'male'}).\
@@ -35,26 +36,31 @@ bpython) and try import module `sqlpuzzle`. See for examples below.
     ...     ('column', sqlPuzzle.relations.LIKE('value')),
     ...     ('id', range(5,15,2))
     ... )
-    SELECT * FROM `table` WHERE `name` = "Alan" AND `age` <= 20 AND `sex` = "male" AND `column` LIKE "value" AND `id` IN (5, 7, 9, 11, 13)
+    SELECT * FROM `table` WHERE `name` = 'Alan' AND `age` <= 20 AND `sex` = 'male' AND `column` LIKE 'value' AND `id` IN (5, 7, 9, 11, 13)
 
-    >>> print sqlPuzzle.select_from('table').limit(5, 20)
+    >>> print sqlpuzzle.select_from('table').\
+    ... where(sqlpuzzle.Q(name='Alan') | sqlpuzzle.Q(name='Harry')).\
+    ... where(age=sqlPuzzle.relations.LE(20))
+    SELECT * FROM `table` WHERE (`name` = 'Alan' OR `name` = 'Harry') AND `age` <= 20>
+
+    >>> print sqlpuzzle.select_from('table').limit(5, 20)
     SELECT * FROM `table` LIMIT 5 OFFSET 20
 
-    >>> print sqlPuzzle.insert_into('table').values(name='Michael', age=20)
-    INSERT INTO `table` (`age`, `name`) VALUES (20, "Michael")
+    >>> print sqlpuzzle.insert_into('table').values(name='Michael', age=20)
+    INSERT INTO `table` (`age`, `name`) VALUES (20, 'Michael')
 
-    >>> print sqlPuzzle.update('table').set(name='Michale').where(id=42)
-    UPDATE `table` SET `name` = "Michale" WHERE `id` = 42
+    >>> print sqlpuzzle.update('table').set(name='Michale').where(id=42)
+    UPDATE `table` SET `name` = 'Michale' WHERE `id` = 42
 
-    >>> print sqlPuzzle.update('table').set(name='Michale')
+    >>> print sqlpuzzle.update('table').set(name='Michale')
     Traceback (most recent call last):
       ...
     ConfirmUpdateAllException: Are you sure, that you want update all records?
 
-    >>> print sqlPuzzle.delete_from('table').where(id=42)
+    >>> print sqlpuzzle.delete_from('table').where(id=42)
     DELETE FROM `table` WHERE `id` = 42
 
-    >>> print sqlPuzzle.delete_from('table')
+    >>> print sqlpuzzle.delete_from('table')
     Traceback (most recent call last):
       ...
     ConfirmDeleteAllException: Are you sure, that you want delete all records?
