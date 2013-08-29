@@ -4,10 +4,10 @@
 import sqlpuzzle
 
 
-print sqlpuzzle.select().from_('table')
+print(sqlpuzzle.select().from_('table'))
 # output: SELECT * FROM `table`
 
-print sqlpuzzle.select_from('table')
+print(sqlpuzzle.select_from('table'))
 # same output as previous command
 
 
@@ -15,18 +15,18 @@ sql = sqlpuzzle.select('id', 'name')
 sql.from_('table')
 sql.columns(('first_name', 'firstName'))  # tuple is for AS
 sql.from_('table2')
-print sql
+print(sql)
 # output:
 # SELECT `id`, `name`, `first_name` AS "firstName" FROM `table`, `table2`
 
 
-# you can also use dictionary for AS in columns and tables
+# You can also use dictionary for AS in columns and tables.
 sql = sqlpuzzle.select({'user_id': 'userId'}).from_({'some_table': 'someTable'})
-print sql
+print(sql)
 # output:
 # SELECT `user_id` AS "userId" FROM `some_table` AS `someTable`
 
-# named parameter also possible
+# Named parameter is also possible.
 sql = sqlpuzzle.select(user_id='userId').from_(some_table='someTable')
-print sql
-# same output as before
+print(sql)
+# Same output as before.

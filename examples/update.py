@@ -11,22 +11,22 @@ sql = sqlpuzzle.update('table')
 sql.set(name='Harry')
 
 try:
-    print sql
+    print(sql)
 except sqlpuzzle.exceptions.ConfirmUpdateAllException:
-    pass  # update all records is not enabled by default
+    pass  # Update all records is not enabled by default.
 
 sql.allow_update_all()
-print sql
+print(sql)
 # output: UPDATE `table` SET `name` = "Harry"
 
 try:
     sql.forbid_update_all()
-    print sql
+    print(sql)
 except sqlpuzzle.exceptions.ConfirmUpdateAllException:
-    pass  # protected of update all records can be turned on again
+    pass  # Protected of update all records can be turned on again.
 
 sql.where(id=42)
-print sql
+print(sql)
 # output: UPDATE `table` SET `name` = "Harry" WHERE `id` = 42
 
 sql.set({
@@ -42,7 +42,7 @@ values = (
 )
 sql.set(values)
 
-print sql
+print(sql)
 #
 # output:
 # (for better reading splited to more lines)

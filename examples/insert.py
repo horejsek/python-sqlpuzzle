@@ -25,7 +25,7 @@ values = (
 )
 sql.values(values)
 
-print sql
+print(sql)
 #
 # output:
 # (for better reading splited to more lines)
@@ -36,6 +36,6 @@ print sql
 # (12345.67000, "2011-06-15T00:00:00", "alan", "Alan", 21, 1)
 #
 
-print sqlpuzzle.insert_into('table').values(values)
+print(sqlpuzzle.insert_into('table').values(values))
 # output:
 # INSERT INTO `table` (`age`, `loginname`) VALUES (21, "alan")

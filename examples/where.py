@@ -32,7 +32,7 @@ sql.where(conditions)
 
 sql.where(sqlpuzzle.Q(answer=42) | sqlpuzzle.Q(answer=24))
 
-print sql
+print(sql)
 
 #
 # output:
