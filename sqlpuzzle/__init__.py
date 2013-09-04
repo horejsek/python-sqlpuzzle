@@ -8,12 +8,15 @@ Library for ease of writing SQL queries. For now only for database MySQL.
 Version: %s
 """ % VERSION
 
+from ._backends import set_backend
 from ._common import CustomSql
 from ._queryparts.functions import Avg, Concat, Convert, Count, GroupConcat, Max, Min, Sum
 from ._queryparts.conditions import Conditions
 from ._queries import Delete, Insert, Select, Update
 
 __all__ = (
+    'configure',
+
     'select'
     'select_from',
     'insert',
@@ -38,6 +41,16 @@ __all__ = (
     'group_concat',
     'convert',
 )
+
+
+def configure(database):
+    """
+    Configure used database, so sqlpuzzle can generate queries which are needed.
+    For now there is only support of MySQL and PostgreSQL.
+    configure('mysql')
+    configure('postgresql')
+    """
+    set_backend(database)
 
 
 def select(*args, **kwds):
