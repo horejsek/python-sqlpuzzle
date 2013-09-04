@@ -11,9 +11,9 @@ except NameError:
 
 import types
 import datetime
-import re
 
 from sqlpuzzle.exceptions import InvalidArgumentException
+from sqlpuzzle._backends import get_backend
 from .object import Object
 from .utils import force_text, is_sql_instance
 
@@ -65,6 +65,8 @@ class SqlValue(Object):
     def _get_convert_method(self):
         """Get right method to convert of the value."""
         for type_, method in six.iteritems(self._map):
+            if type(self.value) is bool and type_ is not bool:
+                continue
             if isinstance(self.value, type_):
                 return method
         if is_sql_instance(self.value):
@@ -76,8 +78,8 @@ class SqlValue(Object):
 
     def _string(self):
         # Sometimes, e.g. in subselect, is needed reference to column instead of self.value.
-        if self.value.strip() and self.value.strip()[0] == '`':
-            return self._back_quotes()
+        if get_backend().is_reference(self.value):
+            return self._reference()
         return six.u("'%s'") % _escape_value(force_text(self.value))
 
     def _integer(self):
@@ -87,7 +89,7 @@ class SqlValue(Object):
         return six.u('%.5f') % self.value
 
     def _boolean(self):
-        return six.u('%d') % self.value
+        return get_backend().boolean(self.value)
 
     def _date(self):
         return self._datetime()
@@ -112,19 +114,8 @@ class SqlValue(Object):
         except Exception:
             return six.u('<undefined value>')
 
-    def _back_quotes(self):
-        """
-        Convert as reference on column.
-        "table" => "`table`"
-        "table.column" => "`table`.`column`"
-        "db.table.column" => "`db`.`table`.`column`"
-        "table.`col.umn`" => "`table`.`col.umn`"
-        "`table`.`col.umn`" => "`table`.`col.umn`"
-        """
-        value = force_text(self.value)
-        parts = re.split('`([^`]+)`|\.', value)
-        parts = (six.u('`%s`') % i if i != '*' else i for i in parts if i)
-        return six.u('.').join(parts)
+    def _reference(self):
+        return get_backend().reference(self.value)
 
 
 class SqlReference(SqlValue):
@@ -133,8 +124,8 @@ class SqlReference(SqlValue):
     def __init__(self, value):
         from sqlpuzzle._queries import Select, Union
         self._map = {
-            str: self._back_quotes,
-            six.text_type: self._back_quotes,
+            str: self._reference,
+            six.text_type: self._reference,
             int: self._integer,
             Select: self._subselect,
             Union: self._subselect,
