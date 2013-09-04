@@ -13,6 +13,7 @@ setup(
     name='sqlpuzzle',
     packages=[
         'sqlpuzzle',
+        'sqlpuzzle/_backends',
         'sqlpuzzle/_common',
         'sqlpuzzle/_queries',
         'sqlpuzzle/_queryparts',
