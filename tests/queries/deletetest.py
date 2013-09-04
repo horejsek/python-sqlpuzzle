@@ -14,7 +14,7 @@ class BaseTest(DeleteTest):
     def test_simply(self):
         self.delete.from_('user')
         self.delete.allow_delete_all()
-        self.assertEqual(str(self.delete), 'DELETE FROM `user`')
+        self.assertEqual(str(self.delete), 'DELETE FROM "user"')
 
 
 class MoreReferencesTest(DeleteTest):
@@ -24,15 +24,15 @@ class MoreReferencesTest(DeleteTest):
 
     def test_more_tables(self):
         self.delete.delete('user').from_('user', 'user2')
-        self.assertEqual(str(self.delete), 'DELETE `user` FROM `user`, `user2`')
+        self.assertEqual(str(self.delete), 'DELETE "user" FROM "user", "user2"')
 
     def test_more_tables_with_alias(self):
         self.delete.delete('u').from_({'user': 'u', 'user2': 'u2'})
-        self.assertEqual(str(self.delete), 'DELETE `u` FROM `user2` AS `u2`, `user` AS `u`')
+        self.assertEqual(str(self.delete), 'DELETE "u" FROM "user2" AS "u2", "user" AS "u"')
 
     def test_join(self):
         self.delete.delete('user').from_('user').left_join('role').on('role.id', 'user.role_id').where('role.name', ('a', 'b'))
-        self.assertEqual(str(self.delete), 'DELETE `user` FROM `user` LEFT JOIN `role` ON `role`.`id` = `user`.`role_id` WHERE `role`.`name` IN (\'a\', \'b\')')
+        self.assertEqual(str(self.delete), 'DELETE "user" FROM "user" LEFT JOIN "role" ON "role"."id" = "user"."role_id" WHERE "role"."name" IN (\'a\', \'b\')')
 
 
 class WhereTest(DeleteTest):
@@ -46,7 +46,7 @@ class WhereTest(DeleteTest):
         self.delete.where((
             ('enabled', 1),
         ))
-        self.assertEqual(str(self.delete), 'DELETE FROM `user` WHERE `age` = 42 AND `name` LIKE \'Harry\' AND `sex` = \'male\' AND `enabled` = 1')
+        self.assertEqual(str(self.delete), 'DELETE FROM "user" WHERE "age" = 42 AND "name" LIKE \'Harry\' AND "sex" = \'male\' AND "enabled" = 1')
 
 
 class CopyTest(WhereTest):
@@ -54,8 +54,8 @@ class CopyTest(WhereTest):
         self.delete.from_('user').where(id=42)
         copy = self.delete.copy()
         self.delete.where(name='Harry')
-        self.assertEqual(str(copy), 'DELETE FROM `user` WHERE `id` = 42')
-        self.assertEqual(str(self.delete), 'DELETE FROM `user` WHERE `id` = 42 AND `name` = \'Harry\'')
+        self.assertEqual(str(copy), 'DELETE FROM "user" WHERE "id" = 42')
+        self.assertEqual(str(self.delete), 'DELETE FROM "user" WHERE "id" = 42 AND "name" = \'Harry\'')
 
     def test_equals(self):
         self.delete.from_('user').where(id=42)

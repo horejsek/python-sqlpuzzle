@@ -16,7 +16,7 @@ class BaseTest(UpdateTest):
         self.update.table('user')
         self.update.set(name='Alan')
         self.update.allow_update_all()
-        self.assertEqual(str(self.update), 'UPDATE `user` SET `name` = \'Alan\'')
+        self.assertEqual(str(self.update), 'UPDATE "user" SET "name" = \'Alan\'')
 
 
 class WhereTest(UpdateTest):
@@ -31,7 +31,7 @@ class WhereTest(UpdateTest):
         self.update.where((
             ('enabled', 1),
         ))
-        self.assertEqual(str(self.update), 'UPDATE `user` SET `name` = \'Alan\' WHERE `age` = 42 AND `name` LIKE \'Harry\' AND `sex` = \'male\' AND `enabled` = 1')
+        self.assertEqual(str(self.update), 'UPDATE "user" SET "name" = \'Alan\' WHERE "age" = 42 AND "name" LIKE \'Harry\' AND "sex" = \'male\' AND "enabled" = 1')
 
 
 class CopyTest(UpdateTest):
@@ -39,8 +39,8 @@ class CopyTest(UpdateTest):
         self.update.table('user').set(name='Alan').where(id=42)
         copy = self.update.copy()
         self.update.set(age=24)
-        self.assertEqual(str(copy), 'UPDATE `user` SET `name` = \'Alan\' WHERE `id` = 42')
-        self.assertEqual(str(self.update), 'UPDATE `user` SET `name` = \'Alan\', `age` = 24 WHERE `id` = 42')
+        self.assertEqual(str(copy), 'UPDATE "user" SET "name" = \'Alan\' WHERE "id" = 42')
+        self.assertEqual(str(self.update), 'UPDATE "user" SET "name" = \'Alan\', "age" = 24 WHERE "id" = 42')
 
     def test_equals(self):
         self.update.table('user').set(name='Alan').where(id=42)

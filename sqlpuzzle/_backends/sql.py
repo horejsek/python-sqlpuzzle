@@ -19,7 +19,7 @@ class SqlBackend(object):
         if not isinstance(value, six.string_types):
             return False
         value = value.strip()
-        return value and value[0] == cls._reference_quote
+        return len(value) > 1 and value[0] == cls._reference_quote
 
     @classmethod
     def reference(cls, value):

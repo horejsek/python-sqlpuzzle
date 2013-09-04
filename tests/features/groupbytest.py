@@ -23,19 +23,19 @@ class BaseTest(GroupByTest):
 
     def test_simply(self):
         self.group_by.group_by('id')
-        self.assertEqual(str(self.group_by), 'GROUP BY `id`')
+        self.assertEqual(str(self.group_by), 'GROUP BY "id"')
 
     def test_more_columns(self):
         self.group_by.group_by('id', ['name', 'desc'])
-        self.assertEqual(str(self.group_by), 'GROUP BY `id`, `name` DESC')
+        self.assertEqual(str(self.group_by), 'GROUP BY "id", "name" DESC')
 
     def test_asc(self):
         self.group_by.group_by(['name', 'asc'])
-        self.assertEqual(str(self.group_by), 'GROUP BY `name`')
+        self.assertEqual(str(self.group_by), 'GROUP BY "name"')
 
     def test_desc(self):
         self.group_by.group_by(['name', 'desc'])
-        self.assertEqual(str(self.group_by), 'GROUP BY `name` DESC')
+        self.assertEqual(str(self.group_by), 'GROUP BY "name" DESC')
 
     def test_order_by_number(self):
         self.group_by.group_by(1)
@@ -43,15 +43,15 @@ class BaseTest(GroupByTest):
 
     def test_by_dictionary(self):
         self.group_by.group_by({'id': 'ASC', 'name': 'DESC'})
-        self.assertEqual(str(self.group_by), 'GROUP BY `id`, `name` DESC')
+        self.assertEqual(str(self.group_by), 'GROUP BY "id", "name" DESC')
 
     def test_by_kwds(self):
         self.group_by.group_by(id='ASC', name='DESC')
-        self.assertEqual(str(self.group_by), 'GROUP BY `id`, `name` DESC')
+        self.assertEqual(str(self.group_by), 'GROUP BY "id", "name" DESC')
 
     def test_str(self):
         self.group_by.group_by('ščřž')
-        self.assertEqual(str(self.group_by), 'GROUP BY `ščřž`')
+        self.assertEqual(str(self.group_by), 'GROUP BY "ščřž"')
 
     def test_unicode(self):
         if six.PY3:
@@ -59,27 +59,27 @@ class BaseTest(GroupByTest):
         else:
             name = unicode('ščřž', 'utf-8')
         self.group_by.group_by(name)
-        self.assertEqual(str(self.group_by), 'GROUP BY `ščřž`')
+        self.assertEqual(str(self.group_by), 'GROUP BY "ščřž"')
 
 
 class BackQuotesTest(GroupByTest):
     def test_column_name_as_table_and_column(self):
         self.group_by.group_by('table.column')
-        self.assertEqual(str(self.group_by), 'GROUP BY `table`.`column`')
+        self.assertEqual(str(self.group_by), 'GROUP BY "table"."column"')
 
     def test_column_name_as_table_and_column_with_dot_in_name(self):
-        self.group_by.group_by('table.`column.`')
-        self.assertEqual(str(self.group_by), 'GROUP BY `table`.`column.`')
+        self.group_by.group_by('table."column."')
+        self.assertEqual(str(self.group_by), 'GROUP BY "table"."column."')
 
 
 class GroupingTest(GroupByTest):
     def test_more_same_columns_print_as_one(self):
         self.group_by.group_by('col', 'col')
-        self.assertEqual(str(self.group_by), 'GROUP BY `col`')
+        self.assertEqual(str(self.group_by), 'GROUP BY "col"')
 
     def test_more_same_columns_with_diff_asc_print_as_one(self):
         self.group_by.group_by('col', ('col', 'DESC'))
-        self.assertEqual(str(self.group_by), 'GROUP BY `col` DESC')
+        self.assertEqual(str(self.group_by), 'GROUP BY "col" DESC')
 
 
 class CopyTest(GroupByTest):
@@ -87,8 +87,8 @@ class CopyTest(GroupByTest):
         self.group_by.group_by('id', 'name')
         copy = self.group_by.copy()
         self.group_by.group_by('address')
-        self.assertEqual(str(copy), 'GROUP BY `id`, `name`')
-        self.assertEqual(str(self.group_by), 'GROUP BY `id`, `name`, `address`')
+        self.assertEqual(str(copy), 'GROUP BY "id", "name"')
+        self.assertEqual(str(self.group_by), 'GROUP BY "id", "name", "address"')
 
     def test_equals(self):
         self.group_by.group_by('id', 'name')

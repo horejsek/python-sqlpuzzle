@@ -11,10 +11,10 @@ from sqlpuzzle._common import SqlValue, SqlReference
 
 class SqlValueTest(unittest.TestCase):
     def test_string(self):
-        self.assertEqual(str(SqlValue('Hello World!')), "'Hello World!'")
+        self.assertEqual(str(SqlValue('Hello World!')), '\'Hello World!\'')
 
     def test_unicode(self):
-        self.assertEqual(str(SqlValue(six.u('Hello World!'))), "'Hello World!'")
+        self.assertEqual(str(SqlValue(six.u('Hello World!'))), '\'Hello World!\'')
 
     def test_integer(self):
         self.assertEqual(str(SqlValue(42)), '42')
@@ -29,25 +29,25 @@ class SqlValueTest(unittest.TestCase):
         self.assertEqual(str(SqlValue(True)), '1')
 
     def test_date(self):
-        self.assertEqual(str(SqlValue(datetime.date(2011, 5, 25))), "'2011-05-25'")
+        self.assertEqual(str(SqlValue(datetime.date(2011, 5, 25))), '\'2011-05-25\'')
 
     def test_datetime(self):
-        self.assertEqual(str(SqlValue(datetime.datetime(2011, 5, 25, 19, 33, 20))), "'2011-05-25T19:33:20'")
+        self.assertEqual(str(SqlValue(datetime.datetime(2011, 5, 25, 19, 33, 20))), '\'2011-05-25T19:33:20\'')
 
     def test_list_with_string(self):
         self.assertEqual(str(SqlValue(['a', 'b', 'c'])), "('a', 'b', 'c')")
 
     def test_list_with_integer(self):
-        self.assertEqual(str(SqlValue([12,23,34])), '(12, 23, 34)')
+        self.assertEqual(str(SqlValue([12, 23, 34])), '(12, 23, 34)')
 
     def test_empty_list(self):
         self.assertRaises(sqlpuzzle.exceptions.InvalidArgumentException, str, SqlValue([]))
 
-    def test_tuple_with_integer(self):
+    def test_tuple_with_string(self):
         self.assertEqual(str(SqlValue(('a', 'b', 'c'))), "('a', 'b', 'c')")
 
     def test_tuple_with_integer(self):
-        self.assertEqual(str(SqlValue((12,23,34))), '(12, 23, 34)')
+        self.assertEqual(str(SqlValue((12, 23, 34))), '(12, 23, 34)')
 
     def test_empty_tuple(self):
         self.assertRaises(sqlpuzzle.exceptions.InvalidArgumentException, str, SqlValue(()))
@@ -75,25 +75,25 @@ class SqlValueTest(unittest.TestCase):
 
     def test_subselect(self):
         select = sqlpuzzle.select_from('table')
-        self.assertEqual(str(SqlValue(select)), '(SELECT * FROM `table`)')
+        self.assertEqual(str(SqlValue(select)), '(SELECT * FROM "table")')
 
 
 class SqlReferenceTest(unittest.TestCase):
     def test_string(self):
-        self.assertEqual(str(SqlReference('test')), '`test`')
+        self.assertEqual(str(SqlReference('test')), '"test"')
 
     def test_unicode(self):
-        self.assertEqual(str(SqlReference(six.u('test'))), '`test`')
+        self.assertEqual(str(SqlReference(six.u('test'))), '"test"')
 
     def test_subselect(self):
         select = sqlpuzzle.select_from('table')
-        self.assertEqual(str(SqlReference(select)), '(SELECT * FROM `table`)')
+        self.assertEqual(str(SqlReference(select)), '(SELECT * FROM "table")')
 
     def test_table_column(self):
-        self.assertEqual(str(SqlReference('table.column')), '`table`.`column`')
+        self.assertEqual(str(SqlReference('table.column')), '"table"."column"')
 
     def test_database_table_column(self):
-        self.assertEqual(str(SqlReference('db.table.column')), '`db`.`table`.`column`')
+        self.assertEqual(str(SqlReference('db.table.column')), '"db"."table"."column"')
 
 
 class SecurityTest(unittest.TestCase):

@@ -23,19 +23,19 @@ class BaseTest(OrderByTest):
 
     def test_simply(self):
         self.order_by.order_by('id')
-        self.assertEqual(str(self.order_by), 'ORDER BY `id`')
+        self.assertEqual(str(self.order_by), 'ORDER BY "id"')
 
     def test_more_columns(self):
         self.order_by.order_by('id', ['name', 'desc'])
-        self.assertEqual(str(self.order_by), 'ORDER BY `id`, `name` DESC')
+        self.assertEqual(str(self.order_by), 'ORDER BY "id", "name" DESC')
 
     def test_asc(self):
         self.order_by.order_by(['name', 'asc'])
-        self.assertEqual(str(self.order_by), 'ORDER BY `name`')
+        self.assertEqual(str(self.order_by), 'ORDER BY "name"')
 
     def test_desc(self):
         self.order_by.order_by(['name', 'desc'])
-        self.assertEqual(str(self.order_by), 'ORDER BY `name` DESC')
+        self.assertEqual(str(self.order_by), 'ORDER BY "name" DESC')
 
     def test_order_by_number(self):
         self.order_by.order_by(1)
@@ -43,15 +43,15 @@ class BaseTest(OrderByTest):
 
     def test_by_dictionary(self):
         self.order_by.order_by({'id': 'ASC', 'name': 'DESC'})
-        self.assertEqual(str(self.order_by), 'ORDER BY `id`, `name` DESC')
+        self.assertEqual(str(self.order_by), 'ORDER BY "id", "name" DESC')
 
     def test_by_kwds(self):
         self.order_by.order_by(id='ASC', name='DESC')
-        self.assertEqual(str(self.order_by), 'ORDER BY `id`, `name` DESC')
+        self.assertEqual(str(self.order_by), 'ORDER BY "id", "name" DESC')
 
     def test_str(self):
         self.order_by.order_by('ščřž')
-        self.assertEqual(str(self.order_by), 'ORDER BY `ščřž`')
+        self.assertEqual(str(self.order_by), 'ORDER BY "ščřž"')
 
     def test_unicode(self):
         if six.PY3:
@@ -59,27 +59,27 @@ class BaseTest(OrderByTest):
         else:
             name = unicode('ščřž', 'utf-8')
         self.order_by.order_by(name)
-        self.assertEqual(str(self.order_by), 'ORDER BY `ščřž`')
+        self.assertEqual(str(self.order_by), 'ORDER BY "ščřž"')
 
 
 class BackQuotesTest(OrderByTest):
     def test_column_name_as_table_and_column(self):
         self.order_by.order_by('table.column')
-        self.assertEqual(str(self.order_by), 'ORDER BY `table`.`column`')
+        self.assertEqual(str(self.order_by), 'ORDER BY "table"."column"')
 
     def test_column_name_as_table_and_column_with_dot_in_name(self):
-        self.order_by.order_by('table.`column.`')
-        self.assertEqual(str(self.order_by), 'ORDER BY `table`.`column.`')
+        self.order_by.order_by('table."column."')
+        self.assertEqual(str(self.order_by), 'ORDER BY "table"."column."')
 
 
 class GroupingTest(OrderByTest):
     def test_more_same_columns_print_as_one(self):
         self.order_by.order_by('col', 'col')
-        self.assertEqual(str(self.order_by), 'ORDER BY `col`')
+        self.assertEqual(str(self.order_by), 'ORDER BY "col"')
 
     def test_more_same_columns_with_diff_asc_print_as_one(self):
         self.order_by.order_by('col', ('col', 'DESC'))
-        self.assertEqual(str(self.order_by), 'ORDER BY `col` DESC')
+        self.assertEqual(str(self.order_by), 'ORDER BY "col" DESC')
 
 
 class CopyTest(OrderByTest):
@@ -87,8 +87,8 @@ class CopyTest(OrderByTest):
         self.order_by.order_by('name')
         copy = self.order_by.copy()
         self.order_by.order_by('surname')
-        self.assertEqual(str(copy), 'ORDER BY `name`')
-        self.assertEqual(str(self.order_by), 'ORDER BY `name`, `surname`')
+        self.assertEqual(str(copy), 'ORDER BY "name"')
+        self.assertEqual(str(self.order_by), 'ORDER BY "name", "surname"')
 
     def test_equals(self):
         self.order_by.order_by('name')
