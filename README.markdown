@@ -22,6 +22,8 @@ More examples in directory examples.
 
     >>> import sqlpuzzle
 
+    >>> sqlpuzzle.configure('mysql')
+
     >>> print sqlpuzzle.select_from('table')
     SELECT * FROM `table`
 
