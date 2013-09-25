@@ -1,3 +1,18 @@
+python-sqlpuzzle (1.0.0) UNRELEASED; urgency=low
+
+  * Big refactoring (PEP8 and so)
+  * Changed license to PSF
+  * Support of Python 3
+  * Support of MySQL and PostgreSQL
+  * Q object for complex conditions
+  * Unicode
+  * Values enclosed by single quotes ('value' instead of "value")
+  * Select for update
+  * Possibility to specify offset without limit
+  * Possibility to turn off select options
+
+ -- Michal Horejsek <horejsekmichal@gmail.com>  Tue, 25 Sep 2013 15:46:50 +0200
+
 python-sqlpuzzle (0.20.4) UNRELEASED; urgency=low
 
   * Fix spelling of LESS_THAN_OR_EQUAL_TO.
