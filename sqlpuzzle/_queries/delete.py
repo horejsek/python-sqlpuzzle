@@ -124,3 +124,13 @@ class Delete(Query):
         """
         self._where.where(*args, **kwds)
         return self
+
+    # Backward compatibility.
+
+    allowDeleteAll = allow_delete_all
+    forbidDeleteAll = forbid_delete_all
+    fromTable = from_table
+    fromTables = from_tables
+    innerJoin = inner_join
+    leftJoin = left_join
+    rightJoin = right_join

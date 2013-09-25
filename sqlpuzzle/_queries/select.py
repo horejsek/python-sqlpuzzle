@@ -240,3 +240,26 @@ class Select(Query):
     def for_update(self, allow=True):
         self._select_for_update.for_update(allow)
         return self
+
+    # Backward compatibility.
+
+    fromTable = from_table
+    fromTables = from_tables
+    innerJoin = inner_join
+    leftJoin = left_join
+    rightJoin = right_join
+    groupBy = group_by
+    orderBy = order_by
+    intoOutfile = into_outfile
+    fieldsTerminatedBy = fields_terminated_by
+    linesTerminatedBy = lines_terminated_by
+    optionallyEnclosedBy = optionally_enclosed_by
+    sqlCache = sql_cache
+    sqlNoCache = sql_no_cache
+    sqlSmallResult = sql_small_result
+    sqlBigResult = sql_big_result
+    sqlBufferResult = sql_buffer_result
+    sqlCalcFoundRows = sql_calc_found_rows
+    straightJoin = straight_join
+    highPriority = high_priority
+    forUpdate = for_update

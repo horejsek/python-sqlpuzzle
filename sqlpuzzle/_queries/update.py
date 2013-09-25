@@ -63,3 +63,8 @@ class Update(Query):
         """
         self._where.where(*args, **kwds)
         return self
+
+    # Backward compatibility.
+
+    allowUpdateAll = allow_update_all
+    forbidUpdateAll = forbid_update_all
