@@ -28,7 +28,7 @@ class MoreReferencesTest(DeleteTest):
 
     def test_more_tables_with_alias(self):
         self.delete.delete('u').from_({'user': 'u', 'user2': 'u2'})
-        self.assertEqual(str(self.delete), 'DELETE "u" FROM "user2" AS "u2", "user" AS "u"')
+        self.assertEqual(str(self.delete), 'DELETE "u" FROM "user" AS "u", "user2" AS "u2"')
 
     def test_join(self):
         self.delete.delete('user').from_('user').left_join('role').on('role.id', 'user.role_id').where('role.name', ('a', 'b'))

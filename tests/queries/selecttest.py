@@ -250,7 +250,7 @@ class SelectOptionsTest(SelectTest):
 
     def test_more_options(self):
         self.select.from_('table').distinct().sql_calc_found_rows().sql_no_cache()
-        self.assertEqual(str(self.select), 'SELECT SQL_CALC_FOUND_ROWS SQL_NO_CACHE DISTINCT * FROM "table"')
+        self.assertEqual(str(self.select), 'SELECT DISTINCT SQL_CALC_FOUND_ROWS SQL_NO_CACHE * FROM "table"')
 
     def test_select_for_update(self):
         self.select.from_('table').for_update()

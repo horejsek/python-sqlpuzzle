@@ -121,7 +121,7 @@ class Parser(object):
             self._parse_list(self.input_data.args)
 
     def _parse_dictionary(self, dictionary):
-        for item in six.iteritems(dictionary):
+        for item in sorted(six.iteritems(dictionary)):
             self._parse_item(item)
 
     def _parse_list(self, list_):

@@ -53,11 +53,11 @@ class SelectOptions(Object):
             self._options[option_key] = 'off'
 
     def __unicode__(self):
-        return six.u(' ').join(
+        return six.u(' ').join(sorted(
             self._definition_of_options[key][val]
             for key, val in six.iteritems(self._options)
             if val != 'off'
-        )
+        ))
 
     def __eq__(self, other):
         return (
