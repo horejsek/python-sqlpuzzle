@@ -1,4 +1,4 @@
-# sqlpuzzle
+# sqlpuzzle [![Build Status](https://travis-ci.org/horejsek/python-sqlpuzzle.png?branch=master)](https://travis-ci.org/horejsek/python-sqlpuzzle)
 
 Python library for ease of writing SQL queries. For now only for database MySQL & PostgreSQL.
 
