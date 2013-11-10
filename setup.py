@@ -1,16 +1,16 @@
 #!/usr/bin/env python
-#
-# sqlpuzzle
-# Michal Horejsek <horejsekmichal@gmail.com>
-# https://github.com/horejsek/python-sqlpuzzle
-#
 
-from distutils.core import setup
+try:
+    from setuptools import setup
+except ImportError:
+    from distutils.core import setup
+from pip.req import parse_requirements
 
 from sqlpuzzle import VERSION
 
 setup(
     name='sqlpuzzle',
+    version=VERSION,
     packages=[
         'sqlpuzzle',
         'sqlpuzzle/_backends',
@@ -18,12 +18,15 @@ setup(
         'sqlpuzzle/_queries',
         'sqlpuzzle/_queryparts',
     ],
-    version=VERSION,
+
+    install_requires=[str(ir.req) for ir in parse_requirements('requirements.txt')],
+
     url='https://github.com/horejsek/python-sqlpuzzle',
-    description='Python library for writing SQL queries.',
     author='Michal Horejsek',
     author_email='horejsekmichal@gmail.com',
+    description='Python library for writing SQL queries.',
     license='PSF',
+
     classifiers=[
         'Programming Language :: Python',
         'Programming Language :: Python :: 2',
