@@ -1,3 +1,10 @@
+python-sqlpuzzle (1.0.1) UNRELEASED; urgency=low
+
+  * Support of decimal
+  * Sort dictionaries by key
+
+ -- Michal Horejsek <horejsekmichal@gmail.com>  Tue, 15 Nov 2013 19:51:20 +0200
+
 python-sqlpuzzle (1.0.0) UNRELEASED; urgency=low
 
   * Big refactoring (PEP8 and so)
