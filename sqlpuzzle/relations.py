@@ -3,8 +3,9 @@
 import six
 from six.moves import xrange
 
-import types
 import datetime
+import decimal
+import types
 
 from sqlpuzzle._common.object import Object
 from sqlpuzzle._common.utils import force_text, is_sql_instance
@@ -62,7 +63,7 @@ class _RelationValue(Object):
 
 class EQ(_RelationValue):
     _string_representation = '='
-    _allowed_types = six.string_types + six.integer_types + (float, bool, datetime.date)
+    _allowed_types = six.string_types + six.integer_types + (float, decimal.Decimal, bool, datetime.date)
 EQUAL_TO = EQ
 
 
@@ -73,7 +74,7 @@ NOT_EQUAL_TO = NE
 
 class GT(_RelationValue):
     _string_representation = '>'
-    _allowed_types = six.string_types + six.integer_types + (float, datetime.date)
+    _allowed_types = six.string_types + six.integer_types + (float, decimal.Decimal, datetime.date)
 GRATHER_THAN = GT
 
 

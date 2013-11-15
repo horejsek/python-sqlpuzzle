@@ -9,8 +9,9 @@ try:
 except NameError:
     long = int
 
-import types
 import datetime
+import decimal
+import types
 
 from sqlpuzzle.exceptions import InvalidArgumentException
 from sqlpuzzle._backends import get_backend
@@ -42,6 +43,7 @@ class SqlValue(Object):
             int: self._integer,
             long: self._integer,
             float: self._float,
+            decimal.Decimal: self._float,
             bool: self._boolean,
             datetime.date: self._date,
             datetime.datetime: self._datetime,

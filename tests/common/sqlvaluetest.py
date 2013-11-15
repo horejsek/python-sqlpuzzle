@@ -3,6 +3,7 @@ import six
 from six.moves import xrange
 
 import datetime
+import decimal
 import unittest
 
 import sqlpuzzle
@@ -24,6 +25,9 @@ class SqlValueTest(unittest.TestCase):
 
     def test_float(self):
         self.assertEqual(str(SqlValue(23.456)), '23.45600')
+
+    def test_decimal(self):
+        self.assertEqual(str(SqlValue(decimal.Decimal('23.456'))), '23.45600')
 
     def test_boolean(self):
         self.assertEqual(str(SqlValue(True)), '1')

@@ -5,6 +5,7 @@ from __future__ import absolute_import
 import six
 
 import datetime
+import decimal
 
 from sqlpuzzle._common import SqlValue, SqlReference, check_type_decorator, parse_args
 from .queryparts import QueryPart, QueryParts, append_custom_sql_decorator
@@ -43,7 +44,7 @@ class Value(QueryPart):
         return self._value
 
     @value.setter
-    @check_type_decorator(six.string_types + six.integer_types + (type(None), float, bool, datetime.date))
+    @check_type_decorator(six.string_types + six.integer_types + (type(None), float, decimal.Decimal, bool, datetime.date))
     def value(self, value):
         self._value = value
 

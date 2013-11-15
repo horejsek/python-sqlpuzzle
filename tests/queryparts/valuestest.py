@@ -2,6 +2,7 @@
 
 import six
 
+import decimal
 import unittest
 
 import sqlpuzzle
@@ -84,6 +85,10 @@ class AllowedValuesTest(ValuesTest):
 
     def test_value_as_float(self):
         self.values.set('col', 42.1)
+        self.assertEqual(str(self.values), '"col" = 42.10000')
+
+    def test_value_as_fdecimal(self):
+        self.values.set('col', decimal.Decimal('42.1'))
         self.assertEqual(str(self.values), '"col" = 42.10000')
 
     def test_value_as_boolean(self):

@@ -9,8 +9,9 @@ try:
 except NameError:
     long = int
 
-import types
 import datetime
+import decimal
+import types
 
 from sqlpuzzle._common import Object, SqlValue, SqlReference, check_type_decorator, parse_args
 from .queryparts import QueryPart, QueryParts, append_custom_sql_decorator
@@ -41,6 +42,7 @@ class Condition(BinaryOperationMixin, QueryPart):
         int: relations.EQ,
         long: relations.EQ,
         float: relations.EQ,
+        decimal.Decimal: relations.EQ,
         bool: relations.EQ,
         list: relations.IN,
         tuple: relations.IN,
@@ -101,7 +103,7 @@ class Condition(BinaryOperationMixin, QueryPart):
 
     @value.setter
     @check_type_decorator(six.string_types + six.integer_types + (
-        float, bool, list, tuple, xrange, types.GeneratorType, datetime.date, datetime.datetime
+        float, decimal.Decimal, bool, list, tuple, xrange, types.GeneratorType, datetime.date, datetime.datetime,
     ))
     def value(self, value):
         if not isinstance(value, relations._RelationValue):

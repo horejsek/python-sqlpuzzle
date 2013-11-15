@@ -3,6 +3,7 @@
 import six
 from six.moves import xrange
 
+import decimal
 import unittest
 
 import sqlpuzzle
@@ -167,6 +168,10 @@ class AllowedValuesTest(WhereTest):
 
     def test_value_as_float(self):
         self.where.where('col', 42.1)
+        self.assertEqual(str(self.where), 'WHERE "col" = 42.10000')
+
+    def test_value_as_decimal(self):
+        self.where.where('col', decimal.Decimal('42.1'))
         self.assertEqual(str(self.where), 'WHERE "col" = 42.10000')
 
     def test_value_as_boolean(self):
