@@ -103,7 +103,8 @@ class Condition(BinaryOperationMixin, QueryPart):
 
     @value.setter
     @check_type_decorator(six.string_types + six.integer_types + (
-        float, decimal.Decimal, bool, list, tuple, xrange, types.GeneratorType, datetime.date, datetime.datetime,
+        type(None), float, decimal.Decimal, bool, list, tuple,
+        xrange, types.GeneratorType, datetime.date, datetime.datetime,
     ))
     def value(self, value):
         if not isinstance(value, relations._RelationValue):

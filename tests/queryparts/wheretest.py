@@ -195,8 +195,12 @@ class AllowedValuesTest(WhereTest):
         self.assertEqual(str(self.where), 'WHERE "id" IN (0, 1, 2)')
 
     def test_value_as_none(self):
-        self.where.where('country', sqlpuzzle.relations.IS_NOT(None))
-        self.assertEqual(str(self.where), 'WHERE "country" IS NOT NULL')
+        self.where.where('col', None)
+        self.assertEqual(str(self.where), 'WHERE "col" IS NULL')
+
+    def test_value_as_not_none(self):
+        self.where.where('col', sqlpuzzle.relations.IS_NOT(None))
+        self.assertEqual(str(self.where), 'WHERE "col" IS NOT NULL')
 
 
 class CopyTest(WhereTest):
