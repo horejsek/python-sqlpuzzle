@@ -17,6 +17,24 @@ class BaseTest(InsertTest):
         self.assertEqual(str(self.insert), 'INSERT INTO "user" ("name") VALUES (\'Alan\')')
 
 
+class PropertiesTest(InsertTest):
+    def test_has_not_tables(self):
+        self.assertFalse(self.insert.has('tables'))
+
+    def test_has_tables(self):
+        self.insert.into('user')
+        self.assertTrue(self.insert.has('tables'))
+        self.assertTrue(self.insert.has('tables', 'user'))
+
+    def test_has_not_values(self):
+        self.assertFalse(self.insert.has('values'))
+
+    def test_has_values(self):
+        self.insert.values(id=1)
+        self.assertTrue(self.insert.has('values'))
+        self.assertTrue(self.insert.has('values', '1'))
+
+
 class OnDuplicateKeyUpdateTest(InsertTest):
     def test_on_duplicate_key_update(self):
         self.insert.into('user')

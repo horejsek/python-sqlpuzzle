@@ -35,6 +35,23 @@ class Select(Query):
         super(Select, self).__init__()
         self.columns(*args, **kwds)
 
+    #  It's here just for shortcut, so you can call just `sql.has('distinct')`
+    #+ instead of `sql.has('select_options', 'distinct')` (programmer does not
+    #+ have to know about internal implementation).
+    def has(self, querypart_name, value=None):
+        """Returns True if `querypart_name` with `value` is set.
+
+        For example you can check if you already used condition by `sql.has('where')`.
+
+        If you want to check for more information, for example if that condition
+        also contain ID, you can do this by `sql.has('where', 'id')`.
+        """
+        if super(Select, self).has(querypart_name, value):
+            return True
+        if not value:
+            return super(Select, self).has('select_options', querypart_name)
+        return False
+
     def __and__(self, other):
         """UNION ALL selects."""
         return Union(self, other, UNION_ALL)

@@ -17,6 +17,24 @@ class BaseTest(DeleteTest):
         self.assertEqual(str(self.delete), 'DELETE FROM "user"')
 
 
+class PropertiesTest(DeleteTest):
+    def test_has_not_references(self):
+        self.assertFalse(self.delete.has('references'))
+
+    def test_has_references(self):
+        self.delete.from_('user')
+        self.assertTrue(self.delete.has('references'))
+        self.assertTrue(self.delete.has('references', 'user'))
+
+    def test_has_not_where(self):
+        self.assertFalse(self.delete.has('where'))
+
+    def test_has_where(self):
+        self.delete.where(id=1)
+        self.assertTrue(self.delete.has('where'))
+        self.assertTrue(self.delete.has('where', 'id'))
+
+
 class MoreReferencesTest(DeleteTest):
     def setUp(self):
         super(MoreReferencesTest, self).setUp()

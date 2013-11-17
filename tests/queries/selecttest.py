@@ -40,6 +40,25 @@ class BaseTest(SelectTest):
         self.assertEqual(str(self.select), 'SELECT * FROM "user" GROUP BY "id"')
 
 
+class PropertiesTest(SelectTest):
+    def test_has_not_where(self):
+        self.assertFalse(self.select.has('where'))
+
+    def test_has_where(self):
+        self.select.where(id=1)
+        self.assertTrue(self.select.has('where'))
+        self.assertTrue(self.select.has('where', 'id'))
+
+    def test_has_not_distinct(self):
+        self.assertFalse(self.select.has('distinct'))
+        self.select.distinctrow()
+        self.assertFalse(self.select.has('distinct'))
+
+    def test_has_distinct(self):
+        self.select.distinct()
+        self.assertTrue(self.select.has('distinct'))
+
+
 class TableTest(SelectTest):
     def test_from(self):
         self.select.from_('table')

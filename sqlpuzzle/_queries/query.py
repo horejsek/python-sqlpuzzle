@@ -42,3 +42,20 @@ class Query(Object):
         This functionality is required for example in joins.
         """
         return id(self)
+
+    def has(self, querypart_name, value=None):
+        """Returns True if `querypart_name` with `value` is set.
+
+        For example you can check if you already used condition by `sql.has('where')`.
+
+        If you want to check for more information, for example if that condition
+        also contain ID, you can do this by `sql.has('where', 'id')`.
+        """
+        querypart = self._queryparts.get(querypart_name)
+        if not querypart:
+            return False
+        if not querypart.is_set():
+            return False
+        if value:
+            return querypart.has(value)
+        return True

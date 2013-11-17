@@ -2,7 +2,8 @@
 
 import six
 
-from sqlpuzzle._common import Object
+from sqlpuzzle._common import Object, force_text
+from sqlpuzzle._queryparts.queryparts import has
 
 __all__ = ('SelectOptions',)
 
@@ -65,6 +66,9 @@ class SelectOptions(Object):
             and len(self._options) == len(other._options)
             and all(bool(so == oo) for so, oo in zip(self._options.values(), other._options.values()))
         )
+
+    def has(self, value):
+        return has(self, force_text(value).upper())
 
     def is_set(self):
         return any(item != 'off' for item in six.itervalues(self._options))

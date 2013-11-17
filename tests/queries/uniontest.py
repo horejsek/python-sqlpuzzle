@@ -12,6 +12,13 @@ class UnionTest(unittest.TestCase):
         self.union = self.select1 | self.select2
 
 
+class PropertiesTest(UnionTest):
+    def test_has_no_property(self):
+        self.assertFalse(self.union.has('tables'))
+        self.assertFalse(self.union.has('values'))
+        self.assertFalse(self.union.has('where'))
+
+
 class BaseTest(UnionTest):
     def test_union(self):
         self.assertEqual(str(self.select1 | self.select2), 'SELECT * FROM "t1" UNION SELECT * FROM "t2"')

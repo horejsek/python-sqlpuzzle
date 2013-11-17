@@ -3,11 +3,12 @@
 import six
 
 from functools import wraps
+import re
 
 from sqlpuzzle._common import Object, force_text, is_sql_instance
 from sqlpuzzle.exceptions import SqlPuzzleException
 
-__all__ = ('QueryPart', 'QueryParts', 'append_custom_sql_decorator')
+__all__ = ('QueryPart', 'QueryParts', 'append_custom_sql_decorator', 'has')
 
 
 def append_custom_sql_decorator(func):
@@ -21,9 +22,20 @@ def append_custom_sql_decorator(func):
     return wrapper
 
 
+def has(part, value):
+    value = force_text(value)
+    #  If I look for example for "distinct", I don't want to say "hey, there is
+    #+ distinct!", if there is actually "distinctrow".
+    res = re.search('([^\w]|^)%s([^\w]|$)' % value, six.text_type(part))
+    return bool(res)
+
+
 class QueryPart(Object):
     def is_set(self):
         return True
+
+    def has(self, value):
+        return has(self, value)
 
 
 class QueryParts(Object):
@@ -59,6 +71,9 @@ class QueryParts(Object):
 
     def is_set(self):
         return bool(self._parts != [] or self._default_query_string)
+
+    def has(self, value):
+        return has(self, value)
 
     def append_unique_part(self, query_part):
         if query_part not in self:
