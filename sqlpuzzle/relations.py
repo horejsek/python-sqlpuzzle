@@ -123,15 +123,6 @@ class IN(_RelationValue):
         super(IN, self).__init__(value)
 
 
-class IN_WITH_NONE(IN):
-    _allowed_types = IN._allowed_types + (None,)
-
-    def __init__(self, *args):
-        if len(args) == 1 and args[0] is None:
-            args = ([],)
-        super(IN_WITH_NONE, self).__init__(*args)
-
-
 class NOT_IN(IN):
     _string_representation = 'NOT IN'
 

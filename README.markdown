@@ -148,7 +148,6 @@ As you can see, if you pass list, it's automatically use by default `IN`. But yo
  * `LIKE`
  * `REGEXP`
  * `IN` (default for list-like variables)
- * `IN_WITH_NONE`
  * `NOT_IN`
  * `IS` (default for `None`)
  * `IS_NOT`

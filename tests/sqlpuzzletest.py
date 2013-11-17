@@ -83,7 +83,6 @@ class RelationTest(unittest.TestCase):
         sqlpuzzle.relations.LIKE(sqlpuzzle.customsql('custom'))
         sqlpuzzle.relations.REGEXP(sqlpuzzle.customsql('custom'))
         sqlpuzzle.relations.IN(sqlpuzzle.customsql('custom'))
-        sqlpuzzle.relations.IN_WITH_NONE(sqlpuzzle.customsql('custom'))
         sqlpuzzle.relations.NOT_IN(sqlpuzzle.customsql('custom'))
         sqlpuzzle.relations.IS(sqlpuzzle.customsql('custom'))
         sqlpuzzle.relations.IS_NOT(sqlpuzzle.customsql('custom'))

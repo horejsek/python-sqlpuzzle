@@ -74,51 +74,51 @@ class BaseTest(WhereTest):
 
 
 class RelationsTest(WhereTest):
-    def testEQ(self):
+    def test_EQ(self):
         self.where.where('col', sqlpuzzle.relations.EQ(12))
         self.assertEqual(str(self.where), 'WHERE "col" = 12')
 
-    def testNE(self):
+    def test_NE(self):
         self.where.where('col', sqlpuzzle.relations.NE(12))
         self.assertEqual(str(self.where), 'WHERE "col" != 12')
 
-    def testGT(self):
+    def test_GT(self):
         self.where.where('col', sqlpuzzle.relations.GT(12))
         self.assertEqual(str(self.where), 'WHERE "col" > 12')
 
-    def testGE(self):
+    def test_GE(self):
         self.where.where('col', sqlpuzzle.relations.GE(12))
         self.assertEqual(str(self.where), 'WHERE "col" >= 12')
 
-    def testLT(self):
+    def test_LT(self):
         self.where.where('col', sqlpuzzle.relations.LT(12))
         self.assertEqual(str(self.where), 'WHERE "col" < 12')
 
-    def testLE(self):
+    def test_LE(self):
         self.where.where('col', sqlpuzzle.relations.LE(12))
         self.assertEqual(str(self.where), 'WHERE "col" <= 12')
 
-    def testLIKE(self):
+    def test_LIKE(self):
         self.where.where('col', sqlpuzzle.relations.LIKE('val'))
         self.assertEqual(str(self.where), 'WHERE "col" LIKE \'val\'')
 
-    def testREGEXP(self):
+    def test_REGEXP(self):
         self.where.where('col', sqlpuzzle.relations.REGEXP('val'))
         self.assertEqual(str(self.where), 'WHERE "col" REGEXP \'val\'')
 
-    def testIN(self):
+    def test_IN(self):
         self.where.where('col', sqlpuzzle.relations.IN(range(3)))
         self.assertEqual(str(self.where), 'WHERE "col" IN (0, 1, 2)')
 
-    def testNOT_IN(self):
+    def test_NOT_IN(self):
         self.where.where('col', sqlpuzzle.relations.NOT_IN(range(3)))
         self.assertEqual(str(self.where), 'WHERE "col" NOT IN (0, 1, 2)')
 
-    def testIS(self):
+    def test_IS(self):
         self.where.where('col', sqlpuzzle.relations.IS(None))
         self.assertEqual(str(self.where), 'WHERE "col" IS NULL')
 
-    def testIS_NOT(self):
+    def test_IS_NOT(self):
         self.where.where('col', sqlpuzzle.relations.IS_NOT(None))
         self.assertEqual(str(self.where), 'WHERE "col" IS NOT NULL')
 
