@@ -42,6 +42,7 @@ class IntoOutfile(QueryPart):
             self._optionally_enclosed_by == other._optionally_enclosed_by
         )
 
+    @property
     def is_set(self):
         return self._into_outfile is not None
 

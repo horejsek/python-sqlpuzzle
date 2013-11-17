@@ -16,11 +16,11 @@ class ValuesTest(unittest.TestCase):
 
 class BaseTest(ValuesTest):
     def test_is_not_set(self):
-        self.assertEqual(self.values.is_set(), False)
+        self.assertEqual(self.values.is_set, False)
 
     def test_is_set(self):
         self.values.set(id=23)
-        self.assertEqual(self.values.is_set(), True)
+        self.assertEqual(self.values.is_set, True)
 
     def test_values_by_tuple(self):
         self.values.set((

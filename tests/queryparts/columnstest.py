@@ -15,11 +15,11 @@ class ColumnsTest(unittest.TestCase):
 
 class BaseTest(ColumnsTest):
     def test_is_not_set(self):
-        self.assertEqual(self.columns.is_set(), True)
+        self.assertEqual(self.columns.is_set, True)
 
     def test_is_set(self):
         self.columns.columns('id')
-        self.assertEqual(self.columns.is_set(), True)
+        self.assertEqual(self.columns.is_set, True)
 
     def test_one_column(self):
         self.columns.columns('id')

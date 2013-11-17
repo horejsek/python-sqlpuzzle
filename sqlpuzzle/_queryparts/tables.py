@@ -88,7 +88,7 @@ class Table(QueryPart):
                 six.u('%s %s%s') % (
                     JOIN_TYPES[join['type']],
                     join['table'],
-                    six.u(' ON %s') % join['ons'] if join['ons'].is_set() else '',
+                    six.u(' ON %s') % join['ons'] if join['ons'].is_set else '',
                 ) for join in self._joins
             )
 

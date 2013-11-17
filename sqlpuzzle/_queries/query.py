@@ -20,7 +20,7 @@ class Query(Object):
     def __unicode__(self):
         context = {}
         for key, querypart in six.iteritems(self._queryparts):
-            is_set = getattr(querypart, 'is_set', lambda: True)()
+            is_set = getattr(querypart, 'is_set', True)
             if is_set:
                 context[key] = ' ' + force_text(querypart)
             else:
@@ -54,7 +54,7 @@ class Query(Object):
         querypart = self._queryparts.get(querypart_name)
         if not querypart:
             return False
-        if not querypart.is_set():
+        if not querypart.is_set:
             return False
         if value:
             return querypart.has(value)

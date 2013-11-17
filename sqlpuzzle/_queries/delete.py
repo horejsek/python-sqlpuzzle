@@ -25,7 +25,7 @@ class Delete(Query):
         self._tables.set(*tables)
 
     def __unicode__(self):
-        if not self._where.is_set() and not self._allow_delete_all:
+        if not self._where.is_set and not self._allow_delete_all:
             raise ConfirmDeleteAllException()
         return super(Delete, self).__unicode__()
 

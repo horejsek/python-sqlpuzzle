@@ -104,7 +104,7 @@ class Concat(Function):
 
     def __init__(self, *expr):
         self._columns = Columns().columns(*expr)
-        if not self._columns.is_set():
+        if not self._columns.is_set:
             raise InvalidArgumentException('You must specify columns for %s.' % self._function_name)
 
     def __unicode__(self):
@@ -131,7 +131,7 @@ class GroupConcat(Concat):
         )
 
     def _str_order_by(self):
-        if self._order_by.is_set():
+        if self._order_by.is_set:
             return six.u(' %s') % self._order_by
         return ''
 

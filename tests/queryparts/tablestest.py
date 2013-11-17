@@ -16,11 +16,11 @@ class TablesTest(unittest.TestCase):
 
 class BaseTest(TablesTest):
     def test_is_not_set(self):
-        self.assertEqual(self.tables.is_set(), False)
+        self.assertEqual(self.tables.is_set, False)
 
     def test_is_set(self):
         self.tables.set('table')
-        self.assertEqual(self.tables.is_set(), True)
+        self.assertEqual(self.tables.is_set, True)
 
     def test_is_simple(self):
         self.tables.set('table')

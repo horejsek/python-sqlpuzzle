@@ -25,7 +25,7 @@ class Update(Query):
         self.table(table)
 
     def __unicode__(self):
-        if not self._where.is_set() and not self._allow_update_all:
+        if not self._where.is_set and not self._allow_update_all:
             raise ConfirmUpdateAllException()
         return super(Update, self).__unicode__()
 

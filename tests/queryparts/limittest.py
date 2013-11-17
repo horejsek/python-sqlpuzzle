@@ -13,11 +13,11 @@ class LimitTest(unittest.TestCase):
 
 class BaseTest(LimitTest):
     def test_is_not_set(self):
-        self.assertEqual(self.limit.is_set(), False)
+        self.assertEqual(self.limit.is_set, False)
 
     def test_is_set(self):
         self.limit.limit(42)
-        self.assertEqual(self.limit.is_set(), True)
+        self.assertEqual(self.limit.is_set, True)
 
     def test_limit(self):
         self.limit.limit(10)

@@ -18,11 +18,11 @@ class WhereTest(unittest.TestCase):
 
 class BaseTest(WhereTest):
     def test_is_not_set(self):
-        self.assertEqual(self.where.is_set(), False)
+        self.assertEqual(self.where.is_set, False)
 
     def test_is_set(self):
         self.where.where(name='Alan')
-        self.assertEqual(self.where.is_set(), True)
+        self.assertEqual(self.where.is_set, True)
 
     def test_where_by_tuple(self):
         self.where.where((

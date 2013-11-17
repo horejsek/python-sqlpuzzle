@@ -15,11 +15,11 @@ class GroupByTest(unittest.TestCase):
 
 class BaseTest(GroupByTest):
     def test_is_not_set(self):
-        self.assertEqual(self.group_by.is_set(), False)
+        self.assertEqual(self.group_by.is_set, False)
 
     def test_is_set(self):
         self.group_by.group_by('id')
-        self.assertEqual(self.group_by.is_set(), True)
+        self.assertEqual(self.group_by.is_set, True)
 
     def test_simply(self):
         self.group_by.group_by('id')

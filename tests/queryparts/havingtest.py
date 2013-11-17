@@ -16,11 +16,11 @@ class HavingTest(unittest.TestCase):
 
 class BaseTest(HavingTest):
     def test_is_not_set(self):
-        self.assertEqual(self.having.is_set(), False)
+        self.assertEqual(self.having.is_set, False)
 
     def test_is_set(self):
         self.having.where(name='Alan')
-        self.assertEqual(self.having.is_set(), True)
+        self.assertEqual(self.having.is_set, True)
 
     def test_where_by_tuple(self):
         self.having.where((

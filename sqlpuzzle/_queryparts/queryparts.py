@@ -31,6 +31,7 @@ def has(part, value):
 
 
 class QueryPart(Object):
+    @property
     def is_set(self):
         return True
 
@@ -69,6 +70,7 @@ class QueryParts(Object):
     def count_of_parts(self):
         return len(self._parts)
 
+    @property
     def is_set(self):
         return bool(self._parts != [] or self._default_query_string)
 

@@ -70,6 +70,7 @@ class SelectOptions(Object):
     def has(self, value):
         return has(self, force_text(value).upper())
 
+    @property
     def is_set(self):
         return any(item != 'off' for item in six.itervalues(self._options))
 
@@ -123,6 +124,7 @@ class SelectForUpdate(Object):
             and self._for_update == other._for_update
         )
 
+    @property
     def is_set(self):
         return self._for_update
 

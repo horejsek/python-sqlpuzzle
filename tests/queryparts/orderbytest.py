@@ -15,11 +15,11 @@ class OrderByTest(unittest.TestCase):
 
 class BaseTest(OrderByTest):
     def test_is_not_set(self):
-        self.assertEqual(self.order_by.is_set(), False)
+        self.assertEqual(self.order_by.is_set, False)
 
     def test_is_set(self):
         self.order_by.order_by('id')
-        self.assertEqual(self.order_by.is_set(), True)
+        self.assertEqual(self.order_by.is_set, True)
 
     def test_simply(self):
         self.order_by.order_by('id')

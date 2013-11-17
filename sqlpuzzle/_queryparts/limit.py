@@ -33,6 +33,7 @@ class Limit(QueryPart):
             self._offset == other._offset
         )
 
+    @property
     def is_set(self):
         return self._limit is not None or self._offset is not None
 
