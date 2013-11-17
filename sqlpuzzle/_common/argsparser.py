@@ -102,12 +102,7 @@ class Parser(object):
         self.output_data = []
 
     def parse(self):
-        if self.input_data.is_dictionary or self.input_data.is_kwds:
-            if not self.options.allow_dict:
-                raise InvalidArgumentException('Dictionary or kwds is disabled.')
-            self._parse_dictionary(self.input_data.dictionary_or_kwds)
-
-        elif (
+        if (
                 self.options.min_items > 1
                 and self.input_data.is_args
                 and self.input_data.count_of_args_is_in_interval(self.options.min_items, self.options.max_items)
@@ -117,8 +112,13 @@ class Parser(object):
         elif self.options.allow_list and self.input_data.is_list:
             self._parse_list(self.input_data.list)
 
-        else:
+        elif not self.input_data.is_dictionary and self.input_data.args:
             self._parse_list(self.input_data.args)
+
+        if self.input_data.is_dictionary or self.input_data.is_kwds:
+            if not self.options.allow_dict:
+                raise InvalidArgumentException('Dictionary or kwds is disabled.')
+            self._parse_dictionary(self.input_data.dictionary_or_kwds)
 
     def _parse_dictionary(self, dictionary):
         for item in sorted(six.iteritems(dictionary)):

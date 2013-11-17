@@ -44,6 +44,10 @@ class BaseTest(ColumnsTest):
         self.columns.columns(id='ID', name='Name')
         self.assertEqual(str(self.columns), '"id" AS "ID", "name" AS "Name"')
 
+    def test_column_by_args_and_kwds(self):
+        self.columns.columns('id', name='Name')
+        self.assertEqual(str(self.columns), '"id", "name" AS "Name"')
+
     def test_str(self):
         self.columns.columns('ščřž')
         self.assertEqual(str(self.columns), '"ščřž"')

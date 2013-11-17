@@ -92,3 +92,8 @@ class OptionAllowListTest(ArgsParserTest):
 
     def test_list(self):
         self.assertEqual(parser({'allow_list': True}, (1, 2, 3)), [(1,), (2,), (3,)])
+
+
+class ArgsAndKwdsTEst(ArgsParserTest):
+    def test(self):
+        self.assertEqual(parser({'allow_dict': True, 'max_items': 2}, 'a', b=2), [('a', None), ('b', 2)])
