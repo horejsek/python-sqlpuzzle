@@ -58,6 +58,10 @@ class PropertiesTest(SelectTest):
         self.select.distinct()
         self.assertTrue(self.select.has('distinct'))
 
+    def test_has_select_for_update(self):
+        self.select.for_update()
+        self.assertTrue(self.select.has('select_for_update'))
+
 
 class TableTest(SelectTest):
     def test_from(self):
