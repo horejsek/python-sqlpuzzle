@@ -62,13 +62,13 @@ def select(*args, **kwds):
     return Select(*args, **kwds)
 
 
-def select_from(*tables):
+def select_from(*args, **kwds):
     """Select. Columns is set to *. Set table(s) by parameter(s).
     select_from('user', 'country', ...)
     select_from(('user', 'asUser'), ('user', 'asParent'))
     select_from({'user': 'asUser', 'user', 'asParent'})
     """
-    return Select().from_(*tables)
+    return Select().from_(*args, **kwds)
 
 
 def insert():

@@ -23,6 +23,10 @@ class SqlPuzzleTest(unittest.TestCase):
         sql = sqlpuzzle.select_from('user')
         self.assertEqual(str(sql), 'SELECT * FROM "user"')
 
+    def test_select_from_as_kwds(self):
+        sql = sqlpuzzle.select_from(user='u')
+        self.assertEqual(str(sql), 'SELECT * FROM "user" AS "u"')
+
     def test_select_from_with_more(self):
         sql = sqlpuzzle.select_from('user', 'country')
         self.assertEqual(str(sql), 'SELECT * FROM "user", "country"')
