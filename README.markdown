@@ -30,9 +30,7 @@ Right now sqlpuzzle support only two databases – MySQL and PostgreSQL. By defa
 
 ```python
 sqlpuzzle.configure('mysql')
-
 # or
-
 sqlpuzzle.configure('postgresql')
 ```
 
@@ -68,7 +66,7 @@ You can also use:
  * `straight_join`
  * `high_priority`
 
-All these methods have one param `allow` by which you can turn off that select option. Not all of them works for every database.
+All these methods have one param `allow` by which you can turn off that select option. Useful when you want in some condition turn it off.
 
 ```python
 sql = sqlpuzzle.select_from('table')
@@ -77,6 +75,8 @@ sql.distinct()
 sql.distinct(allow=False)
 # SELECT * FROM "table"
 ```
+
+Note that not all of them works for every database. For example `SQL_NO_CACHE` is only for MySQL.
 
 #### Columns to select
 
@@ -87,7 +87,7 @@ sql = sqlpuzzle.select('id', 'name').from_('table')
 # SELECT "id", "name" FROM "table"
 ```
 
-Check out method `from_`. There have to be underscore because `from` is keyword.
+Look closer to method `from_`. There have to be underscore because `from` is keyword.
 
 If you need add some columns, you can do that by method `columns`.
 
@@ -96,9 +96,11 @@ sql.columns('email', 'country')
 # SELECT "id", "name", "email", "country" FROM "table"
 ```
 
+How to make aliases is described in own [section](#aliases).
+
 #### Tables
 
-Sometimes we need to select from more tables.
+Sometimes we need to fetch data from more tables. sqlpuzzle supports both cartesian product and joins.
 
 ```python
 sqlpuzzle.select_from('t1', 't2')
@@ -127,7 +129,7 @@ sql.where((sqlpuzzle.Q(age=20) | sqlpuzzle.Q(age=30)) & sqlpuzzle.Q(country='cz'
 # SELECT * FROM "t" WHERE ("age" = 20 OR "age" = 30) AND "country" = 'cz'
 ```
 
-Ok. What about relations. `IN`, `LIKE` and others?
+Ok. What about relations – `IN`, `LIKE` and others?
 
 ```python
 sql.where(id=range(1, 4))
@@ -137,7 +139,9 @@ sql.where(age=sqlpuzzle.relations.GE(21))
 # SELECT * FROM "t" WHERE "age" > 21
 ```
 
-As you can see, if you pass list, it's automatically use by default `IN`. But you can use relation which you want (if it's supported for that type). List of relations:
+As you can see, if you pass list, it automatically use relation `IN` by default. But you can use relation which you want (if it's supported for that type; you can't use for example integer with `IN`).
+
+List of all supported relations:
 
  * `EQ` (and alias `EQUAL_TO`)
  * `NE` (and alias `NOT_EQUAL_TO`)
@@ -154,11 +158,11 @@ As you can see, if you pass list, it's automatically use by default `IN`. But yo
 
 #### `GROUP BY`
 
-Grouping is for syntax same as [ordering](#order-by).
+Grouping is very similar to [ordering](#order-by).
 
 #### `HAVING`
 
-Having is for syntax same as [conditions](#conditions-where).
+Having is very similar to [conditions](#conditions-where).
 
 ```python
 sql.having(id=42)
@@ -235,14 +239,15 @@ You doesn't have to be worried about order of columns or that you always have to
 ```python
 sql = sqlpuzzle.insert_into('table')
 sql.values(a=1)
-sql.values(b="a")
+sql.values(b='a')
 INSERT INTO "table" ("a", "b") VALUES (1, NULL), (NULL, 'a')
 ```
 
 #### `ON DUPLICATE KEY UPDATE`
 
 ```python
-INSERT INTO "t" ("a") VALUES (2) ON DUPLICATE KEY UPDATE "b" = 4
+sqlpuzzle.insert_into('t').values(a=2).on_duplicate_key_update(b=4)
+# INSERT INTO "t" ("a") VALUES (2) ON DUPLICATE KEY UPDATE "b" = 4
 ```
 
 ### Update
@@ -273,7 +278,7 @@ sqlpuzzle.delete_from('table').where(id=1)
 
 #### How to delete all rows?
 
-It's same as for [update](#update), just methods and exception have different name.
+It's same as for [update](#update), just methods and exception have different names.
 
 ```python
 sqlpuzzle.delete_from('t')
@@ -291,16 +296,16 @@ When you have two select query, you can use `|` or `&` to make `UNION` or `UNION
 s1 = sqlpuzzle.select_from('t')
 s2 = sqlpuzzle.select_from('u')
 
-s1 & s2
-# SELECT * FROM "t" UNION ALL SELECT * FROM "u"
-
 s1 | s2
 # SELECT * FROM "t" UNION SELECT * FROM "u"
+
+s1 & s2
+# SELECT * FROM "t" UNION ALL SELECT * FROM "u"
 ```
 
 ### Functions
 
-Databases have some agregate functions. For example `COUNT`. You could use [customsql](#custom-sql), but there is better way.
+Databases have some agregate functions. For example `COUNT`. You could use [customsql](#custom-sql) for it, but there is better way for some common functions.
 
 ```python
 sqlpuzzle.select(sqlpuzzle.count()).from_('users')
@@ -310,7 +315,7 @@ sqlpuzzle.select(sqlpuzzle.avg('age')).from_('users')
 # SELECT AVG(`age`) FROM `users`
 ```
 
-List of functions:
+List of all supported functions:
 
  * `avg` or `avg_distinct`
  * `count`
@@ -323,12 +328,16 @@ List of functions:
 
 #### `GROUP CONCAT`
 
+This function have little bit more methods which you can use.
+
 ```python
 sqlpuzzle.group_contact('name').order_by('name').separator(',')
 # GROUP_CONCAT(`name` ORDER BY `age` SEPARATOR ',')
 ```
 
 #### `CONVERT`
+
+Second parameter of this function have to be some database type. There is no validation, because it's easier to allow everything and keep validation for database.
 
 ```python
 sqlpuzzle.convert('col', 'unsigned')
@@ -348,7 +357,7 @@ You can pass `customsql` everywhere. But be aware – `customsql` does not provi
 
 ### Aliases
 
-Almost everywhere, where aliases makes sense, you can use this:
+Everywhere, where aliases makes sense, you can use this.
 
 ```python
 sqlpuzzle.select('id', ('name', 'users name'), ('age', 'how old user is'))
@@ -361,7 +370,7 @@ sqlpuzzle.select(name='users name')
 # SELECT "name" AS "users name"
 ```
 
-Note: every column / table is put only once. Only if you have always different alias is same column / table put more than once.
+Note: every column / table is put only once. Only if you have always different alias is same column / table putted more than once.
 
 ```python
 sqlpuzzle.select('a', 'a')
@@ -428,6 +437,47 @@ s1.where(id=42)
 s2 = sql.copy()
 s2.where(id=24)
 ```
+
+#### Check what query contains
+
+There could be situation when you need to know if for example `distinct` is used.
+
+```python
+sql = sqlpuzzle.select_from('t').distinct()
+sql.has('distinct')
+# True
+```
+
+This method have two param. First is for specifing part of query (for example `'where'`) and second is for searching in that part of query. Searching is not so stupid, it looks for words.
+
+```python
+sql = sqlpuzzle.select_from('t')
+sql.has('where')
+# False
+sql = sqlpuzzle.select_from('t').where(name='Michael')
+sql.has('where')
+# True
+sql.has('where', 'name')
+# True
+sql = sqlpuzzle.select_from('t').where(surname='Michael')
+sql.has('where', 'name')
+# False
+```
+
+In first param you can use:
+
+ * `select_options` (in fact you can type here already some select options as above)
+ * `columns`
+ * `tables`
+ * `where`
+ * `group_by`
+ * `having`
+ * `order_by`
+ * `limit`
+ * `into_outfile`
+ * `select_for_update`
+ * `values`
+ * `on_duplicate_key_update`
 
 
 Enjoy!
