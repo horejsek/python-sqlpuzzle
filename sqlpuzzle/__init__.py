@@ -9,7 +9,7 @@ Version: %s
 """ % VERSION
 
 from ._backends import set_backend
-from ._common import CustomSql, SqlValue as V, SqlReference as R
+from ._common import CustomSql as customsql, SqlValue as sqlvalue, SqlReference as sqlreference
 from ._queryparts.functions import Avg, Concat, Convert, Count, GroupConcat, Max, Min, Sum
 from ._queryparts.conditions import Conditions
 from ._queries import Delete, Insert, Select, Update
@@ -27,7 +27,11 @@ __all__ = (
     'customsql',
 
     'Q',
+    'customsql',
+    'C',
+    'sqlvalue',
     'V',
+    'sqlreference',
     'R',
 
     'avg',
@@ -101,11 +105,6 @@ def delete_from(*args, **kwds):
     delete_from({'user': 'asUser', 'user', 'asParent'})
     """
     return Delete().from_(*args, **kwds)
-
-
-def customsql(sql):
-    """Custom SQL."""
-    return CustomSql(sql)
 
 
 def Q(**kwds):
@@ -182,6 +181,14 @@ def group_concat(*expr):
 def convert(expr, type_=None):
     """Function CONVERT(expr, type)"""
     return Convert(expr, type_)
+
+
+# Shortcuts.
+
+
+C = customsql
+V = sqlvalue
+R = sqlreference
 
 
 # Backward compatibility.

@@ -3,6 +3,7 @@
 import unittest
 
 import sqlpuzzle
+from sqlpuzzle._common import SqlValue, SqlReference
 from sqlpuzzle._queryparts import Column
 
 
@@ -86,3 +87,11 @@ class RelationTest(unittest.TestCase):
         sqlpuzzle.relations.NOT_IN(sqlpuzzle.customsql('custom'))
         sqlpuzzle.relations.IS(sqlpuzzle.customsql('custom'))
         sqlpuzzle.relations.IS_NOT(sqlpuzzle.customsql('custom'))
+
+
+class ShortcutsTest(unittest.TestCase):
+    def test_sql_value(self):
+        self.assertIsInstance(sqlpuzzle.V('5'), SqlValue)
+
+    def test_sql_reference(self):
+        self.assertIsInstance(sqlpuzzle.R('table'), SqlReference)
