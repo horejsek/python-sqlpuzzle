@@ -346,14 +346,41 @@ sqlpuzzle.convert('col', 'unsigned')
 
 ### Custom SQL
 
-Sometimes you have really complex part of query which you can't write with sqlpuzzle. That doesn't mean you have to write that whole query by yourself. You can use `customsql`.
+Sometimes you have really complex part of query which you can't write with sqlpuzzle. That doesn't mean you have to write that whole query by yourself. You can use `customsql` or just `C`.
 
 ```python
-sqlpuzzle.select_from('t').where(sqlpuzzle.custom('a=5'))
-SELECT * FROM "t" WHERE a=5
+sqlpuzzle.select_from('t').where(sqlpuzzle.C('a=5'))
+# SELECT * FROM "t" WHERE a=5
 ```
 
-You can pass `customsql` everywhere. But be aware – `customsql` does not provide [escaping](#escaping).
+You can pass `customsql` everywhere. But be aware – `customsql` does not provide [escaping](#escaping). Maybe better choice will be [sqlvalue](#sql-reference-and-value).
+
+### SQL reference and value
+
+For example conditions for joins uses by default reference on both sides.
+
+```python
+sqlpuzzle.select_from('t').left_join('u').on('t.id', 'u.id')
+# SELECT * FROM "t" LEFT JOIN "u" ON "t"."id" = "u"."id"
+```
+
+When you need use SQL value instead, use explicitly `sqlvalue` or just `V`.
+
+```python
+sqlpuzzle.select_from('t').left_join('u').on('t.id', sqlpuzzle.V('hi'))
+# SELECT * FROM "t" LEFT JOIN "u" ON "t"."id" = 'hi'
+```
+
+Same for SQL references with `sqlreference` or just `R`.
+
+```python
+sqlpuzzle.select_from('t', 'u').where('t.id', 'u.id')
+# SELECT * FROM "t", "u" WHERE "t"."id" = 'u.id'
+
+sqlpuzzle.select_from('t', 'u').where('t.id', sqlpuzzle.R('u'))
+# SELECT * FROM "t", "u" WHERE "t"."id" = "u"."id"
+```
+
 
 ### Aliases
 
