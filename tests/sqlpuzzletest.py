@@ -91,7 +91,7 @@ class RelationTest(unittest.TestCase):
 
 class ShortcutsTest(unittest.TestCase):
     def test_sql_value(self):
-        self.assertIsInstance(sqlpuzzle.V('5'), SqlValue)
+        self.assertTrue(isinstance(sqlpuzzle.V('5'), SqlValue))
 
     def test_sql_reference(self):
-        self.assertIsInstance(sqlpuzzle.R('table'), SqlReference)
+        self.assertTrue(isinstance(sqlpuzzle.R('table'), SqlReference))
