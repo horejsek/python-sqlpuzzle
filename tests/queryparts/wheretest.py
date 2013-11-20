@@ -122,6 +122,14 @@ class RelationsTest(WhereTest):
         self.where.where('col', sqlpuzzle.relations.IS_NOT(None))
         self.assertEqual(str(self.where), 'WHERE "col" IS NOT NULL')
 
+    def test_default_relation_of_sql_value_with_number(self):
+        self.where.where('col', sqlpuzzle.V(123))
+        self.assertEqual(str(self.where), 'WHERE "col" = 123')
+
+    def test_default_relation_of_sql_value_with_none(self):
+        self.where.where('col', sqlpuzzle.V(None))
+        self.assertEqual(str(self.where), 'WHERE "col" IS NULL')
+
 
 class RelationGeneratorTest(WhereTest):
     def test(self):
