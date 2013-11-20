@@ -108,7 +108,7 @@ class Condition(BinaryOperationMixin, QueryPart):
     ))
     def value(self, value):
         if not isinstance(value, relations._RelationValue):
-            value_type = type(value)
+            value_type = type(value.value if isinstance(value, SqlValue) else value)
             value = self._default_relations.get(value_type, relations.EQ)(value)
         self._value = value
 
