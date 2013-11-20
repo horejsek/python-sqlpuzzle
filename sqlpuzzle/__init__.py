@@ -9,7 +9,7 @@ Version: %s
 """ % VERSION
 
 from ._backends import set_backend
-from ._common import CustomSql
+from ._common import CustomSql, SqlValue as V, SqlReference as R
 from ._queryparts.functions import Avg, Concat, Convert, Count, GroupConcat, Max, Min, Sum
 from ._queryparts.conditions import Conditions
 from ._queries import Delete, Insert, Select, Update
@@ -25,7 +25,10 @@ __all__ = (
     'delete',
     'delete_from',
     'customsql',
+
     'Q',
+    'V',
+    'R',
 
     'avg',
     'avg_distinct',
