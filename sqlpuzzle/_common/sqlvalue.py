@@ -33,9 +33,8 @@ def _escape_value(value):
 
 
 class SqlValue(Object):
-    """Object used for SQL values (e.g. value of column, for condition, ...)."""
-
     def __init__(self, value):
+        """Object used for SQL values (e.g. value of column, for condition, ...)."""
         from sqlpuzzle._queries import Select, Union
         self._map = {
             str: self._string,
@@ -121,9 +120,8 @@ class SqlValue(Object):
 
 
 class SqlReference(SqlValue):
-    """Object used for string for SQL reference (e.g. name of tables, columns, ...)."""
-
     def __init__(self, value):
+        """Object used for string for SQL reference (e.g. name of tables, columns, ...)."""
         from sqlpuzzle._queries import Select, Union
         self._map = {
             str: self._reference,

@@ -10,6 +10,7 @@ __all__ = ('CustomSql',)
 
 class CustomSql(Object):
     def __init__(self, string=''):
+        """Custom SQL."""
         super(CustomSql, self).__init__()
         self._custom_sql_string = force_text(string)
 
