@@ -2,7 +2,7 @@
 
 from __future__ import absolute_import
 
-VERSION = '1.0.1'
+VERSION = '1.1.0'
 """
 Library for ease of writing SQL queries. For now only for database MySQL.
 Version: %s
