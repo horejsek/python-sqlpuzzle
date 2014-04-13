@@ -9,7 +9,7 @@ from pip.req import parse_requirements
 
 setup(
     name='sqlpuzzle',
-    version='1.1.1',  # Can't use VERSION, because of imports during install before installing dependencies.
+    version='1.1.2',  # Can't use VERSION, because of imports during install before installing dependencies.
     packages=[
         'sqlpuzzle',
         'sqlpuzzle/_backends',
