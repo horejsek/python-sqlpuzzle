@@ -4,12 +4,11 @@ try:
     from setuptools import setup
 except ImportError:
     from distutils.core import setup
-from pip.req import parse_requirements
 
 
 setup(
     name='sqlpuzzle',
-    version='1.1.2',  # Can't use VERSION, because of imports during install before installing dependencies.
+    version='1.1.3',  # Can't use VERSION because of imports during install before installing dependencies.
     packages=[
         'sqlpuzzle',
         'sqlpuzzle/_backends',
@@ -18,7 +17,7 @@ setup(
         'sqlpuzzle/_queryparts',
     ],
 
-    install_requires=[str(ir.req) for ir in parse_requirements('requirements.txt')],
+    install_requires=[line.strip() for line in open('requirements.txt').readlines()],
 
     url='https://github.com/horejsek/python-sqlpuzzle',
     author='Michal Horejsek',
