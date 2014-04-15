@@ -9,5 +9,5 @@ Package: python-sqlpuzzle
 Architecture: all
 Homepage: https://github.com/horejsek/sqlpuzzle
 XB-Python-Version:
-Depends:
+Depends: python-six
 Description: Python library for writing SQL queries.
