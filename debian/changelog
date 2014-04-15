@@ -1,9 +1,17 @@
-python-sqlpuzzle (1.0.1) UNRELEASED; urgency=low
+python-sqlpuzzle (1.1.3) unstable; urgency=low
 
   * Support of decimal
   * Sort dictionaries by key
+  * Support of setting columns by args & kwds
+  * Method has checking what is in query set
+  * Allowed None in condition
+  * Join with just value
+  * Shortcuts
+  * Doc strings & documentation
+  * Fixed installing with dependencies
+  * Bugfixing
 
- -- Michal Horejsek <horejsekmichal@gmail.com>  Tue, 15 Nov 2013 19:51:20 +0200
+ -- Michal Horejsek <michal.horejsek@firma.seznam.cz>  Tue, 15 Apr 2014 12:36:43 +0200
 
 python-sqlpuzzle (1.0.0) UNRELEASED; urgency=low
 
