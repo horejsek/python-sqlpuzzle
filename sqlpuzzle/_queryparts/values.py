@@ -71,12 +71,12 @@ class Values(QueryParts):
         if column_order:
             map_of_col_to_val = dict((value.column_name, value) for value in values)
             values = [map_of_col_to_val.get(column, None) for column in column_order]
-        return ', '.join(str(SqlValue(value.value if value else None)) for value in values)
+        return six.u(', ').join(six.text_type(SqlValue(value.value if value else None)) for value in values)
 
 
 class MultipleValues(QueryParts):
     def __unicode__(self):
-        return '(%s) VALUES %s' % (
+        return six.u('(%s) VALUES %s') % (
             self.columns(),
             self.values(),
         )
@@ -95,7 +95,7 @@ class MultipleValues(QueryParts):
 
     def values(self):
         column_order = self.all_columns
-        return ', '.join('(%s)' % values.values(column_order) for values in self._parts)
+        return six.u(', ').join(six.u('(%s)') % values.values(column_order) for values in self._parts)
 
     def add(self, *args, **kwds):
         values = Values().set(*args, **kwds)

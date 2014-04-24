@@ -1,3 +1,9 @@
+python-sqlpuzzle (1.1.5) unstable; urgency=low
+
+  * Fix unicode for insert
+
+ -- Michal Horejsek <michal.horejsek@firma.seznam.cz>  Tue, 24 Apr 2014 13:51:23 +0200
+
 python-sqlpuzzle (1.1.4) unstable; urgency=low
 
   * Added dependencies

@@ -1,5 +1,8 @@
+# -*- coding: utf-8 -*-
 
 import unittest
+
+import six
 
 import sqlpuzzle.exceptions
 import sqlpuzzle._queries.update
@@ -17,6 +20,22 @@ class BaseTest(UpdateTest):
         self.update.set(name='Alan')
         self.update.allow_update_all()
         self.assertEqual(str(self.update), 'UPDATE "user" SET "name" = \'Alan\'')
+
+    def test_str(self):
+        self.update.table('user')
+        self.update.set(name='ščřž')
+        self.update.allow_update_all()
+        self.assertEqual(str(self.update), 'UPDATE "user" SET "name" = \'ščřž\'')
+
+    def test_unicode(self):
+        if six.PY3:
+            name = 'ščřž'
+        else:
+            name = unicode('ščřž', 'utf-8')
+        self.update.table('user')
+        self.update.set(name=name)
+        self.update.allow_update_all()
+        self.assertEqual(str(self.update), 'UPDATE "user" SET "name" = \'ščřž\'')
 
 
 class WhereTest(UpdateTest):

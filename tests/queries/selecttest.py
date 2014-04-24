@@ -1,5 +1,8 @@
+# -*- coding: utf-8 -*-
 
 import unittest
+
+import six
 
 import sqlpuzzle.exceptions
 import sqlpuzzle._queries.select
@@ -38,6 +41,20 @@ class BaseTest(SelectTest):
         self.select.from_('user')
         self.select.group_by('id')
         self.assertEqual(str(self.select), 'SELECT * FROM "user" GROUP BY "id"')
+
+    def test_str(self):
+        self.select.from_('user')
+        self.select.where(name='ščřž')
+        self.assertEqual(str(self.select), 'SELECT * FROM "user" WHERE "name" = \'ščřž\'')
+
+    def test_unicode(self):
+        if six.PY3:
+            name = 'ščřž'
+        else:
+            name = unicode('ščřž', 'utf-8')
+        self.select.from_('user')
+        self.select.where(name=name)
+        self.assertEqual(str(self.select), 'SELECT * FROM "user" WHERE "name" = \'ščřž\'')
 
 
 class PropertiesTest(SelectTest):

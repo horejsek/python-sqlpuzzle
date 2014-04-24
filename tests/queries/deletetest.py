@@ -1,5 +1,8 @@
+# -*- coding: utf-8 -*-
 
 import unittest
+
+import six
 
 import sqlpuzzle.exceptions
 import sqlpuzzle._queries.delete
@@ -15,6 +18,20 @@ class BaseTest(DeleteTest):
         self.delete.from_('user')
         self.delete.allow_delete_all()
         self.assertEqual(str(self.delete), 'DELETE FROM "user"')
+
+    def test_str(self):
+        self.delete.from_('user')
+        self.delete.where(name='ščřž')
+        self.assertEqual(str(self.delete), 'DELETE FROM "user" WHERE "name" = \'ščřž\'')
+
+    def test_unicode(self):
+        if six.PY3:
+            name = 'ščřž'
+        else:
+            name = unicode('ščřž', 'utf-8')
+        self.delete.from_('user')
+        self.delete.where(name=name)
+        self.assertEqual(str(self.delete), 'DELETE FROM "user" WHERE "name" = \'ščřž\'')
 
 
 class PropertiesTest(DeleteTest):

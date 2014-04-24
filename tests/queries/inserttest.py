@@ -1,5 +1,8 @@
+# -*- coding: utf-8 -*-
 
 import unittest
+
+import six
 
 import sqlpuzzle.exceptions
 import sqlpuzzle._queries.insert
@@ -15,6 +18,20 @@ class BaseTest(InsertTest):
         self.insert.into('user')
         self.insert.values(name='Alan')
         self.assertEqual(str(self.insert), 'INSERT INTO "user" ("name") VALUES (\'Alan\')')
+
+    def test_str(self):
+        self.insert.into('user')
+        self.insert.values(name='ščřž')
+        self.assertEqual(str(self.insert), 'INSERT INTO "user" ("name") VALUES (\'ščřž\')')
+
+    def test_unicode(self):
+        if six.PY3:
+            name = 'ščřž'
+        else:
+            name = unicode('ščřž', 'utf-8')
+        self.insert.into('user')
+        self.insert.values(name=name)
+        self.assertEqual(str(self.insert), 'INSERT INTO "user" ("name") VALUES (\'ščřž\')')
 
 
 class PropertiesTest(InsertTest):
