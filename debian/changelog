@@ -1,3 +1,9 @@
+python-sqlpuzzle (1.2.0) stable; urgency=low
+
+  * Added relation NOT_LIKE
+
+ --  Michal Horejsek <michal.horejsek@firma.seznam.cz>  Mon, 07 Jul 2014 22:20:46 +0200
+
 python-sqlpuzzle (1.1.5) unstable; urgency=low
 
   * Fix unicode for insert

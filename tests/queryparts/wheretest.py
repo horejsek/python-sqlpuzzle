@@ -102,6 +102,10 @@ class RelationsTest(WhereTest):
         self.where.where('col', sqlpuzzle.relations.LIKE('val'))
         self.assertEqual(str(self.where), 'WHERE "col" LIKE \'val\'')
 
+    def test_NOT_LIKE(self):
+        self.where.where('col', sqlpuzzle.relations.NOT_LIKE('val'))
+        self.assertEqual(str(self.where), 'WHERE "col" NOT LIKE \'val\'')
+
     def test_REGEXP(self):
         self.where.where('col', sqlpuzzle.relations.REGEXP('val'))
         self.assertEqual(str(self.where), 'WHERE "col" REGEXP \'val\'')

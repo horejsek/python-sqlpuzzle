@@ -98,6 +98,10 @@ class LIKE(_RelationValue):
     _allowed_types = six.string_types
 
 
+class NOT_LIKE(LIKE):
+    _string_representation = 'NOT LIKE'
+
+
 class REGEXP(_RelationValue):
     _string_representation = 'REGEXP'
     _allowed_types = six.string_types
