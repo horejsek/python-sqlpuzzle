@@ -125,9 +125,9 @@ class Conditions(BinaryOperationMixin, QueryParts):
     _separator_of_parts = ' AND '
     _condition_class = Condition
 
-    def __init__(self, **kwds):
+    def __init__(self, *args, **kwds):
         super(Conditions, self).__init__()
-        self.where(**kwds)
+        self.where(*args, **kwds)
 
     @append_custom_sql_decorator
     def where(self, *args, **kwds):
@@ -137,8 +137,12 @@ class Conditions(BinaryOperationMixin, QueryParts):
             'allow_dict': True,
             'allow_list': True,
         }
-        for column_name, value in parse_args(options, *args, **kwds):
-            self.append_unique_part(self._condition_class(column_name, value))
+        if args and all(isinstance(item, (Conditions, ConditionsOfConditions)) for item in args):
+            for item in args:
+                self.append_unique_part(item)
+        else:
+            for column_name, value in parse_args(options, *args, **kwds):
+                self.append_unique_part(self._condition_class(column_name, value))
 
         return self
 

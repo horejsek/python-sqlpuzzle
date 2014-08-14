@@ -2,7 +2,7 @@
 
 from __future__ import absolute_import
 
-VERSION = '1.2.0'
+VERSION = '1.3.0'
 """
 Library for ease of writing SQL queries.
 Version: %s
@@ -107,7 +107,7 @@ def delete_from(*args, **kwds):
     return Delete().from_(*args, **kwds)
 
 
-def Q(**kwds):
+def Q(*args, **kwds):
     """
     Use as condition (where, having, ...) and pass it to condition. Works like
     Q object in Django, so you can use it with logical operands (& and |).
@@ -115,7 +115,7 @@ def Q(**kwds):
     Fro example:
     sqlpuzzle.where(Q(name='Michael', country=None) | Q(name='Alan'))
     """
-    return Conditions(**kwds)
+    return Conditions(*args, **kwds)
 
 
 def avg(expr):

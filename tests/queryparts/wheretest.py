@@ -280,3 +280,15 @@ class QObjectTest(WhereTest):
     def test_more_conditions_in_q(self):
         self.where.where(Q(a=42, b=24) | Q(x='y'))
         self.assertEqual(str(self.where), 'WHERE (("a" = 42 AND "b" = 24) OR "x" = \'y\')')
+
+    def test_two_qobjects(self):
+        self.where.where(Q(a=1) | Q(a=2), Q(b=1) | Q(b=2))
+        self.assertEqual(str(self.where), 'WHERE ("a" = 1 OR "a" = 2) AND ("b" = 1 OR "b" = 2)')
+
+    def test_three_qobjects(self):
+        self.where.where(Q(a=1) | Q(a=2), Q(b=1) | Q(b=2), Q(c=1))
+        self.assertEqual(str(self.where), 'WHERE ("a" = 1 OR "a" = 2) AND ("b" = 1 OR "b" = 2) AND "c" = 1')
+
+    def test_qobject_in_qobject(self):
+        self.where.where(Q(Q(a=1) | Q(b=2)) & Q(c=3))
+        self.assertEqual(str(self.where), 'WHERE (("a" = 1 OR "b" = 2) AND "c" = 3)')
