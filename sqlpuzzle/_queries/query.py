@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+from collections import OrderedDict
+
 import six
 
 from sqlpuzzle._common import Object, force_text
@@ -13,7 +15,9 @@ class Query(Object):
 
     def __init__(self):
         super(Query, self).__init__()
-        self._queryparts = dict([(key, cls()) for key, cls in six.iteritems(self._queryparts)])
+        # Keep sorted query parts for comparison in `__eq__`. Since Python 3.3
+        # is not dictionary ordered by keys.
+        self._queryparts = OrderedDict([(key, cls()) for key, cls in sorted(self._queryparts.items())])
         for key, querypart in six.iteritems(self._queryparts):
             setattr(self, '_%s' % key, querypart)
 

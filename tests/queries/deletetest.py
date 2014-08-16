@@ -84,7 +84,7 @@ class WhereTest(DeleteTest):
         self.assertEqual(str(self.delete), 'DELETE FROM "user" WHERE "age" = 42 AND "name" LIKE \'Harry\' AND "sex" = \'male\' AND "enabled" = 1')
 
 
-class CopyTest(WhereTest):
+class CopyTest(DeleteTest):
     def test_copy(self):
         self.delete.from_('user').where(id=42)
         copy = self.delete.copy()

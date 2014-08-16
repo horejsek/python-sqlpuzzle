@@ -4,7 +4,8 @@ Python library for ease of writing SQL queries. For now only for database MySQL 
 
 ## Requirements
 
-- Python 2.6 or later.
+- Python 2.7 or later.
+- Latest version supporting Python 2.6 is 1.3.0.
 
 ## Installation
 
