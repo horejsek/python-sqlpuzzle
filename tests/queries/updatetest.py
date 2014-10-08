@@ -71,3 +71,41 @@ class CopyTest(UpdateTest):
         copy = self.update.copy()
         self.update.set(age=24)
         self.assertFalse(self.update == copy)
+
+
+class JoinTest(UpdateTest):
+    def test_join(self):
+        self.update.table('user')
+        self.update.join('test_user')
+        self.update.on('user.id', 'test_user.id')
+        self.update.set(name='Alan')
+        self.update.where(age=42)
+        self.update.allow_update_all()
+        self.assertEqual(str(self.update), 'UPDATE "user" JOIN "test_user" ON "user"."id" = "test_user"."id" SET "name" = \'Alan\' WHERE "age" = 42')
+
+    def test_inner_join(self):
+        self.update.table('user')
+        self.update.inner_join('test_user')
+        self.update.on('user.id', 'test_user.id')
+        self.update.set(name='Alan')
+        self.update.where(age=42)
+        self.update.allow_update_all()
+        self.assertEqual(str(self.update), 'UPDATE "user" JOIN "test_user" ON "user"."id" = "test_user"."id" SET "name" = \'Alan\' WHERE "age" = 42')
+
+    def test_left_join(self):
+        self.update.table('user')
+        self.update.left_join('test_user')
+        self.update.on('user.id', 'test_user.id')
+        self.update.set(name='Alan')
+        self.update.where(age=42)
+        self.update.allow_update_all()
+        self.assertEqual(str(self.update), 'UPDATE "user" LEFT JOIN "test_user" ON "user"."id" = "test_user"."id" SET "name" = \'Alan\' WHERE "age" = 42')
+
+    def test_right_join(self):
+        self.update.table('user')
+        self.update.right_join('test_user')
+        self.update.on('user.id', 'test_user.id')
+        self.update.set(name='Alan')
+        self.update.where(age=42)
+        self.update.allow_update_all()
+        self.assertEqual(str(self.update), 'UPDATE "user" RIGHT JOIN "test_user" ON "user"."id" = "test_user"."id" SET "name" = \'Alan\' WHERE "age" = 42')
