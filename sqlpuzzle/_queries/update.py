@@ -64,6 +64,51 @@ class Update(Query):
         self._where.where(*args, **kwds)
         return self
 
+    def join(self, table):
+        """
+        join('table')
+        join(('table', 'asTable'))
+        join({'table': 'asTable'})
+        """
+        self._tables.join(table)
+        return self
+
+    def inner_join(self, table):
+        """
+        inner_join('table')
+        inner_join(('table', 'asTable'))
+        inner_join({'table': 'asTable'})
+        """
+        self._tables.inner_join(table)
+        return self
+
+    def left_join(self, table):
+        """
+        left_join('table')
+        left_join(('table', 'asTable'))
+        left_join({'table': 'asTable'})
+        """
+        self._tables.left_join(table)
+        return self
+
+    def right_join(self, table):
+        """
+        right_join('table')
+        right_join(('table', 'asTable'))
+        right_join({'table': 'asTable'})
+        """
+        self._tables.right_join(table)
+        return self
+
+    def on(self, *args, **kwds):
+        """
+        on(id='another_id')
+        on({'table1.id': 'table2.another_id'})
+        on([('table1.id', 'table2.another_id')])
+        """
+        self._tables.on(*args, **kwds)
+        return self
+
     # Backward compatibility.
 
     allowUpdateAll = allow_update_all
