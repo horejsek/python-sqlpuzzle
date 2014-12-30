@@ -173,14 +173,14 @@ sql.having(id=42)
 #### `ORDER BY`
 
 ```python
-sql.group_by('name', 'age')
+sql.order_by('name', 'age')
 # SELECT * FROM "t" GROUP BY "name", "age"
 ```
 
 Change order is same as making [aliases](#aliases):
 
 ```python
-sql.group_by('name', ('age', 'desc'))
+sql.order_by('name', ('age', 'desc'))
 # SELECT * FROM "t" GROUP BY "name", "age" DESC
 ```
 
