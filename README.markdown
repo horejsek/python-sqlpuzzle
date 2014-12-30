@@ -174,14 +174,14 @@ sql.having(id=42)
 
 ```python
 sql.order_by('name', 'age')
-# SELECT * FROM "t" GROUP BY "name", "age"
+# SELECT * FROM "t" ORDER BY "name", "age"
 ```
 
 Change order is same as making [aliases](#aliases):
 
 ```python
 sql.order_by('name', ('age', 'desc'))
-# SELECT * FROM "t" GROUP BY "name", "age" DESC
+# SELECT * FROM "t" ORDER BY "name", "age" DESC
 ```
 
 #### `LIMIT` and `OFFSET`
