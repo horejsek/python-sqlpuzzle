@@ -8,7 +8,7 @@ except ImportError:
 
 setup(
     name='sqlpuzzle',
-    version='1.5.0',  # Can't use VERSION because of imports during install before installing dependencies.
+    version='1.6.0',  # Can't use VERSION because of imports during install before installing dependencies.
     packages=[
         'sqlpuzzle',
         'sqlpuzzle/_backends',
