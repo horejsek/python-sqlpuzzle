@@ -5,19 +5,33 @@ from __future__ import absolute_import
 import six
 
 from sqlpuzzle.exceptions import ConfirmUpdateAllException
+from sqlpuzzle._queries.options import Options
 from sqlpuzzle._queryparts import Tables, Values, Where
 from .query import Query
 
 __all__ = ('Update',)
 
 
+class UpdateOptions(Options):
+    _definition_of_options = {
+        'ignore': {
+            'off': '',
+            'on': 'IGNORE',
+        },
+    }
+
+    def ignore(self, allow=True):
+        self._options['ignore'] = 'on' if allow else 'off'
+
+
 class Update(Query):
     _queryparts = {
+        'update_options': UpdateOptions,
         'tables': Tables,
         'values': Values,
         'where': Where,
     }
-    _query_template = six.u('UPDATE%(tables)s SET%(values)s%(where)s')
+    _query_template = six.u('UPDATE%(update_options)s%(tables)s SET%(values)s%(where)s')
 
     def __init__(self, table=None):
         super(Update, self).__init__()
@@ -107,6 +121,12 @@ class Update(Query):
         on([('table1.id', 'table2.another_id')])
         """
         self._tables.on(*args, **kwds)
+        return self
+
+    # UPDATE OPTIONS
+
+    def ignore(self, allow=True):
+        self._update_options.ignore(allow)
         return self
 
     # Backward compatibility.

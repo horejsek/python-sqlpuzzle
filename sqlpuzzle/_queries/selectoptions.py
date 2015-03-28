@@ -2,18 +2,18 @@
 
 import six
 
-from sqlpuzzle._common import Object, force_text
-from sqlpuzzle._queryparts.queryparts import has
+from sqlpuzzle._common import Object
+from sqlpuzzle._queries.options import Options
 
-__all__ = ('SelectOptions',)
+__all__ = ()
 
 
-class SelectOptions(Object):
+class SelectOptions(Options):
     _definition_of_options = {
         'sql_cache': {
             'off': '',
             'cache': 'SQL_CACHE',
-            'noCache': 'SQL_NO_CACHE'
+            'no_cache': 'SQL_NO_CACHE'
         },
         'duplicated': {
             'off': '',
@@ -47,38 +47,11 @@ class SelectOptions(Object):
         },
     }
 
-    def __init__(self):
-        super(SelectOptions, self).__init__()
-        self._options = {}
-        for option_key in self._definition_of_options.keys():
-            self._options[option_key] = 'off'
-
-    def __unicode__(self):
-        return six.u(' ').join(sorted(
-            self._definition_of_options[key][val]
-            for key, val in six.iteritems(self._options)
-            if val != 'off'
-        ))
-
-    def __eq__(self, other):
-        return (
-            type(self) == type(other)
-            and len(self._options) == len(other._options)
-            and all(bool(so == oo) for so, oo in zip(self._options.values(), other._options.values()))
-        )
-
-    def has(self, value):
-        return has(self, force_text(value).upper())
-
-    @property
-    def is_set(self):
-        return any(item != 'off' for item in six.itervalues(self._options))
-
     def sql_cache(self, allow=True):
         self._options['sql_cache'] = 'cache' if allow else 'off'
 
     def sql_no_cache(self, allow=True):
-        self._options['sql_cache'] = 'noCache' if allow else 'off'
+        self._options['sql_cache'] = 'no_cache' if allow else 'off'
 
     def all(self, allow=True):
         self._options['duplicated'] = 'all' if allow else 'off'
@@ -109,7 +82,7 @@ class SelectOptions(Object):
 
 
 class SelectForUpdate(Object):
-    def __init__(self, ):
+    def __init__(self):
         super(SelectForUpdate, self).__init__()
         self._for_update = False
 

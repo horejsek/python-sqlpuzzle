@@ -5,19 +5,33 @@ from __future__ import absolute_import
 import six
 
 from sqlpuzzle.exceptions import ConfirmDeleteAllException
+from sqlpuzzle._queries.options import Options
 from sqlpuzzle._queryparts import Tables, Where
 from .query import Query
 
 __all__ = ('Delete',)
 
 
+class DeleteOptions(Options):
+    _definition_of_options = {
+        'ignore': {
+            'off': '',
+            'on': 'IGNORE',
+        },
+    }
+
+    def ignore(self, allow=True):
+        self._options['ignore'] = 'on' if allow else 'off'
+
+
 class Delete(Query):
     _queryparts = {
+        'delete_options': DeleteOptions,
         'tables': Tables,
         'references': Tables,
         'where': Where,
     }
-    _query_template = six.u('DELETE%(tables)s FROM%(references)s%(where)s')
+    _query_template = six.u('DELETE%(delete_options)s%(tables)s FROM%(references)s%(where)s')
 
     def __init__(self, *tables):
         super(Delete, self).__init__()
@@ -124,6 +138,13 @@ class Delete(Query):
         """
         self._where.where(*args, **kwds)
         return self
+
+    # DELETE OPTIONS
+
+    def ignore(self, allow=True):
+        self._delete_options.ignore(allow)
+        return self
+
 
     # Backward compatibility.
 

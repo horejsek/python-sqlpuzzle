@@ -109,3 +109,9 @@ class JoinTest(UpdateTest):
         self.update.where(age=42)
         self.update.allow_update_all()
         self.assertEqual(str(self.update), 'UPDATE "user" RIGHT JOIN "test_user" ON "user"."id" = "test_user"."id" SET "name" = \'Alan\' WHERE "age" = 42')
+
+
+class UpdateOptionsTest(UpdateTest):
+    def test_sql_cache(self):
+        self.update.table('table').set(col='val').where(id=1).ignore()
+        self.assertEqual(str(self.update), 'UPDATE IGNORE "table" SET "col" = \'val\' WHERE "id" = 1')

@@ -102,3 +102,9 @@ class CopyTest(DeleteTest):
         copy = self.delete.copy()
         self.delete.where(name='Harry')
         self.assertFalse(self.delete == copy)
+
+
+class DeleteOptionsTest(DeleteTest):
+    def test_sql_cache(self):
+        self.delete.from_('table').where(id=1).ignore()
+        self.assertEqual(str(self.delete), 'DELETE IGNORE FROM "table" WHERE "id" = 1')

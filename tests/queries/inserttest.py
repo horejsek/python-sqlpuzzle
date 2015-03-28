@@ -87,3 +87,9 @@ class MultipleInsertTest(InsertTest):
     def test(self):
         self.insert.into('table').values(id=1).values(id=2).values(id=3)
         self.assertEqual(str(self.insert), 'INSERT INTO "table" ("id") VALUES (1), (2), (3)')
+
+
+class InsertOptionsTest(InsertTest):
+    def test_sql_cache(self):
+        self.insert.into('table').values(id=1).ignore()
+        self.assertEqual(str(self.insert), 'INSERT IGNORE INTO "table" ("id") VALUES (1)')
