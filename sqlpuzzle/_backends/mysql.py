@@ -8,4 +8,6 @@ __all__ = ('MySqlBackend',)
 
 
 class MySqlBackend(SqlBackend):
+    name = 'MySQL'
+
     _reference_quote = '`'

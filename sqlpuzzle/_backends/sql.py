@@ -10,6 +10,10 @@ __all__ = ('SqlBackend',)
 class SqlBackend(object):
     _reference_quote = '"'
 
+    name = 'SQL'
+
+    supports_full_join = False
+
     @classmethod
     def boolean(cls, value):
         return six.u('%d') % value

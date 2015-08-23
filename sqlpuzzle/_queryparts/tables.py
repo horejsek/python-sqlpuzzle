@@ -5,6 +5,7 @@ from __future__ import absolute_import
 import six
 
 import sqlpuzzle
+from sqlpuzzle._backends import get_backend
 from sqlpuzzle._common import SqlValue, SqlReference, force_text, check_type_decorator, parse_args
 from sqlpuzzle.exceptions import InvalidArgumentException, InvalidQueryException
 from .queryparts import QueryPart, QueryParts
@@ -16,11 +17,13 @@ __all__ = ('Table', 'Tables', 'TablesForSelect')
 INNER_JOIN = 0
 LEFT_JOIN = 1
 RIGHT_JOIN = 2
+FULL_JOIN = 3
 
 JOIN_TYPES = {
     INNER_JOIN: 'JOIN',
     LEFT_JOIN: 'LEFT JOIN',
     RIGHT_JOIN: 'RIGHT JOIN',
+    FULL_JOIN: 'FULL JOIN',
 }
 
 
@@ -202,6 +205,13 @@ class Tables(QueryParts):
 
     def right_join(self, arg):
         self.last_table().join(arg, RIGHT_JOIN)
+        return self
+
+    def full_join(self, arg):
+        backend = get_backend()
+        if not backend.supports_full_join:
+            raise InvalidQueryException('Backend {} does not support FULL JOIN.'.format(backend.name))
+        self.last_table().join(arg, FULL_JOIN)
         return self
 
     def on(self, *args, **kwds):

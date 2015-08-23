@@ -1,10 +1,15 @@
 # -*- coding: utf-8 -*-
 
 import unittest
+try:
+    from unittest import mock
+except ImportError:
+    import mock
 
 import six
 
 import sqlpuzzle.exceptions
+from sqlpuzzle._backends.sql import SqlBackend
 import sqlpuzzle._queries.select
 import sqlpuzzle.relations
 
@@ -118,6 +123,11 @@ class JoinTest(SelectTest):
     def test_right_join(self):
         self.select.from_('user').right_join('country').on('user.country_id', 'country.id')
         self.assertEqual(str(self.select), 'SELECT * FROM "user" RIGHT JOIN "country" ON "user"."country_id" = "country"."id"')
+
+    def test_full_join(self):
+        with mock.patch.object(SqlBackend, 'supports_full_join', True):
+            self.select.from_('user').full_join('country').on('user.country_id', 'country.id')
+            self.assertEqual(str(self.select), 'SELECT * FROM "user" FULL JOIN "country" ON "user"."country_id" = "country"."id"')
 
 
 class WhereTest(SelectTest):

@@ -131,6 +131,15 @@ class Select(Query):
         self._tables.right_join(table)
         return self
 
+    def full_join(self, table):
+        """
+        full_join('table')
+        full_join(('table', 'asTable'))
+        full_join({'table': 'asTable'})
+        """
+        self._tables.full_join(table)
+        return self
+
     def on(self, *args, **kwds):
         """
         on(id='another_id')

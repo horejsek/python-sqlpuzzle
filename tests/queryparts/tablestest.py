@@ -3,9 +3,15 @@
 import six
 
 import unittest
+try:
+    from unittest import mock
+except ImportError:
+    import mock
 
 import sqlpuzzle
 from sqlpuzzle import Q
+from sqlpuzzle.exceptions import InvalidQueryException
+from sqlpuzzle._backends.sql import SqlBackend
 from sqlpuzzle._queryparts import Tables
 
 
@@ -150,6 +156,15 @@ class SimpleJoinsTest(TablesTest):
         self.tables.set('t1')
         self.tables.right_join('t2').on('t1.id', 't2.id')
         self.assertEqual(str(self.tables), '"t1" RIGHT JOIN "t2" ON "t1"."id" = "t2"."id"')
+
+    def test_full_join_not_supported(self):
+        with self.assertRaises(InvalidQueryException):
+            self.tables.set('user').full_join('country').on('user.country_id', 'country.id')
+
+    def test_full_join_supported(self):
+        with mock.patch.object(SqlBackend, 'supports_full_join', True):
+            self.tables.set('user').full_join('country').on('user.country_id', 'country.id')
+            self.assertEqual(str(self.tables), '"user" FULL JOIN "country" ON "user"."country_id" = "country"."id"')
 
     def test_simple_as_inner_join(self):
         self.tables.set(('user', 'u')).inner_join(('country', 'c')).on('u.country_id', 'c.id')
