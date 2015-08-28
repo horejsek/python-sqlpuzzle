@@ -58,11 +58,9 @@ class OnCondition(Condition):
             and revert_relation == type(other.relation_instance)
         )
 
-    @staticmethod
-    def _get_value_for_str(value):
-        if isinstance(value, six.string_types):
-            return SqlReference(value)
-        return SqlValue(value)
+    def __unicode__(self):
+        value_transformer = SqlReference if isinstance(self.value, six.string_types) else SqlValue
+        return self._value._format_condition(SqlReference(self.column_name), value_transformer=value_transformer)
 
 
 class OnConditions(Conditions):

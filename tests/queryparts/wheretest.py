@@ -114,9 +114,25 @@ class RelationsTest(WhereTest):
         self.where.where('col', sqlpuzzle.relations.IN(range(3)))
         self.assertEqual(str(self.where), 'WHERE "col" IN (0, 1, 2)')
 
+    def test_IN_WITH_NONE(self):
+        self.where.where('col', sqlpuzzle.relations.IN([0, 1, 2, None]))
+        self.assertEqual(str(self.where), 'WHERE ("col" IN (0, 1, 2) OR "col" IS NULL)')
+
+    def test_IN_WITH_NONE_ONLY(self):
+        self.where.where('col', sqlpuzzle.relations.IN([None]))
+        self.assertEqual(str(self.where), 'WHERE "col" IS NULL')
+
     def test_NOT_IN(self):
         self.where.where('col', sqlpuzzle.relations.NOT_IN(range(3)))
         self.assertEqual(str(self.where), 'WHERE "col" NOT IN (0, 1, 2)')
+
+    def test_NOT_IN_WITH_NONE(self):
+        self.where.where('col', sqlpuzzle.relations.NOT_IN([0, 1, 2, None]))
+        self.assertEqual(str(self.where), 'WHERE ("col" NOT IN (0, 1, 2) AND "col" IS NOT NULL)')
+
+    def test_NOT_IN_WITH_NONE_ONLY(self):
+        self.where.where('col', sqlpuzzle.relations.NOT_IN([None]))
+        self.assertEqual(str(self.where), 'WHERE "col" IS NOT NULL')
 
     def test_IS(self):
         self.where.where('col', sqlpuzzle.relations.IS(None))
@@ -141,16 +157,6 @@ class RelationGeneratorTest(WhereTest):
         self.assertEqual(str(self.where), 'WHERE "col" IN (0, 1, 2, 3, 4)')
         # Second printed version must be same. Generator give values only once!
         self.assertEqual(str(self.where), 'WHERE "col" IN (0, 1, 2, 3, 4)')
-
-
-class RelationInWithNoneTest(WhereTest):
-    def test_one_value(self):
-        self.where.where('col', (None,))
-        self.assertEqual(str(self.where), 'WHERE "col" IS NULL')
-
-    def test_more_values(self):
-        self.where.where('col', ('a', 'b', None))
-        self.assertEqual(str(self.where), 'WHERE ("col" IN (\'a\', \'b\') OR "col" IS NULL)')
 
 
 class CustomSqlTest(WhereTest):

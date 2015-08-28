@@ -60,6 +60,13 @@ class _RelationValue(Object):
     def value(self):
         return self._value
 
+    def _format_condition(self, column, value_transformer=lambda value: value):
+        return six.u('%(col)s %(rel)s %(val)s') % {
+            'col': column,
+            'rel': self.relation,
+            'val': value_transformer(self.value),
+        }
+
 
 class EQ(_RelationValue):
     _string_representation = '='
@@ -126,9 +133,49 @@ class IN(_RelationValue):
             pass
         super(IN, self).__init__(value)
 
+    def _format_condition(self, column, value_transformer=lambda value: value):
+        template = six.u('%(col)s %(rel)s %(val)s')
+
+        try:
+            value = [v for v in self.value if v is not None]
+            if None in self.value:
+                if value:
+                    template = six.u('(') + template + six.u(' OR %(col)s IS NULL)')
+                else:
+                    template = six.u('%(col)s IS NULL')
+        except TypeError:
+            # If its not iterable, it can be subselect or something.
+            value = self.value
+
+        return template % {
+            'col': column,
+            'rel': self.relation,
+            'val': value_transformer(value),
+        }
+
 
 class NOT_IN(IN):
     _string_representation = 'NOT IN'
+
+    def _format_condition(self, column, value_transformer=lambda value: value):
+        template = six.u('%(col)s %(rel)s %(val)s')
+
+        try:
+            value = [v for v in self.value if v is not None]
+            if None in self.value:
+                if value:
+                    template = six.u('(') + template + six.u(' AND %(col)s IS NOT NULL)')
+                else:
+                    template = six.u('%(col)s IS NOT NULL')
+        except TypeError:
+            # If its not iterable, it can be subselect or something.
+            value = self.value
+
+        return template % {
+            'col': column,
+            'rel': self.relation,
+            'val': value_transformer(value),
+        }
 
 
 class IS(_RelationValue):

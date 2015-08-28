@@ -59,26 +59,7 @@ class Condition(BinaryOperationMixin, QueryPart):
         self.value = value
 
     def __unicode__(self):
-        foo = six.u('%(col)s %(rel)s %(val)s')
-
-        value = self.value
-        if isinstance(value, (list, tuple, xrange)) and None in value:
-            value = [v for v in value if v is not None]
-            # If list of values is empty, there must be only condition for NULL.
-            if value:
-                foo = six.u('(') + foo + six.u(' OR %(col)s IS NULL)')
-            else:
-                foo = '%(col)s IS NULL'
-
-        return foo % {
-            'col': SqlReference(self.column_name),
-            'rel': self.relation,
-            'val': self._get_value_for_str(value),
-        }
-
-    @staticmethod
-    def _get_value_for_str(value):
-        return SqlValue(value)
+        return self._value._format_condition(SqlReference(self.column_name), value_transformer=SqlValue)
 
     def __eq__(self, other):
         return (
