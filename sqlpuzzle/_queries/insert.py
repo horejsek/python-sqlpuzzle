@@ -24,6 +24,17 @@ class InsertOptions(Options):
 
 
 class Insert(Query):
+    """
+    Example:
+
+    .. code-block:: python
+
+        >>> sql = sqlpuzzle.insert_into('table')
+        >>> sql.values(name='Alan', salary=12345.67)
+        >>> sql.values(name='Bob', age=42)
+        <Insert: INSERT INTO "table" ("age", "name", "salary") VALUES (NULL, 'Alan', 12345.67000), (42, 'Bob', NULL)>
+    """
+
     _queryparts = {
         'insert_options': InsertOptions,
         'tables': Tables,
@@ -33,31 +44,14 @@ class Insert(Query):
     _query_template = six.u('INSERT%(insert_options)s INTO%(tables)s%(values)s%(on_duplicate_key_update)s')
 
     def into(self, table):
-        """
-        into('user', 'country', ...)
-        into(('user', 'asUser'), ('user', 'asParent'))
-        into({'user': 'asUser', 'user', 'asParent'})
-        """
         self._tables.set(table)
         return self
 
     def values(self, *args, **kwds):
-        """
-        values(name='Michael', country=None)
-        values({'age': 20, 'enabled': True})
-        values('last_modify', datetime.datetime(2011, 6, 15, 22, 11, 00))
-        values([('id', 20), ('name', 'Harry')])
-        """
         self._values.add(*args, **kwds)
         return self
 
     def on_duplicate_key_update(self, *args, **kwds):
-        """
-        on_duplicate_key_update(name='Michael', country=None)
-        on_duplicate_key_update({'age': 20, 'enabled': True})
-        on_duplicate_key_update('last_modify', datetime.datetime(2011, 6, 15, 22, 11, 00))
-        on_duplicate_key_update([('id', 20), ('name', 'Harry')])
-        """
         self._on_duplicate_key_update.set(*args, **kwds)
         return self
 

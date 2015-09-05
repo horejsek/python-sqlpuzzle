@@ -17,6 +17,19 @@ UNION_TYPES = (UNION, UNION_ALL)
 
 
 class Union(Query):
+    """
+    Class representing ``UNION`` or ``UNION ALL``.
+
+    You will get it by calling magic methods on :py:class:`Select <sqlpuzzle._queries.select.Select>`:
+
+    .. code-block:: python
+
+        >>> sqlpuzzle.select('t') & sqlpuzzle.select('u')
+        <Union: SELECT "t" UNION ALL SELECT "u">
+        >>> sqlpuzzle.select('t') | sqlpuzzle.select('u')
+        <Union: SELECT "t" UNION SELECT "u">
+    """
+
     def __init__(self, query1, query2, union_type=UNION):
         super(Union, self).__init__()
         self.query1 = query1
@@ -39,11 +52,25 @@ class Union(Query):
         )
 
     def __and__(self, other):
-        """UNION ALL"""
+        """
+        Returns :py:class:`sqlpuzzle._queries.union.Union` instance, ``UNION ALL``.
+
+        .. code-block:: python
+
+            >>> sqlpuzzle.select('t') & sqlpuzzle.select('u') & sqlpuzzle.select('v')
+            <Union: SELECT "t" UNION ALL SELECT "u" UNION ALL SELECT "v">
+        """
         return Union(self, other, UNION_ALL)
 
     def __or__(self, other):
-        """UNION"""
+        """
+        Returns :py:class:`sqlpuzzle._queries.union.Union` instance, ``UNION``.
+
+        .. code-block:: python
+
+            >>> sqlpuzzle.select('t') | sqlpuzzle.select('u') | sqlpuzzle.select('v')
+            <Union: SELECT "t" UNION SELECT "u" UNION SELECT "v">
+        """
         return Union(self, other, UNION)
 
     @property

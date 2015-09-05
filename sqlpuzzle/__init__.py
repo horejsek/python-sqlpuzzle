@@ -75,7 +75,7 @@ def select(*args, **kwds):
 def select_from(*args, **kwds):
     """
     Returns :py:class:`~.Select` instance and passed arguments are used for list
-    of tables. Columns are set to **.
+    of tables. Columns are set to \*.
     """
     return Select().from_(*args, **kwds)
 
@@ -122,7 +122,7 @@ def delete_from(*args, **kwds):
 def Q(*args, **kwds):
     """
     Use as condition (where, having, ...) and pass it to condition. Works like
-    Q object in Django, so you can use it with logical operands (& and |).
+    Q object in Django, so you can use it with logical operands (& and \|).
 
     .. code-block:: python
 
@@ -230,51 +230,12 @@ def convert(expr, type_=None):
 
 
 C = customsql
-"""
-Or ``sqlpuzzle.customsql``.
-
-Force custom SQL if it's not supported by ``sqlpuzzle``.
-
-.. code-block:: python
-
-    >>> sqlpuzzle.select(sqlpuzzle.C('IFNULL(col, 42) AS col'))
-    <Select: SELECT IFNULL(col, 42) AS col>
-"""
-
 V = sqlvalue
-"""
-Or ``sqlpuzzle.sqlvalue``.
-
-SQL values which are escaped. Like values in conditions. SqlPuzzle by default
-behave to some arguments automatically as SQL value and to some as SQL reference.
-Use this when SqlPuzzle uses SQL reference instead of value.
-
-.. code-block:: python
-
-    >>> sqlpuzzle.select('a')
-    <Select: SELECT `a`>
-    >>> sqlpuzzle.select(sqlpuzzle.V('a'))
-    <Select: SELECT 'a'>
-"""
-
 R = sqlreference
-"""
-Or ``sqlpuzzle.sqlreference``.
-
-SQL reference is some column. SqlPuzzle by default behave to some arguments
-automatically as SQL value and to some as SQL reference. Use this when SqlPuzzle
-uses SQL value instead of reference.
-
-.. code-block:: python
-
-    >>> sqlpuzzle.select_from('t').where(name='surname')
-    <Select: SELECT * FROM `t` WHERE `name` = 'surname'>
-    >>> sqlpuzzle.select_from('t').where(name=sqlpuzzle.R('surname'))
-    <Select: SELECT * FROM `t` WHERE `name` = `surname`>
-"""
 
 
 # Backward compatibility.
+
 
 selectFrom = select_from
 insertInto = insert_into

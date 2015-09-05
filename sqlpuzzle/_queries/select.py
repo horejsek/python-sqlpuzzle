@@ -13,6 +13,31 @@ __all__ = ('Select',)
 
 
 class Select(Query):
+    """
+    Examples:
+
+    .. code-block:: python
+
+        >>> sql = sqlpuzzle.select('id', 'name')
+        >>> sql.from_('user')
+        >>> sql.join('address').on('address.user_id', 'user.id')
+        >>> sql.where({'user.name': sqlpuzzle.relations.LIKE('%Al%'), 'address.city': 'Prague'})
+        >>> sql.group_by('user.id')
+        >>> sql.order_by('user.name', ('user.sallary', 'desc'))
+        >>> sql.limit(20)
+        <Select:
+            SELECT "id", "name"
+                FROM "user" JOIN "address" ON "address"."user_id" = "user"."id"
+                WHERE "address"."city" = 'Prague' AND "user"."name" LIKE '%Al%'
+                GROUP BY "user"."id"
+                ORDER BY "user"."name", "user"."sallary" DESC
+                LIMIT 20
+        >
+
+        >>> sqlpuzzle.select('name').from_(sql).where(
+        <Select: SELECT "name" FROM (...)>
+    """
+
     _queryparts = {
         'select_options': SelectOptions,
         'columns': Columns,
@@ -39,12 +64,12 @@ class Select(Query):
     #+ instead of `sql.has('select_options', 'distinct')` (programmer does not
     #+ have to know about internal implementation).
     def has(self, querypart_name, value=None):
-        """Returns True if `querypart_name` with `value` is set.
-
-        For example you can check if you already used condition by `sql.has('where')`.
+        """
+        Returns ``True`` if ``querypart_name`` with ``value`` is set. For example
+        you can check if you already used condition by ``sql.has('where')``.
 
         If you want to check for more information, for example if that condition
-        also contain ID, you can do this by `sql.has('where', 'id')`.
+        also contain ID, you can do this by ``sql.has('where', 'id')``.
         """
         if super(Select, self).has(querypart_name, value):
             return True
@@ -53,144 +78,102 @@ class Select(Query):
         return False
 
     def __and__(self, other):
-        """UNION ALL selects."""
+        """
+        Returns :py:class:`sqlpuzzle._queries.union.Union` instance, ``UNION ALL``.
+
+        .. code-block:: python
+
+            >>> sqlpuzzle.select('t') & sqlpuzzle.select('u')
+            <Union: SELECT "t" UNION ALL SELECT "u">
+        """
         return Union(self, other, UNION_ALL)
 
     def __or__(self, other):
-        """UNION selects."""
+        """
+        Returns :py:class:`sqlpuzzle._queries.union.Union` instance, ``UNION``.
+
+        .. code-block:: python
+
+            >>> sqlpuzzle.select('t') | sqlpuzzle.select('u')
+            <Union: SELECT "t" UNION SELECT "u">
+        """
         return Union(self, other, UNION)
 
     def columns(self, *args, **kwds):
-        """
-        columns('id', 'name', ...)
-        columns(('id', 'asId'), ('name', 'asName'))
-        columns({'id': 'asId', 'name': 'asName'})
-        """
         self._columns.columns(*args, **kwds)
         return self
 
     def from_(self, *args, **kwds):
-        """
-        from_('user', 'country', ...)
-        from_(('user', 'asUser'), ('user', 'asParent'))
-        from_({'user': 'asUser', 'user', 'asParent'})
-        """
         self._tables.set(*args, **kwds)
         return self
 
     def from_table(self, table, alias=None):
-        """
-        from_table('user')
-        from_table('user', alias='asUser')
-        """
         self._tables.set((table, alias))
         return self
 
-    def from_tables(self, *args, **kwds):
-        """
-        from_tables('user', 'country', ...)
-        from_tables(('user', 'asUser'), ('user', 'asParent'))
-        from_tables({'user': 'asUser', 'user', 'asParent'})
-        """
-        self.from_(*args, **kwds)
-        return self
+    from_tables = from_
 
     def join(self, table):
-        """
-        join('table')
-        join(('table', 'asTable'))
-        join({'table': 'asTable'})
-        """
         self._tables.join(table)
         return self
 
     def inner_join(self, table):
-        """
-        inner_join('table')
-        inner_join(('table', 'asTable'))
-        inner_join({'table': 'asTable'})
-        """
         self._tables.inner_join(table)
         return self
 
     def left_join(self, table):
-        """
-        left_join('table')
-        left_join(('table', 'asTable'))
-        left_join({'table': 'asTable'})
-        """
         self._tables.left_join(table)
         return self
 
     def right_join(self, table):
-        """
-        right_join('table')
-        right_join(('table', 'asTable'))
-        right_join({'table': 'asTable'})
-        """
         self._tables.right_join(table)
         return self
 
     def full_join(self, table):
         """
-        full_join('table')
-        full_join(('table', 'asTable'))
-        full_join({'table': 'asTable'})
-
         .. versionadded:: 1.7.0
         """
         self._tables.full_join(table)
         return self
 
     def on(self, *args, **kwds):
-        """
-        on(id='another_id')
-        on({'table1.id': 'table2.another_id'})
-        on([('table1.id', 'table2.another_id')])
-        """
         self._tables.on(*args, **kwds)
         return self
 
     def where(self, *args, **kwds):
-        """
-        where(name='Michael', country=None)
-        where({'age': 20, 'enabled': True})
-        where('last_modify', datetime.datetime(2011, 6, 15, 22, 11, 00))
-        where('id', range(10, 20, 2), sqlpuzzle.relations.IN)
-        where([('id', 20), ('name', '%ch%', sqlpuzzle.relation.LIKE)])
-        """
         self._where.where(*args, **kwds)
         return self
 
     def having(self, *args, **kwds):
-        """
-        having(name='Michael', country=None)
-        having({'age': 20, 'enabled': True})
-        having('last_modify', datetime.datetime(2011, 6, 15, 22, 11, 00))
-        having('id', range(10, 20, 2), sqlpuzzle.relations.IN)
-        having([('id', 20), ('name', '%ch%', sqlpuzzle.relation.LIKE)])
-        """
         self._having.where(*args, **kwds)
         return self
 
     def group_by(self, *args, **kwds):
         """
-        Default ordering is ASC.
-        group_by('firstOrderBy', 'secondOrderBy')
-        group_by(('name', 'ASC'), ('last_login', 'DESC'))
-        group_by('country', ('id', DESC))
-        group_by({'name': 'asc', 'surname': 'desc'})
+        Default ordering is ``ASC``.
+
+        ``group_by`` accept ``dict`` as you would expect, but note that ``dict``
+        does not have same order. Same for named arguments.
+
+        .. code-block:: python
+
+            >>> sqlpuzzle.select('c').from_('t').group_by('a', ('b', 'desc'))
+            <Select: SELECT "c" FROM "t" GROUP BY "a", "b" DESC>
         """
         self._group_by.group_by(*args, **kwds)
         return self
 
     def order_by(self, *args, **kwds):
         """
-        Default ordering is ASC.
-        order_by('firstOrderBy', 'secondOrderBy')
-        order_by(('name', 'ASC'), ('last_login', 'DESC'))
-        order_by('country', ('id', DESC))
-        order_by({'name': 'asc', 'surname': 'desc'})
+        Default ordering is ``ASC``.
+
+        ``order_by`` accept ``dict`` as you would expect, but note that ``dict``
+        does not have same order.
+
+        .. code-block:: python
+
+            >>> sqlpuzzle.select('c').from_('t').order_by('a', ('b', 'desc'))
+            <Select: SELECT "c" FROM "t" ORDER BY "a", "b" DESC>
         """
         self._order_by.order_by(*args, **kwds)
         return self

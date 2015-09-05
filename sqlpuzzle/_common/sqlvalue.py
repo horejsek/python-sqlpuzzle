@@ -33,10 +33,22 @@ def _escape_value(value):
 
 
 class SqlValue(Object):
+    """
+    Or ``sqlpuzzle.sqlvalue``.
+
+    SQL values which are escaped. Like values in conditions. SqlPuzzle by default
+    behave to some arguments automatically as SQL value and to some as SQL reference.
+    Use this when SqlPuzzle uses SQL reference instead of value.
+
+    .. code-block:: python
+
+        >>> sqlpuzzle.select('a')
+        <Select: SELECT `a`>
+        >>> sqlpuzzle.select(sqlpuzzle.V('a'))
+        <Select: SELECT 'a'>
+    """
+
     def __init__(self, value):
-        """
-        Object used for SQL values (e.g. value of column, for condition, ...).
-        """
         from sqlpuzzle._queries import Select, Union
         self._map = {
             str: self._string,
@@ -124,10 +136,22 @@ class SqlValue(Object):
 
 
 class SqlReference(SqlValue):
+    """
+    Or ``sqlpuzzle.sqlreference``.
+
+    SQL reference is some column. SqlPuzzle by default behave to some arguments
+    automatically as SQL value and to some as SQL reference. Use this when SqlPuzzle
+    uses SQL value instead of reference.
+
+    .. code-block:: python
+
+        >>> sqlpuzzle.select_from('t').where(name='surname')
+        <Select: SELECT * FROM `t` WHERE `name` = 'surname'>
+        >>> sqlpuzzle.select_from('t').where(name=sqlpuzzle.R('surname'))
+        <Select: SELECT * FROM `t` WHERE `name` = `surname`>
+    """
+
     def __init__(self, value):
-        """
-        Object used for string for SQL reference (e.g. name of tables, columns, ...).
-        """
         from sqlpuzzle._queries import Select, Union
         self._map = {
             str: self._reference,

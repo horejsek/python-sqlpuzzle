@@ -48,6 +48,13 @@ class InvalidArgumentException(SqlPuzzleException):
     """
     Raises when you pass invalid argument into SQL puzzle. For example instead
     of column reference some number and so.
+
+    .. code-block:: python
+
+        >>> sqlpuzzle.select(True)
+        Traceback (most recent call last):
+          ...
+        InvalidArgumentException: Invalid argument: column_name cannot be of type <type 'bool'>.
     """
 
     def __init__(self, message=''):
@@ -63,6 +70,13 @@ class InvalidQueryException(InvalidArgumentException):
     """
     Specific type of :py:class:`~.InvalidArgumentException`. Raises when you
     passed good arguments but final query does not make sense.
+
+    .. code-block:: python
+
+        >>> sqlpuzzle.select_from('t').on('t2')
+        Traceback (most recent call last):
+          ...
+        InvalidQueryException: Invalid query: You can not set join condition to nothing. Specify join table first.
     """
 
     def __str__(self):

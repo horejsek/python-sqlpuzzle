@@ -224,7 +224,7 @@ class NOT_IN(IN):
 
     .. versionchanged:: 1.7.0
         There was bug that it generated ``("col" NOT IN (1, 2) OR "col" IS NULL)``
-        instead of corrent condition.
+        instead of correct condition.
     """
 
     _string_representation = 'NOT IN'
