@@ -6,8 +6,7 @@ Library for ease of writing SQL queries. For now only for database MySQL & Postg
 
 from __future__ import absolute_import
 
-VERSION = '1.6.0'
-
+from .version import VERSION
 from ._backends import set_backend
 from ._common import CustomSql as customsql, SqlValue as sqlvalue, SqlReference as sqlreference
 from ._queryparts.functions import Avg, Concat, Convert, Count, GroupConcat, Max, Min, Sum

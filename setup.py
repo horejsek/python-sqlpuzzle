@@ -5,10 +5,12 @@ try:
 except ImportError:
     from distutils.core import setup
 
+# https://packaging.python.org/en/latest/single_source_version.html
+execfile('sqlpuzzle/version.py')
 
 setup(
     name='sqlpuzzle',
-    version='1.6.0',  # Can't use VERSION because of imports during install before installing dependencies.
+    version=VERSION,
     packages=[
         'sqlpuzzle',
         'sqlpuzzle/_backends',
