@@ -1,0 +1,361 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>sqlpuzzle.relations &mdash; SQLPuzzle  documentation</title>
+    
+    <link rel="stylesheet" href="../../static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="../../static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../static/jquery.js"></script>
+    <script type="text/javascript" src="../../static/underscore.js"></script>
+    <script type="text/javascript" src="../../static/doctools.js"></script>
+    <link rel="top" title="SQLPuzzle  documentation" href="../../index.html" />
+    <link rel="up" title="sqlpuzzle" href="../sqlpuzzle.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../index.html">SQLPuzzle  documentation</a> &raquo;</li>
+          <li><a href="../index.html" >Module code</a> &raquo;</li>
+          <li><a href="../sqlpuzzle.html" accesskey="U">sqlpuzzle</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for sqlpuzzle.relations</h1><div class="highlight"><pre>
+<span class="c"># -*- coding: utf-8 -*-</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Use relations in conditions. For example:</span>
+
+<span class="sd">.. code-block:: python</span>
+
+<span class="sd">    &gt;&gt;&gt; sqlpuzzle.select_from(&#39;t&#39;).where(name=sqlpuzzle.relations.LIKE(&#39;M%&#39;))</span>
+<span class="sd">    &lt;Select: SELECT * FROM &quot;t&quot; WHERE &quot;name&quot; LIKE &#39;M%&#39;&gt;</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">six</span>
+<span class="kn">from</span> <span class="nn">six.moves</span> <span class="kn">import</span> <span class="nb">xrange</span>
+
+<span class="kn">import</span> <span class="nn">datetime</span>
+<span class="kn">import</span> <span class="nn">decimal</span>
+<span class="kn">import</span> <span class="nn">types</span>
+
+<span class="kn">from</span> <span class="nn">sqlpuzzle._common.object</span> <span class="kn">import</span> <span class="n">Object</span>
+<span class="kn">from</span> <span class="nn">sqlpuzzle._common.utils</span> <span class="kn">import</span> <span class="n">force_text</span><span class="p">,</span> <span class="n">is_sql_instance</span>
+
+<span class="kn">from</span> <span class="nn">sqlpuzzle.exceptions</span> <span class="kn">import</span> <span class="n">InvalidArgumentException</span>
+
+
+<span class="k">class</span> <span class="nc">_RelationValue</span><span class="p">(</span><span class="n">Object</span><span class="p">):</span>
+    <span class="n">_string_representation</span> <span class="o">=</span> <span class="s">&#39;Abstract Relation&#39;</span>
+    <span class="n">_allowed_types</span> <span class="o">=</span> <span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">_RelationValue</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_check_value_type</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_value</span> <span class="o">=</span> <span class="n">value</span>
+
+    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s">&#39;&quot;</span><span class="si">%s</span><span class="s"> </span><span class="si">%s</span><span class="s">&quot;&#39;</span> <span class="o">%</span> <span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_string_representation</span><span class="p">,</span>
+            <span class="n">force_text</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_value</span><span class="p">),</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">tosql</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__str__</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Are relations equivalent?&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__class__</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">__class__</span> <span class="ow">and</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_value</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">_value</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_check_value_type</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="c"># isinstance(True, (int, long)) is True =&gt; must be special condition</span>
+        <span class="k">if</span> <span class="p">(</span>
+                <span class="ow">not</span> <span class="n">is_sql_instance</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+                <span class="ow">and</span> <span class="p">(</span>
+                    <span class="p">(</span><span class="nb">bool</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_allowed_types</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">bool</span><span class="p">))</span>
+                    <span class="ow">or</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_allowed_types</span><span class="p">)</span>
+                <span class="p">)</span>
+        <span class="p">):</span>
+            <span class="k">raise</span> <span class="n">InvalidArgumentException</span><span class="p">(</span><span class="s">&#39;Relation &quot;</span><span class="si">%s</span><span class="s">&quot; is not allowed for data type &quot;</span><span class="si">%s</span><span class="s">&quot;.&#39;</span> <span class="o">%</span> <span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_string_representation</span><span class="p">,</span>
+                <span class="nb">type</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+            <span class="p">))</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">relation</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_string_representation</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">value</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_value</span>
+
+    <span class="k">def</span> <span class="nf">_format_condition</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">column</span><span class="p">,</span> <span class="n">value_transformer</span><span class="o">=</span><span class="k">lambda</span> <span class="n">value</span><span class="p">:</span> <span class="n">value</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">six</span><span class="o">.</span><span class="n">u</span><span class="p">(</span><span class="s">&#39;</span><span class="si">%(col)s</span><span class="s"> </span><span class="si">%(rel)s</span><span class="s"> </span><span class="si">%(val)s</span><span class="s">&#39;</span><span class="p">)</span> <span class="o">%</span> <span class="p">{</span>
+            <span class="s">&#39;col&#39;</span><span class="p">:</span> <span class="n">column</span><span class="p">,</span>
+            <span class="s">&#39;rel&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">relation</span><span class="p">,</span>
+            <span class="s">&#39;val&#39;</span><span class="p">:</span> <span class="n">value_transformer</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">value</span><span class="p">),</span>
+        <span class="p">}</span>
+
+
+<div class="viewcode-block" id="EQ"><a class="viewcode-back" href="../../index.html#sqlpuzzle.relations.EQ">[docs]</a><span class="k">class</span> <span class="nc">EQ</span><span class="p">(</span><span class="n">_RelationValue</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Relation ``=``.</span>
+
+<span class="sd">    Default relation in most cases.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">_string_representation</span> <span class="o">=</span> <span class="s">&#39;=&#39;</span>
+    <span class="n">_allowed_types</span> <span class="o">=</span> <span class="n">six</span><span class="o">.</span><span class="n">string_types</span> <span class="o">+</span> <span class="n">six</span><span class="o">.</span><span class="n">integer_types</span> <span class="o">+</span> <span class="p">(</span><span class="nb">float</span><span class="p">,</span> <span class="n">decimal</span><span class="o">.</span><span class="n">Decimal</span><span class="p">,</span> <span class="nb">bool</span><span class="p">,</span> <span class="n">datetime</span><span class="o">.</span><span class="n">date</span><span class="p">)</span></div>
+<span class="n">EQUAL_TO</span> <span class="o">=</span> <span class="n">EQ</span>
+
+
+<div class="viewcode-block" id="NE"><a class="viewcode-back" href="../../index.html#sqlpuzzle.relations.NE">[docs]</a><span class="k">class</span> <span class="nc">NE</span><span class="p">(</span><span class="n">EQ</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Relation ``!=``.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">_string_representation</span> <span class="o">=</span> <span class="s">&#39;!=&#39;</span></div>
+<span class="n">NOT_EQUAL_TO</span> <span class="o">=</span> <span class="n">NE</span>
+
+
+<div class="viewcode-block" id="GT"><a class="viewcode-back" href="../../index.html#sqlpuzzle.relations.GT">[docs]</a><span class="k">class</span> <span class="nc">GT</span><span class="p">(</span><span class="n">_RelationValue</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Relation ``&gt;``.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">_string_representation</span> <span class="o">=</span> <span class="s">&#39;&gt;&#39;</span>
+    <span class="n">_allowed_types</span> <span class="o">=</span> <span class="n">six</span><span class="o">.</span><span class="n">string_types</span> <span class="o">+</span> <span class="n">six</span><span class="o">.</span><span class="n">integer_types</span> <span class="o">+</span> <span class="p">(</span><span class="nb">float</span><span class="p">,</span> <span class="n">decimal</span><span class="o">.</span><span class="n">Decimal</span><span class="p">,</span> <span class="n">datetime</span><span class="o">.</span><span class="n">date</span><span class="p">)</span></div>
+<span class="n">GRATHER_THAN</span> <span class="o">=</span> <span class="n">GT</span>
+
+
+<div class="viewcode-block" id="GE"><a class="viewcode-back" href="../../index.html#sqlpuzzle.relations.GE">[docs]</a><span class="k">class</span> <span class="nc">GE</span><span class="p">(</span><span class="n">GT</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Relation ``&gt;=``.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">_string_representation</span> <span class="o">=</span> <span class="s">&#39;&gt;=&#39;</span></div>
+<span class="n">GRATHER_THAN_OR_EQUAL_TO</span> <span class="o">=</span> <span class="n">GE</span>
+
+
+<div class="viewcode-block" id="LT"><a class="viewcode-back" href="../../index.html#sqlpuzzle.relations.LT">[docs]</a><span class="k">class</span> <span class="nc">LT</span><span class="p">(</span><span class="n">GT</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Relation ``&lt;``.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">_string_representation</span> <span class="o">=</span> <span class="s">&#39;&lt;&#39;</span></div>
+<span class="n">LESS_THAN</span> <span class="o">=</span> <span class="n">LT</span>
+
+
+<div class="viewcode-block" id="LE"><a class="viewcode-back" href="../../index.html#sqlpuzzle.relations.LE">[docs]</a><span class="k">class</span> <span class="nc">LE</span><span class="p">(</span><span class="n">GT</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Relation ``&lt;=``.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">_string_representation</span> <span class="o">=</span> <span class="s">&#39;&lt;=&#39;</span></div>
+<span class="n">LESS_THAN_OR_EQUAL_TO</span> <span class="o">=</span> <span class="n">LE</span>
+
+
+<div class="viewcode-block" id="LIKE"><a class="viewcode-back" href="../../index.html#sqlpuzzle.relations.LIKE">[docs]</a><span class="k">class</span> <span class="nc">LIKE</span><span class="p">(</span><span class="n">_RelationValue</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Relation ``LIKE``.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">_string_representation</span> <span class="o">=</span> <span class="s">&#39;LIKE&#39;</span>
+    <span class="n">_allowed_types</span> <span class="o">=</span> <span class="n">six</span><span class="o">.</span><span class="n">string_types</span>
+
+</div>
+<div class="viewcode-block" id="NOT_LIKE"><a class="viewcode-back" href="../../index.html#sqlpuzzle.relations.NOT_LIKE">[docs]</a><span class="k">class</span> <span class="nc">NOT_LIKE</span><span class="p">(</span><span class="n">LIKE</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Relation ``NOT LIKE``.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">_string_representation</span> <span class="o">=</span> <span class="s">&#39;NOT LIKE&#39;</span>
+
+</div>
+<div class="viewcode-block" id="REGEXP"><a class="viewcode-back" href="../../index.html#sqlpuzzle.relations.REGEXP">[docs]</a><span class="k">class</span> <span class="nc">REGEXP</span><span class="p">(</span><span class="n">_RelationValue</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Relation ``REGEXP``.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">_string_representation</span> <span class="o">=</span> <span class="s">&#39;REGEXP&#39;</span>
+    <span class="n">_allowed_types</span> <span class="o">=</span> <span class="n">six</span><span class="o">.</span><span class="n">string_types</span>
+
+</div>
+<div class="viewcode-block" id="IN"><a class="viewcode-back" href="../../index.html#sqlpuzzle.relations.IN">[docs]</a><span class="k">class</span> <span class="nc">IN</span><span class="p">(</span><span class="n">_RelationValue</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Relation ``IN``.</span>
+
+<span class="sd">    If you pass ``None`` in list, it will behave correctly:</span>
+
+<span class="sd">    .. code-block:: python</span>
+
+<span class="sd">        &gt;&gt;&gt; sqlpuzzle.select_from(&#39;t&#39;).where(col=sqlpuzzle.relations.IN([1,2,None]))</span>
+<span class="sd">        &lt;Select: SELECT * FROM &quot;t&quot; WHERE (&quot;col&quot; IN (1, 2) OR &quot;col&quot; IS NULL)&gt;</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">_string_representation</span> <span class="o">=</span> <span class="s">&#39;IN&#39;</span>
+    <span class="n">_allowed_types</span> <span class="o">=</span> <span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">,</span> <span class="nb">xrange</span><span class="p">,</span> <span class="n">types</span><span class="o">.</span><span class="n">GeneratorType</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">args</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">value</span> <span class="o">=</span> <span class="n">args</span>
+        <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">args</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">value</span> <span class="o">=</span> <span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">value</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="c">#  Make list copy of value (if it is possible) because generators</span>
+            <span class="c">#+ give value only once.</span>
+            <span class="n">value</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">TypeError</span><span class="p">:</span>
+            <span class="k">pass</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">IN</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_format_condition</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">column</span><span class="p">,</span> <span class="n">value_transformer</span><span class="o">=</span><span class="k">lambda</span> <span class="n">value</span><span class="p">:</span> <span class="n">value</span><span class="p">):</span>
+        <span class="n">template</span> <span class="o">=</span> <span class="n">six</span><span class="o">.</span><span class="n">u</span><span class="p">(</span><span class="s">&#39;</span><span class="si">%(col)s</span><span class="s"> </span><span class="si">%(rel)s</span><span class="s"> </span><span class="si">%(val)s</span><span class="s">&#39;</span><span class="p">)</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">value</span> <span class="o">=</span> <span class="p">[</span><span class="n">v</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">value</span> <span class="k">if</span> <span class="n">v</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">]</span>
+            <span class="k">if</span> <span class="bp">None</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">value</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">value</span><span class="p">:</span>
+                    <span class="n">template</span> <span class="o">=</span> <span class="n">six</span><span class="o">.</span><span class="n">u</span><span class="p">(</span><span class="s">&#39;(&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="n">template</span> <span class="o">+</span> <span class="n">six</span><span class="o">.</span><span class="n">u</span><span class="p">(</span><span class="s">&#39; OR </span><span class="si">%(col)s</span><span class="s"> IS NULL)&#39;</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">template</span> <span class="o">=</span> <span class="n">six</span><span class="o">.</span><span class="n">u</span><span class="p">(</span><span class="s">&#39;</span><span class="si">%(col)s</span><span class="s"> IS NULL&#39;</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">TypeError</span><span class="p">:</span>
+            <span class="c"># If its not iterable, it can be subselect or something.</span>
+            <span class="n">value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">value</span>
+
+        <span class="k">return</span> <span class="n">template</span> <span class="o">%</span> <span class="p">{</span>
+            <span class="s">&#39;col&#39;</span><span class="p">:</span> <span class="n">column</span><span class="p">,</span>
+            <span class="s">&#39;rel&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">relation</span><span class="p">,</span>
+            <span class="s">&#39;val&#39;</span><span class="p">:</span> <span class="n">value_transformer</span><span class="p">(</span><span class="n">value</span><span class="p">),</span>
+        <span class="p">}</span>
+
+</div>
+<div class="viewcode-block" id="NOT_IN"><a class="viewcode-back" href="../../index.html#sqlpuzzle.relations.NOT_IN">[docs]</a><span class="k">class</span> <span class="nc">NOT_IN</span><span class="p">(</span><span class="n">IN</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Relation ``NOT IN``.</span>
+
+<span class="sd">    If you pass ``None`` in list, it will behave correctly:</span>
+
+<span class="sd">    .. code-block:: python</span>
+
+<span class="sd">        &gt;&gt;&gt; sqlpuzzle.select_from(&#39;t&#39;).where(col=sqlpuzzle.relations.NOT_IN([1,2,None]))</span>
+<span class="sd">        &lt;Select: SELECT * FROM &quot;t&quot; WHERE (&quot;col&quot; NOT IN (1, 2) AND &quot;col&quot; IS NOT NULL)&gt;</span>
+
+<span class="sd">    .. versionchanged:: 1.7.0</span>
+<span class="sd">        There was bug that it generated ``(&quot;col&quot; NOT IN (1, 2) OR &quot;col&quot; IS NULL)``</span>
+<span class="sd">        instead of correct condition.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">_string_representation</span> <span class="o">=</span> <span class="s">&#39;NOT IN&#39;</span>
+
+    <span class="k">def</span> <span class="nf">_format_condition</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">column</span><span class="p">,</span> <span class="n">value_transformer</span><span class="o">=</span><span class="k">lambda</span> <span class="n">value</span><span class="p">:</span> <span class="n">value</span><span class="p">):</span>
+        <span class="n">template</span> <span class="o">=</span> <span class="n">six</span><span class="o">.</span><span class="n">u</span><span class="p">(</span><span class="s">&#39;</span><span class="si">%(col)s</span><span class="s"> </span><span class="si">%(rel)s</span><span class="s"> </span><span class="si">%(val)s</span><span class="s">&#39;</span><span class="p">)</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">value</span> <span class="o">=</span> <span class="p">[</span><span class="n">v</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">value</span> <span class="k">if</span> <span class="n">v</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">]</span>
+            <span class="k">if</span> <span class="bp">None</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">value</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">value</span><span class="p">:</span>
+                    <span class="n">template</span> <span class="o">=</span> <span class="n">six</span><span class="o">.</span><span class="n">u</span><span class="p">(</span><span class="s">&#39;(&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="n">template</span> <span class="o">+</span> <span class="n">six</span><span class="o">.</span><span class="n">u</span><span class="p">(</span><span class="s">&#39; AND </span><span class="si">%(col)s</span><span class="s"> IS NOT NULL)&#39;</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">template</span> <span class="o">=</span> <span class="n">six</span><span class="o">.</span><span class="n">u</span><span class="p">(</span><span class="s">&#39;</span><span class="si">%(col)s</span><span class="s"> IS NOT NULL&#39;</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">TypeError</span><span class="p">:</span>
+            <span class="c"># If its not iterable, it can be subselect or something.</span>
+            <span class="n">value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">value</span>
+
+        <span class="k">return</span> <span class="n">template</span> <span class="o">%</span> <span class="p">{</span>
+            <span class="s">&#39;col&#39;</span><span class="p">:</span> <span class="n">column</span><span class="p">,</span>
+            <span class="s">&#39;rel&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">relation</span><span class="p">,</span>
+            <span class="s">&#39;val&#39;</span><span class="p">:</span> <span class="n">value_transformer</span><span class="p">(</span><span class="n">value</span><span class="p">),</span>
+        <span class="p">}</span>
+
+</div>
+<div class="viewcode-block" id="IS"><a class="viewcode-back" href="../../index.html#sqlpuzzle.relations.IS">[docs]</a><span class="k">class</span> <span class="nc">IS</span><span class="p">(</span><span class="n">_RelationValue</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Relation ``IS``.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">_string_representation</span> <span class="o">=</span> <span class="s">&#39;IS&#39;</span>
+    <span class="n">_allowed_types</span> <span class="o">=</span> <span class="p">(</span><span class="nb">bool</span><span class="p">,</span> <span class="nb">type</span><span class="p">(</span><span class="bp">None</span><span class="p">))</span>
+
+</div>
+<div class="viewcode-block" id="IS_NOT"><a class="viewcode-back" href="../../index.html#sqlpuzzle.relations.IS_NOT">[docs]</a><span class="k">class</span> <span class="nc">IS_NOT</span><span class="p">(</span><span class="n">IS</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Relation ``IS NOT``.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">_string_representation</span> <span class="o">=</span> <span class="s">&#39;IS NOT&#39;</span></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../index.html">SQLPuzzle  documentation</a> &raquo;</li>
+          <li><a href="../index.html" >Module code</a> &raquo;</li>
+          <li><a href="../sqlpuzzle.html" >sqlpuzzle</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2015, Michal Horejsek.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
+    </div>
+  </body>
+</html>

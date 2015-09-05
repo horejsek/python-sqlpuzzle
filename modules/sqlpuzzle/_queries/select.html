@@ -1,0 +1,370 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>sqlpuzzle._queries.select &mdash; SQLPuzzle  documentation</title>
+    
+    <link rel="stylesheet" href="../../../static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="../../../static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../static/jquery.js"></script>
+    <script type="text/javascript" src="../../../static/underscore.js"></script>
+    <script type="text/javascript" src="../../../static/doctools.js"></script>
+    <link rel="top" title="SQLPuzzle  documentation" href="../../../index.html" />
+    <link rel="up" title="sqlpuzzle" href="../../sqlpuzzle.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../../index.html">SQLPuzzle  documentation</a> &raquo;</li>
+          <li><a href="../../index.html" >Module code</a> &raquo;</li>
+          <li><a href="../../sqlpuzzle.html" accesskey="U">sqlpuzzle</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for sqlpuzzle._queries.select</h1><div class="highlight"><pre>
+<span class="c"># -*- coding: utf-8 -*-</span>
+
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">absolute_import</span>
+
+<span class="kn">import</span> <span class="nn">six</span>
+
+<span class="kn">from</span> <span class="nn">sqlpuzzle._queryparts</span> <span class="kn">import</span> <span class="n">Columns</span><span class="p">,</span> <span class="n">TablesForSelect</span><span class="p">,</span> <span class="n">Where</span><span class="p">,</span> <span class="n">GroupBy</span><span class="p">,</span> <span class="n">Having</span><span class="p">,</span> <span class="n">OrderBy</span><span class="p">,</span> <span class="n">Limit</span><span class="p">,</span> <span class="n">IntoOutfile</span>
+<span class="kn">from</span> <span class="nn">.query</span> <span class="kn">import</span> <span class="n">Query</span>
+<span class="kn">from</span> <span class="nn">.union</span> <span class="kn">import</span> <span class="n">Union</span><span class="p">,</span> <span class="n">UNION</span><span class="p">,</span> <span class="n">UNION_ALL</span>
+<span class="kn">from</span> <span class="nn">.selectoptions</span> <span class="kn">import</span> <span class="n">SelectOptions</span><span class="p">,</span> <span class="n">SelectForUpdate</span>
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">(</span><span class="s">&#39;Select&#39;</span><span class="p">,)</span>
+
+
+<div class="viewcode-block" id="Select"><a class="viewcode-back" href="../../../index.html#sqlpuzzle._queries.select.Select">[docs]</a><span class="k">class</span> <span class="nc">Select</span><span class="p">(</span><span class="n">Query</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Examples:</span>
+
+<span class="sd">    .. code-block:: python</span>
+
+<span class="sd">        &gt;&gt;&gt; sql = sqlpuzzle.select(&#39;id&#39;, &#39;name&#39;)</span>
+<span class="sd">        &gt;&gt;&gt; sql.from_(&#39;user&#39;)</span>
+<span class="sd">        &gt;&gt;&gt; sql.join(&#39;address&#39;).on(&#39;address.user_id&#39;, &#39;user.id&#39;)</span>
+<span class="sd">        &gt;&gt;&gt; sql.where({&#39;user.name&#39;: sqlpuzzle.relations.LIKE(&#39;%Al%&#39;), &#39;address.city&#39;: &#39;Prague&#39;})</span>
+<span class="sd">        &gt;&gt;&gt; sql.group_by(&#39;user.id&#39;)</span>
+<span class="sd">        &gt;&gt;&gt; sql.order_by(&#39;user.name&#39;, (&#39;user.sallary&#39;, &#39;desc&#39;))</span>
+<span class="sd">        &gt;&gt;&gt; sql.limit(20)</span>
+<span class="sd">        &lt;Select:</span>
+<span class="sd">            SELECT &quot;id&quot;, &quot;name&quot;</span>
+<span class="sd">                FROM &quot;user&quot; JOIN &quot;address&quot; ON &quot;address&quot;.&quot;user_id&quot; = &quot;user&quot;.&quot;id&quot;</span>
+<span class="sd">                WHERE &quot;address&quot;.&quot;city&quot; = &#39;Prague&#39; AND &quot;user&quot;.&quot;name&quot; LIKE &#39;%Al%&#39;</span>
+<span class="sd">                GROUP BY &quot;user&quot;.&quot;id&quot;</span>
+<span class="sd">                ORDER BY &quot;user&quot;.&quot;name&quot;, &quot;user&quot;.&quot;sallary&quot; DESC</span>
+<span class="sd">                LIMIT 20</span>
+<span class="sd">        &gt;</span>
+
+<span class="sd">        &gt;&gt;&gt; sqlpuzzle.select(&#39;name&#39;).from_(sql).where(</span>
+<span class="sd">        &lt;Select: SELECT &quot;name&quot; FROM (...)&gt;</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">_queryparts</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s">&#39;select_options&#39;</span><span class="p">:</span> <span class="n">SelectOptions</span><span class="p">,</span>
+        <span class="s">&#39;columns&#39;</span><span class="p">:</span> <span class="n">Columns</span><span class="p">,</span>
+        <span class="s">&#39;tables&#39;</span><span class="p">:</span> <span class="n">TablesForSelect</span><span class="p">,</span>
+        <span class="s">&#39;where&#39;</span><span class="p">:</span> <span class="n">Where</span><span class="p">,</span>
+        <span class="s">&#39;group_by&#39;</span><span class="p">:</span> <span class="n">GroupBy</span><span class="p">,</span>
+        <span class="s">&#39;having&#39;</span><span class="p">:</span> <span class="n">Having</span><span class="p">,</span>
+        <span class="s">&#39;order_by&#39;</span><span class="p">:</span> <span class="n">OrderBy</span><span class="p">,</span>
+        <span class="s">&#39;limit&#39;</span><span class="p">:</span> <span class="n">Limit</span><span class="p">,</span>
+        <span class="s">&#39;into_outfile&#39;</span><span class="p">:</span> <span class="n">IntoOutfile</span><span class="p">,</span>
+        <span class="s">&#39;select_for_update&#39;</span><span class="p">:</span> <span class="n">SelectForUpdate</span><span class="p">,</span>
+    <span class="p">}</span>
+    <span class="n">_query_template</span> <span class="o">=</span> <span class="n">six</span><span class="o">.</span><span class="n">u</span><span class="p">(</span>
+        <span class="s">&#39;SELECT</span><span class="si">%(select_options)s%(columns)s%(tables)s</span><span class="s">&#39;</span>
+        <span class="s">&#39;</span><span class="si">%(where)s%(group_by)s%(having)s</span><span class="s">&#39;</span>
+        <span class="s">&#39;</span><span class="si">%(order_by)s%(limit)s%(into_outfile)s%(select_for_update)s</span><span class="s">&#39;</span>
+    <span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwds</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">Select</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">columns</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwds</span><span class="p">)</span>
+
+    <span class="c">#  It&#39;s here just for shortcut, so you can call just `sql.has(&#39;distinct&#39;)`</span>
+    <span class="c">#+ instead of `sql.has(&#39;select_options&#39;, &#39;distinct&#39;)` (programmer does not</span>
+    <span class="c">#+ have to know about internal implementation).</span>
+<div class="viewcode-block" id="Select.has"><a class="viewcode-back" href="../../../index.html#sqlpuzzle._queries.select.Select.has">[docs]</a>    <span class="k">def</span> <span class="nf">has</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">querypart_name</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns ``True`` if ``querypart_name`` with ``value`` is set. For example</span>
+<span class="sd">        you can check if you already used condition by ``sql.has(&#39;where&#39;)``.</span>
+
+<span class="sd">        If you want to check for more information, for example if that condition</span>
+<span class="sd">        also contain ID, you can do this by ``sql.has(&#39;where&#39;, &#39;id&#39;)``.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">super</span><span class="p">(</span><span class="n">Select</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">has</span><span class="p">(</span><span class="n">querypart_name</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">True</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">value</span><span class="p">:</span>
+            <span class="k">return</span> <span class="nb">super</span><span class="p">(</span><span class="n">Select</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">has</span><span class="p">(</span><span class="s">&#39;select_options&#39;</span><span class="p">,</span> <span class="n">querypart_name</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">False</span>
+</div>
+<div class="viewcode-block" id="Select.__and__"><a class="viewcode-back" href="../../../index.html#sqlpuzzle._queries.select.Select.__and__">[docs]</a>    <span class="k">def</span> <span class="nf">__and__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns :py:class:`sqlpuzzle._queries.union.Union` instance, ``UNION ALL``.</span>
+
+<span class="sd">        .. code-block:: python</span>
+
+<span class="sd">            &gt;&gt;&gt; sqlpuzzle.select(&#39;t&#39;) &amp; sqlpuzzle.select(&#39;u&#39;)</span>
+<span class="sd">            &lt;Union: SELECT &quot;t&quot; UNION ALL SELECT &quot;u&quot;&gt;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">Union</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">,</span> <span class="n">UNION_ALL</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="Select.__or__"><a class="viewcode-back" href="../../../index.html#sqlpuzzle._queries.select.Select.__or__">[docs]</a>    <span class="k">def</span> <span class="nf">__or__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns :py:class:`sqlpuzzle._queries.union.Union` instance, ``UNION``.</span>
+
+<span class="sd">        .. code-block:: python</span>
+
+<span class="sd">            &gt;&gt;&gt; sqlpuzzle.select(&#39;t&#39;) | sqlpuzzle.select(&#39;u&#39;)</span>
+<span class="sd">            &lt;Union: SELECT &quot;t&quot; UNION SELECT &quot;u&quot;&gt;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">Union</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">,</span> <span class="n">UNION</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="Select.columns"><a class="viewcode-back" href="../../../index.html#sqlpuzzle._queries.select.Select.columns">[docs]</a>    <span class="k">def</span> <span class="nf">columns</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwds</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_columns</span><span class="o">.</span><span class="n">columns</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwds</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span>
+</div>
+<div class="viewcode-block" id="Select.from_"><a class="viewcode-back" href="../../../index.html#sqlpuzzle._queries.select.Select.from_">[docs]</a>    <span class="k">def</span> <span class="nf">from_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwds</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_tables</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwds</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span>
+</div>
+<div class="viewcode-block" id="Select.from_table"><a class="viewcode-back" href="../../../index.html#sqlpuzzle._queries.select.Select.from_table">[docs]</a>    <span class="k">def</span> <span class="nf">from_table</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">table</span><span class="p">,</span> <span class="n">alias</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_tables</span><span class="o">.</span><span class="n">set</span><span class="p">((</span><span class="n">table</span><span class="p">,</span> <span class="n">alias</span><span class="p">))</span>
+        <span class="k">return</span> <span class="bp">self</span>
+</div>
+    <span class="n">from_tables</span> <span class="o">=</span> <span class="n">from_</span>
+
+<div class="viewcode-block" id="Select.join"><a class="viewcode-back" href="../../../index.html#sqlpuzzle._queries.select.Select.join">[docs]</a>    <span class="k">def</span> <span class="nf">join</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">table</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_tables</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">table</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span>
+</div>
+<div class="viewcode-block" id="Select.inner_join"><a class="viewcode-back" href="../../../index.html#sqlpuzzle._queries.select.Select.inner_join">[docs]</a>    <span class="k">def</span> <span class="nf">inner_join</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">table</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_tables</span><span class="o">.</span><span class="n">inner_join</span><span class="p">(</span><span class="n">table</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span>
+</div>
+<div class="viewcode-block" id="Select.left_join"><a class="viewcode-back" href="../../../index.html#sqlpuzzle._queries.select.Select.left_join">[docs]</a>    <span class="k">def</span> <span class="nf">left_join</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">table</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_tables</span><span class="o">.</span><span class="n">left_join</span><span class="p">(</span><span class="n">table</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span>
+</div>
+<div class="viewcode-block" id="Select.right_join"><a class="viewcode-back" href="../../../index.html#sqlpuzzle._queries.select.Select.right_join">[docs]</a>    <span class="k">def</span> <span class="nf">right_join</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">table</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_tables</span><span class="o">.</span><span class="n">right_join</span><span class="p">(</span><span class="n">table</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span>
+</div>
+<div class="viewcode-block" id="Select.full_join"><a class="viewcode-back" href="../../../index.html#sqlpuzzle._queries.select.Select.full_join">[docs]</a>    <span class="k">def</span> <span class="nf">full_join</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">table</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        .. versionadded:: 1.7.0</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_tables</span><span class="o">.</span><span class="n">full_join</span><span class="p">(</span><span class="n">table</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span>
+</div>
+<div class="viewcode-block" id="Select.on"><a class="viewcode-back" href="../../../index.html#sqlpuzzle._queries.select.Select.on">[docs]</a>    <span class="k">def</span> <span class="nf">on</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwds</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_tables</span><span class="o">.</span><span class="n">on</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwds</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span>
+</div>
+<div class="viewcode-block" id="Select.where"><a class="viewcode-back" href="../../../index.html#sqlpuzzle._queries.select.Select.where">[docs]</a>    <span class="k">def</span> <span class="nf">where</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwds</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_where</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwds</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span>
+</div>
+<div class="viewcode-block" id="Select.having"><a class="viewcode-back" href="../../../index.html#sqlpuzzle._queries.select.Select.having">[docs]</a>    <span class="k">def</span> <span class="nf">having</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwds</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_having</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwds</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span>
+</div>
+<div class="viewcode-block" id="Select.group_by"><a class="viewcode-back" href="../../../index.html#sqlpuzzle._queries.select.Select.group_by">[docs]</a>    <span class="k">def</span> <span class="nf">group_by</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwds</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Default ordering is ``ASC``.</span>
+
+<span class="sd">        ``group_by`` accept ``dict`` as you would expect, but note that ``dict``</span>
+<span class="sd">        does not have same order. Same for named arguments.</span>
+
+<span class="sd">        .. code-block:: python</span>
+
+<span class="sd">            &gt;&gt;&gt; sqlpuzzle.select(&#39;c&#39;).from_(&#39;t&#39;).group_by(&#39;a&#39;, (&#39;b&#39;, &#39;desc&#39;))</span>
+<span class="sd">            &lt;Select: SELECT &quot;c&quot; FROM &quot;t&quot; GROUP BY &quot;a&quot;, &quot;b&quot; DESC&gt;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_group_by</span><span class="o">.</span><span class="n">group_by</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwds</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span>
+</div>
+<div class="viewcode-block" id="Select.order_by"><a class="viewcode-back" href="../../../index.html#sqlpuzzle._queries.select.Select.order_by">[docs]</a>    <span class="k">def</span> <span class="nf">order_by</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwds</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Default ordering is ``ASC``.</span>
+
+<span class="sd">        ``order_by`` accept ``dict`` as you would expect, but note that ``dict``</span>
+<span class="sd">        does not have same order.</span>
+
+<span class="sd">        .. code-block:: python</span>
+
+<span class="sd">            &gt;&gt;&gt; sqlpuzzle.select(&#39;c&#39;).from_(&#39;t&#39;).order_by(&#39;a&#39;, (&#39;b&#39;, &#39;desc&#39;))</span>
+<span class="sd">            &lt;Select: SELECT &quot;c&quot; FROM &quot;t&quot; ORDER BY &quot;a&quot;, &quot;b&quot; DESC&gt;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_order_by</span><span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwds</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span>
+</div>
+<div class="viewcode-block" id="Select.limit"><a class="viewcode-back" href="../../../index.html#sqlpuzzle._queries.select.Select.limit">[docs]</a>    <span class="k">def</span> <span class="nf">limit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">limit</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_limit</span><span class="o">.</span><span class="n">limit</span><span class="p">(</span><span class="n">limit</span><span class="p">,</span> <span class="n">offset</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span>
+</div>
+<div class="viewcode-block" id="Select.offset"><a class="viewcode-back" href="../../../index.html#sqlpuzzle._queries.select.Select.offset">[docs]</a>    <span class="k">def</span> <span class="nf">offset</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">offset</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_limit</span><span class="o">.</span><span class="n">offset</span><span class="p">(</span><span class="n">offset</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span>
+</div>
+<div class="viewcode-block" id="Select.into_outfile"><a class="viewcode-back" href="../../../index.html#sqlpuzzle._queries.select.Select.into_outfile">[docs]</a>    <span class="k">def</span> <span class="nf">into_outfile</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">into_outfile</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_into_outfile</span><span class="o">.</span><span class="n">into_outfile</span><span class="p">(</span><span class="n">into_outfile</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span>
+</div>
+<div class="viewcode-block" id="Select.fields_terminated_by"><a class="viewcode-back" href="../../../index.html#sqlpuzzle._queries.select.Select.fields_terminated_by">[docs]</a>    <span class="k">def</span> <span class="nf">fields_terminated_by</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fields_terminated_by</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_into_outfile</span><span class="o">.</span><span class="n">fields_terminated_by</span><span class="p">(</span><span class="n">fields_terminated_by</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span>
+</div>
+<div class="viewcode-block" id="Select.lines_terminated_by"><a class="viewcode-back" href="../../../index.html#sqlpuzzle._queries.select.Select.lines_terminated_by">[docs]</a>    <span class="k">def</span> <span class="nf">lines_terminated_by</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lines_terminated_by</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_into_outfile</span><span class="o">.</span><span class="n">lines_terminated_by</span><span class="p">(</span><span class="n">lines_terminated_by</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span>
+</div>
+<div class="viewcode-block" id="Select.optionally_enclosed_by"><a class="viewcode-back" href="../../../index.html#sqlpuzzle._queries.select.Select.optionally_enclosed_by">[docs]</a>    <span class="k">def</span> <span class="nf">optionally_enclosed_by</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">optionally_enclosed_by</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_into_outfile</span><span class="o">.</span><span class="n">optionally_enclosed_by</span><span class="p">(</span><span class="n">optionally_enclosed_by</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span>
+
+    <span class="c"># SELECT OPTIONS</span>
+</div>
+<div class="viewcode-block" id="Select.sql_cache"><a class="viewcode-back" href="../../../index.html#sqlpuzzle._queries.select.Select.sql_cache">[docs]</a>    <span class="k">def</span> <span class="nf">sql_cache</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">allow</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_select_options</span><span class="o">.</span><span class="n">sql_cache</span><span class="p">(</span><span class="n">allow</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span>
+</div>
+<div class="viewcode-block" id="Select.sql_no_cache"><a class="viewcode-back" href="../../../index.html#sqlpuzzle._queries.select.Select.sql_no_cache">[docs]</a>    <span class="k">def</span> <span class="nf">sql_no_cache</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">allow</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_select_options</span><span class="o">.</span><span class="n">sql_no_cache</span><span class="p">(</span><span class="n">allow</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span>
+</div>
+<div class="viewcode-block" id="Select.all"><a class="viewcode-back" href="../../../index.html#sqlpuzzle._queries.select.Select.all">[docs]</a>    <span class="k">def</span> <span class="nf">all</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">allow</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_select_options</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">allow</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span>
+</div>
+<div class="viewcode-block" id="Select.distinct"><a class="viewcode-back" href="../../../index.html#sqlpuzzle._queries.select.Select.distinct">[docs]</a>    <span class="k">def</span> <span class="nf">distinct</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">allow</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_select_options</span><span class="o">.</span><span class="n">distinct</span><span class="p">(</span><span class="n">allow</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span>
+</div>
+<div class="viewcode-block" id="Select.distinctrow"><a class="viewcode-back" href="../../../index.html#sqlpuzzle._queries.select.Select.distinctrow">[docs]</a>    <span class="k">def</span> <span class="nf">distinctrow</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">allow</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_select_options</span><span class="o">.</span><span class="n">distinctrow</span><span class="p">(</span><span class="n">allow</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span>
+</div>
+<div class="viewcode-block" id="Select.sql_small_result"><a class="viewcode-back" href="../../../index.html#sqlpuzzle._queries.select.Select.sql_small_result">[docs]</a>    <span class="k">def</span> <span class="nf">sql_small_result</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">allow</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_select_options</span><span class="o">.</span><span class="n">sql_small_result</span><span class="p">(</span><span class="n">allow</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span>
+</div>
+<div class="viewcode-block" id="Select.sql_big_result"><a class="viewcode-back" href="../../../index.html#sqlpuzzle._queries.select.Select.sql_big_result">[docs]</a>    <span class="k">def</span> <span class="nf">sql_big_result</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">allow</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_select_options</span><span class="o">.</span><span class="n">sql_big_result</span><span class="p">(</span><span class="n">allow</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span>
+</div>
+<div class="viewcode-block" id="Select.sql_buffer_result"><a class="viewcode-back" href="../../../index.html#sqlpuzzle._queries.select.Select.sql_buffer_result">[docs]</a>    <span class="k">def</span> <span class="nf">sql_buffer_result</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">allow</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_select_options</span><span class="o">.</span><span class="n">sql_buffer_result</span><span class="p">(</span><span class="n">allow</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span>
+</div>
+<div class="viewcode-block" id="Select.sql_calc_found_rows"><a class="viewcode-back" href="../../../index.html#sqlpuzzle._queries.select.Select.sql_calc_found_rows">[docs]</a>    <span class="k">def</span> <span class="nf">sql_calc_found_rows</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">allow</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_select_options</span><span class="o">.</span><span class="n">sql_calc_found_rows</span><span class="p">(</span><span class="n">allow</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span>
+</div>
+<div class="viewcode-block" id="Select.straight_join"><a class="viewcode-back" href="../../../index.html#sqlpuzzle._queries.select.Select.straight_join">[docs]</a>    <span class="k">def</span> <span class="nf">straight_join</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">allow</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_select_options</span><span class="o">.</span><span class="n">straight_join</span><span class="p">(</span><span class="n">allow</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span>
+</div>
+<div class="viewcode-block" id="Select.high_priority"><a class="viewcode-back" href="../../../index.html#sqlpuzzle._queries.select.Select.high_priority">[docs]</a>    <span class="k">def</span> <span class="nf">high_priority</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">allow</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_select_options</span><span class="o">.</span><span class="n">high_priority</span><span class="p">(</span><span class="n">allow</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span>
+</div>
+<div class="viewcode-block" id="Select.for_update"><a class="viewcode-back" href="../../../index.html#sqlpuzzle._queries.select.Select.for_update">[docs]</a>    <span class="k">def</span> <span class="nf">for_update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">allow</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_select_for_update</span><span class="o">.</span><span class="n">for_update</span><span class="p">(</span><span class="n">allow</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span>
+
+    <span class="c"># Backward compatibility.</span>
+</div>
+    <span class="n">fromTable</span> <span class="o">=</span> <span class="n">from_table</span>
+    <span class="n">fromTables</span> <span class="o">=</span> <span class="n">from_tables</span>
+    <span class="n">innerJoin</span> <span class="o">=</span> <span class="n">inner_join</span>
+    <span class="n">leftJoin</span> <span class="o">=</span> <span class="n">left_join</span>
+    <span class="n">rightJoin</span> <span class="o">=</span> <span class="n">right_join</span>
+    <span class="n">groupBy</span> <span class="o">=</span> <span class="n">group_by</span>
+    <span class="n">orderBy</span> <span class="o">=</span> <span class="n">order_by</span>
+    <span class="n">intoOutfile</span> <span class="o">=</span> <span class="n">into_outfile</span>
+    <span class="n">fieldsTerminatedBy</span> <span class="o">=</span> <span class="n">fields_terminated_by</span>
+    <span class="n">linesTerminatedBy</span> <span class="o">=</span> <span class="n">lines_terminated_by</span>
+    <span class="n">optionallyEnclosedBy</span> <span class="o">=</span> <span class="n">optionally_enclosed_by</span>
+    <span class="n">sqlCache</span> <span class="o">=</span> <span class="n">sql_cache</span>
+    <span class="n">sqlNoCache</span> <span class="o">=</span> <span class="n">sql_no_cache</span>
+    <span class="n">sqlSmallResult</span> <span class="o">=</span> <span class="n">sql_small_result</span>
+    <span class="n">sqlBigResult</span> <span class="o">=</span> <span class="n">sql_big_result</span>
+    <span class="n">sqlBufferResult</span> <span class="o">=</span> <span class="n">sql_buffer_result</span>
+    <span class="n">sqlCalcFoundRows</span> <span class="o">=</span> <span class="n">sql_calc_found_rows</span>
+    <span class="n">straightJoin</span> <span class="o">=</span> <span class="n">straight_join</span>
+    <span class="n">highPriority</span> <span class="o">=</span> <span class="n">high_priority</span>
+    <span class="n">forUpdate</span> <span class="o">=</span> <span class="n">for_update</span></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../../index.html">SQLPuzzle  documentation</a> &raquo;</li>
+          <li><a href="../../index.html" >Module code</a> &raquo;</li>
+          <li><a href="../../sqlpuzzle.html" >sqlpuzzle</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2015, Michal Horejsek.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
+    </div>
+  </body>
+</html>

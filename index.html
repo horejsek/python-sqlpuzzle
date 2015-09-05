@@ -1,0 +1,1122 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>SQLPuzzle documentation &mdash; SQLPuzzle  documentation</title>
+    
+    <link rel="stylesheet" href="static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="static/jquery.js"></script>
+    <script type="text/javascript" src="static/underscore.js"></script>
+    <script type="text/javascript" src="static/doctools.js"></script>
+    <link rel="top" title="SQLPuzzle  documentation" href="#" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="#">SQLPuzzle  documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-sqlpuzzle">
+<span id="sqlpuzzle-documentation"></span><h1>SQLPuzzle documentation<a class="headerlink" href="#module-sqlpuzzle" title="Permalink to this headline">¶</a></h1>
+<p>Library for ease of writing SQL queries. For now only for database MySQL &amp; PostgreSQL.</p>
+<div class="section" id="installation">
+<h2>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-bash"><div class="highlight"><pre>pip install sqlpuzzle
+</pre></div>
+</div>
+</div>
+<div class="section" id="documentation">
+<h2>Documentation<a class="headerlink" href="#documentation" title="Permalink to this headline">¶</a></h2>
+<p>Note there are also <cite>camelCase</cite> methods which are only aliases to methods described
+here. It&#8217;s only for backward compatiblity with version 0.x. It will be removed one day.</p>
+<p>To all methods you can pass arguments of different types. I know, in <tt class="docutils literal"><span class="pre">this</span></tt> is
+line saying <em>There should be one&#8211; and preferably only one &#8211;obvious way to do it.</em>
+but you can have different type of data for different type of SQL and why to
+support only one style and force user to deal with it everywhere.</p>
+<p>So you should note that you can:</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li>Pass single argument. For example for table, column, …</li>
+</ol>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">sqlpuzzle</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="s">&#39;column&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">from_</span><span class="p">(</span><span class="s">&#39;table&#39;</span><span class="p">)</span>
+<span class="go">&lt;Select: SELECT &quot;column&quot; FROM &quot;table&quot;&gt;</span>
+</pre></div>
+</div>
+<ol class="arabic simple" start="2">
+<li>Pass several arguments. Where you can pass only one argument, most of there
+time you can also pass several arguments.</li>
+</ol>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">sqlpuzzle</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="s">&#39;c1&#39;</span><span class="p">,</span> <span class="s">&#39;c2&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">from_</span><span class="p">(</span><span class="s">&#39;t1&#39;</span><span class="p">,</span> <span class="s">&#39;t2&#39;</span><span class="p">)</span>
+<span class="go">&lt;Select: SELECT &quot;c1&quot;, &quot;c2&quot; FROM &quot;t1&quot;, &quot;t2&quot;&gt;</span>
+</pre></div>
+</div>
+<ol class="arabic simple" start="3">
+<li>Pass <tt class="docutils literal"><span class="pre">tuple</span></tt> or <tt class="docutils literal"><span class="pre">list</span></tt>. Because you want for example make aliases.
+Advantage of <tt class="docutils literal"><span class="pre">tuple</span></tt> is that you can pass it only when you need alias.</li>
+</ol>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">sqlpuzzle</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="s">&#39;c1&#39;</span><span class="p">,</span> <span class="s">&#39;c2&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">from_</span><span class="p">(</span><span class="s">&#39;t&#39;</span><span class="p">,</span> <span class="p">(</span><span class="s">&#39;t&#39;</span><span class="p">,</span> <span class="s">&#39;t2&#39;</span><span class="p">))</span>
+<span class="go">&lt;Select: SELECT &quot;c1&quot;, &quot;c2&quot; FROM &quot;t&quot;, &quot;t&quot; AS &quot;t2&quot;&gt;</span>
+</pre></div>
+</div>
+<ol class="arabic simple" start="4">
+<li>Pass <tt class="docutils literal"><span class="pre">dict</span></tt>. Because it&#8217;s more sexy than tuples. Usage is same. You just
+have to be aware that <tt class="docutils literal"><span class="pre">dict</span></tt> is not sorted, so if you need same order,
+use <tt class="docutils literal"><span class="pre">OrderedDict</span></tt> instead. And also with same key you can have only one
+value.</li>
+</ol>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">sqlpuzzle</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="s">&#39;c&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">from_</span><span class="p">(</span><span class="s">&#39;t&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">where</span><span class="p">({</span><span class="s">&#39;x&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s">&#39;y&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">})</span>
+<span class="go">&lt;Select: SELECT &quot;c&quot; FROM &quot;t&quot; WHERE &quot;x&quot; = 1 AND &quot;y&quot; = 2&gt;</span>
+</pre></div>
+</div>
+<ol class="arabic simple" start="5">
+<li>Pass named arugments. Which is same as <tt class="docutils literal"><span class="pre">dict</span></tt> above.</li>
+</ol>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">sqlpuzzle</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="s">&#39;c&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">from_</span><span class="p">(</span><span class="s">&#39;t&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="go">&lt;Select: SELECT &quot;c&quot; FROM &quot;t&quot; WHERE &quot;x&quot; = 1 AND &quot;y&quot; = 2&gt;</span>
+</pre></div>
+</div>
+</div></blockquote>
+<div class="section" id="configuration">
+<h3>Configuration<a class="headerlink" href="#configuration" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="sqlpuzzle.configure">
+<tt class="descclassname">sqlpuzzle.</tt><tt class="descname">configure</tt><big>(</big><em>database</em><big>)</big><a class="reference internal" href="modules/sqlpuzzle.html#configure"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sqlpuzzle.configure" title="Permalink to this definition">¶</a></dt>
+<dd><p>By default sqlpuzzle generates syntax in plain SQL. If you want to change it,
+you should call this method somewhere on start of your app. For now there is
+only support of MySQL and PostgreSQL.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">configure</span><span class="p">(</span><span class="s">&#39;mysql&#39;</span><span class="p">)</span>
+<span class="c"># or</span>
+<span class="n">configure</span><span class="p">(</span><span class="s">&#39;postgresql&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="base-methods">
+<h3>Base methods<a class="headerlink" href="#base-methods" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="sqlpuzzle.select">
+<tt class="descclassname">sqlpuzzle.</tt><tt class="descname">select</tt><big>(</big><em>*args</em>, <em>**kwds</em><big>)</big><a class="reference internal" href="modules/sqlpuzzle.html#select"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sqlpuzzle.select" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns <a class="reference internal" href="#sqlpuzzle._queries.select.Select" title="sqlpuzzle._queries.select.Select"><tt class="xref py py-class docutils literal"><span class="pre">Select</span></tt></a> instance and passed arguments are used for list
+of columns.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="sqlpuzzle.select_from">
+<tt class="descclassname">sqlpuzzle.</tt><tt class="descname">select_from</tt><big>(</big><em>*args</em>, <em>**kwds</em><big>)</big><a class="reference internal" href="modules/sqlpuzzle.html#select_from"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sqlpuzzle.select_from" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns <a class="reference internal" href="#sqlpuzzle._queries.select.Select" title="sqlpuzzle._queries.select.Select"><tt class="xref py py-class docutils literal"><span class="pre">Select</span></tt></a> instance and passed arguments are used for list
+of tables. Columns are set to *.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="sqlpuzzle.insert">
+<tt class="descclassname">sqlpuzzle.</tt><tt class="descname">insert</tt><big>(</big><big>)</big><a class="reference internal" href="modules/sqlpuzzle.html#insert"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sqlpuzzle.insert" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns <a class="reference internal" href="#sqlpuzzle._queries.insert.Insert" title="sqlpuzzle._queries.insert.Insert"><tt class="xref py py-class docutils literal"><span class="pre">Insert</span></tt></a> instance. But probably you want to use
+<a class="reference internal" href="#sqlpuzzle.insert_into" title="sqlpuzzle.insert_into"><tt class="xref py py-func docutils literal"><span class="pre">insert_into()</span></tt></a> instead.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="sqlpuzzle.insert_into">
+<tt class="descclassname">sqlpuzzle.</tt><tt class="descname">insert_into</tt><big>(</big><em>table</em><big>)</big><a class="reference internal" href="modules/sqlpuzzle.html#insert_into"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sqlpuzzle.insert_into" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns <a class="reference internal" href="#sqlpuzzle._queries.insert.Insert" title="sqlpuzzle._queries.insert.Insert"><tt class="xref py py-class docutils literal"><span class="pre">Insert</span></tt></a> instance and passed argument is used for table.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="sqlpuzzle.update">
+<tt class="descclassname">sqlpuzzle.</tt><tt class="descname">update</tt><big>(</big><em>table</em><big>)</big><a class="reference internal" href="modules/sqlpuzzle.html#update"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sqlpuzzle.update" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns <a class="reference internal" href="#sqlpuzzle._queries.update.Update" title="sqlpuzzle._queries.update.Update"><tt class="xref py py-class docutils literal"><span class="pre">Update</span></tt></a> instance and passed argument is used for table.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="sqlpuzzle.delete">
+<tt class="descclassname">sqlpuzzle.</tt><tt class="descname">delete</tt><big>(</big><em>*tables</em><big>)</big><a class="reference internal" href="modules/sqlpuzzle.html#delete"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sqlpuzzle.delete" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns <a class="reference internal" href="#sqlpuzzle._queries.delete.Delete" title="sqlpuzzle._queries.delete.Delete"><tt class="xref py py-class docutils literal"><span class="pre">Delete</span></tt></a> instance and passed arguments are used for list
+of tables from which really data should be deleted. But probably you want
+to use <a class="reference internal" href="#sqlpuzzle.delete_from" title="sqlpuzzle.delete_from"><tt class="xref py py-func docutils literal"><span class="pre">delete_from()</span></tt></a> instead.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="sqlpuzzle.delete_from">
+<tt class="descclassname">sqlpuzzle.</tt><tt class="descname">delete_from</tt><big>(</big><em>*args</em>, <em>**kwds</em><big>)</big><a class="reference internal" href="modules/sqlpuzzle.html#delete_from"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sqlpuzzle.delete_from" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns <a class="reference internal" href="#sqlpuzzle._queries.delete.Delete" title="sqlpuzzle._queries.delete.Delete"><tt class="xref py py-class docutils literal"><span class="pre">Delete</span></tt></a> instance and passed arguments are used for list
+of tables.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="helpers">
+<h3>Helpers<a class="headerlink" href="#helpers" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="sqlpuzzle.Q">
+<tt class="descclassname">sqlpuzzle.</tt><tt class="descname">Q</tt><big>(</big><em>*args</em>, <em>**kwds</em><big>)</big><a class="reference internal" href="modules/sqlpuzzle.html#Q"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sqlpuzzle.Q" title="Permalink to this definition">¶</a></dt>
+<dd><p>Use as condition (where, having, ...) and pass it to condition. Works like
+Q object in Django, so you can use it with logical operands (&amp; and |).</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">sqlpuzzle</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">Q</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Michael&#39;</span><span class="p">,</span> <span class="n">country</span><span class="o">=</span><span class="bp">None</span><span class="p">)</span> <span class="o">|</span> <span class="n">Q</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Alan&#39;</span><span class="p">))</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="sqlpuzzle.C">
+<tt class="descclassname">sqlpuzzle.</tt><tt class="descname">C</tt><big>(</big><em>string=''</em><big>)</big><a class="headerlink" href="#sqlpuzzle.C" title="Permalink to this definition">¶</a></dt>
+<dd><p>Or <tt class="docutils literal"><span class="pre">sqlpuzzle.customsql</span></tt>.</p>
+<p>Force custom SQL if it&#8217;s not supported by <tt class="docutils literal"><span class="pre">sqlpuzzle</span></tt>.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">sqlpuzzle</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="n">sqlpuzzle</span><span class="o">.</span><span class="n">C</span><span class="p">(</span><span class="s">&#39;IFNULL(col, 42) AS col&#39;</span><span class="p">))</span>
+<span class="go">&lt;Select: SELECT IFNULL(col, 42) AS col&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sqlpuzzle</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="s">&#39;t&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">sqlpuzzle</span><span class="o">.</span><span class="n">C</span><span class="p">(</span><span class="s">&#39;`age` = `age` + 1&#39;</span><span class="p">))</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
+<span class="go">&lt;Update: UPDATE &quot;t&quot; SET `age` = `age` + 1 WHERE &quot;id&quot; = 42&gt;</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="sqlpuzzle.V">
+<tt class="descclassname">sqlpuzzle.</tt><tt class="descname">V</tt><big>(</big><em>value</em><big>)</big><a class="headerlink" href="#sqlpuzzle.V" title="Permalink to this definition">¶</a></dt>
+<dd><p>Or <tt class="docutils literal"><span class="pre">sqlpuzzle.sqlvalue</span></tt>.</p>
+<p>SQL values which are escaped. Like values in conditions. SqlPuzzle by default
+behave to some arguments automatically as SQL value and to some as SQL reference.
+Use this when SqlPuzzle uses SQL reference instead of value.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">sqlpuzzle</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="s">&#39;a&#39;</span><span class="p">)</span>
+<span class="go">&lt;Select: SELECT `a`&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sqlpuzzle</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="n">sqlpuzzle</span><span class="o">.</span><span class="n">V</span><span class="p">(</span><span class="s">&#39;a&#39;</span><span class="p">))</span>
+<span class="go">&lt;Select: SELECT &#39;a&#39;&gt;</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="sqlpuzzle.R">
+<tt class="descclassname">sqlpuzzle.</tt><tt class="descname">R</tt><big>(</big><em>value</em><big>)</big><a class="headerlink" href="#sqlpuzzle.R" title="Permalink to this definition">¶</a></dt>
+<dd><p>Or <tt class="docutils literal"><span class="pre">sqlpuzzle.sqlreference</span></tt>.</p>
+<p>SQL reference is some column. SqlPuzzle by default behave to some arguments
+automatically as SQL value and to some as SQL reference. Use this when SqlPuzzle
+uses SQL value instead of reference.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">sqlpuzzle</span><span class="o">.</span><span class="n">select_from</span><span class="p">(</span><span class="s">&#39;t&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;surname&#39;</span><span class="p">)</span>
+<span class="go">&lt;Select: SELECT * FROM `t` WHERE `name` = &#39;surname&#39;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sqlpuzzle</span><span class="o">.</span><span class="n">select_from</span><span class="p">(</span><span class="s">&#39;t&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">sqlpuzzle</span><span class="o">.</span><span class="n">R</span><span class="p">(</span><span class="s">&#39;surname&#39;</span><span class="p">))</span>
+<span class="go">&lt;Select: SELECT * FROM `t` WHERE `name` = `surname`&gt;</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="functions">
+<h3>Functions<a class="headerlink" href="#functions" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="sqlpuzzle.avg">
+<tt class="descclassname">sqlpuzzle.</tt><tt class="descname">avg</tt><big>(</big><em>expr</em><big>)</big><a class="reference internal" href="modules/sqlpuzzle.html#avg"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sqlpuzzle.avg" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function <tt class="docutils literal"><span class="pre">AVG(expr)</span></tt></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="sqlpuzzle.avg_distinct">
+<tt class="descclassname">sqlpuzzle.</tt><tt class="descname">avg_distinct</tt><big>(</big><em>expr</em><big>)</big><a class="reference internal" href="modules/sqlpuzzle.html#avg_distinct"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sqlpuzzle.avg_distinct" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function <tt class="docutils literal"><span class="pre">AVG(DICTINCT</span> <span class="pre">expr)</span></tt></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="sqlpuzzle.count">
+<tt class="descclassname">sqlpuzzle.</tt><tt class="descname">count</tt><big>(</big><em>expr=None</em><big>)</big><a class="reference internal" href="modules/sqlpuzzle.html#count"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sqlpuzzle.count" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function <tt class="docutils literal"><span class="pre">COUNT(expr)</span></tt></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="sqlpuzzle.count_distinct">
+<tt class="descclassname">sqlpuzzle.</tt><tt class="descname">count_distinct</tt><big>(</big><em>expr=None</em><big>)</big><a class="reference internal" href="modules/sqlpuzzle.html#count_distinct"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sqlpuzzle.count_distinct" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function <tt class="docutils literal"><span class="pre">COUNT(DISTINCT</span> <span class="pre">expr)</span></tt></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="sqlpuzzle.max">
+<tt class="descclassname">sqlpuzzle.</tt><tt class="descname">max</tt><big>(</big><em>expr</em><big>)</big><a class="reference internal" href="modules/sqlpuzzle.html#max"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sqlpuzzle.max" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function <tt class="docutils literal"><span class="pre">MAX(expr)</span></tt></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="sqlpuzzle.max_distinct">
+<tt class="descclassname">sqlpuzzle.</tt><tt class="descname">max_distinct</tt><big>(</big><em>expr</em><big>)</big><a class="reference internal" href="modules/sqlpuzzle.html#max_distinct"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sqlpuzzle.max_distinct" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function <tt class="docutils literal"><span class="pre">MAX(DISTINCT</span> <span class="pre">expr)</span></tt></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="sqlpuzzle.min">
+<tt class="descclassname">sqlpuzzle.</tt><tt class="descname">min</tt><big>(</big><em>expr</em><big>)</big><a class="reference internal" href="modules/sqlpuzzle.html#min"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sqlpuzzle.min" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function <tt class="docutils literal"><span class="pre">MIN(expr)</span></tt></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="sqlpuzzle.min_distinct">
+<tt class="descclassname">sqlpuzzle.</tt><tt class="descname">min_distinct</tt><big>(</big><em>expr</em><big>)</big><a class="reference internal" href="modules/sqlpuzzle.html#min_distinct"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sqlpuzzle.min_distinct" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function <tt class="docutils literal"><span class="pre">MIN(DISTINCT</span> <span class="pre">expr)</span></tt></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="sqlpuzzle.sum">
+<tt class="descclassname">sqlpuzzle.</tt><tt class="descname">sum</tt><big>(</big><em>expr</em><big>)</big><a class="reference internal" href="modules/sqlpuzzle.html#sum"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sqlpuzzle.sum" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function <tt class="docutils literal"><span class="pre">SUM(expr)</span></tt></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="sqlpuzzle.sum_distinct">
+<tt class="descclassname">sqlpuzzle.</tt><tt class="descname">sum_distinct</tt><big>(</big><em>expr</em><big>)</big><a class="reference internal" href="modules/sqlpuzzle.html#sum_distinct"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sqlpuzzle.sum_distinct" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function <tt class="docutils literal"><span class="pre">SUM(DISTINCT</span> <span class="pre">expr)</span></tt></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="sqlpuzzle.concat">
+<tt class="descclassname">sqlpuzzle.</tt><tt class="descname">concat</tt><big>(</big><em>*expr</em><big>)</big><a class="reference internal" href="modules/sqlpuzzle.html#concat"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sqlpuzzle.concat" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function <tt class="docutils literal"><span class="pre">CONCAT(expr)</span></tt></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="sqlpuzzle.group_concat">
+<tt class="descclassname">sqlpuzzle.</tt><tt class="descname">group_concat</tt><big>(</big><em>*expr</em><big>)</big><a class="reference internal" href="modules/sqlpuzzle.html#group_concat"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sqlpuzzle.group_concat" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function <tt class="docutils literal"><span class="pre">GROUP_CONCAT(expr</span> <span class="pre">[ORDER</span> <span class="pre">BY</span> <span class="pre">[SEPARATOR]])</span></tt></p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><a class="reference internal" href="#sqlpuzzle._queryparts.functions.GroupConcat" title="sqlpuzzle._queryparts.functions.GroupConcat"><tt class="xref py py-class docutils literal"><span class="pre">GroupConcat</span></tt></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="sqlpuzzle.convert">
+<tt class="descclassname">sqlpuzzle.</tt><tt class="descname">convert</tt><big>(</big><em>expr</em>, <em>type_=None</em><big>)</big><a class="reference internal" href="modules/sqlpuzzle.html#convert"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sqlpuzzle.convert" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function <tt class="docutils literal"><span class="pre">CONVERT(expr,</span> <span class="pre">type)</span></tt></p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><a class="reference internal" href="#sqlpuzzle._queryparts.functions.Convert" title="sqlpuzzle._queryparts.functions.Convert"><tt class="xref py py-class docutils literal"><span class="pre">Convert</span></tt></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="class">
+<dt id="sqlpuzzle._queryparts.functions.GroupConcat">
+<em class="property">class </em><tt class="descclassname">sqlpuzzle._queryparts.functions.</tt><tt class="descname">GroupConcat</tt><big>(</big><em>*expr</em><big>)</big><a class="reference internal" href="modules/sqlpuzzle/_queryparts/functions.html#GroupConcat"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sqlpuzzle._queryparts.functions.GroupConcat" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="method">
+<dt id="sqlpuzzle._queryparts.functions.GroupConcat.order_by">
+<tt class="descname">order_by</tt><big>(</big><em>*args</em><big>)</big><a class="reference internal" href="modules/sqlpuzzle/_queryparts/functions.html#GroupConcat.order_by"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sqlpuzzle._queryparts.functions.GroupConcat.order_by" title="Permalink to this definition">¶</a></dt>
+<dd><p>Order of concatination.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">sqlpuzzle</span><span class="o">.</span><span class="n">group_concat</span><span class="p">(</span><span class="s">&#39;col&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="s">&#39;col&#39;</span><span class="p">)</span>
+<span class="go">&lt;GroupConcat: GROUP_CONCAT(&quot;col&quot; ORDER BY &quot;col&quot;)&gt;</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="sqlpuzzle._queryparts.functions.GroupConcat.separator">
+<tt class="descname">separator</tt><big>(</big><em>separator</em><big>)</big><a class="reference internal" href="modules/sqlpuzzle/_queryparts/functions.html#GroupConcat.separator"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sqlpuzzle._queryparts.functions.GroupConcat.separator" title="Permalink to this definition">¶</a></dt>
+<dd><p>Separator of values.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">sqlpuzzle</span><span class="o">.</span><span class="n">group_concat</span><span class="p">(</span><span class="s">&#39;col&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">separator</span><span class="p">(</span><span class="s">&#39;-&#39;</span><span class="p">)</span>
+<span class="go">&lt;GroupConcat: GROUP_CONCAT(&quot;col&quot; SEPARATOR &#39;-&#39;)&gt;</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="sqlpuzzle._queryparts.functions.Convert">
+<em class="property">class </em><tt class="descclassname">sqlpuzzle._queryparts.functions.</tt><tt class="descname">Convert</tt><big>(</big><em>expr</em>, <em>type_=None</em><big>)</big><a class="reference internal" href="modules/sqlpuzzle/_queryparts/functions.html#Convert"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sqlpuzzle._queryparts.functions.Convert" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="method">
+<dt id="sqlpuzzle._queryparts.functions.Convert.to">
+<tt class="descname">to</tt><big>(</big><em>type_</em><big>)</big><a class="reference internal" href="modules/sqlpuzzle/_queryparts/functions.html#Convert.to"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sqlpuzzle._queryparts.functions.Convert.to" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert to which type.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">sqlpuzzle</span><span class="o">.</span><span class="n">convert</span><span class="p">(</span><span class="s">&#39;col&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="s">&#39;unsigned&#39;</span><span class="p">)</span>
+<span class="go">&lt;Convert: CONVERT(&quot;col&quot;, UNSIGNED)&gt;</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sqlpuzzle</span><span class="o">.</span><span class="n">convert</span><span class="p">(</span><span class="s">&#39;col&#39;</span><span class="p">,</span> <span class="s">&#39;unsigned&#39;</span><span class="p">)</span>
+<span class="go">&lt;Convert: CONVERT(&quot;col&quot;, UNSIGNED)&gt;</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-sqlpuzzle.relations">
+<span id="relations"></span><h3>Relations<a class="headerlink" href="#module-sqlpuzzle.relations" title="Permalink to this headline">¶</a></h3>
+<p>Use relations in conditions. For example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">sqlpuzzle</span><span class="o">.</span><span class="n">select_from</span><span class="p">(</span><span class="s">&#39;t&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">sqlpuzzle</span><span class="o">.</span><span class="n">relations</span><span class="o">.</span><span class="n">LIKE</span><span class="p">(</span><span class="s">&#39;M%&#39;</span><span class="p">))</span>
+<span class="go">&lt;Select: SELECT * FROM &quot;t&quot; WHERE &quot;name&quot; LIKE &#39;M%&#39;&gt;</span>
+</pre></div>
+</div>
+<dl class="class">
+<dt id="sqlpuzzle.relations.EQ">
+<em class="property">class </em><tt class="descclassname">sqlpuzzle.relations.</tt><tt class="descname">EQ</tt><big>(</big><em>value</em><big>)</big><a class="reference internal" href="modules/sqlpuzzle/relations.html#EQ"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sqlpuzzle.relations.EQ" title="Permalink to this definition">¶</a></dt>
+<dd><p>Relation <tt class="docutils literal"><span class="pre">=</span></tt>.</p>
+<p>Default relation in most cases.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="sqlpuzzle.relations.EQUAL_TO">
+<tt class="descclassname">sqlpuzzle.relations.</tt><tt class="descname">EQUAL_TO</tt><a class="headerlink" href="#sqlpuzzle.relations.EQUAL_TO" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <a class="reference internal" href="#sqlpuzzle.relations.EQ" title="sqlpuzzle.relations.EQ"><tt class="xref py py-class docutils literal"><span class="pre">EQ</span></tt></a></p>
+</dd></dl>
+
+<dl class="class">
+<dt id="sqlpuzzle.relations.GE">
+<em class="property">class </em><tt class="descclassname">sqlpuzzle.relations.</tt><tt class="descname">GE</tt><big>(</big><em>value</em><big>)</big><a class="reference internal" href="modules/sqlpuzzle/relations.html#GE"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sqlpuzzle.relations.GE" title="Permalink to this definition">¶</a></dt>
+<dd><p>Relation <tt class="docutils literal"><span class="pre">&gt;=</span></tt>.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="sqlpuzzle.relations.GRATHER_THAN">
+<tt class="descclassname">sqlpuzzle.relations.</tt><tt class="descname">GRATHER_THAN</tt><a class="headerlink" href="#sqlpuzzle.relations.GRATHER_THAN" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <a class="reference internal" href="#sqlpuzzle.relations.GT" title="sqlpuzzle.relations.GT"><tt class="xref py py-class docutils literal"><span class="pre">GT</span></tt></a></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="sqlpuzzle.relations.GRATHER_THAN_OR_EQUAL_TO">
+<tt class="descclassname">sqlpuzzle.relations.</tt><tt class="descname">GRATHER_THAN_OR_EQUAL_TO</tt><a class="headerlink" href="#sqlpuzzle.relations.GRATHER_THAN_OR_EQUAL_TO" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <a class="reference internal" href="#sqlpuzzle.relations.GE" title="sqlpuzzle.relations.GE"><tt class="xref py py-class docutils literal"><span class="pre">GE</span></tt></a></p>
+</dd></dl>
+
+<dl class="class">
+<dt id="sqlpuzzle.relations.GT">
+<em class="property">class </em><tt class="descclassname">sqlpuzzle.relations.</tt><tt class="descname">GT</tt><big>(</big><em>value</em><big>)</big><a class="reference internal" href="modules/sqlpuzzle/relations.html#GT"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sqlpuzzle.relations.GT" title="Permalink to this definition">¶</a></dt>
+<dd><p>Relation <tt class="docutils literal"><span class="pre">&gt;</span></tt>.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="sqlpuzzle.relations.IN">
+<em class="property">class </em><tt class="descclassname">sqlpuzzle.relations.</tt><tt class="descname">IN</tt><big>(</big><em>*args</em><big>)</big><a class="reference internal" href="modules/sqlpuzzle/relations.html#IN"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sqlpuzzle.relations.IN" title="Permalink to this definition">¶</a></dt>
+<dd><p>Relation <tt class="docutils literal"><span class="pre">IN</span></tt>.</p>
+<p>If you pass <tt class="docutils literal"><span class="pre">None</span></tt> in list, it will behave correctly:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">sqlpuzzle</span><span class="o">.</span><span class="n">select_from</span><span class="p">(</span><span class="s">&#39;t&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">col</span><span class="o">=</span><span class="n">sqlpuzzle</span><span class="o">.</span><span class="n">relations</span><span class="o">.</span><span class="n">IN</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="bp">None</span><span class="p">]))</span>
+<span class="go">&lt;Select: SELECT * FROM &quot;t&quot; WHERE (&quot;col&quot; IN (1, 2) OR &quot;col&quot; IS NULL)&gt;</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="class">
+<dt id="sqlpuzzle.relations.IS">
+<em class="property">class </em><tt class="descclassname">sqlpuzzle.relations.</tt><tt class="descname">IS</tt><big>(</big><em>value</em><big>)</big><a class="reference internal" href="modules/sqlpuzzle/relations.html#IS"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sqlpuzzle.relations.IS" title="Permalink to this definition">¶</a></dt>
+<dd><p>Relation <tt class="docutils literal"><span class="pre">IS</span></tt>.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="sqlpuzzle.relations.IS_NOT">
+<em class="property">class </em><tt class="descclassname">sqlpuzzle.relations.</tt><tt class="descname">IS_NOT</tt><big>(</big><em>value</em><big>)</big><a class="reference internal" href="modules/sqlpuzzle/relations.html#IS_NOT"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sqlpuzzle.relations.IS_NOT" title="Permalink to this definition">¶</a></dt>
+<dd><p>Relation <tt class="docutils literal"><span class="pre">IS</span> <span class="pre">NOT</span></tt>.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="sqlpuzzle.relations.LE">
+<em class="property">class </em><tt class="descclassname">sqlpuzzle.relations.</tt><tt class="descname">LE</tt><big>(</big><em>value</em><big>)</big><a class="reference internal" href="modules/sqlpuzzle/relations.html#LE"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sqlpuzzle.relations.LE" title="Permalink to this definition">¶</a></dt>
+<dd><p>Relation <tt class="docutils literal"><span class="pre">&lt;=</span></tt>.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="sqlpuzzle.relations.LESS_THAN">
+<tt class="descclassname">sqlpuzzle.relations.</tt><tt class="descname">LESS_THAN</tt><a class="headerlink" href="#sqlpuzzle.relations.LESS_THAN" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <a class="reference internal" href="#sqlpuzzle.relations.LT" title="sqlpuzzle.relations.LT"><tt class="xref py py-class docutils literal"><span class="pre">LT</span></tt></a></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="sqlpuzzle.relations.LESS_THAN_OR_EQUAL_TO">
+<tt class="descclassname">sqlpuzzle.relations.</tt><tt class="descname">LESS_THAN_OR_EQUAL_TO</tt><a class="headerlink" href="#sqlpuzzle.relations.LESS_THAN_OR_EQUAL_TO" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <a class="reference internal" href="#sqlpuzzle.relations.LE" title="sqlpuzzle.relations.LE"><tt class="xref py py-class docutils literal"><span class="pre">LE</span></tt></a></p>
+</dd></dl>
+
+<dl class="class">
+<dt id="sqlpuzzle.relations.LIKE">
+<em class="property">class </em><tt class="descclassname">sqlpuzzle.relations.</tt><tt class="descname">LIKE</tt><big>(</big><em>value</em><big>)</big><a class="reference internal" href="modules/sqlpuzzle/relations.html#LIKE"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sqlpuzzle.relations.LIKE" title="Permalink to this definition">¶</a></dt>
+<dd><p>Relation <tt class="docutils literal"><span class="pre">LIKE</span></tt>.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="sqlpuzzle.relations.LT">
+<em class="property">class </em><tt class="descclassname">sqlpuzzle.relations.</tt><tt class="descname">LT</tt><big>(</big><em>value</em><big>)</big><a class="reference internal" href="modules/sqlpuzzle/relations.html#LT"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sqlpuzzle.relations.LT" title="Permalink to this definition">¶</a></dt>
+<dd><p>Relation <tt class="docutils literal"><span class="pre">&lt;</span></tt>.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="sqlpuzzle.relations.NE">
+<em class="property">class </em><tt class="descclassname">sqlpuzzle.relations.</tt><tt class="descname">NE</tt><big>(</big><em>value</em><big>)</big><a class="reference internal" href="modules/sqlpuzzle/relations.html#NE"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sqlpuzzle.relations.NE" title="Permalink to this definition">¶</a></dt>
+<dd><p>Relation <tt class="docutils literal"><span class="pre">!=</span></tt>.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="sqlpuzzle.relations.NOT_EQUAL_TO">
+<tt class="descclassname">sqlpuzzle.relations.</tt><tt class="descname">NOT_EQUAL_TO</tt><a class="headerlink" href="#sqlpuzzle.relations.NOT_EQUAL_TO" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <a class="reference internal" href="#sqlpuzzle.relations.NE" title="sqlpuzzle.relations.NE"><tt class="xref py py-class docutils literal"><span class="pre">NE</span></tt></a></p>
+</dd></dl>
+
+<dl class="class">
+<dt id="sqlpuzzle.relations.NOT_IN">
+<em class="property">class </em><tt class="descclassname">sqlpuzzle.relations.</tt><tt class="descname">NOT_IN</tt><big>(</big><em>*args</em><big>)</big><a class="reference internal" href="modules/sqlpuzzle/relations.html#NOT_IN"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sqlpuzzle.relations.NOT_IN" title="Permalink to this definition">¶</a></dt>
+<dd><p>Relation <tt class="docutils literal"><span class="pre">NOT</span> <span class="pre">IN</span></tt>.</p>
+<p>If you pass <tt class="docutils literal"><span class="pre">None</span></tt> in list, it will behave correctly:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">sqlpuzzle</span><span class="o">.</span><span class="n">select_from</span><span class="p">(</span><span class="s">&#39;t&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">col</span><span class="o">=</span><span class="n">sqlpuzzle</span><span class="o">.</span><span class="n">relations</span><span class="o">.</span><span class="n">NOT_IN</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="bp">None</span><span class="p">]))</span>
+<span class="go">&lt;Select: SELECT * FROM &quot;t&quot; WHERE (&quot;col&quot; NOT IN (1, 2) AND &quot;col&quot; IS NOT NULL)&gt;</span>
+</pre></div>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified">Changed in version 1.7.0: </span>There was bug that it generated <tt class="docutils literal"><span class="pre">(&quot;col&quot;</span> <span class="pre">NOT</span> <span class="pre">IN</span> <span class="pre">(1,</span> <span class="pre">2)</span> <span class="pre">OR</span> <span class="pre">&quot;col&quot;</span> <span class="pre">IS</span> <span class="pre">NULL)</span></tt>
+instead of correct condition.</p>
+</div>
+</dd></dl>
+
+<dl class="class">
+<dt id="sqlpuzzle.relations.NOT_LIKE">
+<em class="property">class </em><tt class="descclassname">sqlpuzzle.relations.</tt><tt class="descname">NOT_LIKE</tt><big>(</big><em>value</em><big>)</big><a class="reference internal" href="modules/sqlpuzzle/relations.html#NOT_LIKE"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sqlpuzzle.relations.NOT_LIKE" title="Permalink to this definition">¶</a></dt>
+<dd><p>Relation <tt class="docutils literal"><span class="pre">NOT</span> <span class="pre">LIKE</span></tt>.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="sqlpuzzle.relations.REGEXP">
+<em class="property">class </em><tt class="descclassname">sqlpuzzle.relations.</tt><tt class="descname">REGEXP</tt><big>(</big><em>value</em><big>)</big><a class="reference internal" href="modules/sqlpuzzle/relations.html#REGEXP"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sqlpuzzle.relations.REGEXP" title="Permalink to this definition">¶</a></dt>
+<dd><p>Relation <tt class="docutils literal"><span class="pre">REGEXP</span></tt>.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="select">
+<h3>Select<a class="headerlink" href="#select" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="sqlpuzzle._queries.select.Select">
+<em class="property">class </em><tt class="descclassname">sqlpuzzle._queries.select.</tt><tt class="descname">Select</tt><big>(</big><em>*args</em>, <em>**kwds</em><big>)</big><a class="reference internal" href="modules/sqlpuzzle/_queries/select.html#Select"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sqlpuzzle._queries.select.Select" title="Permalink to this definition">¶</a></dt>
+<dd><p>Examples:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">sql</span> <span class="o">=</span> <span class="n">sqlpuzzle</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="s">&#39;id&#39;</span><span class="p">,</span> <span class="s">&#39;name&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sql</span><span class="o">.</span><span class="n">from_</span><span class="p">(</span><span class="s">&#39;user&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sql</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s">&#39;address&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">on</span><span class="p">(</span><span class="s">&#39;address.user_id&#39;</span><span class="p">,</span> <span class="s">&#39;user.id&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sql</span><span class="o">.</span><span class="n">where</span><span class="p">({</span><span class="s">&#39;user.name&#39;</span><span class="p">:</span> <span class="n">sqlpuzzle</span><span class="o">.</span><span class="n">relations</span><span class="o">.</span><span class="n">LIKE</span><span class="p">(</span><span class="s">&#39;%Al%&#39;</span><span class="p">),</span> <span class="s">&#39;address.city&#39;</span><span class="p">:</span> <span class="s">&#39;Prague&#39;</span><span class="p">})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sql</span><span class="o">.</span><span class="n">group_by</span><span class="p">(</span><span class="s">&#39;user.id&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sql</span><span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="s">&#39;user.name&#39;</span><span class="p">,</span> <span class="p">(</span><span class="s">&#39;user.sallary&#39;</span><span class="p">,</span> <span class="s">&#39;desc&#39;</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sql</span><span class="o">.</span><span class="n">limit</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span>
+<span class="go">&lt;Select:</span>
+<span class="go">    SELECT &quot;id&quot;, &quot;name&quot;</span>
+<span class="go">        FROM &quot;user&quot; JOIN &quot;address&quot; ON &quot;address&quot;.&quot;user_id&quot; = &quot;user&quot;.&quot;id&quot;</span>
+<span class="go">        WHERE &quot;address&quot;.&quot;city&quot; = &#39;Prague&#39; AND &quot;user&quot;.&quot;name&quot; LIKE &#39;%Al%&#39;</span>
+<span class="go">        GROUP BY &quot;user&quot;.&quot;id&quot;</span>
+<span class="go">        ORDER BY &quot;user&quot;.&quot;name&quot;, &quot;user&quot;.&quot;sallary&quot; DESC</span>
+<span class="go">        LIMIT 20</span>
+<span class="go">&gt;</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sqlpuzzle</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="s">&#39;name&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">from_</span><span class="p">(</span><span class="n">sql</span><span class="p">)</span><span class="o">.</span><span class="n">where</span><span class="p">(</span>
+<span class="go">&lt;Select: SELECT &quot;name&quot; FROM (...)&gt;</span>
+</pre></div>
+</div>
+<dl class="method">
+<dt id="sqlpuzzle._queries.select.Select.__and__">
+<tt class="descname">__and__</tt><big>(</big><em>other</em><big>)</big><a class="reference internal" href="modules/sqlpuzzle/_queries/select.html#Select.__and__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sqlpuzzle._queries.select.Select.__and__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns <a class="reference internal" href="#sqlpuzzle._queries.union.Union" title="sqlpuzzle._queries.union.Union"><tt class="xref py py-class docutils literal"><span class="pre">sqlpuzzle._queries.union.Union</span></tt></a> instance, <tt class="docutils literal"><span class="pre">UNION</span> <span class="pre">ALL</span></tt>.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">sqlpuzzle</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="s">&#39;t&#39;</span><span class="p">)</span> <span class="o">&amp;</span> <span class="n">sqlpuzzle</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="s">&#39;u&#39;</span><span class="p">)</span>
+<span class="go">&lt;Union: SELECT &quot;t&quot; UNION ALL SELECT &quot;u&quot;&gt;</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="sqlpuzzle._queries.select.Select.__or__">
+<tt class="descname">__or__</tt><big>(</big><em>other</em><big>)</big><a class="reference internal" href="modules/sqlpuzzle/_queries/select.html#Select.__or__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sqlpuzzle._queries.select.Select.__or__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns <a class="reference internal" href="#sqlpuzzle._queries.union.Union" title="sqlpuzzle._queries.union.Union"><tt class="xref py py-class docutils literal"><span class="pre">sqlpuzzle._queries.union.Union</span></tt></a> instance, <tt class="docutils literal"><span class="pre">UNION</span></tt>.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">sqlpuzzle</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="s">&#39;t&#39;</span><span class="p">)</span> <span class="o">|</span> <span class="n">sqlpuzzle</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="s">&#39;u&#39;</span><span class="p">)</span>
+<span class="go">&lt;Union: SELECT &quot;t&quot; UNION SELECT &quot;u&quot;&gt;</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="sqlpuzzle._queries.select.Select.all">
+<tt class="descname">all</tt><big>(</big><em>allow=True</em><big>)</big><a class="reference internal" href="modules/sqlpuzzle/_queries/select.html#Select.all"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sqlpuzzle._queries.select.Select.all" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="sqlpuzzle._queries.select.Select.columns">
+<tt class="descname">columns</tt><big>(</big><em>*args</em>, <em>**kwds</em><big>)</big><a class="reference internal" href="modules/sqlpuzzle/_queries/select.html#Select.columns"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sqlpuzzle._queries.select.Select.columns" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="sqlpuzzle._queries.select.Select.distinct">
+<tt class="descname">distinct</tt><big>(</big><em>allow=True</em><big>)</big><a class="reference internal" href="modules/sqlpuzzle/_queries/select.html#Select.distinct"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sqlpuzzle._queries.select.Select.distinct" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="sqlpuzzle._queries.select.Select.distinctrow">
+<tt class="descname">distinctrow</tt><big>(</big><em>allow=True</em><big>)</big><a class="reference internal" href="modules/sqlpuzzle/_queries/select.html#Select.distinctrow"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sqlpuzzle._queries.select.Select.distinctrow" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="sqlpuzzle._queries.select.Select.fields_terminated_by">
+<tt class="descname">fields_terminated_by</tt><big>(</big><em>fields_terminated_by</em><big>)</big><a class="reference internal" href="modules/sqlpuzzle/_queries/select.html#Select.fields_terminated_by"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sqlpuzzle._queries.select.Select.fields_terminated_by" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="sqlpuzzle._queries.select.Select.for_update">
+<tt class="descname">for_update</tt><big>(</big><em>allow=True</em><big>)</big><a class="reference internal" href="modules/sqlpuzzle/_queries/select.html#Select.for_update"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sqlpuzzle._queries.select.Select.for_update" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="sqlpuzzle._queries.select.Select.from_">
+<tt class="descname">from_</tt><big>(</big><em>*args</em>, <em>**kwds</em><big>)</big><a class="reference internal" href="modules/sqlpuzzle/_queries/select.html#Select.from_"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sqlpuzzle._queries.select.Select.from_" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="sqlpuzzle._queries.select.Select.from_table">
+<tt class="descname">from_table</tt><big>(</big><em>table</em>, <em>alias=None</em><big>)</big><a class="reference internal" href="modules/sqlpuzzle/_queries/select.html#Select.from_table"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sqlpuzzle._queries.select.Select.from_table" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="sqlpuzzle._queries.select.Select.from_tables">
+<tt class="descname">from_tables</tt><big>(</big><em>*args</em>, <em>**kwds</em><big>)</big><a class="headerlink" href="#sqlpuzzle._queries.select.Select.from_tables" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="sqlpuzzle._queries.select.Select.full_join">
+<tt class="descname">full_join</tt><big>(</big><em>table</em><big>)</big><a class="reference internal" href="modules/sqlpuzzle/_queries/select.html#Select.full_join"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sqlpuzzle._queries.select.Select.full_join" title="Permalink to this definition">¶</a></dt>
+<dd><div class="versionadded">
+<p><span class="versionmodified">New in version 1.7.0.</span></p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="sqlpuzzle._queries.select.Select.group_by">
+<tt class="descname">group_by</tt><big>(</big><em>*args</em>, <em>**kwds</em><big>)</big><a class="reference internal" href="modules/sqlpuzzle/_queries/select.html#Select.group_by"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sqlpuzzle._queries.select.Select.group_by" title="Permalink to this definition">¶</a></dt>
+<dd><p>Default ordering is <tt class="docutils literal"><span class="pre">ASC</span></tt>.</p>
+<p><tt class="docutils literal"><span class="pre">group_by</span></tt> accept <tt class="docutils literal"><span class="pre">dict</span></tt> as you would expect, but note that <tt class="docutils literal"><span class="pre">dict</span></tt>
+does not have same order. Same for named arguments.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">sqlpuzzle</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="s">&#39;c&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">from_</span><span class="p">(</span><span class="s">&#39;t&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">group_by</span><span class="p">(</span><span class="s">&#39;a&#39;</span><span class="p">,</span> <span class="p">(</span><span class="s">&#39;b&#39;</span><span class="p">,</span> <span class="s">&#39;desc&#39;</span><span class="p">))</span>
+<span class="go">&lt;Select: SELECT &quot;c&quot; FROM &quot;t&quot; GROUP BY &quot;a&quot;, &quot;b&quot; DESC&gt;</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="sqlpuzzle._queries.select.Select.has">
+<tt class="descname">has</tt><big>(</big><em>querypart_name</em>, <em>value=None</em><big>)</big><a class="reference internal" href="modules/sqlpuzzle/_queries/select.html#Select.has"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sqlpuzzle._queries.select.Select.has" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns <tt class="docutils literal"><span class="pre">True</span></tt> if <tt class="docutils literal"><span class="pre">querypart_name</span></tt> with <tt class="docutils literal"><span class="pre">value</span></tt> is set. For example
+you can check if you already used condition by <tt class="docutils literal"><span class="pre">sql.has('where')</span></tt>.</p>
+<p>If you want to check for more information, for example if that condition
+also contain ID, you can do this by <tt class="docutils literal"><span class="pre">sql.has('where',</span> <span class="pre">'id')</span></tt>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="sqlpuzzle._queries.select.Select.having">
+<tt class="descname">having</tt><big>(</big><em>*args</em>, <em>**kwds</em><big>)</big><a class="reference internal" href="modules/sqlpuzzle/_queries/select.html#Select.having"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sqlpuzzle._queries.select.Select.having" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="sqlpuzzle._queries.select.Select.high_priority">
+<tt class="descname">high_priority</tt><big>(</big><em>allow=True</em><big>)</big><a class="reference internal" href="modules/sqlpuzzle/_queries/select.html#Select.high_priority"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sqlpuzzle._queries.select.Select.high_priority" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="sqlpuzzle._queries.select.Select.inner_join">
+<tt class="descname">inner_join</tt><big>(</big><em>table</em><big>)</big><a class="reference internal" href="modules/sqlpuzzle/_queries/select.html#Select.inner_join"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sqlpuzzle._queries.select.Select.inner_join" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="sqlpuzzle._queries.select.Select.into_outfile">
+<tt class="descname">into_outfile</tt><big>(</big><em>into_outfile</em><big>)</big><a class="reference internal" href="modules/sqlpuzzle/_queries/select.html#Select.into_outfile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sqlpuzzle._queries.select.Select.into_outfile" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="sqlpuzzle._queries.select.Select.join">
+<tt class="descname">join</tt><big>(</big><em>table</em><big>)</big><a class="reference internal" href="modules/sqlpuzzle/_queries/select.html#Select.join"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sqlpuzzle._queries.select.Select.join" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="sqlpuzzle._queries.select.Select.left_join">
+<tt class="descname">left_join</tt><big>(</big><em>table</em><big>)</big><a class="reference internal" href="modules/sqlpuzzle/_queries/select.html#Select.left_join"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sqlpuzzle._queries.select.Select.left_join" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="sqlpuzzle._queries.select.Select.limit">
+<tt class="descname">limit</tt><big>(</big><em>limit</em>, <em>offset=None</em><big>)</big><a class="reference internal" href="modules/sqlpuzzle/_queries/select.html#Select.limit"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sqlpuzzle._queries.select.Select.limit" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="sqlpuzzle._queries.select.Select.lines_terminated_by">
+<tt class="descname">lines_terminated_by</tt><big>(</big><em>lines_terminated_by</em><big>)</big><a class="reference internal" href="modules/sqlpuzzle/_queries/select.html#Select.lines_terminated_by"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sqlpuzzle._queries.select.Select.lines_terminated_by" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="sqlpuzzle._queries.select.Select.offset">
+<tt class="descname">offset</tt><big>(</big><em>offset</em><big>)</big><a class="reference internal" href="modules/sqlpuzzle/_queries/select.html#Select.offset"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sqlpuzzle._queries.select.Select.offset" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="sqlpuzzle._queries.select.Select.on">
+<tt class="descname">on</tt><big>(</big><em>*args</em>, <em>**kwds</em><big>)</big><a class="reference internal" href="modules/sqlpuzzle/_queries/select.html#Select.on"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sqlpuzzle._queries.select.Select.on" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="sqlpuzzle._queries.select.Select.optionally_enclosed_by">
+<tt class="descname">optionally_enclosed_by</tt><big>(</big><em>optionally_enclosed_by</em><big>)</big><a class="reference internal" href="modules/sqlpuzzle/_queries/select.html#Select.optionally_enclosed_by"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sqlpuzzle._queries.select.Select.optionally_enclosed_by" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="sqlpuzzle._queries.select.Select.order_by">
+<tt class="descname">order_by</tt><big>(</big><em>*args</em>, <em>**kwds</em><big>)</big><a class="reference internal" href="modules/sqlpuzzle/_queries/select.html#Select.order_by"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sqlpuzzle._queries.select.Select.order_by" title="Permalink to this definition">¶</a></dt>
+<dd><p>Default ordering is <tt class="docutils literal"><span class="pre">ASC</span></tt>.</p>
+<p><tt class="docutils literal"><span class="pre">order_by</span></tt> accept <tt class="docutils literal"><span class="pre">dict</span></tt> as you would expect, but note that <tt class="docutils literal"><span class="pre">dict</span></tt>
+does not have same order.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">sqlpuzzle</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="s">&#39;c&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">from_</span><span class="p">(</span><span class="s">&#39;t&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="s">&#39;a&#39;</span><span class="p">,</span> <span class="p">(</span><span class="s">&#39;b&#39;</span><span class="p">,</span> <span class="s">&#39;desc&#39;</span><span class="p">))</span>
+<span class="go">&lt;Select: SELECT &quot;c&quot; FROM &quot;t&quot; ORDER BY &quot;a&quot;, &quot;b&quot; DESC&gt;</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="sqlpuzzle._queries.select.Select.right_join">
+<tt class="descname">right_join</tt><big>(</big><em>table</em><big>)</big><a class="reference internal" href="modules/sqlpuzzle/_queries/select.html#Select.right_join"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sqlpuzzle._queries.select.Select.right_join" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="sqlpuzzle._queries.select.Select.sql_big_result">
+<tt class="descname">sql_big_result</tt><big>(</big><em>allow=True</em><big>)</big><a class="reference internal" href="modules/sqlpuzzle/_queries/select.html#Select.sql_big_result"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sqlpuzzle._queries.select.Select.sql_big_result" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="sqlpuzzle._queries.select.Select.sql_buffer_result">
+<tt class="descname">sql_buffer_result</tt><big>(</big><em>allow=True</em><big>)</big><a class="reference internal" href="modules/sqlpuzzle/_queries/select.html#Select.sql_buffer_result"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sqlpuzzle._queries.select.Select.sql_buffer_result" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="sqlpuzzle._queries.select.Select.sql_cache">
+<tt class="descname">sql_cache</tt><big>(</big><em>allow=True</em><big>)</big><a class="reference internal" href="modules/sqlpuzzle/_queries/select.html#Select.sql_cache"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sqlpuzzle._queries.select.Select.sql_cache" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="sqlpuzzle._queries.select.Select.sql_calc_found_rows">
+<tt class="descname">sql_calc_found_rows</tt><big>(</big><em>allow=True</em><big>)</big><a class="reference internal" href="modules/sqlpuzzle/_queries/select.html#Select.sql_calc_found_rows"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sqlpuzzle._queries.select.Select.sql_calc_found_rows" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="sqlpuzzle._queries.select.Select.sql_no_cache">
+<tt class="descname">sql_no_cache</tt><big>(</big><em>allow=True</em><big>)</big><a class="reference internal" href="modules/sqlpuzzle/_queries/select.html#Select.sql_no_cache"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sqlpuzzle._queries.select.Select.sql_no_cache" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="sqlpuzzle._queries.select.Select.sql_small_result">
+<tt class="descname">sql_small_result</tt><big>(</big><em>allow=True</em><big>)</big><a class="reference internal" href="modules/sqlpuzzle/_queries/select.html#Select.sql_small_result"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sqlpuzzle._queries.select.Select.sql_small_result" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="sqlpuzzle._queries.select.Select.straight_join">
+<tt class="descname">straight_join</tt><big>(</big><em>allow=True</em><big>)</big><a class="reference internal" href="modules/sqlpuzzle/_queries/select.html#Select.straight_join"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sqlpuzzle._queries.select.Select.straight_join" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="sqlpuzzle._queries.select.Select.where">
+<tt class="descname">where</tt><big>(</big><em>*args</em>, <em>**kwds</em><big>)</big><a class="reference internal" href="modules/sqlpuzzle/_queries/select.html#Select.where"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sqlpuzzle._queries.select.Select.where" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="union">
+<h3>Union<a class="headerlink" href="#union" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="sqlpuzzle._queries.union.Union">
+<em class="property">class </em><tt class="descclassname">sqlpuzzle._queries.union.</tt><tt class="descname">Union</tt><big>(</big><em>query1</em>, <em>query2</em>, <em>union_type='UNION'</em><big>)</big><a class="reference internal" href="modules/sqlpuzzle/_queries/union.html#Union"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sqlpuzzle._queries.union.Union" title="Permalink to this definition">¶</a></dt>
+<dd><p>Class representing <tt class="docutils literal"><span class="pre">UNION</span></tt> or <tt class="docutils literal"><span class="pre">UNION</span> <span class="pre">ALL</span></tt>.</p>
+<p>You will get it by calling magic methods on <a class="reference internal" href="#sqlpuzzle._queries.select.Select" title="sqlpuzzle._queries.select.Select"><tt class="xref py py-class docutils literal"><span class="pre">Select</span></tt></a>:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">sqlpuzzle</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="s">&#39;t&#39;</span><span class="p">)</span> <span class="o">&amp;</span> <span class="n">sqlpuzzle</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="s">&#39;u&#39;</span><span class="p">)</span>
+<span class="go">&lt;Union: SELECT &quot;t&quot; UNION ALL SELECT &quot;u&quot;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sqlpuzzle</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="s">&#39;t&#39;</span><span class="p">)</span> <span class="o">|</span> <span class="n">sqlpuzzle</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="s">&#39;u&#39;</span><span class="p">)</span>
+<span class="go">&lt;Union: SELECT &quot;t&quot; UNION SELECT &quot;u&quot;&gt;</span>
+</pre></div>
+</div>
+<dl class="method">
+<dt id="sqlpuzzle._queries.union.Union.__and__">
+<tt class="descname">__and__</tt><big>(</big><em>other</em><big>)</big><a class="reference internal" href="modules/sqlpuzzle/_queries/union.html#Union.__and__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sqlpuzzle._queries.union.Union.__and__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns <a class="reference internal" href="#sqlpuzzle._queries.union.Union" title="sqlpuzzle._queries.union.Union"><tt class="xref py py-class docutils literal"><span class="pre">sqlpuzzle._queries.union.Union</span></tt></a> instance, <tt class="docutils literal"><span class="pre">UNION</span> <span class="pre">ALL</span></tt>.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">sqlpuzzle</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="s">&#39;t&#39;</span><span class="p">)</span> <span class="o">&amp;</span> <span class="n">sqlpuzzle</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="s">&#39;u&#39;</span><span class="p">)</span> <span class="o">&amp;</span> <span class="n">sqlpuzzle</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="s">&#39;v&#39;</span><span class="p">)</span>
+<span class="go">&lt;Union: SELECT &quot;t&quot; UNION ALL SELECT &quot;u&quot; UNION ALL SELECT &quot;v&quot;&gt;</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="sqlpuzzle._queries.union.Union.__or__">
+<tt class="descname">__or__</tt><big>(</big><em>other</em><big>)</big><a class="reference internal" href="modules/sqlpuzzle/_queries/union.html#Union.__or__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sqlpuzzle._queries.union.Union.__or__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns <a class="reference internal" href="#sqlpuzzle._queries.union.Union" title="sqlpuzzle._queries.union.Union"><tt class="xref py py-class docutils literal"><span class="pre">sqlpuzzle._queries.union.Union</span></tt></a> instance, <tt class="docutils literal"><span class="pre">UNION</span></tt>.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">sqlpuzzle</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="s">&#39;t&#39;</span><span class="p">)</span> <span class="o">|</span> <span class="n">sqlpuzzle</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="s">&#39;u&#39;</span><span class="p">)</span> <span class="o">|</span> <span class="n">sqlpuzzle</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="s">&#39;v&#39;</span><span class="p">)</span>
+<span class="go">&lt;Union: SELECT &quot;t&quot; UNION SELECT &quot;u&quot; UNION SELECT &quot;v&quot;&gt;</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="insert">
+<h3>Insert<a class="headerlink" href="#insert" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="sqlpuzzle._queries.insert.Insert">
+<em class="property">class </em><tt class="descclassname">sqlpuzzle._queries.insert.</tt><tt class="descname">Insert</tt><a class="reference internal" href="modules/sqlpuzzle/_queries/insert.html#Insert"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sqlpuzzle._queries.insert.Insert" title="Permalink to this definition">¶</a></dt>
+<dd><p>Example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">sql</span> <span class="o">=</span> <span class="n">sqlpuzzle</span><span class="o">.</span><span class="n">insert_into</span><span class="p">(</span><span class="s">&#39;table&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sql</span><span class="o">.</span><span class="n">values</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Alan&#39;</span><span class="p">,</span> <span class="n">salary</span><span class="o">=</span><span class="mf">12345.67</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sql</span><span class="o">.</span><span class="n">values</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Bob&#39;</span><span class="p">,</span> <span class="n">age</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
+<span class="go">&lt;Insert: INSERT INTO &quot;table&quot; (&quot;age&quot;, &quot;name&quot;, &quot;salary&quot;) VALUES (NULL, &#39;Alan&#39;, 12345.67000), (42, &#39;Bob&#39;, NULL)&gt;</span>
+</pre></div>
+</div>
+<dl class="method">
+<dt id="sqlpuzzle._queries.insert.Insert.ignore">
+<tt class="descname">ignore</tt><big>(</big><em>allow=True</em><big>)</big><a class="reference internal" href="modules/sqlpuzzle/_queries/insert.html#Insert.ignore"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sqlpuzzle._queries.insert.Insert.ignore" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="sqlpuzzle._queries.insert.Insert.into">
+<tt class="descname">into</tt><big>(</big><em>table</em><big>)</big><a class="reference internal" href="modules/sqlpuzzle/_queries/insert.html#Insert.into"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sqlpuzzle._queries.insert.Insert.into" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="sqlpuzzle._queries.insert.Insert.on_duplicate_key_update">
+<tt class="descname">on_duplicate_key_update</tt><big>(</big><em>*args</em>, <em>**kwds</em><big>)</big><a class="reference internal" href="modules/sqlpuzzle/_queries/insert.html#Insert.on_duplicate_key_update"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sqlpuzzle._queries.insert.Insert.on_duplicate_key_update" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="sqlpuzzle._queries.insert.Insert.values">
+<tt class="descname">values</tt><big>(</big><em>*args</em>, <em>**kwds</em><big>)</big><a class="reference internal" href="modules/sqlpuzzle/_queries/insert.html#Insert.values"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sqlpuzzle._queries.insert.Insert.values" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="update">
+<h3>Update<a class="headerlink" href="#update" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="sqlpuzzle._queries.update.Update">
+<em class="property">class </em><tt class="descclassname">sqlpuzzle._queries.update.</tt><tt class="descname">Update</tt><big>(</big><em>table=None</em><big>)</big><a class="reference internal" href="modules/sqlpuzzle/_queries/update.html#Update"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sqlpuzzle._queries.update.Update" title="Permalink to this definition">¶</a></dt>
+<dd><p>Example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">sqlpuzzle</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="s">&#39;t&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Alan&#39;</span><span class="p">,</span> <span class="n">sallary</span><span class="o">=</span><span class="mf">12345.67</span><span class="p">)</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="go">&lt;Update: UPDATE &quot;t&quot; SET &quot;name&quot; = &#39;Alan&#39;, &quot;sallary&quot; = 12345.67000 WHERE &quot;id&quot; = 1&gt;</span>
+</pre></div>
+</div>
+<dl class="method">
+<dt id="sqlpuzzle._queries.update.Update.allow_update_all">
+<tt class="descname">allow_update_all</tt><big>(</big><big>)</big><a class="reference internal" href="modules/sqlpuzzle/_queries/update.html#Update.allow_update_all"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sqlpuzzle._queries.update.Update.allow_update_all" title="Permalink to this definition">¶</a></dt>
+<dd><p>Allow query without <tt class="docutils literal"><span class="pre">WHERE</span></tt> condition.</p>
+<p>By default update without condition will raise exception
+<a class="reference internal" href="#sqlpuzzle.exceptions.ConfirmUpdateAllException" title="sqlpuzzle.exceptions.ConfirmUpdateAllException"><tt class="xref py py-class docutils literal"><span class="pre">ConfirmUpdateAllException</span></tt></a>.
+If you want really update all rows without condition, allow it by calling
+this method.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">sqlpuzzle</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="s">&#39;t&#39;</span><span class="p">)</span>
+<span class="gt">Traceback (most recent call last):</span>
+  <span class="c">...</span>
+<span class="gr">ConfirmUpdateAllException</span>: <span class="n">Are you sure, that you want update all records?</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sqlpuzzle</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="s">&#39;t&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">allow_update_all</span><span class="p">()</span>
+<span class="go">&lt;Update: UPDATE &quot;t&quot; SET &quot;a&quot; = 1&gt;</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="sqlpuzzle._queries.update.Update.forbid_update_all">
+<tt class="descname">forbid_update_all</tt><big>(</big><big>)</big><a class="reference internal" href="modules/sqlpuzzle/_queries/update.html#Update.forbid_update_all"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sqlpuzzle._queries.update.Update.forbid_update_all" title="Permalink to this definition">¶</a></dt>
+<dd><p>Forbid query without WHERE condition.</p>
+<p>By default update without condition will raise exception
+<a class="reference internal" href="#sqlpuzzle.exceptions.ConfirmUpdateAllException" title="sqlpuzzle.exceptions.ConfirmUpdateAllException"><tt class="xref py py-class docutils literal"><span class="pre">ConfirmUpdateAllException</span></tt></a>.
+It can be allowed by calling method <a class="reference internal" href="#sqlpuzzle._queries.update.Update.allow_update_all" title="sqlpuzzle._queries.update.Update.allow_update_all"><tt class="xref py py-meth docutils literal"><span class="pre">allow_update_all()</span></tt></a>. If
+you want to again forbid it, call this method.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="sqlpuzzle._queries.update.Update.ignore">
+<tt class="descname">ignore</tt><big>(</big><em>allow=True</em><big>)</big><a class="reference internal" href="modules/sqlpuzzle/_queries/update.html#Update.ignore"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sqlpuzzle._queries.update.Update.ignore" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="sqlpuzzle._queries.update.Update.inner_join">
+<tt class="descname">inner_join</tt><big>(</big><em>table</em><big>)</big><a class="reference internal" href="modules/sqlpuzzle/_queries/update.html#Update.inner_join"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sqlpuzzle._queries.update.Update.inner_join" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="sqlpuzzle._queries.update.Update.join">
+<tt class="descname">join</tt><big>(</big><em>table</em><big>)</big><a class="reference internal" href="modules/sqlpuzzle/_queries/update.html#Update.join"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sqlpuzzle._queries.update.Update.join" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="sqlpuzzle._queries.update.Update.left_join">
+<tt class="descname">left_join</tt><big>(</big><em>table</em><big>)</big><a class="reference internal" href="modules/sqlpuzzle/_queries/update.html#Update.left_join"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sqlpuzzle._queries.update.Update.left_join" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="sqlpuzzle._queries.update.Update.on">
+<tt class="descname">on</tt><big>(</big><em>*args</em>, <em>**kwds</em><big>)</big><a class="reference internal" href="modules/sqlpuzzle/_queries/update.html#Update.on"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sqlpuzzle._queries.update.Update.on" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="sqlpuzzle._queries.update.Update.right_join">
+<tt class="descname">right_join</tt><big>(</big><em>table</em><big>)</big><a class="reference internal" href="modules/sqlpuzzle/_queries/update.html#Update.right_join"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sqlpuzzle._queries.update.Update.right_join" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="sqlpuzzle._queries.update.Update.set">
+<tt class="descname">set</tt><big>(</big><em>*args</em>, <em>**kwds</em><big>)</big><a class="reference internal" href="modules/sqlpuzzle/_queries/update.html#Update.set"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sqlpuzzle._queries.update.Update.set" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="sqlpuzzle._queries.update.Update.table">
+<tt class="descname">table</tt><big>(</big><em>table</em><big>)</big><a class="reference internal" href="modules/sqlpuzzle/_queries/update.html#Update.table"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sqlpuzzle._queries.update.Update.table" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="sqlpuzzle._queries.update.Update.where">
+<tt class="descname">where</tt><big>(</big><em>*args</em>, <em>**kwds</em><big>)</big><a class="reference internal" href="modules/sqlpuzzle/_queries/update.html#Update.where"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sqlpuzzle._queries.update.Update.where" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="delete">
+<h3>Delete<a class="headerlink" href="#delete" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="sqlpuzzle._queries.delete.Delete">
+<em class="property">class </em><tt class="descclassname">sqlpuzzle._queries.delete.</tt><tt class="descname">Delete</tt><big>(</big><em>*tables</em><big>)</big><a class="reference internal" href="modules/sqlpuzzle/_queries/delete.html#Delete"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sqlpuzzle._queries.delete.Delete" title="Permalink to this definition">¶</a></dt>
+<dd><p>Example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">sqlpuzzle</span><span class="o">.</span><span class="n">delete_from</span><span class="p">(</span><span class="s">&#39;t&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="go">&lt;Delete: DELETE FROM &quot;t&quot; WHERE &quot;id&quot; = 1&gt;</span>
+</pre></div>
+</div>
+<dl class="method">
+<dt id="sqlpuzzle._queries.delete.Delete.allow_delete_all">
+<tt class="descname">allow_delete_all</tt><big>(</big><big>)</big><a class="reference internal" href="modules/sqlpuzzle/_queries/delete.html#Delete.allow_delete_all"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sqlpuzzle._queries.delete.Delete.allow_delete_all" title="Permalink to this definition">¶</a></dt>
+<dd><p>Allow query without <tt class="docutils literal"><span class="pre">WHERE</span></tt> condition.</p>
+<p>By default delete without condition will raise exception
+<a class="reference internal" href="#sqlpuzzle.exceptions.ConfirmDeleteAllException" title="sqlpuzzle.exceptions.ConfirmDeleteAllException"><tt class="xref py py-class docutils literal"><span class="pre">ConfirmDeleteAllException</span></tt></a>.
+If you want really delete all rows without condition, allow it by calling
+this method.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">sqlpuzzle</span><span class="o">.</span><span class="n">delete_from</span><span class="p">(</span><span class="s">&#39;t&#39;</span><span class="p">)</span>
+<span class="gt">Traceback (most recent call last):</span>
+  <span class="c">...</span>
+<span class="gr">ConfirmDeleteAllException</span>: <span class="n">Are you sure, that you want delete all records?</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sqlpuzzle</span><span class="o">.</span><span class="n">delete_from</span><span class="p">(</span><span class="s">&#39;t&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">allow_delete_all</span><span class="p">()</span>
+<span class="go">&lt;Delete: DELETE FROM &quot;t&quot;&gt;</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="sqlpuzzle._queries.delete.Delete.delete">
+<tt class="descname">delete</tt><big>(</big><em>*tables</em><big>)</big><a class="reference internal" href="modules/sqlpuzzle/_queries/delete.html#Delete.delete"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sqlpuzzle._queries.delete.Delete.delete" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="sqlpuzzle._queries.delete.Delete.forbid_delete_all">
+<tt class="descname">forbid_delete_all</tt><big>(</big><big>)</big><a class="reference internal" href="modules/sqlpuzzle/_queries/delete.html#Delete.forbid_delete_all"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sqlpuzzle._queries.delete.Delete.forbid_delete_all" title="Permalink to this definition">¶</a></dt>
+<dd><p>Forbid query without WHERE condition.</p>
+<p>By default delete without condition will raise exception
+<a class="reference internal" href="#sqlpuzzle.exceptions.ConfirmDeleteAllException" title="sqlpuzzle.exceptions.ConfirmDeleteAllException"><tt class="xref py py-class docutils literal"><span class="pre">ConfirmDeleteAllException</span></tt></a>.
+It can be allowed by calling method <a class="reference internal" href="#sqlpuzzle._queries.delete.Delete.allow_delete_all" title="sqlpuzzle._queries.delete.Delete.allow_delete_all"><tt class="xref py py-meth docutils literal"><span class="pre">allow_delete_all()</span></tt></a>. If
+you want to again forbid it, call this method.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="sqlpuzzle._queries.delete.Delete.from_">
+<tt class="descname">from_</tt><big>(</big><em>*args</em>, <em>**kwds</em><big>)</big><a class="reference internal" href="modules/sqlpuzzle/_queries/delete.html#Delete.from_"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sqlpuzzle._queries.delete.Delete.from_" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="sqlpuzzle._queries.delete.Delete.from_table">
+<tt class="descname">from_table</tt><big>(</big><em>table</em>, <em>alias=None</em><big>)</big><a class="reference internal" href="modules/sqlpuzzle/_queries/delete.html#Delete.from_table"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sqlpuzzle._queries.delete.Delete.from_table" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="sqlpuzzle._queries.delete.Delete.from_tables">
+<tt class="descname">from_tables</tt><big>(</big><em>*args</em>, <em>**kwds</em><big>)</big><a class="reference internal" href="modules/sqlpuzzle/_queries/delete.html#Delete.from_tables"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sqlpuzzle._queries.delete.Delete.from_tables" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="sqlpuzzle._queries.delete.Delete.ignore">
+<tt class="descname">ignore</tt><big>(</big><em>allow=True</em><big>)</big><a class="reference internal" href="modules/sqlpuzzle/_queries/delete.html#Delete.ignore"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sqlpuzzle._queries.delete.Delete.ignore" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="sqlpuzzle._queries.delete.Delete.inner_join">
+<tt class="descname">inner_join</tt><big>(</big><em>table</em><big>)</big><a class="reference internal" href="modules/sqlpuzzle/_queries/delete.html#Delete.inner_join"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sqlpuzzle._queries.delete.Delete.inner_join" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="sqlpuzzle._queries.delete.Delete.join">
+<tt class="descname">join</tt><big>(</big><em>table</em><big>)</big><a class="reference internal" href="modules/sqlpuzzle/_queries/delete.html#Delete.join"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sqlpuzzle._queries.delete.Delete.join" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="sqlpuzzle._queries.delete.Delete.left_join">
+<tt class="descname">left_join</tt><big>(</big><em>table</em><big>)</big><a class="reference internal" href="modules/sqlpuzzle/_queries/delete.html#Delete.left_join"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sqlpuzzle._queries.delete.Delete.left_join" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="sqlpuzzle._queries.delete.Delete.on">
+<tt class="descname">on</tt><big>(</big><em>*args</em>, <em>**kwds</em><big>)</big><a class="reference internal" href="modules/sqlpuzzle/_queries/delete.html#Delete.on"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sqlpuzzle._queries.delete.Delete.on" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="sqlpuzzle._queries.delete.Delete.right_join">
+<tt class="descname">right_join</tt><big>(</big><em>table</em><big>)</big><a class="reference internal" href="modules/sqlpuzzle/_queries/delete.html#Delete.right_join"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sqlpuzzle._queries.delete.Delete.right_join" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="sqlpuzzle._queries.delete.Delete.where">
+<tt class="descname">where</tt><big>(</big><em>*args</em>, <em>**kwds</em><big>)</big><a class="reference internal" href="modules/sqlpuzzle/_queries/delete.html#Delete.where"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sqlpuzzle._queries.delete.Delete.where" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-sqlpuzzle.exceptions">
+<span id="exceptions"></span><h3>Exceptions<a class="headerlink" href="#module-sqlpuzzle.exceptions" title="Permalink to this headline">¶</a></h3>
+<dl class="exception">
+<dt id="sqlpuzzle.exceptions.ConfirmDeleteAllException">
+<em class="property">exception </em><tt class="descclassname">sqlpuzzle.exceptions.</tt><tt class="descname">ConfirmDeleteAllException</tt><a class="reference internal" href="modules/sqlpuzzle/exceptions.html#ConfirmDeleteAllException"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sqlpuzzle.exceptions.ConfirmDeleteAllException" title="Permalink to this definition">¶</a></dt>
+<dd><p>Raises when you want render delete SQL without any where condition. It is
+security before droping all data by mistake.</p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="sqlpuzzle.exceptions.ConfirmException">
+<em class="property">exception </em><tt class="descclassname">sqlpuzzle.exceptions.</tt><tt class="descname">ConfirmException</tt><a class="reference internal" href="modules/sqlpuzzle/exceptions.html#ConfirmException"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sqlpuzzle.exceptions.ConfirmException" title="Permalink to this definition">¶</a></dt>
+<dd><p>Base confirm exception. If you want to handle any confirm exception
+(of update or delete) in same way, catch this one.</p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="sqlpuzzle.exceptions.ConfirmUpdateAllException">
+<em class="property">exception </em><tt class="descclassname">sqlpuzzle.exceptions.</tt><tt class="descname">ConfirmUpdateAllException</tt><a class="reference internal" href="modules/sqlpuzzle/exceptions.html#ConfirmUpdateAllException"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sqlpuzzle.exceptions.ConfirmUpdateAllException" title="Permalink to this definition">¶</a></dt>
+<dd><p>Raises when you want render update SQL without any where condition. It is
+security before changing all data by mistake.</p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="sqlpuzzle.exceptions.InvalidArgumentException">
+<em class="property">exception </em><tt class="descclassname">sqlpuzzle.exceptions.</tt><tt class="descname">InvalidArgumentException</tt><big>(</big><em>message=''</em><big>)</big><a class="reference internal" href="modules/sqlpuzzle/exceptions.html#InvalidArgumentException"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sqlpuzzle.exceptions.InvalidArgumentException" title="Permalink to this definition">¶</a></dt>
+<dd><p>Raises when you pass invalid argument into SQL puzzle. For example instead
+of column reference some number and so.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">sqlpuzzle</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="bp">True</span><span class="p">)</span>
+<span class="gt">Traceback (most recent call last):</span>
+  <span class="c">...</span>
+<span class="gr">InvalidArgumentException: Invalid argument</span>: <span class="n">column_name cannot be of type &lt;type &#39;bool&#39;&gt;.</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="exception">
+<dt id="sqlpuzzle.exceptions.InvalidQueryException">
+<em class="property">exception </em><tt class="descclassname">sqlpuzzle.exceptions.</tt><tt class="descname">InvalidQueryException</tt><big>(</big><em>message=''</em><big>)</big><a class="reference internal" href="modules/sqlpuzzle/exceptions.html#InvalidQueryException"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sqlpuzzle.exceptions.InvalidQueryException" title="Permalink to this definition">¶</a></dt>
+<dd><p>Specific type of <a class="reference internal" href="#sqlpuzzle.exceptions.InvalidArgumentException" title="sqlpuzzle.exceptions.InvalidArgumentException"><tt class="xref py py-class docutils literal"><span class="pre">InvalidArgumentException</span></tt></a>. Raises when you
+passed good arguments but final query does not make sense.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">sqlpuzzle</span><span class="o">.</span><span class="n">select_from</span><span class="p">(</span><span class="s">&#39;t&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">on</span><span class="p">(</span><span class="s">&#39;t2&#39;</span><span class="p">)</span>
+<span class="gt">Traceback (most recent call last):</span>
+  <span class="c">...</span>
+<span class="gr">InvalidQueryException: Invalid query</span>: <span class="n">You can not set join condition to nothing. Specify join table first.</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="exception">
+<dt id="sqlpuzzle.exceptions.SqlPuzzleException">
+<em class="property">exception </em><tt class="descclassname">sqlpuzzle.exceptions.</tt><tt class="descname">SqlPuzzleException</tt><big>(</big><em>message</em><big>)</big><a class="reference internal" href="modules/sqlpuzzle/exceptions.html#SqlPuzzleException"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sqlpuzzle.exceptions.SqlPuzzleException" title="Permalink to this definition">¶</a></dt>
+<dd><p>Base exception. If you want to handle any exception of SQL puzzle in same
+way, catch this one.</p>
+</dd></dl>
+
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="#">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">SQLPuzzle documentation</a><ul>
+<li><a class="reference internal" href="#installation">Installation</a></li>
+<li><a class="reference internal" href="#documentation">Documentation</a><ul>
+<li><a class="reference internal" href="#configuration">Configuration</a></li>
+<li><a class="reference internal" href="#base-methods">Base methods</a></li>
+<li><a class="reference internal" href="#helpers">Helpers</a></li>
+<li><a class="reference internal" href="#functions">Functions</a></li>
+<li><a class="reference internal" href="#module-sqlpuzzle.relations">Relations</a></li>
+<li><a class="reference internal" href="#select">Select</a></li>
+<li><a class="reference internal" href="#union">Union</a></li>
+<li><a class="reference internal" href="#insert">Insert</a></li>
+<li><a class="reference internal" href="#update">Update</a></li>
+<li><a class="reference internal" href="#delete">Delete</a></li>
+<li><a class="reference internal" href="#module-sqlpuzzle.exceptions">Exceptions</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="sources/index.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="#">SQLPuzzle  documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2015, Michal Horejsek.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
+    </div>
+  </body>
+</html>

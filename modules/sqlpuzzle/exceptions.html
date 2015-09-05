@@ -1,0 +1,179 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>sqlpuzzle.exceptions &mdash; SQLPuzzle  documentation</title>
+    
+    <link rel="stylesheet" href="../../static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="../../static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../static/jquery.js"></script>
+    <script type="text/javascript" src="../../static/underscore.js"></script>
+    <script type="text/javascript" src="../../static/doctools.js"></script>
+    <link rel="top" title="SQLPuzzle  documentation" href="../../index.html" />
+    <link rel="up" title="sqlpuzzle" href="../sqlpuzzle.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../index.html">SQLPuzzle  documentation</a> &raquo;</li>
+          <li><a href="../index.html" >Module code</a> &raquo;</li>
+          <li><a href="../sqlpuzzle.html" accesskey="U">sqlpuzzle</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for sqlpuzzle.exceptions</h1><div class="highlight"><pre>
+<span class="c"># -*- coding: utf-8 -*-</span>
+
+
+<div class="viewcode-block" id="SqlPuzzleException"><a class="viewcode-back" href="../../index.html#sqlpuzzle.exceptions.SqlPuzzleException">[docs]</a><span class="k">class</span> <span class="nc">SqlPuzzleException</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Base exception. If you want to handle any exception of SQL puzzle in same</span>
+<span class="sd">    way, catch this one.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">message</span> <span class="o">=</span> <span class="n">message</span>
+
+    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s">&quot;SqlPuzzleException: </span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">message</span>
+
+</div>
+<div class="viewcode-block" id="ConfirmException"><a class="viewcode-back" href="../../index.html#sqlpuzzle.exceptions.ConfirmException">[docs]</a><span class="k">class</span> <span class="nc">ConfirmException</span><span class="p">(</span><span class="n">SqlPuzzleException</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Base confirm exception. If you want to handle any confirm exception</span>
+<span class="sd">    (of update or delete) in same way, catch this one.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">pass</span>
+
+</div>
+<div class="viewcode-block" id="ConfirmUpdateAllException"><a class="viewcode-back" href="../../index.html#sqlpuzzle.exceptions.ConfirmUpdateAllException">[docs]</a><span class="k">class</span> <span class="nc">ConfirmUpdateAllException</span><span class="p">(</span><span class="n">ConfirmException</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Raises when you want render update SQL without any where condition. It is</span>
+<span class="sd">    security before changing all data by mistake.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s">&quot;Are you sure, that you want update all records?&quot;</span>
+
+</div>
+<div class="viewcode-block" id="ConfirmDeleteAllException"><a class="viewcode-back" href="../../index.html#sqlpuzzle.exceptions.ConfirmDeleteAllException">[docs]</a><span class="k">class</span> <span class="nc">ConfirmDeleteAllException</span><span class="p">(</span><span class="n">ConfirmException</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Raises when you want render delete SQL without any where condition. It is</span>
+<span class="sd">    security before droping all data by mistake.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s">&quot;Are you sure, that you want delete all records?&quot;</span>
+
+</div>
+<div class="viewcode-block" id="InvalidArgumentException"><a class="viewcode-back" href="../../index.html#sqlpuzzle.exceptions.InvalidArgumentException">[docs]</a><span class="k">class</span> <span class="nc">InvalidArgumentException</span><span class="p">(</span><span class="n">SqlPuzzleException</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Raises when you pass invalid argument into SQL puzzle. For example instead</span>
+<span class="sd">    of column reference some number and so.</span>
+
+<span class="sd">    .. code-block:: python</span>
+
+<span class="sd">        &gt;&gt;&gt; sqlpuzzle.select(True)</span>
+<span class="sd">        Traceback (most recent call last):</span>
+<span class="sd">          ...</span>
+<span class="sd">        InvalidArgumentException: Invalid argument: column_name cannot be of type &lt;type &#39;bool&#39;&gt;.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">message</span><span class="o">=</span><span class="s">&#39;&#39;</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">message</span> <span class="o">=</span> <span class="n">message</span>
+
+    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">message</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s">&quot;Invalid argument: </span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">message</span>
+        <span class="k">return</span> <span class="s">&quot;Invalid argument&quot;</span>
+
+</div>
+<div class="viewcode-block" id="InvalidQueryException"><a class="viewcode-back" href="../../index.html#sqlpuzzle.exceptions.InvalidQueryException">[docs]</a><span class="k">class</span> <span class="nc">InvalidQueryException</span><span class="p">(</span><span class="n">InvalidArgumentException</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Specific type of :py:class:`~.InvalidArgumentException`. Raises when you</span>
+<span class="sd">    passed good arguments but final query does not make sense.</span>
+
+<span class="sd">    .. code-block:: python</span>
+
+<span class="sd">        &gt;&gt;&gt; sqlpuzzle.select_from(&#39;t&#39;).on(&#39;t2&#39;)</span>
+<span class="sd">        Traceback (most recent call last):</span>
+<span class="sd">          ...</span>
+<span class="sd">        InvalidQueryException: Invalid query: You can not set join condition to nothing. Specify join table first.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">message</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s">&quot;Invalid query: </span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">message</span>
+        <span class="k">return</span> <span class="s">&quot;Invalid query&quot;</span></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../index.html">SQLPuzzle  documentation</a> &raquo;</li>
+          <li><a href="../index.html" >Module code</a> &raquo;</li>
+          <li><a href="../sqlpuzzle.html" >sqlpuzzle</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2015, Michal Horejsek.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
+    </div>
+  </body>
+</html>

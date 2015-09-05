@@ -1,0 +1,223 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>sqlpuzzle._queries.update &mdash; SQLPuzzle  documentation</title>
+    
+    <link rel="stylesheet" href="../../../static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="../../../static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../static/jquery.js"></script>
+    <script type="text/javascript" src="../../../static/underscore.js"></script>
+    <script type="text/javascript" src="../../../static/doctools.js"></script>
+    <link rel="top" title="SQLPuzzle  documentation" href="../../../index.html" />
+    <link rel="up" title="sqlpuzzle" href="../../sqlpuzzle.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../../index.html">SQLPuzzle  documentation</a> &raquo;</li>
+          <li><a href="../../index.html" >Module code</a> &raquo;</li>
+          <li><a href="../../sqlpuzzle.html" accesskey="U">sqlpuzzle</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for sqlpuzzle._queries.update</h1><div class="highlight"><pre>
+<span class="c"># -*- coding: utf-8 -*-</span>
+
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">absolute_import</span>
+
+<span class="kn">import</span> <span class="nn">six</span>
+
+<span class="kn">from</span> <span class="nn">sqlpuzzle.exceptions</span> <span class="kn">import</span> <span class="n">ConfirmUpdateAllException</span>
+<span class="kn">from</span> <span class="nn">sqlpuzzle._queries.options</span> <span class="kn">import</span> <span class="n">Options</span>
+<span class="kn">from</span> <span class="nn">sqlpuzzle._queryparts</span> <span class="kn">import</span> <span class="n">Tables</span><span class="p">,</span> <span class="n">Values</span><span class="p">,</span> <span class="n">Where</span>
+<span class="kn">from</span> <span class="nn">.query</span> <span class="kn">import</span> <span class="n">Query</span>
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">(</span><span class="s">&#39;Update&#39;</span><span class="p">,)</span>
+
+
+<span class="k">class</span> <span class="nc">UpdateOptions</span><span class="p">(</span><span class="n">Options</span><span class="p">):</span>
+    <span class="n">_definition_of_options</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s">&#39;ignore&#39;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s">&#39;off&#39;</span><span class="p">:</span> <span class="s">&#39;&#39;</span><span class="p">,</span>
+            <span class="s">&#39;on&#39;</span><span class="p">:</span> <span class="s">&#39;IGNORE&#39;</span><span class="p">,</span>
+        <span class="p">},</span>
+    <span class="p">}</span>
+
+    <span class="k">def</span> <span class="nf">ignore</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">allow</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_options</span><span class="p">[</span><span class="s">&#39;ignore&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s">&#39;on&#39;</span> <span class="k">if</span> <span class="n">allow</span> <span class="k">else</span> <span class="s">&#39;off&#39;</span>
+
+
+<div class="viewcode-block" id="Update"><a class="viewcode-back" href="../../../index.html#sqlpuzzle._queries.update.Update">[docs]</a><span class="k">class</span> <span class="nc">Update</span><span class="p">(</span><span class="n">Query</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Example:</span>
+
+<span class="sd">    .. code-block:: python</span>
+
+<span class="sd">        &gt;&gt;&gt; sqlpuzzle.update(&#39;t&#39;).set(name=&#39;Alan&#39;, sallary=12345.67).where(id=1)</span>
+<span class="sd">        &lt;Update: UPDATE &quot;t&quot; SET &quot;name&quot; = &#39;Alan&#39;, &quot;sallary&quot; = 12345.67000 WHERE &quot;id&quot; = 1&gt;</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">_queryparts</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s">&#39;update_options&#39;</span><span class="p">:</span> <span class="n">UpdateOptions</span><span class="p">,</span>
+        <span class="s">&#39;tables&#39;</span><span class="p">:</span> <span class="n">Tables</span><span class="p">,</span>
+        <span class="s">&#39;values&#39;</span><span class="p">:</span> <span class="n">Values</span><span class="p">,</span>
+        <span class="s">&#39;where&#39;</span><span class="p">:</span> <span class="n">Where</span><span class="p">,</span>
+    <span class="p">}</span>
+    <span class="n">_query_template</span> <span class="o">=</span> <span class="n">six</span><span class="o">.</span><span class="n">u</span><span class="p">(</span><span class="s">&#39;UPDATE</span><span class="si">%(update_options)s%(tables)s</span><span class="s"> SET</span><span class="si">%(values)s%(where)s</span><span class="s">&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">table</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">Update</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_allow_update_all</span> <span class="o">=</span> <span class="bp">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">table</span><span class="p">(</span><span class="n">table</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__unicode__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_where</span><span class="o">.</span><span class="n">is_set</span> <span class="ow">and</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_allow_update_all</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">ConfirmUpdateAllException</span><span class="p">()</span>
+        <span class="k">return</span> <span class="nb">super</span><span class="p">(</span><span class="n">Update</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__unicode__</span><span class="p">()</span>
+
+<div class="viewcode-block" id="Update.allow_update_all"><a class="viewcode-back" href="../../../index.html#sqlpuzzle._queries.update.Update.allow_update_all">[docs]</a>    <span class="k">def</span> <span class="nf">allow_update_all</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Allow query without ``WHERE`` condition.</span>
+
+<span class="sd">        By default update without condition will raise exception</span>
+<span class="sd">        :py:class:`ConfirmUpdateAllException &lt;sqlpuzzle.exceptions.ConfirmUpdateAllException&gt;`.</span>
+<span class="sd">        If you want really update all rows without condition, allow it by calling</span>
+<span class="sd">        this method.</span>
+
+<span class="sd">        .. code-block:: python</span>
+
+<span class="sd">            &gt;&gt;&gt; sqlpuzzle.update(&#39;t&#39;)</span>
+<span class="sd">            Traceback (most recent call last):</span>
+<span class="sd">              ...</span>
+<span class="sd">            ConfirmUpdateAllException: Are you sure, that you want update all records?</span>
+<span class="sd">            &gt;&gt;&gt; sqlpuzzle.update(&#39;t&#39;).set(a=1).allow_update_all()</span>
+<span class="sd">            &lt;Update: UPDATE &quot;t&quot; SET &quot;a&quot; = 1&gt;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_allow_update_all</span> <span class="o">=</span> <span class="bp">True</span>
+        <span class="k">return</span> <span class="bp">self</span>
+</div>
+<div class="viewcode-block" id="Update.forbid_update_all"><a class="viewcode-back" href="../../../index.html#sqlpuzzle._queries.update.Update.forbid_update_all">[docs]</a>    <span class="k">def</span> <span class="nf">forbid_update_all</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Forbid query without WHERE condition.</span>
+
+<span class="sd">        By default update without condition will raise exception</span>
+<span class="sd">        :py:class:`ConfirmUpdateAllException &lt;sqlpuzzle.exceptions.ConfirmUpdateAllException&gt;`.</span>
+<span class="sd">        It can be allowed by calling method :py:meth:`~.allow_update_all`. If</span>
+<span class="sd">        you want to again forbid it, call this method.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_allow_update_all</span> <span class="o">=</span> <span class="bp">False</span>
+        <span class="k">return</span> <span class="bp">self</span>
+</div>
+<div class="viewcode-block" id="Update.table"><a class="viewcode-back" href="../../../index.html#sqlpuzzle._queries.update.Update.table">[docs]</a>    <span class="k">def</span> <span class="nf">table</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">table</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_tables</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">table</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span>
+</div>
+<div class="viewcode-block" id="Update.set"><a class="viewcode-back" href="../../../index.html#sqlpuzzle._queries.update.Update.set">[docs]</a>    <span class="k">def</span> <span class="nf">set</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwds</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_values</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwds</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span>
+</div>
+<div class="viewcode-block" id="Update.where"><a class="viewcode-back" href="../../../index.html#sqlpuzzle._queries.update.Update.where">[docs]</a>    <span class="k">def</span> <span class="nf">where</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwds</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_where</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwds</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span>
+</div>
+<div class="viewcode-block" id="Update.join"><a class="viewcode-back" href="../../../index.html#sqlpuzzle._queries.update.Update.join">[docs]</a>    <span class="k">def</span> <span class="nf">join</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">table</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_tables</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">table</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span>
+</div>
+<div class="viewcode-block" id="Update.inner_join"><a class="viewcode-back" href="../../../index.html#sqlpuzzle._queries.update.Update.inner_join">[docs]</a>    <span class="k">def</span> <span class="nf">inner_join</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">table</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_tables</span><span class="o">.</span><span class="n">inner_join</span><span class="p">(</span><span class="n">table</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span>
+</div>
+<div class="viewcode-block" id="Update.left_join"><a class="viewcode-back" href="../../../index.html#sqlpuzzle._queries.update.Update.left_join">[docs]</a>    <span class="k">def</span> <span class="nf">left_join</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">table</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_tables</span><span class="o">.</span><span class="n">left_join</span><span class="p">(</span><span class="n">table</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span>
+</div>
+<div class="viewcode-block" id="Update.right_join"><a class="viewcode-back" href="../../../index.html#sqlpuzzle._queries.update.Update.right_join">[docs]</a>    <span class="k">def</span> <span class="nf">right_join</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">table</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_tables</span><span class="o">.</span><span class="n">right_join</span><span class="p">(</span><span class="n">table</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span>
+</div>
+<div class="viewcode-block" id="Update.on"><a class="viewcode-back" href="../../../index.html#sqlpuzzle._queries.update.Update.on">[docs]</a>    <span class="k">def</span> <span class="nf">on</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwds</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_tables</span><span class="o">.</span><span class="n">on</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwds</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span>
+
+    <span class="c"># UPDATE OPTIONS</span>
+</div>
+<div class="viewcode-block" id="Update.ignore"><a class="viewcode-back" href="../../../index.html#sqlpuzzle._queries.update.Update.ignore">[docs]</a>    <span class="k">def</span> <span class="nf">ignore</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">allow</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_update_options</span><span class="o">.</span><span class="n">ignore</span><span class="p">(</span><span class="n">allow</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span>
+
+    <span class="c"># Backward compatibility.</span>
+</div>
+    <span class="n">allowUpdateAll</span> <span class="o">=</span> <span class="n">allow_update_all</span>
+    <span class="n">forbidUpdateAll</span> <span class="o">=</span> <span class="n">forbid_update_all</span></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../../index.html">SQLPuzzle  documentation</a> &raquo;</li>
+          <li><a href="../../index.html" >Module code</a> &raquo;</li>
+          <li><a href="../../sqlpuzzle.html" >sqlpuzzle</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2015, Michal Horejsek.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,236 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>sqlpuzzle._queries.delete &mdash; SQLPuzzle  documentation</title>
+    
+    <link rel="stylesheet" href="../../../static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="../../../static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../static/jquery.js"></script>
+    <script type="text/javascript" src="../../../static/underscore.js"></script>
+    <script type="text/javascript" src="../../../static/doctools.js"></script>
+    <link rel="top" title="SQLPuzzle  documentation" href="../../../index.html" />
+    <link rel="up" title="sqlpuzzle" href="../../sqlpuzzle.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../../index.html">SQLPuzzle  documentation</a> &raquo;</li>
+          <li><a href="../../index.html" >Module code</a> &raquo;</li>
+          <li><a href="../../sqlpuzzle.html" accesskey="U">sqlpuzzle</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for sqlpuzzle._queries.delete</h1><div class="highlight"><pre>
+<span class="c"># -*- coding: utf-8 -*-</span>
+
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">absolute_import</span>
+
+<span class="kn">import</span> <span class="nn">six</span>
+
+<span class="kn">from</span> <span class="nn">sqlpuzzle.exceptions</span> <span class="kn">import</span> <span class="n">ConfirmDeleteAllException</span>
+<span class="kn">from</span> <span class="nn">sqlpuzzle._queries.options</span> <span class="kn">import</span> <span class="n">Options</span>
+<span class="kn">from</span> <span class="nn">sqlpuzzle._queryparts</span> <span class="kn">import</span> <span class="n">Tables</span><span class="p">,</span> <span class="n">Where</span>
+<span class="kn">from</span> <span class="nn">.query</span> <span class="kn">import</span> <span class="n">Query</span>
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">(</span><span class="s">&#39;Delete&#39;</span><span class="p">,)</span>
+
+
+<span class="k">class</span> <span class="nc">DeleteOptions</span><span class="p">(</span><span class="n">Options</span><span class="p">):</span>
+    <span class="n">_definition_of_options</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s">&#39;ignore&#39;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s">&#39;off&#39;</span><span class="p">:</span> <span class="s">&#39;&#39;</span><span class="p">,</span>
+            <span class="s">&#39;on&#39;</span><span class="p">:</span> <span class="s">&#39;IGNORE&#39;</span><span class="p">,</span>
+        <span class="p">},</span>
+    <span class="p">}</span>
+
+    <span class="k">def</span> <span class="nf">ignore</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">allow</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_options</span><span class="p">[</span><span class="s">&#39;ignore&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s">&#39;on&#39;</span> <span class="k">if</span> <span class="n">allow</span> <span class="k">else</span> <span class="s">&#39;off&#39;</span>
+
+
+<div class="viewcode-block" id="Delete"><a class="viewcode-back" href="../../../index.html#sqlpuzzle._queries.delete.Delete">[docs]</a><span class="k">class</span> <span class="nc">Delete</span><span class="p">(</span><span class="n">Query</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Example:</span>
+
+<span class="sd">    .. code-block:: python</span>
+
+<span class="sd">        &gt;&gt;&gt; sqlpuzzle.delete_from(&#39;t&#39;).where(id=1)</span>
+<span class="sd">        &lt;Delete: DELETE FROM &quot;t&quot; WHERE &quot;id&quot; = 1&gt;</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">_queryparts</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s">&#39;delete_options&#39;</span><span class="p">:</span> <span class="n">DeleteOptions</span><span class="p">,</span>
+        <span class="s">&#39;tables&#39;</span><span class="p">:</span> <span class="n">Tables</span><span class="p">,</span>
+        <span class="s">&#39;references&#39;</span><span class="p">:</span> <span class="n">Tables</span><span class="p">,</span>
+        <span class="s">&#39;where&#39;</span><span class="p">:</span> <span class="n">Where</span><span class="p">,</span>
+    <span class="p">}</span>
+    <span class="n">_query_template</span> <span class="o">=</span> <span class="n">six</span><span class="o">.</span><span class="n">u</span><span class="p">(</span><span class="s">&#39;DELETE</span><span class="si">%(delete_options)s%(tables)s</span><span class="s"> FROM</span><span class="si">%(references)s%(where)s</span><span class="s">&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">tables</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">Delete</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_allow_delete_all</span> <span class="o">=</span> <span class="bp">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_tables</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="o">*</span><span class="n">tables</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__unicode__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_where</span><span class="o">.</span><span class="n">is_set</span> <span class="ow">and</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_allow_delete_all</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">ConfirmDeleteAllException</span><span class="p">()</span>
+        <span class="k">return</span> <span class="nb">super</span><span class="p">(</span><span class="n">Delete</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__unicode__</span><span class="p">()</span>
+
+<div class="viewcode-block" id="Delete.allow_delete_all"><a class="viewcode-back" href="../../../index.html#sqlpuzzle._queries.delete.Delete.allow_delete_all">[docs]</a>    <span class="k">def</span> <span class="nf">allow_delete_all</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Allow query without ``WHERE`` condition.</span>
+
+<span class="sd">        By default delete without condition will raise exception</span>
+<span class="sd">        :py:class:`ConfirmDeleteAllException &lt;sqlpuzzle.exceptions.ConfirmDeleteAllException&gt;`.</span>
+<span class="sd">        If you want really delete all rows without condition, allow it by calling</span>
+<span class="sd">        this method.</span>
+
+<span class="sd">        .. code-block:: python</span>
+
+<span class="sd">            &gt;&gt;&gt; sqlpuzzle.delete_from(&#39;t&#39;)</span>
+<span class="sd">            Traceback (most recent call last):</span>
+<span class="sd">              ...</span>
+<span class="sd">            ConfirmDeleteAllException: Are you sure, that you want delete all records?</span>
+<span class="sd">            &gt;&gt;&gt; sqlpuzzle.delete_from(&#39;t&#39;).allow_delete_all()</span>
+<span class="sd">            &lt;Delete: DELETE FROM &quot;t&quot;&gt;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_allow_delete_all</span> <span class="o">=</span> <span class="bp">True</span>
+        <span class="k">return</span> <span class="bp">self</span>
+</div>
+<div class="viewcode-block" id="Delete.forbid_delete_all"><a class="viewcode-back" href="../../../index.html#sqlpuzzle._queries.delete.Delete.forbid_delete_all">[docs]</a>    <span class="k">def</span> <span class="nf">forbid_delete_all</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Forbid query without WHERE condition.</span>
+
+<span class="sd">        By default delete without condition will raise exception</span>
+<span class="sd">        :py:class:`ConfirmDeleteAllException &lt;sqlpuzzle.exceptions.ConfirmDeleteAllException&gt;`.</span>
+<span class="sd">        It can be allowed by calling method :py:meth:`~.allow_delete_all`. If</span>
+<span class="sd">        you want to again forbid it, call this method.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_allow_delete_all</span> <span class="o">=</span> <span class="bp">False</span>
+        <span class="k">return</span> <span class="bp">self</span>
+</div>
+<div class="viewcode-block" id="Delete.delete"><a class="viewcode-back" href="../../../index.html#sqlpuzzle._queries.delete.Delete.delete">[docs]</a>    <span class="k">def</span> <span class="nf">delete</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">tables</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_tables</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="o">*</span><span class="n">tables</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span>
+</div>
+<div class="viewcode-block" id="Delete.from_"><a class="viewcode-back" href="../../../index.html#sqlpuzzle._queries.delete.Delete.from_">[docs]</a>    <span class="k">def</span> <span class="nf">from_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwds</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_references</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwds</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span>
+</div>
+<div class="viewcode-block" id="Delete.from_table"><a class="viewcode-back" href="../../../index.html#sqlpuzzle._queries.delete.Delete.from_table">[docs]</a>    <span class="k">def</span> <span class="nf">from_table</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">table</span><span class="p">,</span> <span class="n">alias</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_references</span><span class="o">.</span><span class="n">set</span><span class="p">((</span><span class="n">table</span><span class="p">,</span> <span class="n">alias</span><span class="p">))</span>
+        <span class="k">return</span> <span class="bp">self</span>
+</div>
+<div class="viewcode-block" id="Delete.from_tables"><a class="viewcode-back" href="../../../index.html#sqlpuzzle._queries.delete.Delete.from_tables">[docs]</a>    <span class="k">def</span> <span class="nf">from_tables</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwds</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">from_</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwds</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span>
+</div>
+<div class="viewcode-block" id="Delete.join"><a class="viewcode-back" href="../../../index.html#sqlpuzzle._queries.delete.Delete.join">[docs]</a>    <span class="k">def</span> <span class="nf">join</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">table</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_references</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">table</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span>
+</div>
+<div class="viewcode-block" id="Delete.inner_join"><a class="viewcode-back" href="../../../index.html#sqlpuzzle._queries.delete.Delete.inner_join">[docs]</a>    <span class="k">def</span> <span class="nf">inner_join</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">table</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_references</span><span class="o">.</span><span class="n">inner_join</span><span class="p">(</span><span class="n">table</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span>
+</div>
+<div class="viewcode-block" id="Delete.left_join"><a class="viewcode-back" href="../../../index.html#sqlpuzzle._queries.delete.Delete.left_join">[docs]</a>    <span class="k">def</span> <span class="nf">left_join</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">table</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_references</span><span class="o">.</span><span class="n">left_join</span><span class="p">(</span><span class="n">table</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span>
+</div>
+<div class="viewcode-block" id="Delete.right_join"><a class="viewcode-back" href="../../../index.html#sqlpuzzle._queries.delete.Delete.right_join">[docs]</a>    <span class="k">def</span> <span class="nf">right_join</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">table</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_references</span><span class="o">.</span><span class="n">right_join</span><span class="p">(</span><span class="n">table</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span>
+</div>
+<div class="viewcode-block" id="Delete.on"><a class="viewcode-back" href="../../../index.html#sqlpuzzle._queries.delete.Delete.on">[docs]</a>    <span class="k">def</span> <span class="nf">on</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwds</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_references</span><span class="o">.</span><span class="n">on</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwds</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span>
+</div>
+<div class="viewcode-block" id="Delete.where"><a class="viewcode-back" href="../../../index.html#sqlpuzzle._queries.delete.Delete.where">[docs]</a>    <span class="k">def</span> <span class="nf">where</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwds</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_where</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwds</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span>
+
+    <span class="c"># DELETE OPTIONS</span>
+</div>
+<div class="viewcode-block" id="Delete.ignore"><a class="viewcode-back" href="../../../index.html#sqlpuzzle._queries.delete.Delete.ignore">[docs]</a>    <span class="k">def</span> <span class="nf">ignore</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">allow</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_delete_options</span><span class="o">.</span><span class="n">ignore</span><span class="p">(</span><span class="n">allow</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span>
+
+    <span class="c"># Backward compatibility.</span>
+</div>
+    <span class="n">allowDeleteAll</span> <span class="o">=</span> <span class="n">allow_delete_all</span>
+    <span class="n">forbidDeleteAll</span> <span class="o">=</span> <span class="n">forbid_delete_all</span>
+    <span class="n">fromTable</span> <span class="o">=</span> <span class="n">from_table</span>
+    <span class="n">fromTables</span> <span class="o">=</span> <span class="n">from_tables</span>
+    <span class="n">innerJoin</span> <span class="o">=</span> <span class="n">inner_join</span>
+    <span class="n">leftJoin</span> <span class="o">=</span> <span class="n">left_join</span>
+    <span class="n">rightJoin</span> <span class="o">=</span> <span class="n">right_join</span></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../../index.html">SQLPuzzle  documentation</a> &raquo;</li>
+          <li><a href="../../index.html" >Module code</a> &raquo;</li>
+          <li><a href="../../sqlpuzzle.html" >sqlpuzzle</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2015, Michal Horejsek.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
+    </div>
+  </body>
+</html>
