@@ -141,10 +141,26 @@ class GroupConcat(Concat):
         return ''
 
     def order_by(self, *args):
+        """
+        Order of concatination.
+
+        .. code-block:: python
+
+            >>> sqlpuzzle.group_concat('col').order_by('col')
+            <GroupConcat: GROUP_CONCAT("col" ORDER BY "col")>
+        """
         self._order_by.order_by(*args)
         return self
 
     def separator(self, separator):
+        """
+        Separator of values.
+
+        .. code-block:: python
+
+            >>> sqlpuzzle.group_concat('col').separator('-')
+            <GroupConcat: GROUP_CONCAT("col" SEPARATOR '-')>
+        """
         self._separator = separator
         return self
 
@@ -166,5 +182,16 @@ class Convert(Function):
         )
 
     def to(self, type_):
+        """
+        Convert to which type.
+
+        .. code-block:: python
+
+            >>> sqlpuzzle.convert('col').to('unsigned')
+            <Convert: CONVERT("col", UNSIGNED)>
+
+            >>> sqlpuzzle.convert('col', 'unsigned')
+            <Convert: CONVERT("col", UNSIGNED)>
+        """
         self._type = str(type_).upper()
         return self

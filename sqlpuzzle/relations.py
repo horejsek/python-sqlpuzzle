@@ -1,5 +1,14 @@
 # -*- coding: utf-8 -*-
 
+"""
+Use relations in conditions. For example:
+
+.. code-block:: python
+
+    >>> sqlpuzzle.select_from('t').where(name=sqlpuzzle.relations.LIKE('M%'))
+    <Select: SELECT * FROM "t" WHERE "name" LIKE 'M%'>
+"""
+
 import six
 from six.moves import xrange
 
@@ -69,52 +78,100 @@ class _RelationValue(Object):
 
 
 class EQ(_RelationValue):
+    """
+    Relation ``=``.
+
+    Default relation in most cases.
+    """
+
     _string_representation = '='
     _allowed_types = six.string_types + six.integer_types + (float, decimal.Decimal, bool, datetime.date)
 EQUAL_TO = EQ
 
 
 class NE(EQ):
+    """
+    Relation ``!=``.
+    """
     _string_representation = '!='
 NOT_EQUAL_TO = NE
 
 
 class GT(_RelationValue):
+    """
+    Relation ``>``.
+    """
+
     _string_representation = '>'
     _allowed_types = six.string_types + six.integer_types + (float, decimal.Decimal, datetime.date)
 GRATHER_THAN = GT
 
 
 class GE(GT):
+    """
+    Relation ``>=``.
+    """
+
     _string_representation = '>='
 GRATHER_THAN_OR_EQUAL_TO = GE
 
 
 class LT(GT):
+    """
+    Relation ``<``.
+    """
+
     _string_representation = '<'
 LESS_THAN = LT
 
 
 class LE(GT):
+    """
+    Relation ``<=``.
+    """
+
     _string_representation = '<='
 LESS_THAN_OR_EQUAL_TO = LE
 
 
 class LIKE(_RelationValue):
+    """
+    Relation ``LIKE``.
+    """
+
     _string_representation = 'LIKE'
     _allowed_types = six.string_types
 
 
 class NOT_LIKE(LIKE):
+    """
+    Relation ``NOT LIKE``.
+    """
+
     _string_representation = 'NOT LIKE'
 
 
 class REGEXP(_RelationValue):
+    """
+    Relation ``REGEXP``.
+    """
+
     _string_representation = 'REGEXP'
     _allowed_types = six.string_types
 
 
 class IN(_RelationValue):
+    """
+    Relation ``IN``.
+
+    If you pass ``None`` in list, it will behave correctly:
+
+    .. code-block:: python
+
+        >>> sqlpuzzle.select_from('t').where(col=sqlpuzzle.relations.IN([1,2,None]))
+        <Select: SELECT * FROM "t" WHERE ("col" IN (1, 2) OR "col" IS NULL)>
+    """
+
     _string_representation = 'IN'
     _allowed_types = (list, tuple, xrange, types.GeneratorType)
 
@@ -155,6 +212,21 @@ class IN(_RelationValue):
 
 
 class NOT_IN(IN):
+    """
+    Relation ``NOT IN``.
+
+    If you pass ``None`` in list, it will behave correctly:
+
+    .. code-block:: python
+
+        >>> sqlpuzzle.select_from('t').where(col=sqlpuzzle.relations.NOT_IN([1,2,None]))
+        <Select: SELECT * FROM "t" WHERE ("col" NOT IN (1, 2) AND "col" IS NOT NULL)>
+
+    .. versionchanged:: 1.7.0
+        There was bug that it generated ``("col" NOT IN (1, 2) OR "col" IS NULL)``
+        instead of corrent condition.
+    """
+
     _string_representation = 'NOT IN'
 
     def _format_condition(self, column, value_transformer=lambda value: value):
@@ -179,9 +251,17 @@ class NOT_IN(IN):
 
 
 class IS(_RelationValue):
+    """
+    Relation ``IS``.
+    """
+
     _string_representation = 'IS'
     _allowed_types = (bool, type(None))
 
 
 class IS_NOT(IS):
+    """
+    Relation ``IS NOT``.
+    """
+
     _string_representation = 'IS NOT'

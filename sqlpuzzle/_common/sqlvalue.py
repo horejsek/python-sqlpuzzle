@@ -34,7 +34,9 @@ def _escape_value(value):
 
 class SqlValue(Object):
     def __init__(self, value):
-        """Object used for SQL values (e.g. value of column, for condition, ...)."""
+        """
+        Object used for SQL values (e.g. value of column, for condition, ...).
+        """
         from sqlpuzzle._queries import Select, Union
         self._map = {
             str: self._string,
@@ -64,7 +66,9 @@ class SqlValue(Object):
         return convert_method()
 
     def _get_convert_method(self):
-        """Get right method to convert of the value."""
+        """
+        Get right method to convert of the value.
+        """
         for type_, method in six.iteritems(self._map):
             if type(self.value) is bool and type_ is not bool:
                 continue
@@ -121,7 +125,9 @@ class SqlValue(Object):
 
 class SqlReference(SqlValue):
     def __init__(self, value):
-        """Object used for string for SQL reference (e.g. name of tables, columns, ...)."""
+        """
+        Object used for string for SQL reference (e.g. name of tables, columns, ...).
+        """
         from sqlpuzzle._queries import Select, Union
         self._map = {
             str: self._reference,

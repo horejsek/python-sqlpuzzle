@@ -32,5 +32,7 @@ def set_backend(database):
 
 
 def get_backend():
-    """Get backend which is used right now."""
+    """
+    Get backend which is used right now.
+    """
     return BACKEND

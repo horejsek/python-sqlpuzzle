@@ -136,6 +136,8 @@ class Select(Query):
         full_join('table')
         full_join(('table', 'asTable'))
         full_join({'table': 'asTable'})
+
+        .. versionadded:: 1.7.0
         """
         self._tables.full_join(table)
         return self
