@@ -6,7 +6,10 @@ except ImportError:
     from distutils.core import setup
 
 # https://packaging.python.org/en/latest/single_source_version.html
-execfile('sqlpuzzle/version.py')
+try:
+    execfile('sqlpuzzle/version.py')
+except NameError:
+    exec(open('sqlpuzzle/version.py').read())
 
 setup(
     name='sqlpuzzle',
