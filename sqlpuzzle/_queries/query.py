@@ -29,7 +29,7 @@ class Query(Object):
                 context[key] = ' ' + force_text(querypart)
             else:
                 context[key] = ''
-        return self._query_template % context
+        return (self._query_template % context).strip()
 
     def __eq__(self, other):
         if type(self) != type(other):

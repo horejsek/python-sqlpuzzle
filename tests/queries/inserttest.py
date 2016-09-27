@@ -53,6 +53,14 @@ class PropertiesTest(InsertTest):
 
 
 class OnDuplicateKeyUpdateTest(InsertTest):
+    @classmethod
+    def setUpClass(cls):
+        sqlpuzzle.configure('postgresql')
+
+    @classmethod
+    def tearDownClass(cls):
+        sqlpuzzle.configure('sql')
+
     def test_on_duplicate_key_update(self):
         self.insert.into('user')
         values = {

@@ -5,6 +5,7 @@ from __future__ import absolute_import
 from .mysql import MySqlBackend
 from .postgresql import PostgreSqlBackend
 from .sql import SqlBackend
+from .sqlite import SqliteBackend
 
 __all__ = ('set_backend', 'get_backend',)
 
@@ -15,7 +16,7 @@ BACKENDS = {
     'sql': SqlBackend,
     'mysql': MySqlBackend,
     'postgresql': PostgreSqlBackend,
-    'sqlite': SqlBackend,
+    'sqlite': SqliteBackend,
 }
 
 

@@ -4,11 +4,28 @@ from __future__ import absolute_import
 
 import six
 
+from sqlpuzzle._backends import get_backend
 from sqlpuzzle._queries.options import Options
 from sqlpuzzle._queryparts import Tables, MultipleValues, OnDuplicateKeyUpdate
 from .query import Query
 
 __all__ = ('Insert',)
+
+
+class InsertKeyword(object):
+    def __init__(self):
+        self._is_replace = False
+
+    def __str__(self):
+        if self._is_replace:
+            return 'REPLACE'
+        return 'INSERT'
+
+    def __eq__(self, other):
+        return type(self) == type(other) and self._is_replace == other._is_replace
+
+    def replace(self):
+        self._is_replace = True
 
 
 class InsertOptions(Options):
@@ -36,12 +53,13 @@ class Insert(Query):
     """
 
     _queryparts = {
+        'keyword': InsertKeyword,
         'insert_options': InsertOptions,
         'tables': Tables,
         'values': MultipleValues,
         'on_duplicate_key_update': OnDuplicateKeyUpdate,
     }
-    _query_template = six.u('INSERT%(insert_options)s INTO%(tables)s%(values)s%(on_duplicate_key_update)s')
+    _query_template = six.u('%(keyword)s%(insert_options)s INTO%(tables)s%(values)s%(on_duplicate_key_update)s')
 
     def into(self, table):
         self._tables.set(table)
@@ -52,7 +70,13 @@ class Insert(Query):
         return self
 
     def on_duplicate_key_update(self, *args, **kwds):
-        self._on_duplicate_key_update.set(*args, **kwds)
+        backend = get_backend()
+        if backend.supports_on_duplicate_key_update:
+            self._on_duplicate_key_update.set(*args, **kwds)
+        if backend.supports_replace_into:
+            if args or kwds:
+                raise Exception('No argument for on_duplicate_key_update for backend {} is supported'.format(backend.name))
+            self._queryparts['keyword'].replace()
         return self
 
     # INSERT OPTIONS

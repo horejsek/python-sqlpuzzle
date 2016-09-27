@@ -10,4 +10,5 @@ __all__ = ('MySqlBackend',)
 class MySqlBackend(SqlBackend):
     name = 'MySQL'
 
-    _reference_quote = '`'
+    reference_quote = '`'
+    supports_on_duplicate_key_update = True
