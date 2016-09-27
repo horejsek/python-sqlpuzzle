@@ -53,10 +53,12 @@ def configure(database):
     """
     By default sqlpuzzle generates syntax in plain SQL. If you want to change it,
     you should call this method somewhere on start of your app. For now there is
-    only support of MySQL and PostgreSQL.
+    only support of SQLite, MySQL and PostgreSQL.
 
     .. code-block:: python
 
+        configure('sqlite')
+        # or
         configure('mysql')
         # or
         configure('postgresql')
