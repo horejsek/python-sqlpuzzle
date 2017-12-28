@@ -102,7 +102,7 @@ class SqlReferenceTest(unittest.TestCase):
 
 class SecurityTest(unittest.TestCase):
     def test_single_quotes(self):
-        self.assertEqual(str(SqlValue('test\'test')), "'test\\'test'")
+        self.assertEqual(str(SqlValue('test\'test')), "'test''test'")
 
     def test_quotes(self):
         self.assertEqual(str(SqlValue('test"test')), "'test\"test'")

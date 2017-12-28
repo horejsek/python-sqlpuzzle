@@ -24,7 +24,7 @@ __all__ = ('SqlValue', 'SqlReference')
 def _escape_value(value):
     replace_table = (
         ("\\", "\\\\"),
-        ("'", "\\'"),
+        ("'", "''"),
         ("\n", "\\n"),
     )
     for old, new in replace_table:
