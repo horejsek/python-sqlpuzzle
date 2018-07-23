@@ -234,17 +234,3 @@ def convert(expr, type_=None):
 C = customsql
 V = sqlvalue
 R = sqlreference
-
-
-# Backward compatibility.
-
-
-selectFrom = select_from
-insertInto = insert_into
-deleteFrom = delete_from
-custom = customSql = customsql
-avgDistinct = avg_distinct
-countDistinct = count_distinct
-minDistinct = min_distinct
-sumDistinct = sum_distinct
-groupConcat = group_concat

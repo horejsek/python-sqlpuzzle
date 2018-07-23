@@ -130,13 +130,3 @@ class Delete(Query):
     def ignore(self, allow=True):
         self._delete_options.ignore(allow)
         return self
-
-    # Backward compatibility.
-
-    allowDeleteAll = allow_delete_all
-    forbidDeleteAll = forbid_delete_all
-    fromTable = from_table
-    fromTables = from_tables
-    innerJoin = inner_join
-    leftJoin = left_join
-    rightJoin = right_join

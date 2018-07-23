@@ -122,8 +122,3 @@ class Update(Query):
     def ignore(self, allow=True):
         self._update_options.ignore(allow)
         return self
-
-    # Backward compatibility.
-
-    allowUpdateAll = allow_update_all
-    forbidUpdateAll = forbid_update_all
