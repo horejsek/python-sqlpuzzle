@@ -23,6 +23,12 @@ setup(
     ],
 
     install_requires=[line.strip() for line in open('requirements.txt').readlines()],
+    extras_require={
+        'devel': [
+            'pylint',
+            'pytest',
+        ],
+    },
 
     url='https://github.com/horejsek/python-sqlpuzzle',
     author='Michal Horejsek',
@@ -32,7 +38,6 @@ setup(
 
     classifiers=[
         'Programming Language :: Python',
-        'Programming Language :: Python :: 2',
         'Programming Language :: Python :: 3',
         'License :: OSI Approved :: MIT License',
         'Operating System :: OS Independent',

@@ -1,5 +1,17 @@
-build/
-dist/
+# Python files
+__pycache__/
+.cache/
 *.pyc
-*.komodo*
-*~
+*.pyo
+
+# Test files
+.pytest_cache/
+temp/
+
+# Build files
+.eggs/
+*.egg-info/
+build/
+_build/
+dist/
+venv/
