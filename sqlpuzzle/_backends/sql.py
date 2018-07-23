@@ -13,6 +13,7 @@ class SqlBackend(object):
     reference_quote = '"'
     supports_full_join = False
     supports_on_duplicate_key_update = False
+    supports_on_conflict_do_update = False
     supports_replace_into = False
 
     @classmethod

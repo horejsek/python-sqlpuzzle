@@ -13,7 +13,7 @@ class PostgreSqlBackend(SqlBackend):
     name = 'PostgreSQL'
 
     supports_full_join = True
-    supports_on_duplicate_key_update = True
+    supports_on_conflict_do_update = True
 
     @classmethod
     def boolean(cls, value):

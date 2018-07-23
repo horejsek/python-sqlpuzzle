@@ -67,8 +67,27 @@ class OnDuplicateKeyUpdateTest(InsertTest):
             'name': 'Alan',
         }
         self.insert.values(id=1, **values)
+        self.insert.on_duplicate_key_update('id', values)
+        self.assertEqual(str(self.insert), 'INSERT INTO "user" ("id", "name") VALUES (1, \'Alan\') ON CONFLICT ("id") DO UPDATE "name" = \'Alan\'')
+
+
+class OnConflictDoUpdateTest(InsertTest):
+    @classmethod
+    def setUpClass(cls):
+        sqlpuzzle.configure('mysql')
+
+    @classmethod
+    def tearDownClass(cls):
+        sqlpuzzle.configure('sql')
+
+    def test_on_conflict_do_update(self):
+        self.insert.into('user')
+        values = {
+            'name': 'Alan',
+        }
+        self.insert.values(id=1, **values)
         self.insert.on_duplicate_key_update(values)
-        self.assertEqual(str(self.insert), 'INSERT INTO "user" ("id", "name") VALUES (1, \'Alan\') ON DUPLICATE KEY UPDATE "name" = \'Alan\'')
+        self.assertEqual(str(self.insert), 'INSERT INTO `user` (`id`, `name`) VALUES (1, \'Alan\') ON DUPLICATE KEY UPDATE `name` = \'Alan\'')
 
 
 class CopyTest(InsertTest):

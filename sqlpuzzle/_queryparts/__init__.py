@@ -11,6 +11,7 @@ from .groupby import GroupBy
 from .having import Having, HavingCondition
 from .intooutfile import IntoOutfile
 from .limit import Limit
+from .onconflictdoupdate import OnConflictDoUpdate
 from .onduplicatekeyupdate import OnDuplicateKeyUpdate
 from .order import Order, Orders
 from .orderby import OrderBy
