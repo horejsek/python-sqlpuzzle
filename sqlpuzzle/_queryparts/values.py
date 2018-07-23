@@ -1,9 +1,3 @@
-# -*- coding: utf-8 -*-
-
-from __future__ import absolute_import
-
-import six
-
 import datetime
 import decimal
 
@@ -18,7 +12,7 @@ class Value(QueryPart):
         self.value = value
 
     def __unicode__(self):
-        return six.u('%s = %s') % (
+        return '%s = %s' % (
             SqlReference(self.column_name),
             SqlValue(self.value),
         )
@@ -35,7 +29,7 @@ class Value(QueryPart):
         return self._column_name
 
     @column_name.setter
-    @check_type_decorator(six.string_types)
+    @check_type_decorator(str)
     def column_name(self, column_name):
         self._column_name = column_name
 
@@ -44,7 +38,7 @@ class Value(QueryPart):
         return self._value
 
     @value.setter
-    @check_type_decorator(six.string_types + six.integer_types + (type(None), float, decimal.Decimal, bool, datetime.date))
+    @check_type_decorator((type(None), str, int, float, decimal.Decimal, bool, datetime.date))
     def value(self, value):
         self._value = value
 
@@ -71,12 +65,12 @@ class Values(QueryParts):
         if column_order:
             map_of_col_to_val = dict((value.column_name, value) for value in values)
             values = [map_of_col_to_val.get(column, None) for column in column_order]
-        return six.u(', ').join(six.text_type(SqlValue(value.value if value else None)) for value in values)
+        return ', '.join(str(SqlValue(value.value if value else None)) for value in values)
 
 
 class MultipleValues(QueryParts):
     def __unicode__(self):
-        return six.u('(%s) VALUES %s') % (
+        return '(%s) VALUES %s' % (
             self.columns(),
             self.values(),
         )
@@ -95,7 +89,7 @@ class MultipleValues(QueryParts):
 
     def values(self):
         column_order = self.all_columns
-        return six.u(', ').join(six.u('(%s)') % values.values(column_order) for values in self._parts)
+        return ', '.join('(%s)' % values.values(column_order) for values in self._parts)
 
     def add(self, *args, **kwds):
         values = Values().set(*args, **kwds)

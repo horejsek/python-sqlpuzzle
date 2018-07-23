@@ -1,7 +1,3 @@
-# -*- coding: utf-8 -*-
-
-import six
-
 from sqlpuzzle._common import Object, force_text
 from sqlpuzzle._queryparts.queryparts import has
 
@@ -18,9 +14,9 @@ class Options(Object):
             self._options[option_key] = 'off'
 
     def __unicode__(self):
-        return six.u(' ').join(sorted(
+        return ' '.join(sorted(
             self._definition_of_options[key][val]
-            for key, val in six.iteritems(self._options)
+            for key, val in self._options.items()
             if val != 'off'
         ))
 
@@ -36,4 +32,4 @@ class Options(Object):
 
     @property
     def is_set(self):
-        return any(item != 'off' for item in six.itervalues(self._options))
+        return any(item != 'off' for item in self._options.values())

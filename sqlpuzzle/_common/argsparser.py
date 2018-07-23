@@ -1,7 +1,3 @@
-# -*- coding: utf-8 -*-
-
-import six
-
 from sqlpuzzle.exceptions import InvalidArgumentException
 
 __all__ = ('parse_args',)
@@ -121,7 +117,7 @@ class Parser(object):
             self._parse_dictionary(self.input_data.dictionary_or_kwds)
 
     def _parse_dictionary(self, dictionary):
-        for item in sorted(six.iteritems(dictionary)):
+        for item in sorted(dictionary.items()):
             self._parse_item(item)
 
     def _parse_list(self, list_):

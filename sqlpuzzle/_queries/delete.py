@@ -1,8 +1,4 @@
-# -*- coding: utf-8 -*-
-
 from __future__ import absolute_import
-
-import six
 
 from sqlpuzzle.exceptions import ConfirmDeleteAllException
 from sqlpuzzle._queries.options import Options
@@ -40,7 +36,7 @@ class Delete(Query):
         'references': Tables,
         'where': Where,
     }
-    _query_template = six.u('DELETE%(delete_options)s%(tables)s FROM%(references)s%(where)s')
+    _query_template = 'DELETE%(delete_options)s%(tables)s FROM%(references)s%(where)s'
 
     def __init__(self, *tables):
         super(Delete, self).__init__()

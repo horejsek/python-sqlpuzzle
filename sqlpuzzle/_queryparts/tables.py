@@ -1,9 +1,3 @@
-# -*- coding: utf-8 -*-
-
-from __future__ import absolute_import
-
-import six
-
 import sqlpuzzle
 from sqlpuzzle._backends import get_backend
 from sqlpuzzle._common import SqlValue, SqlReference, force_text, check_type_decorator, parse_args
@@ -52,14 +46,14 @@ class OnCondition(Condition):
         revert_relation = self._revert_relation_map.get(type(self.relation_instance), None)
         return (
             type(self) == type(other)
-            and isinstance(self.value, six.string_types)
+            and isinstance(self.value, str)
             and self.value == other.column_name
             and self.column_name == other.value
             and revert_relation == type(other.relation_instance)
         )
 
     def __unicode__(self):
-        value_transformer = SqlReference if isinstance(self.value, six.string_types) else SqlValue
+        value_transformer = SqlReference if isinstance(self.value, str) else SqlValue
         return self._value._format_condition(SqlReference(self.column_name), value_transformer=value_transformer)
 
 
@@ -76,7 +70,7 @@ class Table(QueryPart):
 
     def __unicode__(self):
         if self.alias:
-            table = six.u('%s AS %s') % (
+            table = '%s AS %s' % (
                 SqlReference(self.table_name),
                 SqlReference(self.alias),
             )
@@ -85,11 +79,11 @@ class Table(QueryPart):
 
         if self._joins:
             self._minimize_joins()
-            table += six.u(' ') + six.u(' ').join(
-                six.u('%s %s%s') % (
+            table += ' ' + ' '.join(
+                '%s %s%s' % (
                     JOIN_TYPES[join['type']],
                     join['table'],
-                    six.u(' ON %s') % join['ons'] if join['ons'].is_set else '',
+                    ' ON %s' % join['ons'] if join['ons'].is_set else '',
                 ) for join in self._joins
             )
 
@@ -108,7 +102,7 @@ class Table(QueryPart):
         return self._table_name
 
     @table_name.setter
-    @check_type_decorator(six.string_types)
+    @check_type_decorator(str)
     def table_name(self, table_name):
         self._table_name = table_name
 
@@ -117,7 +111,7 @@ class Table(QueryPart):
         return self._alias
 
     @alias.setter
-    @check_type_decorator(six.string_types + (type(None),))
+    @check_type_decorator((type(None), str))
     def alias(self, alias):
         self._alias = alias
 
@@ -130,7 +124,7 @@ class Table(QueryPart):
             table = Table(*arg)
         elif isinstance(arg, dict) and len(arg) == 1:
             table = Table(*arg.popitem())
-        elif isinstance(arg, six.string_types):
+        elif isinstance(arg, str):
             table = Table(arg)
         else:
             raise InvalidArgumentException('Invalid argument "%s" for join.' % arg)

@@ -1,9 +1,3 @@
-# -*- coding: utf-8 -*-
-
-from __future__ import absolute_import
-
-import six
-from six.moves import xrange
 try:
     long
 except NameError:
@@ -52,7 +46,6 @@ class SqlValue(Object):
         from sqlpuzzle._queries import Select, Union
         self._map = {
             str: self._string,
-            six.text_type: self._string,
             int: self._integer,
             long: self._integer,
             float: self._float,
@@ -65,7 +58,7 @@ class SqlValue(Object):
             set: self._list,
             frozenset: self._list,
             type(None): self._null,
-            xrange: self._list,
+            range: self._list,
             types.GeneratorType: self._list,
             Select: self._subselect,
             Union: self._subselect,
@@ -81,7 +74,7 @@ class SqlValue(Object):
         """
         Get right method to convert of the value.
         """
-        for type_, method in six.iteritems(self._map):
+        for type_, method in self._map.items():
             if type(self.value) is bool and type_ is not bool:
                 continue
             if isinstance(self.value, type_):
@@ -97,13 +90,13 @@ class SqlValue(Object):
         # Sometimes, e.g. in subselect, is needed reference to column instead of self.value.
         if get_backend().is_reference(self.value):
             return self._reference()
-        return six.u("'%s'") % _escape_value(force_text(self.value))
+        return "'%s'" % _escape_value(force_text(self.value))
 
     def _integer(self):
-        return six.u('%d') % self.value
+        return '%d' % self.value
 
     def _float(self):
-        return six.u('%.5f') % self.value
+        return '%.5f' % self.value
 
     def _boolean(self):
         return get_backend().boolean(self.value)
@@ -112,24 +105,24 @@ class SqlValue(Object):
         return self._datetime()
 
     def _datetime(self):
-        return six.u("'%s'") % self.value.isoformat()
+        return "'%s'" % self.value.isoformat()
 
     def _list(self):
         if self.value:
-            return six.u('(%s)') % six.u(', ').join(force_text(SqlValue(item)) for item in self.value)
+            return '(%s)' % ', '.join(force_text(SqlValue(item)) for item in self.value)
         raise InvalidArgumentException('Empty list is not allowed.')
 
     def _subselect(self):
-        return six.u('(%s)') % self.value
+        return '(%s)' % self.value
 
     def _null(self):
-        return six.u('NULL')
+        return 'NULL'
 
     def _undefined(self):
         try:
-            return six.u('<undefined value %s>') % self.value
+            return '<undefined value %s>' % self.value
         except Exception:
-            return six.u('<undefined value>')
+            return '<undefined value>'
 
     def _reference(self):
         return get_backend().reference(self.value)
@@ -155,7 +148,6 @@ class SqlReference(SqlValue):
         from sqlpuzzle._queries import Select, Union
         self._map = {
             str: self._reference,
-            six.text_type: self._reference,
             int: self._integer,
             Select: self._subselect,
             Union: self._subselect,

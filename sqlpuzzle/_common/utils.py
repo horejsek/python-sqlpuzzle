@@ -1,8 +1,4 @@
-# -*- coding: utf-8 -*-
-
 from functools import wraps
-
-import six
 
 from sqlpuzzle.exceptions import InvalidArgumentException
 
@@ -12,11 +8,7 @@ __all__ = ('force_text', 'is_sql_instance', 'check_type_decorator')
 def force_text(value):
     if is_sql_instance(value):
         return value.tosql()
-    if six.PY3:
-        return str(value)
-    if isinstance(value, str):
-        return unicode(value, 'utf-8')
-    return unicode(value)
+    return str(value)
 
 
 def is_sql_instance(value):

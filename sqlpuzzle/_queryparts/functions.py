@@ -1,9 +1,3 @@
-# -*- coding: utf-8 -*-
-
-from __future__ import absolute_import
-
-import six
-
 from sqlpuzzle._common import Object, SqlReference, SqlValue, force_text
 from sqlpuzzle.exceptions import InvalidArgumentException
 from .columns import Columns
@@ -30,15 +24,15 @@ class Function(Object):
 
     def __unicode__(self):
         if not self._function_name:
-            return six.u('<Function>')
-        return six.u('%s(%s)') % (
+            return '<Function>'
+        return '%s(%s)' % (
             self._function_name,
             self._get_expr_as_string(),
         )
 
     def _get_expr_as_string(self):
         if isinstance(self.expr, (list, tuple)):
-            return six.u(', ').join(force_text(SqlReference(e)) for e in self.expr)
+            return ', '.join(force_text(SqlReference(e)) for e in self.expr)
         return SqlReference(self.expr)
 
     @property
@@ -61,8 +55,8 @@ class FunctionWithDistinct(Function):
 
     def __unicode__(self):
         if not self._function_name:
-            return six.u('<FunctionWithDistinct>')
-        return six.u('%s(%s%s)') % (
+            return '<FunctionWithDistinct>'
+        return '%s(%s%s)' % (
             self._function_name,
             'DISTINCT ' if self._distinct else '',
             self._get_expr_as_string(),
@@ -108,7 +102,7 @@ class Concat(Function):
             raise InvalidArgumentException('You must specify columns for %s.' % self._function_name)
 
     def __unicode__(self):
-        return six.u('%s(%s)') % (
+        return '%s(%s)' % (
             self._function_name,
             self._columns,
         )
@@ -123,7 +117,7 @@ class GroupConcat(Concat):
         self._separator = None
 
     def __unicode__(self):
-        return six.u('%s(%s%s%s)') % (
+        return '%s(%s%s%s)' % (
             self._function_name,
             self._columns,
             self._str_order_by(),
@@ -132,12 +126,12 @@ class GroupConcat(Concat):
 
     def _str_order_by(self):
         if self._order_by.is_set:
-            return six.u(' %s') % self._order_by
+            return ' %s' % self._order_by
         return ''
 
     def _str_separator(self):
         if self._separator:
-            return six.u(' SEPARATOR %s') % SqlValue(self._separator)
+            return ' SEPARATOR %s' % SqlValue(self._separator)
         return ''
 
     def order_by(self, *args):
@@ -175,7 +169,7 @@ class Convert(Function):
             self.to(type_)
 
     def __unicode__(self):
-        return six.u('%s(%s, %s)') % (
+        return '%s(%s, %s)' % (
             self._function_name,
             self._get_expr_as_string(),
             self._type,

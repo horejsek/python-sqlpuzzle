@@ -1,9 +1,3 @@
-# -*- coding: utf-8 -*-
-
-from __future__ import absolute_import
-
-import six
-
 from sqlpuzzle._queryparts import Columns, TablesForSelect, Where, GroupBy, Having, OrderBy, Limit, IntoOutfile
 from .query import Query
 from .union import Union, UNION, UNION_ALL
@@ -50,7 +44,7 @@ class Select(Query):
         'into_outfile': IntoOutfile,
         'select_for_update': SelectForUpdate,
     }
-    _query_template = six.u(
+    _query_template = (
         'SELECT%(select_options)s%(columns)s%(tables)s'
         '%(where)s%(group_by)s%(having)s'
         '%(order_by)s%(limit)s%(into_outfile)s%(select_for_update)s'

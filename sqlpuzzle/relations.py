@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """
 Use relations in conditions. For example:
 
@@ -8,9 +6,6 @@ Use relations in conditions. For example:
     >>> sqlpuzzle.select_from('t').where(name=sqlpuzzle.relations.LIKE('M%'))
     <Select: SELECT * FROM "t" WHERE "name" LIKE 'M%'>
 """
-
-import six
-from six.moves import xrange
 
 import datetime
 import decimal
@@ -70,7 +65,7 @@ class _RelationValue(Object):
         return self._value
 
     def _format_condition(self, column, value_transformer=lambda value: value):
-        return six.u('%(col)s %(rel)s %(val)s') % {
+        return '%(col)s %(rel)s %(val)s' % {
             'col': column,
             'rel': self.relation,
             'val': value_transformer(self.value),
@@ -85,7 +80,7 @@ class EQ(_RelationValue):
     """
 
     _string_representation = '='
-    _allowed_types = six.string_types + six.integer_types + (float, decimal.Decimal, bool, datetime.date)
+    _allowed_types = (str, int, float, decimal.Decimal, bool, datetime.date)
 EQUAL_TO = EQ
 
 
@@ -103,7 +98,7 @@ class GT(_RelationValue):
     """
 
     _string_representation = '>'
-    _allowed_types = six.string_types + six.integer_types + (float, decimal.Decimal, datetime.date)
+    _allowed_types = (str, int, float, decimal.Decimal, datetime.date)
 GRATHER_THAN = GT
 
 
@@ -140,7 +135,7 @@ class LIKE(_RelationValue):
     """
 
     _string_representation = 'LIKE'
-    _allowed_types = six.string_types
+    _allowed_types = (str,)
 
 
 class NOT_LIKE(LIKE):
@@ -157,7 +152,7 @@ class REGEXP(_RelationValue):
     """
 
     _string_representation = 'REGEXP'
-    _allowed_types = six.string_types
+    _allowed_types = (str,)
 
 
 class IN(_RelationValue):
@@ -173,7 +168,7 @@ class IN(_RelationValue):
     """
 
     _string_representation = 'IN'
-    _allowed_types = (list, tuple, xrange, types.GeneratorType)
+    _allowed_types = (list, tuple, range, types.GeneratorType)
 
     def __init__(self, *args):
         if len(args) > 1:
@@ -191,15 +186,15 @@ class IN(_RelationValue):
         super(IN, self).__init__(value)
 
     def _format_condition(self, column, value_transformer=lambda value: value):
-        template = six.u('%(col)s %(rel)s %(val)s')
+        template = '%(col)s %(rel)s %(val)s'
 
         try:
             value = [v for v in self.value if v is not None]
             if None in self.value:
                 if value:
-                    template = six.u('(') + template + six.u(' OR %(col)s IS NULL)')
+                    template = '(' + template + ' OR %(col)s IS NULL)'
                 else:
-                    template = six.u('%(col)s IS NULL')
+                    template = '%(col)s IS NULL'
         except TypeError:
             # If its not iterable, it can be subselect or something.
             value = self.value
@@ -230,15 +225,15 @@ class NOT_IN(IN):
     _string_representation = 'NOT IN'
 
     def _format_condition(self, column, value_transformer=lambda value: value):
-        template = six.u('%(col)s %(rel)s %(val)s')
+        template = '%(col)s %(rel)s %(val)s'
 
         try:
             value = [v for v in self.value if v is not None]
             if None in self.value:
                 if value:
-                    template = six.u('(') + template + six.u(' AND %(col)s IS NOT NULL)')
+                    template = '(' + template + ' AND %(col)s IS NOT NULL)'
                 else:
-                    template = six.u('%(col)s IS NOT NULL')
+                    template = '%(col)s IS NOT NULL'
         except TypeError:
             # If its not iterable, it can be subselect or something.
             value = self.value

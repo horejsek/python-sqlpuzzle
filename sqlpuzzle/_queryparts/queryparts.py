@@ -1,7 +1,3 @@
-# -*- coding: utf-8 -*-
-
-import six
-
 from functools import wraps
 import re
 
@@ -26,7 +22,7 @@ def has(part, value):
     value = force_text(value)
     #  If I look for example for "distinct", I don't want to say "hey, there is
     #+ distinct!", if there is actually "distinctrow".
-    res = re.search('([^\w]|^)%s([^\w]|$)' % value, six.text_type(part))
+    res = re.search('([^\w]|^)%s([^\w]|$)' % value, str(part))
     return bool(res)
 
 
@@ -50,10 +46,10 @@ class QueryParts(Object):
 
     def __unicode__(self):
         if not self._parts:
-            return six.text_type(self._default_query_string)
+            return str(self._default_query_string)
         if self._keyword_of_parts:
-            return six.u('%s %s') % (self._keyword_of_parts, self._parts)
-        return six.text_type(self._parts)
+            return '%s %s' % (self._keyword_of_parts, self._parts)
+        return str(self._parts)
 
     def __contains__(self, other_part):
         for part in self._parts:

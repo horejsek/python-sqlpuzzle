@@ -1,8 +1,4 @@
-# -*- coding: utf-8 -*-
-
 from collections import OrderedDict
-
-import six
 
 from sqlpuzzle._common import Object, force_text
 
@@ -18,12 +14,12 @@ class Query(Object):
         # Keep sorted query parts for comparison in `__eq__`. Since Python 3.3
         # is not dictionary ordered by keys.
         self._queryparts = OrderedDict([(key, cls()) for key, cls in sorted(self._queryparts.items())])
-        for key, querypart in six.iteritems(self._queryparts):
+        for key, querypart in self._queryparts.items():
             setattr(self, '_%s' % key, querypart)
 
     def __unicode__(self):
         context = {}
-        for key, querypart in six.iteritems(self._queryparts):
+        for key, querypart in self._queryparts.items():
             is_set = getattr(querypart, 'is_set', True)
             if is_set:
                 context[key] = ' ' + force_text(querypart)

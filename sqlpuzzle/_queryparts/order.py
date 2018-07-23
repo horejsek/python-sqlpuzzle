@@ -1,9 +1,3 @@
-# -*- coding: utf-8 -*-
-
-from __future__ import absolute_import
-
-import six
-
 from sqlpuzzle._common import SqlReference, check_type_decorator, parse_args
 from sqlpuzzle.exceptions import InvalidArgumentException
 from .queryparts import QueryPart, QueryParts
@@ -23,9 +17,9 @@ class Order(QueryPart):
 
     def __unicode__(self):
         if self.sort == ASC:
-            return six.text_type(SqlReference(self.column_name))
+            return str(SqlReference(self.column_name))
         else:
-            return six.u('%s %s') % (
+            return '%s %s' % (
                 SqlReference(self.column_name),
                 self.sort,
             )
@@ -42,7 +36,7 @@ class Order(QueryPart):
         return self._column_name
 
     @column_name.setter
-    @check_type_decorator(six.string_types + (int,))
+    @check_type_decorator((str, int))
     def column_name(self, column_name):
         self._column_name = column_name
 
@@ -51,7 +45,7 @@ class Order(QueryPart):
         return self._sort
 
     @sort.setter
-    @check_type_decorator(six.string_types + (int, type(None)))
+    @check_type_decorator((str, int, type(None)))
     def sort(self, sort):
         if sort is None:
             sort = ASC

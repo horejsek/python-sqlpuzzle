@@ -1,9 +1,3 @@
-# -*- coding: utf-8 -*-
-
-from __future__ import absolute_import
-
-import six
-
 from sqlpuzzle._common import SqlReference, check_type_decorator, parse_args
 from .queryparts import QueryPart, QueryParts
 
@@ -18,12 +12,12 @@ class Column(QueryPart):
 
     def __unicode__(self):
         if self.alias:
-            return six.u('%s AS %s') % (
+            return '%s AS %s' % (
                 SqlReference(self.column_name),
                 SqlReference(self.alias),
             )
         else:
-            return six.text_type(SqlReference(self.column_name))
+            return str(SqlReference(self.column_name))
 
     def __eq__(self, other):
         return (
@@ -37,7 +31,7 @@ class Column(QueryPart):
         return self._column_name
 
     @column_name.setter
-    @check_type_decorator(six.string_types + (int,))
+    @check_type_decorator((str, int))
     def column_name(self, column_name):
         self._column_name = column_name
 
@@ -46,7 +40,7 @@ class Column(QueryPart):
         return self._alias
 
     @alias.setter
-    @check_type_decorator(six.string_types + (type(None),))
+    @check_type_decorator((str, type(None)))
     def alias(self, alias):
         self._alias = alias
 

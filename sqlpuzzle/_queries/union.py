@@ -1,9 +1,3 @@
-# -*- coding: utf-8 -*-
-
-from __future__ import absolute_import
-
-import six
-
 from sqlpuzzle.exceptions import InvalidArgumentException
 from sqlpuzzle._common import check_type_decorator
 from .query import Query
@@ -37,7 +31,7 @@ class Union(Query):
         self.union_type = union_type
 
     def __unicode__(self):
-        return six.u('%s %s %s') % (
+        return '%s %s %s' % (
             self.query1,
             self.union_type,
             self.query2,
@@ -96,7 +90,7 @@ class Union(Query):
         return self._union_type
 
     @union_type.setter
-    @check_type_decorator(six.string_types)
+    @check_type_decorator(str)
     def union_type(self, union_type):
         if not union_type in UNION_TYPES:
             raise InvalidArgumentException('Union type can not be %s.' % union_type)

@@ -1,9 +1,3 @@
-# -*- coding: utf-8 -*-
-
-from __future__ import absolute_import
-
-import six
-
 from sqlpuzzle.exceptions import ConfirmUpdateAllException
 from sqlpuzzle._queries.options import Options
 from sqlpuzzle._queryparts import Tables, Values, Where
@@ -40,7 +34,7 @@ class Update(Query):
         'values': Values,
         'where': Where,
     }
-    _query_template = six.u('UPDATE%(update_options)s%(tables)s SET%(values)s%(where)s')
+    _query_template = 'UPDATE%(update_options)s%(tables)s SET%(values)s%(where)s'
 
     def __init__(self, table=None):
         super(Update, self).__init__()

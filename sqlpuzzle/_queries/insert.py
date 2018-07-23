@@ -1,8 +1,4 @@
-# -*- coding: utf-8 -*-
-
 from __future__ import absolute_import
-
-import six
 
 from sqlpuzzle._backends import get_backend
 from sqlpuzzle._queries.options import Options
@@ -60,7 +56,7 @@ class Insert(Query):
         'on_duplicate_key_update': OnDuplicateKeyUpdate,
         'on_conflict_do_update': OnConflictDoUpdate,
     }
-    _query_template = six.u('%(keyword)s%(insert_options)s INTO%(tables)s%(values)s%(on_duplicate_key_update)s%(on_conflict_do_update)s')
+    _query_template = '%(keyword)s%(insert_options)s INTO%(tables)s%(values)s%(on_duplicate_key_update)s%(on_conflict_do_update)s'
 
     def into(self, table):
         self._tables.set(table)

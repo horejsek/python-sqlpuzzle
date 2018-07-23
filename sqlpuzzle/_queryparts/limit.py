@@ -1,9 +1,3 @@
-# -*- coding: utf-8 -*-
-
-from __future__ import absolute_import
-
-import six
-
 from sqlpuzzle._common import check_type_decorator
 from .queryparts import QueryPart
 
@@ -19,11 +13,11 @@ class Limit(QueryPart):
     def __unicode__(self):
         res = ''
         if self._limit is not None:
-            res += six.u('LIMIT %s') % self._limit
+            res += 'LIMIT %s' % self._limit
         if self._offset is not None:
             if res:
                 res += ' '
-            res += six.u('OFFSET %s') % self._offset
+            res += 'OFFSET %s' % self._offset
         return res
 
     def __eq__(self, other):
@@ -37,7 +31,7 @@ class Limit(QueryPart):
     def is_set(self):
         return self._limit is not None or self._offset is not None
 
-    @check_type_decorator(six.integer_types + (type(None),))
+    @check_type_decorator((type(None), int))
     def limit(self, limit, offset=None):
         if limit is None:
             self._limit = None
@@ -48,7 +42,7 @@ class Limit(QueryPart):
                 self.offset(offset)
         return self
 
-    @check_type_decorator(six.integer_types + (type(None),))
+    @check_type_decorator((type(None), int))
     def offset(self, offset):
         self._offset = int(offset) if offset else None
         return self

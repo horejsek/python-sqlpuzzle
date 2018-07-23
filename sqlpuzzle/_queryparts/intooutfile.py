@@ -1,9 +1,3 @@
-# -*- coding: utf-8 -*-
-
-from __future__ import absolute_import
-
-import six
-
 from sqlpuzzle._common import SqlValue, check_type_decorator
 from .queryparts import QueryPart
 
@@ -24,13 +18,13 @@ class IntoOutfile(QueryPart):
         self._optionally_enclosed_by = optionally_enclosed_by
 
     def __unicode__(self):
-        into_outfile = six.u('INTO OUTFILE %s') % SqlValue(self._into_outfile)
+        into_outfile = 'INTO OUTFILE %s' % SqlValue(self._into_outfile)
         if self._fields_terminated_by is not None:
-            into_outfile += six.u(' FIELDS TERMINATED BY %s') % SqlValue(self._fields_terminated_by)
+            into_outfile += ' FIELDS TERMINATED BY %s' % SqlValue(self._fields_terminated_by)
         if self._lines_terminated_by is not None:
-            into_outfile += six.u(' LINES TERMINATED BY %s') % SqlValue(self._lines_terminated_by)
+            into_outfile += ' LINES TERMINATED BY %s' % SqlValue(self._lines_terminated_by)
         if self._optionally_enclosed_by is not None:
-            into_outfile += six.u(' OPTIONALLY ENCLOSED BY %s') % SqlValue(self._optionally_enclosed_by)
+            into_outfile += ' OPTIONALLY ENCLOSED BY %s' % SqlValue(self._optionally_enclosed_by)
         return into_outfile
 
     def __eq__(self, other):
@@ -46,22 +40,22 @@ class IntoOutfile(QueryPart):
     def is_set(self):
         return self._into_outfile is not None
 
-    @check_type_decorator(six.string_types)
+    @check_type_decorator(str)
     def into_outfile(self, into_outfile):
         self._into_outfile = into_outfile
         return self
 
-    @check_type_decorator(six.string_types)
+    @check_type_decorator(str)
     def fields_terminated_by(self, fields_terminated_by):
         self._fields_terminated_by = fields_terminated_by
         return self
 
-    @check_type_decorator(six.string_types)
+    @check_type_decorator(str)
     def lines_terminated_by(self, lines_terminated_by):
         self._lines_terminated_by = lines_terminated_by
         return self
 
-    @check_type_decorator(six.string_types)
+    @check_type_decorator(str)
     def optionally_enclosed_by(self, optionally_enclosed_by):
         self._optionally_enclosed_by = optionally_enclosed_by
         return self

@@ -1,9 +1,3 @@
-# -*- coding: utf-8 -*-
-
-from __future__ import absolute_import
-
-import six
-from six.moves import xrange
 try:
     long
 except NameError:
@@ -39,7 +33,6 @@ class BinaryOperationMixin(object):
 class Condition(BinaryOperationMixin, QueryPart):
     _default_relations = {
         str: relations.EQ,
-        six.text_type: relations.EQ,
         int: relations.EQ,
         long: relations.EQ,
         float: relations.EQ,
@@ -47,7 +40,7 @@ class Condition(BinaryOperationMixin, QueryPart):
         bool: relations.EQ,
         list: relations.IN,
         tuple: relations.IN,
-        xrange: relations.IN,
+        range: relations.IN,
         types.GeneratorType: relations.IN,
         datetime.date: relations.EQ,
         datetime.datetime: relations.EQ,
@@ -75,7 +68,7 @@ class Condition(BinaryOperationMixin, QueryPart):
         return self._column_name
 
     @column_name.setter
-    @check_type_decorator(six.string_types)
+    @check_type_decorator(str)
     def column_name(self, column_name):
         self._column_name = column_name
 
@@ -84,9 +77,9 @@ class Condition(BinaryOperationMixin, QueryPart):
         return self._value.value
 
     @value.setter
-    @check_type_decorator(six.string_types + six.integer_types + (
-        type(None), float, decimal.Decimal, bool, list, tuple,
-        xrange, types.GeneratorType, datetime.date, datetime.datetime,
+    @check_type_decorator((
+        type(None), str, int, float, decimal.Decimal, bool, list, tuple,
+        range, types.GeneratorType, datetime.date, datetime.datetime,
     ))
     def value(self, value):
         if not isinstance(value, relations._RelationValue):
@@ -136,7 +129,7 @@ class ConditionsOfConditions(BinaryOperationMixin, Object):
         self.type = type
 
     def __unicode__(self):
-        template = six.u('(')
+        template = '('
         template += '(%s)' if self._needs_brackets(self.left) else '%s'
         template += ' %s '
         template += '(%s)' if self._needs_brackets(self.right) else '%s'

@@ -1,7 +1,3 @@
-# -*- coding: utf-8 -*-
-
-import six
-
 from sqlpuzzle._common import Object
 from sqlpuzzle._queries.options import Options
 
