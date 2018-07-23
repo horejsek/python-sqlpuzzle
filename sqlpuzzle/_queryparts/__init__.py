@@ -5,7 +5,7 @@ from __future__ import absolute_import
 from .queryparts import QueryPart, QueryParts
 
 from .columns import Column, Columns
-from .conditions import Condition, Conditions
+from .conditions import Condition, Conditions, Not
 from .functions import Avg, Concat, Convert, Count, GroupConcat, Max, Min, Sum
 from .groupby import GroupBy
 from .having import Having, HavingCondition

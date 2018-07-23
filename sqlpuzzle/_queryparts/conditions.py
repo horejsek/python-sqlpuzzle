@@ -14,10 +14,11 @@ import decimal
 import types
 
 from sqlpuzzle._common import Object, SqlValue, SqlReference, check_type_decorator, parse_args
+from .functions import Function
 from .queryparts import QueryPart, QueryParts, append_custom_sql_decorator
 from sqlpuzzle import relations
 
-__all__ = ('Condition', 'Conditions')
+__all__ = ('Condition', 'Conditions', 'Not')
 
 
 class BinaryOperationMixin(object):
@@ -145,3 +146,11 @@ class ConditionsOfConditions(BinaryOperationMixin, Object):
     @staticmethod
     def _needs_brackets(value):
         return isinstance(value, QueryParts) and value.count_of_parts > 1
+
+
+class Not(Function):
+    _function_name = 'NOT'
+
+    def __init__(self, *args, **kwds):
+        expr = Conditions(*args, **kwds)
+        super().__init__(expr)

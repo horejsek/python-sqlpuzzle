@@ -9,6 +9,7 @@ from __future__ import absolute_import
 from .version import VERSION
 from ._backends import set_backend
 from ._common import CustomSql as customsql, SqlValue as sqlvalue, SqlReference as sqlreference
+from ._queryparts import Not
 from ._queryparts.functions import Avg, Concat, Convert, Count, GroupConcat, Max, Min, Sum
 from ._queryparts.conditions import Conditions
 from ._queries import Delete, Insert, Select, Update
@@ -32,6 +33,8 @@ __all__ = (
     'V',
     'sqlreference',
     'R',
+
+    'Not',
 
     'avg',
     'avg_distinct',

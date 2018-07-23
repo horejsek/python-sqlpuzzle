@@ -8,7 +8,7 @@ import unittest
 
 import sqlpuzzle
 from sqlpuzzle import Q
-from sqlpuzzle._queryparts import Where
+from sqlpuzzle._queryparts import Where, Not
 
 
 class WhereTest(unittest.TestCase):
@@ -298,3 +298,13 @@ class QObjectTest(WhereTest):
     def test_qobject_in_qobject(self):
         self.where.where(Q(Q(a=1) | Q(b=2)) & Q(c=3))
         self.assertEqual(str(self.where), 'WHERE (("a" = 1 OR "b" = 2) AND "c" = 3)')
+
+
+class NotTest(WhereTest):
+    def test_not(self):
+        self.where.where(Not(a=1))
+        self.assertEqual(str(self.where), 'WHERE NOT("a" = 1)')
+
+    def test_not_with_q(self):
+        self.where.where(Not(Q(a=1) | Q(b=2)))
+        self.assertEqual(str(self.where), 'WHERE NOT(("a" = 1 OR "b" = 2))')
