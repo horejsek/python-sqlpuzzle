@@ -8,7 +8,7 @@ from .query import Query
 __all__ = ('Insert',)
 
 
-class InsertKeyword(object):
+class InsertKeyword:
     def __init__(self):
         self._is_replace = False
 

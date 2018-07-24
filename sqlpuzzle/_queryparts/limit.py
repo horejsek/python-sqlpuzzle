@@ -6,11 +6,11 @@ __all__ = ('Limit',)
 
 class Limit(QueryPart):
     def __init__(self, limit=None, offset=None):
-        super(Limit, self).__init__()
+        super().__init__()
         self._limit = limit
         self._offset = offset
 
-    def __unicode__(self):
+    def __str__(self):
         res = ''
         if self._limit is not None:
             res += 'LIMIT {}'.format(self._limit)

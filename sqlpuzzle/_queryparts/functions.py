@@ -19,10 +19,10 @@ class Function(Object):
     _function_name = None
 
     def __init__(self, expr):
-        super(Function, self).__init__()
+        super().__init__()
         self.expr = expr
 
-    def __unicode__(self):
+    def __str__(self):
         if not self._function_name:
             return '<Function>'
         return '{}({})'.format(
@@ -46,14 +46,14 @@ class Function(Object):
 
 class FunctionWithDistinct(Function):
     def __init__(self, expr, distinct=False):
-        super(FunctionWithDistinct, self).__init__(expr)
+        super().__init__(expr)
         self.distinct(distinct)
 
     def distinct(self, distinct=True):
         self._distinct = bool(distinct)
         return self
 
-    def __unicode__(self):
+    def __str__(self):
         if not self._function_name:
             return '<FunctionWithDistinct>'
         return '{}({}{})'.format(
@@ -73,12 +73,12 @@ class Count(FunctionWithDistinct):
     def __init__(self, expr=None, distinct=False):
         if not expr:
             expr = '*'
-        super(Count, self).__init__(expr, distinct)
+        super().__init__(expr, distinct)
 
     def _get_expr_as_string(self):
         if self.expr == '*':
             return self.expr
-        return super(Count, self)._get_expr_as_string()
+        return super()._get_expr_as_string()
 
 
 class Max(FunctionWithDistinct):
@@ -101,7 +101,7 @@ class Concat(Function):
         if not self._columns.is_set:
             raise InvalidArgumentException('You must specify columns for %s.' % self._function_name)
 
-    def __unicode__(self):
+    def __str__(self):
         return '{}({})'.format(
             self._function_name,
             self._columns,
@@ -112,11 +112,11 @@ class GroupConcat(Concat):
     _function_name = 'GROUP_CONCAT'
 
     def __init__(self, *expr):
-        super(GroupConcat, self).__init__(*expr)
+        super().__init__(*expr)
         self._order_by = OrderBy()
         self._separator = None
 
-    def __unicode__(self):
+    def __str__(self):
         return '{}({}{}{})'.format(
             self._function_name,
             self._columns,
@@ -163,12 +163,12 @@ class Convert(Function):
     _function_name = 'CONVERT'
 
     def __init__(self, expr, type_=None):
-        super(Convert, self).__init__(expr)
+        super().__init__(expr)
         self._type = None
         if type_:
             self.to(type_)
 
-    def __unicode__(self):
+    def __str__(self):
         return '{}({}, {})'.format(
             self._function_name,
             self._get_expr_as_string(),

@@ -79,10 +79,10 @@ class SelectOptions(Options):
 
 class SelectForUpdate(Object):
     def __init__(self):
-        super(SelectForUpdate, self).__init__()
+        super().__init__()
         self._for_update = False
 
-    def __unicode__(self):
+    def __str__(self):
         if self._for_update:
             return 'FOR UPDATE'
         return ''

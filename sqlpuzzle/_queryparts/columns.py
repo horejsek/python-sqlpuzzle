@@ -6,11 +6,11 @@ __all__ = ('Column', 'Columns')
 
 class Column(QueryPart):
     def __init__(self, column_name=None, alias=None):
-        super(Column, self).__init__()
+        super().__init__()
         self.column_name = column_name
         self.alias = alias
 
-    def __unicode__(self):
+    def __str__(self):
         if self.alias:
             return '{} AS {}'.format(
                 SqlReference(self.column_name),

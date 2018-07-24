@@ -10,14 +10,14 @@ class Query(Object):
     _query_template = ''
 
     def __init__(self):
-        super(Query, self).__init__()
+        super().__init__()
         # Keep sorted query parts for comparison in `__eq__`. Since Python 3.3
         # is not dictionary ordered by keys.
         self._queryparts = OrderedDict([(key, cls()) for key, cls in sorted(self._queryparts.items())])
         for key, querypart in self._queryparts.items():
             setattr(self, '_{}'.format(key), querypart)
 
-    def __unicode__(self):
+    def __str__(self):
         context = {}
         for key, querypart in self._queryparts.items():
             is_set = getattr(querypart, 'is_set', True)

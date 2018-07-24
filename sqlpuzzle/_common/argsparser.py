@@ -41,7 +41,7 @@ def parse_args(options={}, *args, **kwds):
     return parser.output_data
 
 
-class ParserOptions(object):
+class ParserOptions:
     def __init__(self, options):
         self.min_items = options.get('min_items', 1)
         self.max_items = options.get('max_items', 1)
@@ -52,7 +52,7 @@ class ParserOptions(object):
         assert not self.allow_dict or (self.allow_dict and self.max_items > 1)
 
 
-class ParserInput(object):
+class ParserInput:
     def __init__(self, args, kwds):
         self.args = args
         self.kwds = kwds
@@ -91,7 +91,7 @@ class ParserInput(object):
         return min_ <= len(self.args) <= max_
 
 
-class Parser(object):
+class Parser:
     def __init__(self, options, input_data):
         self.options = options
         self.input_data = input_data

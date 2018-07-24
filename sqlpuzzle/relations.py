@@ -22,7 +22,7 @@ class _RelationValue(Object):
     _allowed_types = ()
 
     def __init__(self, value):
-        super(_RelationValue, self).__init__()
+        super().__init__()
         self._check_value_type(value)
         self._value = value
 
@@ -183,7 +183,7 @@ class IN(_RelationValue):
             value = list(value)
         except TypeError:
             pass
-        super(IN, self).__init__(value)
+        super().__init__(value)
 
     def _format_condition(self, column, value_transformer=lambda value: value):
         template = '%(col)s %(rel)s %(val)s'

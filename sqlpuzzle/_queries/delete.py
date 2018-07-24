@@ -39,14 +39,14 @@ class Delete(Query):
     _query_template = 'DELETE%(delete_options)s%(tables)s FROM%(references)s%(where)s'
 
     def __init__(self, *tables):
-        super(Delete, self).__init__()
+        super().__init__()
         self._allow_delete_all = False
         self._tables.set(*tables)
 
-    def __unicode__(self):
+    def __str__(self):
         if not self._where.is_set and not self._allow_delete_all:
             raise ConfirmDeleteAllException()
-        return super(Delete, self).__unicode__()
+        return super().__str__()
 
     def allow_delete_all(self):
         """

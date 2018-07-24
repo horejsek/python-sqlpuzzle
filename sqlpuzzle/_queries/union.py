@@ -25,12 +25,12 @@ class Union(Query):
     """
 
     def __init__(self, query1, query2, union_type=UNION):
-        super(Union, self).__init__()
+        super().__init__()
         self.query1 = query1
         self.query2 = query2
         self.union_type = union_type
 
-    def __unicode__(self):
+    def __str__(self):
         return '{} {} {}'.format(
             self.query1,
             self.union_type,

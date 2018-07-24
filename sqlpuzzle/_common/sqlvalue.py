@@ -66,7 +66,7 @@ class SqlValue(Object):
 
         self.value = value
 
-    def __unicode__(self):
+    def __str__(self):
         convert_method = self._get_convert_method()
         return convert_method()
 

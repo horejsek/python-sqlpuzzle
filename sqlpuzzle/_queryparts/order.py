@@ -11,11 +11,11 @@ DESC = 'DESC'
 
 class Order(QueryPart):
     def __init__(self, column=None, sort=None):
-        super(Order, self).__init__()
+        super().__init__()
         self.column_name = column
         self.sort = sort
 
-    def __unicode__(self):
+    def __str__(self):
         if self.sort == ASC:
             return str(SqlReference(self.column_name))
         else:

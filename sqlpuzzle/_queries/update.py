@@ -37,14 +37,14 @@ class Update(Query):
     _query_template = 'UPDATE%(update_options)s%(tables)s SET%(values)s%(where)s'
 
     def __init__(self, table=None):
-        super(Update, self).__init__()
+        super().__init__()
         self._allow_update_all = False
         self.table(table)
 
-    def __unicode__(self):
+    def __str__(self):
         if not self._where.is_set and not self._allow_update_all:
             raise ConfirmUpdateAllException()
-        return super(Update, self).__unicode__()
+        return super().__str__()
 
     def allow_update_all(self):
         """

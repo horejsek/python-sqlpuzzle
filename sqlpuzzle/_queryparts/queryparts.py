@@ -41,10 +41,10 @@ class QueryParts(Object):
     _default_query_string = ''
 
     def __init__(self):
-        super(QueryParts, self).__init__()
+        super().__init__()
         self._parts = ListOfQueryParts(self._separator_of_parts)
 
-    def __unicode__(self):
+    def __str__(self):
         if not self._parts:
             return str(self._default_query_string)
         if self._keyword_of_parts:
@@ -83,13 +83,13 @@ class QueryParts(Object):
 
 class ListOfQueryParts(Object, list):
     def __init__(self, separator=''):
-        super(ListOfQueryParts, self).__init__()
+        super().__init__()
         self._separator = separator
 
     def append(self, query_part):
         if not is_sql_instance(query_part):
             raise SqlPuzzleException('Appended item must be instance of QueryPart, not %s.' % type(query_part))
-        super(ListOfQueryParts, self).append(query_part)
+        super().append(query_part)
 
-    def __unicode__(self):
+    def __str__(self):
         return self._separator.join(force_text(f) for f in self)

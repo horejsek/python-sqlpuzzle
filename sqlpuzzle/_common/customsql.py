@@ -23,8 +23,8 @@ class CustomSql(Object):
     """
 
     def __init__(self, string=''):
-        super(CustomSql, self).__init__()
+        super().__init__()
         self._custom_sql_string = force_text(string)
 
-    def __unicode__(self):
+    def __str__(self):
         return self._custom_sql_string

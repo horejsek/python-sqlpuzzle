@@ -15,7 +15,7 @@ from sqlpuzzle import relations
 __all__ = ('Condition', 'Conditions', 'Not')
 
 
-class BinaryOperationMixin(object):
+class BinaryOperationMixin:
     AND = 'AND'
     OR = 'OR'
 
@@ -48,11 +48,11 @@ class Condition(BinaryOperationMixin, QueryPart):
     }
 
     def __init__(self, column_name, value):
-        super(Condition, self).__init__()
+        super().__init__()
         self.column_name = column_name
         self.value = value
 
-    def __unicode__(self):
+    def __str__(self):
         return self._value._format_condition(SqlReference(self.column_name), value_transformer=SqlValue)
 
     def __eq__(self, other):
@@ -101,7 +101,7 @@ class Conditions(BinaryOperationMixin, QueryParts):
     _condition_class = Condition
 
     def __init__(self, *args, **kwds):
-        super(Conditions, self).__init__()
+        super().__init__()
         self.where(*args, **kwds)
 
     @append_custom_sql_decorator
@@ -128,7 +128,7 @@ class ConditionsOfConditions(BinaryOperationMixin, Object):
         self.right = right
         self.type = type
 
-    def __unicode__(self):
+    def __str__(self):
         template = '('
         template += '({})' if self._needs_brackets(self.left) else '{}'
         template += ' {} '

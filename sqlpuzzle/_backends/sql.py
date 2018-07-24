@@ -3,7 +3,7 @@ import re
 __all__ = ('SqlBackend',)
 
 
-class SqlBackend(object):
+class SqlBackend:
     name = 'SQL'
 
     reference_quote = '"'

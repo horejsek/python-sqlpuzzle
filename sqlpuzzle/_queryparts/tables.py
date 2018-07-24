@@ -32,7 +32,7 @@ class OnCondition(Condition):
     }
 
     def __eq__(self, other):
-        if super(OnCondition, self).__eq__(other):
+        if super().__eq__(other):
             return True
 
         #  Condition can be:
@@ -52,7 +52,7 @@ class OnCondition(Condition):
             and revert_relation == type(other.relation_instance)
         )
 
-    def __unicode__(self):
+    def __str__(self):
         value_transformer = SqlReference if isinstance(self.value, str) else SqlValue
         return self._value._format_condition(SqlReference(self.column_name), value_transformer=value_transformer)
 
@@ -63,12 +63,12 @@ class OnConditions(Conditions):
 
 class Table(QueryPart):
     def __init__(self, table_name=None, alias=None):
-        super(Table, self).__init__()
+        super().__init__()
         self.table_name = table_name
         self.alias = alias
         self._joins = []
 
-    def __unicode__(self):
+    def __str__(self):
         if self.alias:
             table = '{} AS {}'.format(
                 SqlReference(self.table_name),

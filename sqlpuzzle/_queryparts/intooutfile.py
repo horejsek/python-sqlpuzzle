@@ -17,7 +17,7 @@ class IntoOutfile(QueryPart):
         self._lines_terminated_by = lines_terminated_by
         self._optionally_enclosed_by = optionally_enclosed_by
 
-    def __unicode__(self):
+    def __str__(self):
         into_outfile = 'INTO OUTFILE {}'.format(SqlValue(self._into_outfile))
         if self._fields_terminated_by is not None:
             into_outfile += ' FIELDS TERMINATED BY {}'.format(SqlValue(self._fields_terminated_by))

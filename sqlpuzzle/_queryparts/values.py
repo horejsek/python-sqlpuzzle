@@ -7,11 +7,11 @@ from .queryparts import QueryPart, QueryParts, append_custom_sql_decorator
 
 class Value(QueryPart):
     def __init__(self, column=None, value=None):
-        super(Value, self).__init__()
+        super().__init__()
         self.column_name = column
         self.value = value
 
-    def __unicode__(self):
+    def __str__(self):
         return '{} = {}'.format(
             SqlReference(self.column_name),
             SqlValue(self.value),
@@ -69,7 +69,7 @@ class Values(QueryParts):
 
 
 class MultipleValues(QueryParts):
-    def __unicode__(self):
+    def __str__(self):
         return '({}) VALUES {}'.format(
             self.columns(),
             self.values(),

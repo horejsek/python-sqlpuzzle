@@ -8,12 +8,12 @@ class Options(Object):
     _definition_of_options = {}
 
     def __init__(self):
-        super(Options, self).__init__()
+        super().__init__()
         self._options = {}
         for option_key in self._definition_of_options.keys():
             self._options[option_key] = 'off'
 
-    def __unicode__(self):
+    def __str__(self):
         return ' '.join(sorted(
             self._definition_of_options[key][val]
             for key, val in self._options.items()
