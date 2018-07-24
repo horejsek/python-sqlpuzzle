@@ -12,7 +12,7 @@ class Column(QueryPart):
 
     def __unicode__(self):
         if self.alias:
-            return '%s AS %s' % (
+            return '{} AS {}'.format(
                 SqlReference(self.column_name),
                 SqlReference(self.alias),
             )

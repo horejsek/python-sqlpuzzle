@@ -13,11 +13,11 @@ class Limit(QueryPart):
     def __unicode__(self):
         res = ''
         if self._limit is not None:
-            res += 'LIMIT %s' % self._limit
+            res += 'LIMIT {}'.format(self._limit)
         if self._offset is not None:
             if res:
                 res += ' '
-            res += 'OFFSET %s' % self._offset
+            res += 'OFFSET {}'.format(self._offset)
         return res
 
     def __eq__(self, other):

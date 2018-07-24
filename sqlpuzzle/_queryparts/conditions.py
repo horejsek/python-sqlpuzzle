@@ -130,11 +130,11 @@ class ConditionsOfConditions(BinaryOperationMixin, Object):
 
     def __unicode__(self):
         template = '('
-        template += '(%s)' if self._needs_brackets(self.left) else '%s'
-        template += ' %s '
-        template += '(%s)' if self._needs_brackets(self.right) else '%s'
+        template += '({})' if self._needs_brackets(self.left) else '{}'
+        template += ' {} '
+        template += '({})' if self._needs_brackets(self.right) else '{}'
         template += ')'
-        return template % (self.left, self.type, self.right)
+        return template.format(self.left, self.type, self.right)
 
     @staticmethod
     def _needs_brackets(value):

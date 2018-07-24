@@ -27,7 +27,7 @@ class _RelationValue(Object):
         self._value = value
 
     def __str__(self):
-        return '"%s %s"' % (
+        return '"{} {}"'.format(
             self._string_representation,
             force_text(self._value),
         )
@@ -51,7 +51,7 @@ class _RelationValue(Object):
                     or not isinstance(value, self._allowed_types)
                 )
         ):
-            raise InvalidArgumentException('Relation "%s" is not allowed for data type "%s".' % (
+            raise InvalidArgumentException('Relation "{}" is not allowed for data type "{}".'.format(
                 self._string_representation,
                 type(value)
             ))
@@ -65,11 +65,11 @@ class _RelationValue(Object):
         return self._value
 
     def _format_condition(self, column, value_transformer=lambda value: value):
-        return '%(col)s %(rel)s %(val)s' % {
-            'col': column,
-            'rel': self.relation,
-            'val': value_transformer(self.value),
-        }
+        return '{col} {rel} {val}'.format(
+            col=column,
+            rel=self.relation,
+            val=value_transformer(self.value),
+        )
 
 
 class EQ(_RelationValue):

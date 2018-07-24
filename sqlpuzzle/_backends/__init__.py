@@ -27,7 +27,7 @@ def set_backend(database):
     """
     new_backend = BACKENDS.get(database.lower())
     if not new_backend:
-        raise Exception('Backend %s is not supported.' % database)
+        raise Exception('Backend {} is not supported.'.format(database))
     global BACKEND
     BACKEND = new_backend
 

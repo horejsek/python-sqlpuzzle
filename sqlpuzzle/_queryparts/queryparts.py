@@ -22,7 +22,7 @@ def has(part, value):
     value = force_text(value)
     #  If I look for example for "distinct", I don't want to say "hey, there is
     #+ distinct!", if there is actually "distinctrow".
-    res = re.search('([^\w]|^)%s([^\w]|$)' % value, str(part))
+    res = re.search(r'([^\w]|^){}([^\w]|$)'.format(value), str(part))
     return bool(res)
 
 

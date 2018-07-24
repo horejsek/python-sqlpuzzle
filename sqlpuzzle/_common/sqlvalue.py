@@ -90,13 +90,13 @@ class SqlValue(Object):
         # Sometimes, e.g. in subselect, is needed reference to column instead of self.value.
         if get_backend().is_reference(self.value):
             return self._reference()
-        return "'%s'" % _escape_value(force_text(self.value))
+        return "'{}'".format(_escape_value(force_text(self.value)))
 
     def _integer(self):
-        return '%d' % self.value
+        return '{:d}'.format(self.value)
 
     def _float(self):
-        return '%.5f' % self.value
+        return '{:.5f}'.format(self.value)
 
     def _boolean(self):
         return get_backend().boolean(self.value)
@@ -105,22 +105,22 @@ class SqlValue(Object):
         return self._datetime()
 
     def _datetime(self):
-        return "'%s'" % self.value.isoformat()
+        return "'{}'".format(self.value.isoformat())
 
     def _list(self):
         if self.value:
-            return '(%s)' % ', '.join(force_text(SqlValue(item)) for item in self.value)
+            return '({})'.format(', '.join(force_text(SqlValue(item)) for item in self.value))
         raise InvalidArgumentException('Empty list is not allowed.')
 
     def _subselect(self):
-        return '(%s)' % self.value
+        return '({})'.format(self.value)
 
     def _null(self):
         return 'NULL'
 
     def _undefined(self):
         try:
-            return '<undefined value %s>' % self.value
+            return '<undefined value {}>'.format(self.value)
         except Exception:
             return '<undefined value>'
 

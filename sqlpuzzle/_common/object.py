@@ -5,7 +5,7 @@ __all__ = ('Object',)
 
 class Object(object):
     def __repr__(self):
-        return '<%s: %s>' % (self.__class__.__name__, str(self))
+        return '<{}: {}>'.format(self.__class__.__name__, str(self))
 
     def __str__(self):
         return self.__unicode__() or '<Object>'

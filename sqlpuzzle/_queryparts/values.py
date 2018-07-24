@@ -12,7 +12,7 @@ class Value(QueryPart):
         self.value = value
 
     def __unicode__(self):
-        return '%s = %s' % (
+        return '{} = {}'.format(
             SqlReference(self.column_name),
             SqlValue(self.value),
         )
@@ -70,7 +70,7 @@ class Values(QueryParts):
 
 class MultipleValues(QueryParts):
     def __unicode__(self):
-        return '(%s) VALUES %s' % (
+        return '({}) VALUES {}'.format(
             self.columns(),
             self.values(),
         )

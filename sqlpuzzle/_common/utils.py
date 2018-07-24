@@ -23,7 +23,7 @@ def check_type_decorator(allowed_types=()):
                     (not isinstance(value, allowed_types) or (isinstance(value, bool) and bool not in allowed_types))
                     and not hasattr(value, 'tosql')
             ):
-                raise InvalidArgumentException('%s cannot be of type %s.' % (
+                raise InvalidArgumentException('{} cannot be of type {}.'.format(
                     func.__name__,
                     type(value),
                 ))

@@ -70,7 +70,7 @@ class Table(QueryPart):
 
     def __unicode__(self):
         if self.alias:
-            table = '%s AS %s' % (
+            table = '{} AS {}'.format(
                 SqlReference(self.table_name),
                 SqlReference(self.alias),
             )
@@ -80,10 +80,10 @@ class Table(QueryPart):
         if self._joins:
             self._minimize_joins()
             table += ' ' + ' '.join(
-                '%s %s%s' % (
+                '{} {}{}'.format(
                     JOIN_TYPES[join['type']],
                     join['table'],
-                    ' ON %s' % join['ons'] if join['ons'].is_set else '',
+                    ' ON {}'.format(join['ons']) if join['ons'].is_set else '',
                 ) for join in self._joins
             )
 
@@ -127,7 +127,7 @@ class Table(QueryPart):
         elif isinstance(arg, str):
             table = Table(arg)
         else:
-            raise InvalidArgumentException('Invalid argument "%s" for join.' % arg)
+            raise InvalidArgumentException('Invalid argument "{}" for join.'.format(arg))
 
         self._joins.append({
             'type': join_type,

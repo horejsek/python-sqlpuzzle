@@ -15,7 +15,7 @@ class Query(Object):
         # is not dictionary ordered by keys.
         self._queryparts = OrderedDict([(key, cls()) for key, cls in sorted(self._queryparts.items())])
         for key, querypart in self._queryparts.items():
-            setattr(self, '_%s' % key, querypart)
+            setattr(self, '_{}'.format(key), querypart)
 
     def __unicode__(self):
         context = {}

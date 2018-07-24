@@ -18,13 +18,13 @@ class IntoOutfile(QueryPart):
         self._optionally_enclosed_by = optionally_enclosed_by
 
     def __unicode__(self):
-        into_outfile = 'INTO OUTFILE %s' % SqlValue(self._into_outfile)
+        into_outfile = 'INTO OUTFILE {}'.format(SqlValue(self._into_outfile))
         if self._fields_terminated_by is not None:
-            into_outfile += ' FIELDS TERMINATED BY %s' % SqlValue(self._fields_terminated_by)
+            into_outfile += ' FIELDS TERMINATED BY {}'.format(SqlValue(self._fields_terminated_by))
         if self._lines_terminated_by is not None:
-            into_outfile += ' LINES TERMINATED BY %s' % SqlValue(self._lines_terminated_by)
+            into_outfile += ' LINES TERMINATED BY {}'.format(SqlValue(self._lines_terminated_by))
         if self._optionally_enclosed_by is not None:
-            into_outfile += ' OPTIONALLY ENCLOSED BY %s' % SqlValue(self._optionally_enclosed_by)
+            into_outfile += ' OPTIONALLY ENCLOSED BY {}'.format(SqlValue(self._optionally_enclosed_by))
         return into_outfile
 
     def __eq__(self, other):

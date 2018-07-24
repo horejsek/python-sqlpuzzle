@@ -14,7 +14,7 @@ class SqlBackend(object):
 
     @classmethod
     def boolean(cls, value):
-        return '%d' % value
+        return '{:d}'.format(value)
 
     @classmethod
     def is_reference(cls, value):
@@ -35,6 +35,6 @@ class SqlBackend(object):
         """
         from sqlpuzzle._common.utils import force_text
         value = force_text(value)
-        parts = re.split('%(quote)s([^%(quote)s]+)%(quote)s|\.' % {'quote': cls.reference_quote}, value)
-        parts = ('%(quote)s%(i)s%(quote)s' % {'quote': cls.reference_quote, 'i': i} if i != '*' else i for i in parts if i)
+        parts = re.split(r'{quote}([^{quote}]+){quote}|\.'.format(quote=cls.reference_quote), value)
+        parts = ('{quote}{i}{quote}'.format(quote=cls.reference_quote, i=i) if i != '*' else i for i in parts if i)
         return '.'.join(parts)

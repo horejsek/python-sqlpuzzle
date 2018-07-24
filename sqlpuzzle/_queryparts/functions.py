@@ -25,7 +25,7 @@ class Function(Object):
     def __unicode__(self):
         if not self._function_name:
             return '<Function>'
-        return '%s(%s)' % (
+        return '{}({})'.format(
             self._function_name,
             self._get_expr_as_string(),
         )
@@ -56,7 +56,7 @@ class FunctionWithDistinct(Function):
     def __unicode__(self):
         if not self._function_name:
             return '<FunctionWithDistinct>'
-        return '%s(%s%s)' % (
+        return '{}({}{})'.format(
             self._function_name,
             'DISTINCT ' if self._distinct else '',
             self._get_expr_as_string(),
@@ -102,7 +102,7 @@ class Concat(Function):
             raise InvalidArgumentException('You must specify columns for %s.' % self._function_name)
 
     def __unicode__(self):
-        return '%s(%s)' % (
+        return '{}({})'.format(
             self._function_name,
             self._columns,
         )
@@ -117,7 +117,7 @@ class GroupConcat(Concat):
         self._separator = None
 
     def __unicode__(self):
-        return '%s(%s%s%s)' % (
+        return '{}({}{}{})'.format(
             self._function_name,
             self._columns,
             self._str_order_by(),
@@ -126,7 +126,7 @@ class GroupConcat(Concat):
 
     def _str_order_by(self):
         if self._order_by.is_set:
-            return ' %s' % self._order_by
+            return ' {}'.format(self._order_by)
         return ''
 
     def _str_separator(self):
@@ -169,7 +169,7 @@ class Convert(Function):
             self.to(type_)
 
     def __unicode__(self):
-        return '%s(%s, %s)' % (
+        return '{}({}, {})'.format(
             self._function_name,
             self._get_expr_as_string(),
             self._type,

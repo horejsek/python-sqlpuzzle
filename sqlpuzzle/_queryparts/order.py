@@ -19,7 +19,7 @@ class Order(QueryPart):
         if self.sort == ASC:
             return str(SqlReference(self.column_name))
         else:
-            return '%s %s' % (
+            return '{} {}'.format(
                 SqlReference(self.column_name),
                 self.sort,
             )
@@ -51,7 +51,7 @@ class Order(QueryPart):
             sort = ASC
         sort = sort.upper()
         if sort not in (ASC, DESC):
-            raise InvalidArgumentException('Type of order can be only %s or %s.' % (ASC, DESC))
+            raise InvalidArgumentException('Type of order can be only {} or {}.'.format(ASC, DESC))
         self._sort = sort
 
 

@@ -31,7 +31,7 @@ class Union(Query):
         self.union_type = union_type
 
     def __unicode__(self):
-        return '%s %s %s' % (
+        return '{} {} {}'.format(
             self.query1,
             self.union_type,
             self.query2,
@@ -93,5 +93,5 @@ class Union(Query):
     @check_type_decorator(str)
     def union_type(self, union_type):
         if not union_type in UNION_TYPES:
-            raise InvalidArgumentException('Union type can not be %s.' % union_type)
+            raise InvalidArgumentException('Union type can not be {}.'.format(union_type))
         self._union_type = union_type
