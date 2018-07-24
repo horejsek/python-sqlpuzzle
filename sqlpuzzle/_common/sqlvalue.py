@@ -1,8 +1,3 @@
-try:
-    long
-except NameError:
-    long = int
-
 import datetime
 import decimal
 import types
@@ -47,7 +42,6 @@ class SqlValue(Object):
         self._map = {
             str: self._string,
             int: self._integer,
-            long: self._integer,
             float: self._float,
             decimal.Decimal: self._float,
             bool: self._boolean,
@@ -115,13 +109,14 @@ class SqlValue(Object):
     def _subselect(self):
         return '({})'.format(self.value)
 
+    # pylint: disable=no-self-use
     def _null(self):
         return 'NULL'
 
     def _undefined(self):
         try:
             return '<undefined value {}>'.format(self.value)
-        except Exception:
+        except Exception:  # pylint: disable=broad-except
             return '<undefined value>'
 
     def _reference(self):
@@ -144,6 +139,7 @@ class SqlReference(SqlValue):
         <Select: SELECT * FROM `t` WHERE `name` = `surname`>
     """
 
+    # pylint: disable=super-init-not-called
     def __init__(self, value):
         from sqlpuzzle._queries import Select, Union
         self._map = {

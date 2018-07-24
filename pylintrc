@@ -4,7 +4,7 @@ ignore=tests
 
 [MESSAGES CONTROL]
 # missing-docstring only for now, remove after this issue is deployed https://github.com/PyCQA/pylint/issues/1164
-disable=missing-docstring
+disable=missing-docstring,unidiomatic-typecheck,attribute-defined-outside-init,protected-access,no-member,duplicate-code
 
 [REPORTS]
 output-format=colorized
@@ -19,7 +19,7 @@ ignore-mixin-members=yes
 [BASIC]
 no-docstring-rgx=_.*
 docstring-min-length=3
-good-names=_,C,Q,R,V
+good-names=_,C,Q,R,V,on,to
 bad-names=foo,bar,baz,foobar
 
 [DESIGN]

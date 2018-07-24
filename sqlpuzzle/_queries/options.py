@@ -10,7 +10,7 @@ class Options(Object):
     def __init__(self):
         super().__init__()
         self._options = {}
-        for option_key in self._definition_of_options.keys():
+        for option_key in self._definition_of_options:
             self._options[option_key] = 'off'
 
     def __str__(self):

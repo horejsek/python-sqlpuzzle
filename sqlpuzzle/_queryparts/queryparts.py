@@ -13,8 +13,7 @@ def append_custom_sql_decorator(func):
         if not kwds and len(args) == 1 and is_sql_instance(args[0]):
             self.append_part(args[0])
             return self
-        else:
-            return func(self, *args, **kwds)
+        return func(self, *args, **kwds)
     return wrapper
 
 

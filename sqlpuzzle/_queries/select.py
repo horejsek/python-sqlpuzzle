@@ -6,6 +6,7 @@ from .selectoptions import SelectOptions, SelectForUpdate
 __all__ = ('Select',)
 
 
+# pylint: disable=too-many-public-methods
 class Select(Query):
     """
     Examples:

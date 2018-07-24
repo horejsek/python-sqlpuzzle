@@ -1,5 +1,3 @@
-from __future__ import absolute_import
-
 from sqlpuzzle._backends import get_backend
 from sqlpuzzle._queries.options import Options
 from sqlpuzzle._queryparts import Tables, MultipleValues, OnDuplicateKeyUpdate, OnConflictDoUpdate
@@ -56,7 +54,10 @@ class Insert(Query):
         'on_duplicate_key_update': OnDuplicateKeyUpdate,
         'on_conflict_do_update': OnConflictDoUpdate,
     }
-    _query_template = '%(keyword)s%(insert_options)s INTO%(tables)s%(values)s%(on_duplicate_key_update)s%(on_conflict_do_update)s'
+    _query_template = (
+        '%(keyword)s%(insert_options)s INTO'
+        '%(tables)s%(values)s%(on_duplicate_key_update)s%(on_conflict_do_update)s'
+    )
 
     def into(self, table):
         self._tables.set(table)
@@ -74,7 +75,11 @@ class Insert(Query):
             self._on_conflict_do_update.set(*args, **kwds)
         if backend.supports_replace_into:
             if args or kwds:
-                raise Exception('No argument for on_duplicate_key_update for backend {} is supported'.format(backend.name))
+                raise Exception(
+                    'No argument for on_duplicate_key_update for backend {} is supported'.format(
+                        backend.name
+                    )
+                )
             self._queryparts['keyword'].replace()
         return self
 

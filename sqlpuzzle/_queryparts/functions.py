@@ -96,6 +96,7 @@ class Sum(FunctionWithDistinct):
 class Concat(Function):
     _function_name = 'CONCAT'
 
+    # pylint: disable=super-init-not-called
     def __init__(self, *expr):
         self._columns = Columns().columns(*expr)
         if not self._columns.is_set:

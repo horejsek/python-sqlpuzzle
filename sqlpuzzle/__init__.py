@@ -1,10 +1,8 @@
-# -*- coding: utf-8 -*-
-
 """
 Library for ease of writing SQL queries. For now only for database MySQL & PostgreSQL.
 """
 
-from __future__ import absolute_import
+# pylint: disable=redefined-builtin
 
 from .version import VERSION
 from ._backends import set_backend
@@ -80,7 +78,7 @@ def select(*args, **kwds):
 def select_from(*args, **kwds):
     """
     Returns :py:class:`~.Select` instance and passed arguments are used for list
-    of tables. Columns are set to \*.
+    of tables. Columns are set to `*`.
     """
     return Select().from_(*args, **kwds)
 
@@ -127,7 +125,7 @@ def delete_from(*args, **kwds):
 def Q(*args, **kwds):
     """
     Use as condition (where, having, ...) and pass it to condition. Works like
-    Q object in Django, so you can use it with logical operands (& and \|).
+    Q object in Django, so you can use it with logical operands (& and |).
 
     .. code-block:: python
 

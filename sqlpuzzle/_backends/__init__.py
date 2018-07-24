@@ -1,7 +1,3 @@
-# -*- coding: utf-8 -*-
-
-from __future__ import absolute_import
-
 from .mysql import MySqlBackend
 from .postgresql import PostgreSqlBackend
 from .sql import SqlBackend
@@ -28,7 +24,7 @@ def set_backend(database):
     new_backend = BACKENDS.get(database.lower())
     if not new_backend:
         raise Exception('Backend {} is not supported.'.format(database))
-    global BACKEND
+    global BACKEND  # pylint: disable=global-statement
     BACKEND = new_backend
 
 

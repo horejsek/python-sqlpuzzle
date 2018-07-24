@@ -98,7 +98,7 @@ class SelectForUpdate(Object):
         return self._for_update
 
     def has(self, value):
-        return has(self, value)
+        return hasattr(self, value)
 
     def for_update(self, allow=True):
         self._for_update = bool(allow)

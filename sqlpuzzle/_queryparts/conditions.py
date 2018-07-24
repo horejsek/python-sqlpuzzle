@@ -1,16 +1,11 @@
-try:
-    long
-except NameError:
-    long = int
-
 import datetime
 import decimal
 import types
 
 from sqlpuzzle._common import Object, SqlValue, SqlReference, check_type_decorator, parse_args
+from sqlpuzzle import relations
 from .functions import Function
 from .queryparts import QueryPart, QueryParts, append_custom_sql_decorator
-from sqlpuzzle import relations
 
 __all__ = ('Condition', 'Conditions', 'Not')
 
@@ -34,7 +29,6 @@ class Condition(BinaryOperationMixin, QueryPart):
     _default_relations = {
         str: relations.EQ,
         int: relations.EQ,
-        long: relations.EQ,
         float: relations.EQ,
         decimal.Decimal: relations.EQ,
         bool: relations.EQ,
@@ -123,10 +117,10 @@ class Conditions(BinaryOperationMixin, QueryParts):
 
 
 class ConditionsOfConditions(BinaryOperationMixin, Object):
-    def __init__(self, left, right, type):
+    def __init__(self, left, right, type_):
         self.left = left
         self.right = right
-        self.type = type
+        self.type = type_
 
     def __str__(self):
         template = '('

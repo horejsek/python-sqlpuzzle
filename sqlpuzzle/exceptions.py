@@ -1,6 +1,3 @@
-# -*- coding: utf-8 -*-
-
-
 class SqlPuzzleException(Exception):
     """
     Base exception. If you want to handle any exception of SQL puzzle in same
@@ -8,6 +5,7 @@ class SqlPuzzleException(Exception):
     """
 
     def __init__(self, message):
+        super().__init__()
         self.message = message
 
     def __str__(self):
@@ -20,6 +18,7 @@ class ConfirmException(SqlPuzzleException):
     (of update or delete) in same way, catch this one.
     """
 
+    # pylint: disable=super-init-not-called
     def __init__(self):
         pass
 
@@ -58,7 +57,7 @@ class InvalidArgumentException(SqlPuzzleException):
     """
 
     def __init__(self, message=''):
-        self.message = message
+        super().__init__(message)
 
     def __str__(self):
         if self.message:

@@ -1,7 +1,3 @@
-# -*- coding: utf-8 -*-
-
-from __future__ import absolute_import
-
 from .conditions import Condition, Conditions
 
 __all__ = ('HavingCondition', 'Having')

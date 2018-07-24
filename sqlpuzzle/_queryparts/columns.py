@@ -16,8 +16,7 @@ class Column(QueryPart):
                 SqlReference(self.column_name),
                 SqlReference(self.alias),
             )
-        else:
-            return str(SqlReference(self.column_name))
+        return str(SqlReference(self.column_name))
 
     def __eq__(self, other):
         return (

@@ -1,5 +1,3 @@
-from __future__ import absolute_import
-
 from sqlpuzzle.exceptions import ConfirmDeleteAllException
 from sqlpuzzle._queries.options import Options
 from sqlpuzzle._queryparts import Tables, Where

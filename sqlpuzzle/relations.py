@@ -7,6 +7,8 @@ Use relations in conditions. For example:
     <Select: SELECT * FROM "t" WHERE "name" LIKE 'M%'>
 """
 
+# pylint: disable=invalid-name
+
 import datetime
 import decimal
 import types

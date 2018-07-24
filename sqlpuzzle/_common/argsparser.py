@@ -3,6 +3,7 @@ from sqlpuzzle.exceptions import InvalidArgumentException
 __all__ = ('parse_args',)
 
 
+# pylint: disable=dangerous-default-value,keyword-arg-before-vararg
 def parse_args(options={}, *args, **kwds):
     """
     Parser of arguments.
@@ -41,6 +42,7 @@ def parse_args(options={}, *args, **kwds):
     return parser.output_data
 
 
+# pylint: disable=too-few-public-methods
 class ParserOptions:
     def __init__(self, options):
         self.min_items = options.get('min_items', 1)
@@ -67,7 +69,7 @@ class ParserInput:
     def dictionary_or_kwds(self):
         if self.is_dictionary:
             return self.args[0]
-        elif self.is_kwds:
+        if self.is_kwds:
             return self.kwds
         return {}
 

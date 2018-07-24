@@ -18,11 +18,10 @@ class Order(QueryPart):
     def __str__(self):
         if self.sort == ASC:
             return str(SqlReference(self.column_name))
-        else:
-            return '{} {}'.format(
-                SqlReference(self.column_name),
-                self.sort,
-            )
+        return '{} {}'.format(
+            SqlReference(self.column_name),
+            self.sort,
+        )
 
     def __eq__(self, other):
         return (
