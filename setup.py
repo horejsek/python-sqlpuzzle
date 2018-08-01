@@ -5,11 +5,17 @@ try:
 except ImportError:
     from distutils.core import setup
 
+
 # https://packaging.python.org/en/latest/single_source_version.html
 try:
     execfile('sqlpuzzle/version.py')
 except NameError:
     exec(open('sqlpuzzle/version.py').read())
+
+
+with open(os.path.join(os.path.dirname(__file__), "README.rst")) as readme:
+    LONG_DESCRIPTION = readme.read()
+
 
 setup(
     name='sqlpuzzle',
@@ -34,6 +40,7 @@ setup(
     author='Michal Horejsek',
     author_email='horejsekmichal@gmail.com',
     description='Python library for writing SQL queries.',
+    long_description=LONG_DESCRIPTION,
     license='PSF',
 
     classifiers=[
