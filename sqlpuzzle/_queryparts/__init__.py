@@ -13,4 +13,4 @@ from .order import Order, Orders
 from .orderby import OrderBy
 from .tables import Table, Tables, TablesForSelect
 from .values import Value, Values, MultipleValues
-from .where import Where
+from .where import Where, Exists

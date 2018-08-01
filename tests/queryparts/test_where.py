@@ -6,7 +6,7 @@ import pytest
 
 import sqlpuzzle
 from sqlpuzzle import Q
-from sqlpuzzle._queryparts import Where, Not
+from sqlpuzzle._queryparts import Exists, Not, Where
 
 
 @pytest.fixture
@@ -344,3 +344,9 @@ def test_not(where):
 def test_not_with_q(where):
     where.where(Not(Q(a=1) | Q(b=2)))
     assert str(where) == 'WHERE NOT(("a" = 1 OR "b" = 2))'
+
+
+def test_exists(where):
+    subquery = sqlpuzzle.select_from('t2').where(col=sqlpuzzle.R('t1.col'))
+    where.where(Exists(subquery))
+    assert str(where) == 'WHERE EXISTS(SELECT * FROM "t2" WHERE "col" = "t1"."col")'

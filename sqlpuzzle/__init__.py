@@ -7,7 +7,7 @@ Library for ease of writing SQL queries. For now only for database MySQL & Postg
 from .version import VERSION
 from ._backends import set_backend
 from ._common import CustomSql as customsql, SqlValue as sqlvalue, SqlReference as sqlreference
-from ._queryparts import Not
+from ._queryparts import Not, Exists
 from ._queryparts.functions import Avg, Concat, Convert, Count, GroupConcat, Max, Min, Sum
 from ._queryparts.conditions import Conditions
 from ._queries import Delete, Insert, Select, Update
