@@ -1,127 +1,126 @@
-# -*- coding: utf-8 -*-
-
-import six
+# pylint: disable=redefined-outer-name,invalid-name
 
 import decimal
-import unittest
+
+import pytest
 
 import sqlpuzzle
 from sqlpuzzle._queryparts import Values
 
 
-class ValuesTest(unittest.TestCase):
-    def setUp(self):
-        self.values = Values()
+@pytest.fixture
+def values():
+    return Values()
 
 
-class BaseTest(ValuesTest):
-    def test_is_not_set(self):
-        self.assertEqual(self.values.is_set, False)
-
-    def test_is_set(self):
-        self.values.set(id=23)
-        self.assertEqual(self.values.is_set, True)
-
-    def test_values_by_tuple(self):
-        self.values.set((
-            ('name', 'Harry'),
-            ('sex', 'female'),
-            ('age', 20),
-            ('country', None),
-        ))
-        self.assertEqual(str(self.values), '"name" = \'Harry\', "sex" = \'female\', "age" = 20, "country" = NULL')
-
-    def test_values_by_list(self):
-        self.values.set([
-            ['name', 'Harry'],
-            ['sex', 'female'],
-            ['age', 20],
-            ['country', None],
-        ])
-        self.assertEqual(str(self.values), '"name" = \'Harry\', "sex" = \'female\', "age" = 20, "country" = NULL')
-
-    def test_values_by_dictionary(self):
-        self.values.set({
-            'name': 'Alan',
-            'age': 20,
-        })
-        self.assertEqual(str(self.values), '"age" = 20, "name" = \'Alan\'')
-
-    def test_values_by_args(self):
-        self.values.set('age', 20)
-        self.assertEqual(str(self.values), '"age" = 20')
-
-    def test_values_by_kwargs(self):
-        self.values.set(name='Alan')
-        self.assertEqual(str(self.values), '"name" = \'Alan\'')
-
-    def test_str(self):
-        self.values.set(name='ščřž')
-        self.assertEqual(str(self.values), '"name" = \'ščřž\'')
-
-    def test_unicode(self):
-        if six.PY3:
-            name = 'ščřž'
-        else:
-            name = unicode('ščřž', 'utf-8')
-        self.values.set(name=name)
-        self.assertEqual(str(self.values), '"name" = \'ščřž\'')
+def test_is_not_set(values):
+    assert not values.is_set
 
 
-class CustomSqlTest(ValuesTest):
-    def setUp(self):
-        super(CustomSqlTest, self).setUp()
-        self.customsql = sqlpuzzle.customsql('"age" = "age" + 1')
-
-    def test_simple(self):
-        self.values.set(self.customsql)
-        self.assertEqual(str(self.values), '"age" = "age" + 1')
+def test_is_set(values):
+    values.set(id=23)
+    assert values.is_set
 
 
-class AllowedValuesTest(ValuesTest):
-    def test_value_as_integer(self):
-        self.values.set('col', 42)
-        self.assertEqual(str(self.values), '"col" = 42')
-
-    def test_value_as_float(self):
-        self.values.set('col', 42.1)
-        self.assertEqual(str(self.values), '"col" = 42.10000')
-
-    def test_value_as_fdecimal(self):
-        self.values.set('col', decimal.Decimal('42.1'))
-        self.assertEqual(str(self.values), '"col" = 42.10000')
-
-    def test_value_as_boolean(self):
-        self.values.set('col', True)
-        self.assertEqual(str(self.values), '"col" = 1')
+def test_values_by_tuple(values):
+    values.set((
+        ('name', 'Harry'),
+        ('sex', 'female'),
+        ('age', 20),
+        ('country', None),
+    ))
+    assert str(values) == '"name" = \'Harry\', "sex" = \'female\', "age" = 20, "country" = NULL'
 
 
-class CopyTest(ValuesTest):
-    def test_copy(self):
-        self.values.set({'id': 42})
-        copy = self.values.copy()
-        self.values.set({'name': 'Alan'})
-        self.assertEqual(str(copy), '"id" = 42')
-        self.assertEqual(str(self.values), '"id" = 42, "name" = \'Alan\'')
-
-    def test_equals(self):
-        self.values.set({'id': 42})
-        copy = self.values.copy()
-        self.assertTrue(self.values == copy)
-
-    def test_not_equals(self):
-        self.values.set({'id': 42})
-        copy = self.values.copy()
-        self.values.set({'name': 'Alan'})
-        self.assertFalse(self.values == copy)
+def test_values_by_list(values):
+    values.set([
+        ['name', 'Harry'],
+        ['sex', 'female'],
+        ['age', 20],
+        ['country', None],
+    ])
+    assert str(values) == '"name" = \'Harry\', "sex" = \'female\', "age" = 20, "country" = NULL'
 
 
-class ExceptionsTest(ValuesTest):
-    def test_column_as_integer_exception(self):
-        self.assertRaises(sqlpuzzle.exceptions.InvalidArgumentException, self.values.set, 42, 'val')
+def test_values_by_dictionary(values):
+    values.set({
+        'name': 'Alan',
+        'age': 20,
+    })
+    assert str(values) == '"age" = 20, "name" = \'Alan\''
 
-    def test_column_as_float_exception(self):
-        self.assertRaises(sqlpuzzle.exceptions.InvalidArgumentException, self.values.set, 42.1, 'val')
 
-    def test_column_as_boolean_exception(self):
-        self.assertRaises(sqlpuzzle.exceptions.InvalidArgumentException, self.values.set, True, 'val')
+def test_values_by_args(values):
+    values.set('age', 20)
+    assert str(values) == '"age" = 20'
+
+
+def test_values_by_kwargs(values):
+    values.set(name='Alan')
+    assert str(values) == '"name" = \'Alan\''
+
+
+def test_str(values):
+    values.set(name='ščřž')
+    assert str(values) == '"name" = \'ščřž\''
+
+
+def test_custom_simple(values):
+    customsql = sqlpuzzle.customsql('"age" = "age" + 1')
+    values.set(customsql)
+    assert str(values) == '"age" = "age" + 1'
+
+
+def test_value_as_integer(values):
+    values.set('col', 42)
+    assert str(values) == '"col" = 42'
+
+
+def test_value_as_float(values):
+    values.set('col', 42.1)
+    assert str(values) == '"col" = 42.10000'
+
+
+def test_value_as_decimal(values):
+    values.set('col', decimal.Decimal('42.1'))
+    assert str(values) == '"col" = 42.10000'
+
+def test_value_as_boolean(values):
+    values.set('col', True)
+    assert str(values) == '"col" = 1'
+
+
+def test_copy(values):
+    values.set({'id': 42})
+    copy = values.copy()
+    values.set({'name': 'Alan'})
+    assert str(copy) == '"id" = 42'
+    assert str(values) == '"id" = 42, "name" = \'Alan\''
+
+
+def test_equals(values):
+    values.set({'id': 42})
+    copy = values.copy()
+    assert values == copy
+
+
+def test_not_equals(values):
+    values.set({'id': 42})
+    copy = values.copy()
+    values.set({'name': 'Alan'})
+    assert not values == copy
+
+
+def test_column_as_integer_exception(values):
+    with pytest.raises(sqlpuzzle.exceptions.InvalidArgumentException):
+        values.set(42, 'val')
+
+
+def test_column_as_float_exception(values):
+    with pytest.raises(sqlpuzzle.exceptions.InvalidArgumentException):
+        values.set(42.1, 'val')
+
+
+def test_column_as_boolean_exception(values):
+    with pytest.raises(sqlpuzzle.exceptions.InvalidArgumentException):
+        values.set(True, 'val')

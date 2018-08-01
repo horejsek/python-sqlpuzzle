@@ -1,23 +1,12 @@
-# -*- coding: utf-8 -*-
-
-import unittest
+# pylint: disable=unused-argument
 
 import sqlpuzzle
 
 
-class PostgreSqlTest(unittest.TestCase):
-    @classmethod
-    def setUpClass(cls):
-        sqlpuzzle.configure('postgresql')
+def test_reference(postgresql):
+    sql = sqlpuzzle.select('id').from_('table')
+    assert str(sql) == 'SELECT "id" FROM "table"'
 
-    @classmethod
-    def tearDownClass(cls):
-        sqlpuzzle.configure('sql')
-
-    def test_reference(self):
-        sql = sqlpuzzle.select('id').from_('table')
-        self.assertEqual(str(sql), 'SELECT "id" FROM "table"')
-
-    def test_boolean(self):
-        sql = sqlpuzzle.select_from('table').where({'flag': True})
-        self.assertEqual(str(sql), 'SELECT * FROM "table" WHERE "flag" = true')
+def test_boolean(postgresql):
+    sql = sqlpuzzle.select_from('table').where({'flag': True})
+    assert str(sql) == 'SELECT * FROM "table" WHERE "flag" = true'

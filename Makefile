@@ -20,7 +20,7 @@ $(VENV_NAME)/bin/activate: setup.py
 	touch $(VENV_NAME)/bin/activate
 
 lint: venv
-	${PYTHON} -m pylint sqlpuzzle
+	${PYTHON} -m pylint sqlpuzzle tests
 
 test: venv
 	${PYTHON} -m pytest

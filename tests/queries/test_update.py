@@ -1,117 +1,109 @@
-# -*- coding: utf-8 -*-
-
-import unittest
-
-import six
+# pylint: disable=invalid-name
 
 import sqlpuzzle.exceptions
-import sqlpuzzle._queries.update
 import sqlpuzzle.relations
 
 
-class UpdateTest(unittest.TestCase):
-    def setUp(self):
-        self.update = sqlpuzzle._queries.update.Update()
+def test_simply(update):
+    update.table('user')
+    update.set(name='Alan')
+    update.allow_update_all()
+    assert str(update) == 'UPDATE "user" SET "name" = \'Alan\''
 
 
-class BaseTest(UpdateTest):
-    def test_simply(self):
-        self.update.table('user')
-        self.update.set(name='Alan')
-        self.update.allow_update_all()
-        self.assertEqual(str(self.update), 'UPDATE "user" SET "name" = \'Alan\'')
-
-    def test_str(self):
-        self.update.table('user')
-        self.update.set(name='ščřž')
-        self.update.allow_update_all()
-        self.assertEqual(str(self.update), 'UPDATE "user" SET "name" = \'ščřž\'')
-
-    def test_unicode(self):
-        if six.PY3:
-            name = 'ščřž'
-        else:
-            name = unicode('ščřž', 'utf-8')
-        self.update.table('user')
-        self.update.set(name=name)
-        self.update.allow_update_all()
-        self.assertEqual(str(self.update), 'UPDATE "user" SET "name" = \'ščřž\'')
+def test_str(update):
+    update.table('user')
+    update.set(name='ščřž')
+    update.allow_update_all()
+    assert str(update) == 'UPDATE "user" SET "name" = \'ščřž\''
 
 
-class WhereTest(UpdateTest):
-    def test_where(self):
-        self.update.table('user')
-        self.update.set(name='Alan')
-        self.update.where(age=42)
-        self.update.where('name', sqlpuzzle.relations.LIKE('Harry'))
-        self.update.where({
-            'sex': 'male',
-        })
-        self.update.where((
-            ('enabled', 1),
-        ))
-        self.assertEqual(str(self.update), 'UPDATE "user" SET "name" = \'Alan\' WHERE "age" = 42 AND "name" LIKE \'Harry\' AND "sex" = \'male\' AND "enabled" = 1')
+def test_where(update):
+    update.table('user')
+    update.set(name='Alan')
+    update.where(age=42)
+    update.where('name', sqlpuzzle.relations.LIKE('Harry'))
+    update.where({
+        'sex': 'male',
+    })
+    update.where((
+        ('enabled', 1),
+    ))
+    assert str(update) == (
+        'UPDATE "user" SET "name" = \'Alan\''
+        ' WHERE "age" = 42 AND "name" LIKE \'Harry\' AND "sex" = \'male\' AND "enabled" = 1'
+    )
 
 
-class CopyTest(UpdateTest):
-    def test_copy(self):
-        self.update.table('user').set(name='Alan').where(id=42)
-        copy = self.update.copy()
-        self.update.set(age=24)
-        self.assertEqual(str(copy), 'UPDATE "user" SET "name" = \'Alan\' WHERE "id" = 42')
-        self.assertEqual(str(self.update), 'UPDATE "user" SET "name" = \'Alan\', "age" = 24 WHERE "id" = 42')
-
-    def test_equals(self):
-        self.update.table('user').set(name='Alan').where(id=42)
-        copy = self.update.copy()
-        self.assertTrue(self.update == copy)
-
-    def test_not_equals(self):
-        self.update.table('user').set(name='Alan').where(id=42)
-        copy = self.update.copy()
-        self.update.set(age=24)
-        self.assertFalse(self.update == copy)
+def test_copy(update):
+    update.table('user').set(name='Alan').where(id=42)
+    copy = update.copy()
+    update.set(age=24)
+    assert str(copy) == 'UPDATE "user" SET "name" = \'Alan\' WHERE "id" = 42'
+    assert str(update) == 'UPDATE "user" SET "name" = \'Alan\', "age" = 24 WHERE "id" = 42'
 
 
-class JoinTest(UpdateTest):
-    def test_join(self):
-        self.update.table('user')
-        self.update.join('test_user')
-        self.update.on('user.id', 'test_user.id')
-        self.update.set(name='Alan')
-        self.update.where(age=42)
-        self.update.allow_update_all()
-        self.assertEqual(str(self.update), 'UPDATE "user" JOIN "test_user" ON "user"."id" = "test_user"."id" SET "name" = \'Alan\' WHERE "age" = 42')
-
-    def test_inner_join(self):
-        self.update.table('user')
-        self.update.inner_join('test_user')
-        self.update.on('user.id', 'test_user.id')
-        self.update.set(name='Alan')
-        self.update.where(age=42)
-        self.update.allow_update_all()
-        self.assertEqual(str(self.update), 'UPDATE "user" JOIN "test_user" ON "user"."id" = "test_user"."id" SET "name" = \'Alan\' WHERE "age" = 42')
-
-    def test_left_join(self):
-        self.update.table('user')
-        self.update.left_join('test_user')
-        self.update.on('user.id', 'test_user.id')
-        self.update.set(name='Alan')
-        self.update.where(age=42)
-        self.update.allow_update_all()
-        self.assertEqual(str(self.update), 'UPDATE "user" LEFT JOIN "test_user" ON "user"."id" = "test_user"."id" SET "name" = \'Alan\' WHERE "age" = 42')
-
-    def test_right_join(self):
-        self.update.table('user')
-        self.update.right_join('test_user')
-        self.update.on('user.id', 'test_user.id')
-        self.update.set(name='Alan')
-        self.update.where(age=42)
-        self.update.allow_update_all()
-        self.assertEqual(str(self.update), 'UPDATE "user" RIGHT JOIN "test_user" ON "user"."id" = "test_user"."id" SET "name" = \'Alan\' WHERE "age" = 42')
+def test_equals(update):
+    update.table('user').set(name='Alan').where(id=42)
+    copy = update.copy()
+    assert update == copy
 
 
-class UpdateOptionsTest(UpdateTest):
-    def test_sql_cache(self):
-        self.update.table('table').set(col='val').where(id=1).ignore()
-        self.assertEqual(str(self.update), 'UPDATE IGNORE "table" SET "col" = \'val\' WHERE "id" = 1')
+def test_not_equals(update):
+    update.table('user').set(name='Alan').where(id=42)
+    copy = update.copy()
+    update.set(age=24)
+    assert not update == copy
+
+
+def test_join(update):
+    update.table('user')
+    update.join('test_user')
+    update.on('user.id', 'test_user.id')
+    update.set(name='Alan')
+    update.where(age=42)
+    update.allow_update_all()
+    assert str(update) == (
+        'UPDATE "user" JOIN "test_user" ON "user"."id" = "test_user"."id" SET "name" = \'Alan\' WHERE "age" = 42'
+    )
+
+
+def test_inner_join(update):
+    update.table('user')
+    update.inner_join('test_user')
+    update.on('user.id', 'test_user.id')
+    update.set(name='Alan')
+    update.where(age=42)
+    update.allow_update_all()
+    assert str(update) == (
+        'UPDATE "user" JOIN "test_user" ON "user"."id" = "test_user"."id" SET "name" = \'Alan\' WHERE "age" = 42'
+    )
+
+
+def test_left_join(update):
+    update.table('user')
+    update.left_join('test_user')
+    update.on('user.id', 'test_user.id')
+    update.set(name='Alan')
+    update.where(age=42)
+    update.allow_update_all()
+    assert str(update) == (
+        'UPDATE "user" LEFT JOIN "test_user" ON "user"."id" = "test_user"."id" SET "name" = \'Alan\' WHERE "age" = 42'
+    )
+
+
+def test_right_join(update):
+    update.table('user')
+    update.right_join('test_user')
+    update.on('user.id', 'test_user.id')
+    update.set(name='Alan')
+    update.where(age=42)
+    update.allow_update_all()
+    assert str(update) == (
+        'UPDATE "user" RIGHT JOIN "test_user" ON "user"."id" = "test_user"."id" SET "name" = \'Alan\' WHERE "age" = 42'
+    )
+
+
+def test_sql_cache(update):
+    update.table('table').set(col='val').where(id=1).ignore()
+    assert str(update) == 'UPDATE IGNORE "table" SET "col" = \'val\' WHERE "id" = 1'

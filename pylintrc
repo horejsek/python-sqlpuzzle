@@ -1,10 +1,9 @@
-
 [MASTER]
-ignore=tests
+ignore=
 
 [MESSAGES CONTROL]
 # missing-docstring only for now, remove after this issue is deployed https://github.com/PyCQA/pylint/issues/1164
-disable=missing-docstring,unidiomatic-typecheck,attribute-defined-outside-init,protected-access,no-member,duplicate-code
+disable=missing-docstring,unidiomatic-typecheck,attribute-defined-outside-init,protected-access,no-member,duplicate-code,no-self-use
 
 [REPORTS]
 output-format=colorized

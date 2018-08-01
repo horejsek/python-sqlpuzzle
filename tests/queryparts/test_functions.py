@@ -1,140 +1,134 @@
-# -*- coding: utf-8 -*-
+# pylint: disable=invalid-name
 
-import unittest
-
-import sqlpuzzle
 from sqlpuzzle._queryparts import Avg, Concat, Convert, Count, GroupConcat, Max, Min, Sum
 
 
-class FunctionsTest(unittest.TestCase):
-    pass
-
-
-class AvgTest(FunctionsTest):
+class TestAvg:
     def test_normal(self):
-        self.assertEqual(str(Avg('col')), 'AVG("col")')
+        assert str(Avg('col')) == 'AVG("col")'
 
     def test_distinct(self):
-        self.assertEqual(str(Avg('col', True)), 'AVG(DISTINCT "col")')
+        assert str(Avg('col', True)) == 'AVG(DISTINCT "col")'
 
     def test_distinct_by_method(self):
-        self.assertEqual(str(Avg('col').distinct()), 'AVG(DISTINCT "col")')
+        assert str(Avg('col').distinct()) == 'AVG(DISTINCT "col")'
 
     def test_distinct_by_method_with_param(self):
-        self.assertEqual(str(Avg('col').distinct(False)), 'AVG("col")')
+        assert str(Avg('col').distinct(False)) == 'AVG("col")'
 
 
-class CountTest(FunctionsTest):
+class TestCount:
     def test_normal(self):
-        self.assertEqual(str(Count('col')), 'COUNT("col")')
+        assert str(Count('col')) == 'COUNT("col")'
 
     def test_count_with_star(self):
-        self.assertEqual(str(Count('*')), 'COUNT(*)')
+        assert str(Count('*')) == 'COUNT(*)'
 
     def test_count_without_param(self):
-        self.assertEqual(str(Count()), 'COUNT(*)')
+        assert str(Count()) == 'COUNT(*)'
 
     def test_distinct(self):
-        self.assertEqual(str(Count('col', True)), 'COUNT(DISTINCT "col")')
+        assert str(Count('col', True)) == 'COUNT(DISTINCT "col")'
 
     def test_distinct_by_method(self):
-        self.assertEqual(str(Count('col').distinct()), 'COUNT(DISTINCT "col")')
+        assert str(Count('col').distinct()) == 'COUNT(DISTINCT "col")'
 
     def test_distinct_by_method_with_param(self):
-        self.assertEqual(str(Count('col').distinct(False)), 'COUNT("col")')
+        assert str(Count('col').distinct(False)) == 'COUNT("col")'
 
     def test_distinct_more_exprs(self):
-        self.assertEqual(str(Count(('col1', 'col2')).distinct()), 'COUNT(DISTINCT "col1", "col2")')
+        assert str(Count(('col1', 'col2')).distinct()) == 'COUNT(DISTINCT "col1", "col2")'
 
 
-class MaxTest(FunctionsTest):
+class TestMax:
     def test_normal(self):
-        self.assertEqual(str(Max('col')), 'MAX("col")')
+        assert str(Max('col')) == 'MAX("col")'
 
     def test_distinct(self):
-        self.assertEqual(str(Max('col', True)), 'MAX(DISTINCT "col")')
+        assert str(Max('col', True)) == 'MAX(DISTINCT "col")'
 
     def test_distinct_by_method(self):
-        self.assertEqual(str(Max('col').distinct()), 'MAX(DISTINCT "col")')
+        assert str(Max('col').distinct()) == 'MAX(DISTINCT "col")'
 
     def test_distinct_by_method_with_param(self):
-        self.assertEqual(str(Max('col').distinct(False)), 'MAX("col")')
+        assert str(Max('col').distinct(False)) == 'MAX("col")'
 
 
-class MinTest(FunctionsTest):
+class TestMin:
     def test_normal(self):
-        self.assertEqual(str(Min('col')), 'MIN("col")')
+        assert str(Min('col')) == 'MIN("col")'
 
     def test_distinct(self):
-        self.assertEqual(str(Min('col', True)), 'MIN(DISTINCT "col")')
+        assert str(Min('col', True)) == 'MIN(DISTINCT "col")'
 
     def test_distinct_by_method(self):
-        self.assertEqual(str(Min('col').distinct()), 'MIN(DISTINCT "col")')
+        assert str(Min('col').distinct()) == 'MIN(DISTINCT "col")'
 
     def test_distinct_by_method_with_param(self):
-        self.assertEqual(str(Min('col').distinct(False)), 'MIN("col")')
+        assert str(Min('col').distinct(False)) == 'MIN("col")'
 
 
-class SumTest(FunctionsTest):
+class TestSum:
     def test_normal(self):
-        self.assertEqual(str(Sum('col')), 'SUM("col")')
+        assert str(Sum('col')) == 'SUM("col")'
 
     def test_distinct(self):
-        self.assertEqual(str(Sum('col', True)), 'SUM(DISTINCT "col")')
+        assert str(Sum('col', True)) == 'SUM(DISTINCT "col")'
 
     def test_distinct_by_method(self):
-        self.assertEqual(str(Sum('col').distinct()), 'SUM(DISTINCT "col")')
+        assert str(Sum('col').distinct()) == 'SUM(DISTINCT "col")'
 
     def test_distinct_by_method_with_param(self):
-        self.assertEqual(str(Sum('col').distinct(False)), 'SUM("col")')
+        assert str(Sum('col').distinct(False)) == 'SUM("col")'
 
 
-class ConcatTest(FunctionsTest):
+class TestConcat:
     def test_normal(self):
         concat = Concat('col')
-        self.assertEqual(str(concat), 'CONCAT("col")')
+        assert str(concat) == 'CONCAT("col")'
 
     def test_more_columns(self):
         concat = Concat('col', 'col2')
-        self.assertEqual(str(concat), 'CONCAT("col", "col2")')
+        assert str(concat) == 'CONCAT("col", "col2")'
 
 
-class GroupConcatTest(FunctionsTest):
-    def setUp(self):
-        self.group_concat = GroupConcat('col')
-
+class TestGroupConcat:
     def test_normal(self):
-        self.assertEqual(str(self.group_concat), 'GROUP_CONCAT("col")')
+        group_concat = GroupConcat('col')
+        assert str(group_concat) == 'GROUP_CONCAT("col")'
 
     def test_more_columns(self):
         group_concat = GroupConcat('col', 'col2')
-        self.assertEqual(str(group_concat), 'GROUP_CONCAT("col", "col2")')
+        assert str(group_concat) == 'GROUP_CONCAT("col", "col2")'
 
     def test_with_order_by(self):
-        self.group_concat.order_by({'name': 'desc'})
-        self.assertEqual(str(self.group_concat), 'GROUP_CONCAT("col" ORDER BY "name" DESC)')
+        group_concat = GroupConcat('col')
+        group_concat.order_by({'name': 'desc'})
+        assert str(group_concat) == 'GROUP_CONCAT("col" ORDER BY "name" DESC)'
 
     def test_with_separator(self):
-        self.group_concat.separator('|||')
-        self.assertEqual(str(self.group_concat), 'GROUP_CONCAT("col" SEPARATOR \'|||\')')
+        group_concat = GroupConcat('col')
+        group_concat.separator('|||')
+        assert str(group_concat) == 'GROUP_CONCAT("col" SEPARATOR \'|||\')'
 
     def test_with_order_by_and_separator(self):
-        self.group_concat.order_by({'name': 'desc'}).separator('|||')
-        self.assertEqual(str(self.group_concat), 'GROUP_CONCAT("col" ORDER BY "name" DESC SEPARATOR \'|||\')')
+        group_concat = GroupConcat('col')
+        group_concat.order_by({'name': 'desc'}).separator('|||')
+        assert str(group_concat) == 'GROUP_CONCAT("col" ORDER BY "name" DESC SEPARATOR \'|||\')'
 
 
-class ConvertTest(FunctionsTest):
-    def setUp(self):
-        self.convert = Convert('col')
-
+class TestConvert:
     def test_signed(self):
-        self.convert.to('signed')
-        self.assertEqual(str(self.convert), 'CONVERT("col", SIGNED)')
+        convert = Convert('col')
+        convert.to('signed')
+        assert str(convert) == 'CONVERT("col", SIGNED)'
 
     def test_char_with_length(self):
-        self.convert.to('char(5)')
-        self.assertEqual(str(self.convert), 'CONVERT("col", CHAR(5))')
+        convert = Convert('col')
+        convert.to('char(5)')
+        assert str(convert) == 'CONVERT("col", CHAR(5))'
 
     def test_decimal_with_precision(self):
-        self.convert.to('decimal(2,5)')
-        self.assertEqual(str(self.convert), 'CONVERT("col", DECIMAL(2,5))')
+        convert = Convert('col')
+        convert.to('decimal(2,5)')
+        assert str(convert) == 'CONVERT("col", DECIMAL(2,5))'

@@ -1,113 +1,116 @@
-# -*- coding: utf-8 -*-
+# pylint: disable=redefined-outer-name,invalid-name
 
-import six
-
-import unittest
+import pytest
 
 import sqlpuzzle
 from sqlpuzzle._queryparts import GroupBy
 
 
-class GroupByTest(unittest.TestCase):
-    def setUp(self):
-        self.group_by = GroupBy()
+@pytest.fixture
+def group_by():
+    return GroupBy()
 
 
-class BaseTest(GroupByTest):
-    def test_is_not_set(self):
-        self.assertEqual(self.group_by.is_set, False)
-
-    def test_is_set(self):
-        self.group_by.group_by('id')
-        self.assertEqual(self.group_by.is_set, True)
-
-    def test_simply(self):
-        self.group_by.group_by('id')
-        self.assertEqual(str(self.group_by), 'GROUP BY "id"')
-
-    def test_more_columns(self):
-        self.group_by.group_by('id', ['name', 'desc'])
-        self.assertEqual(str(self.group_by), 'GROUP BY "id", "name" DESC')
-
-    def test_asc(self):
-        self.group_by.group_by(['name', 'asc'])
-        self.assertEqual(str(self.group_by), 'GROUP BY "name"')
-
-    def test_desc(self):
-        self.group_by.group_by(['name', 'desc'])
-        self.assertEqual(str(self.group_by), 'GROUP BY "name" DESC')
-
-    def test_order_by_number(self):
-        self.group_by.group_by(1)
-        self.assertEqual(str(self.group_by), 'GROUP BY 1')
-
-    def test_by_dictionary(self):
-        self.group_by.group_by({'id': 'ASC', 'name': 'DESC'})
-        self.assertEqual(str(self.group_by), 'GROUP BY "id", "name" DESC')
-
-    def test_by_kwds(self):
-        self.group_by.group_by(id='ASC', name='DESC')
-        self.assertEqual(str(self.group_by), 'GROUP BY "id", "name" DESC')
-
-    def test_str(self):
-        self.group_by.group_by('ščřž')
-        self.assertEqual(str(self.group_by), 'GROUP BY "ščřž"')
-
-    def test_unicode(self):
-        if six.PY3:
-            name = 'ščřž'
-        else:
-            name = unicode('ščřž', 'utf-8')
-        self.group_by.group_by(name)
-        self.assertEqual(str(self.group_by), 'GROUP BY "ščřž"')
+def test_is_not_set(group_by):
+    assert not group_by.is_set
 
 
-class BackQuotesTest(GroupByTest):
-    def test_column_name_as_table_and_column(self):
-        self.group_by.group_by('table.column')
-        self.assertEqual(str(self.group_by), 'GROUP BY "table"."column"')
-
-    def test_column_name_as_table_and_column_with_dot_in_name(self):
-        self.group_by.group_by('table."column."')
-        self.assertEqual(str(self.group_by), 'GROUP BY "table"."column."')
+def test_is_set(group_by):
+    group_by.group_by('id')
+    assert group_by.is_set
 
 
-class GroupingTest(GroupByTest):
-    def test_more_same_columns_print_as_one(self):
-        self.group_by.group_by('col', 'col')
-        self.assertEqual(str(self.group_by), 'GROUP BY "col"')
-
-    def test_more_same_columns_with_diff_asc_print_as_one(self):
-        self.group_by.group_by('col', ('col', 'DESC'))
-        self.assertEqual(str(self.group_by), 'GROUP BY "col" DESC')
+def test_simply(group_by):
+    group_by.group_by('id')
+    assert str(group_by) == 'GROUP BY "id"'
 
 
-class CopyTest(GroupByTest):
-    def test_copy(self):
-        self.group_by.group_by('id', 'name')
-        copy = self.group_by.copy()
-        self.group_by.group_by('address')
-        self.assertEqual(str(copy), 'GROUP BY "id", "name"')
-        self.assertEqual(str(self.group_by), 'GROUP BY "id", "name", "address"')
-
-    def test_equals(self):
-        self.group_by.group_by('id', 'name')
-        copy = self.group_by.copy()
-        self.assertTrue(self.group_by == copy)
-
-    def test_not_equals(self):
-        self.group_by.group_by('id', 'name')
-        copy = self.group_by.copy()
-        self.group_by.group_by('address')
-        self.assertFalse(self.group_by == copy)
+def test_more_columns(group_by):
+    group_by.group_by('id', ['name', 'desc'])
+    assert str(group_by) == 'GROUP BY "id", "name" DESC'
 
 
-class ExceptionsTest(GroupByTest):
-    def test_name_as_float_exception(self):
-        self.assertRaises(sqlpuzzle.exceptions.InvalidArgumentException, self.group_by.group_by, 42.1)
+def test_asc(group_by):
+    group_by.group_by(['name', 'asc'])
+    assert str(group_by) == 'GROUP BY "name"'
 
-    def test_name_as_boolean_exception(self):
-        self.assertRaises(sqlpuzzle.exceptions.InvalidArgumentException, self.group_by.group_by, True)
 
-    def test_not_asc_or_desc_exception(self):
-        self.assertRaises(sqlpuzzle.exceptions.InvalidArgumentException, self.group_by.group_by, ('col', 'AAA'))
+def test_desc(group_by):
+    group_by.group_by(['name', 'desc'])
+    assert str(group_by) == 'GROUP BY "name" DESC'
+
+
+def test_order_by_number(group_by):
+    group_by.group_by(1)
+    assert str(group_by) == 'GROUP BY 1'
+
+
+def test_by_dictionary(group_by):
+    group_by.group_by({'id': 'ASC', 'name': 'DESC'})
+    assert str(group_by) == 'GROUP BY "id", "name" DESC'
+
+
+def test_by_kwds(group_by):
+    group_by.group_by(id='ASC', name='DESC')
+    assert str(group_by) == 'GROUP BY "id", "name" DESC'
+
+
+def test_str(group_by):
+    group_by.group_by('ščřž')
+    assert str(group_by) == 'GROUP BY "ščřž"'
+
+
+def test_column_name_as_table_and_column(group_by):
+    group_by.group_by('table.column')
+    assert str(group_by) == 'GROUP BY "table"."column"'
+
+
+def test_column_name_as_table_and_column_with_dot_in_name(group_by):
+    group_by.group_by('table."column."')
+    assert str(group_by) == 'GROUP BY "table"."column."'
+
+
+def test_more_same_columns_print_as_one(group_by):
+    group_by.group_by('col', 'col')
+    assert str(group_by) == 'GROUP BY "col"'
+
+
+def test_more_same_columns_with_diff_asc_print_as_one(group_by):
+    group_by.group_by('col', ('col', 'DESC'))
+    assert str(group_by) == 'GROUP BY "col" DESC'
+
+
+def test_copy(group_by):
+    group_by.group_by('id', 'name')
+    copy = group_by.copy()
+    group_by.group_by('address')
+    assert str(copy) == 'GROUP BY "id", "name"'
+    assert str(group_by) == 'GROUP BY "id", "name", "address"'
+
+
+def test_equals(group_by):
+    group_by.group_by('id', 'name')
+    copy = group_by.copy()
+    assert group_by == copy
+
+
+def test_not_equals(group_by):
+    group_by.group_by('id', 'name')
+    copy = group_by.copy()
+    group_by.group_by('address')
+    assert not group_by == copy
+
+
+def test_name_as_float_exception(group_by):
+    with pytest.raises(sqlpuzzle.exceptions.InvalidArgumentException):
+        group_by.group_by(42.1)
+
+
+def test_name_as_boolean_exception(group_by):
+    with pytest.raises(sqlpuzzle.exceptions.InvalidArgumentException):
+        group_by.group_by(True)
+
+
+def test_not_asc_or_desc_exception(group_by):
+    with pytest.raises(sqlpuzzle.exceptions.InvalidArgumentException):
+        group_by.group_by(('col', 'AAA'))
