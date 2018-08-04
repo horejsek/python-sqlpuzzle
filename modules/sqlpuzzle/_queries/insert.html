@@ -1,33 +1,22 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
-
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
-    <title>sqlpuzzle._queries.insert &mdash; SQLPuzzle  documentation</title>
-    
+    <title>sqlpuzzle._queries.insert &#8212; SQLPuzzle  documentation</title>
     <link rel="stylesheet" href="../../../static/nature.css" type="text/css" />
     <link rel="stylesheet" href="../../../static/pygments.css" type="text/css" />
-    
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../../../',
-        VERSION:     '',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
-      };
-    </script>
+    <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../static/documentation_options.js"></script>
     <script type="text/javascript" src="../../../static/jquery.js"></script>
     <script type="text/javascript" src="../../../static/underscore.js"></script>
     <script type="text/javascript" src="../../../static/doctools.js"></script>
-    <link rel="top" title="SQLPuzzle  documentation" href="../../../index.html" />
-    <link rel="up" title="sqlpuzzle" href="../../sqlpuzzle.html" /> 
-  </head>
-  <body>
-    <div class="related">
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -36,41 +25,52 @@
         <li class="right" >
           <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li><a href="../../../index.html">SQLPuzzle  documentation</a> &raquo;</li>
-          <li><a href="../../index.html" >Module code</a> &raquo;</li>
-          <li><a href="../../sqlpuzzle.html" accesskey="U">sqlpuzzle</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../../../index.html">SQLPuzzle  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../../sqlpuzzle.html" accesskey="U">sqlpuzzle</a> &#187;</li> 
       </ul>
     </div>  
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <h1>Source code for sqlpuzzle._queries.insert</h1><div class="highlight"><pre>
-<span class="c"># -*- coding: utf-8 -*-</span>
+<span></span><span class="kn">from</span> <span class="nn">sqlpuzzle._backends</span> <span class="k">import</span> <span class="n">get_backend</span>
+<span class="kn">from</span> <span class="nn">sqlpuzzle._queries.options</span> <span class="k">import</span> <span class="n">Options</span>
+<span class="kn">from</span> <span class="nn">sqlpuzzle._queryparts</span> <span class="k">import</span> <span class="n">Tables</span><span class="p">,</span> <span class="n">MultipleValues</span><span class="p">,</span> <span class="n">OnDuplicateKeyUpdate</span><span class="p">,</span> <span class="n">OnConflictDoUpdate</span>
+<span class="kn">from</span> <span class="nn">.query</span> <span class="k">import</span> <span class="n">Query</span>
 
-<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">absolute_import</span>
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;Insert&#39;</span><span class="p">,)</span>
 
-<span class="kn">import</span> <span class="nn">six</span>
 
-<span class="kn">from</span> <span class="nn">sqlpuzzle._queries.options</span> <span class="kn">import</span> <span class="n">Options</span>
-<span class="kn">from</span> <span class="nn">sqlpuzzle._queryparts</span> <span class="kn">import</span> <span class="n">Tables</span><span class="p">,</span> <span class="n">MultipleValues</span><span class="p">,</span> <span class="n">OnDuplicateKeyUpdate</span>
-<span class="kn">from</span> <span class="nn">.query</span> <span class="kn">import</span> <span class="n">Query</span>
+<span class="k">class</span> <span class="nc">InsertKeyword</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_is_replace</span> <span class="o">=</span> <span class="kc">False</span>
 
-<span class="n">__all__</span> <span class="o">=</span> <span class="p">(</span><span class="s">&#39;Insert&#39;</span><span class="p">,)</span>
+    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_is_replace</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s1">&#39;REPLACE&#39;</span>
+        <span class="k">return</span> <span class="s1">&#39;INSERT&#39;</span>
+
+    <span class="k">def</span> <span class="nf">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">==</span> <span class="nb">type</span><span class="p">(</span><span class="n">other</span><span class="p">)</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">_is_replace</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">_is_replace</span>
+
+    <span class="k">def</span> <span class="nf">replace</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_is_replace</span> <span class="o">=</span> <span class="kc">True</span>
 
 
 <span class="k">class</span> <span class="nc">InsertOptions</span><span class="p">(</span><span class="n">Options</span><span class="p">):</span>
     <span class="n">_definition_of_options</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="s">&#39;ignore&#39;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s">&#39;off&#39;</span><span class="p">:</span> <span class="s">&#39;&#39;</span><span class="p">,</span>
-            <span class="s">&#39;on&#39;</span><span class="p">:</span> <span class="s">&#39;IGNORE&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;ignore&#39;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s1">&#39;off&#39;</span><span class="p">:</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;on&#39;</span><span class="p">:</span> <span class="s1">&#39;IGNORE&#39;</span><span class="p">,</span>
         <span class="p">},</span>
     <span class="p">}</span>
 
-    <span class="k">def</span> <span class="nf">ignore</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">allow</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_options</span><span class="p">[</span><span class="s">&#39;ignore&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s">&#39;on&#39;</span> <span class="k">if</span> <span class="n">allow</span> <span class="k">else</span> <span class="s">&#39;off&#39;</span>
+    <span class="k">def</span> <span class="nf">ignore</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">allow</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_options</span><span class="p">[</span><span class="s1">&#39;ignore&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;on&#39;</span> <span class="k">if</span> <span class="n">allow</span> <span class="k">else</span> <span class="s1">&#39;off&#39;</span>
 
 
 <div class="viewcode-block" id="Insert"><a class="viewcode-back" href="../../../index.html#sqlpuzzle._queries.insert.Insert">[docs]</a><span class="k">class</span> <span class="nc">Insert</span><span class="p">(</span><span class="n">Query</span><span class="p">):</span>
@@ -86,28 +86,45 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">_queryparts</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="s">&#39;insert_options&#39;</span><span class="p">:</span> <span class="n">InsertOptions</span><span class="p">,</span>
-        <span class="s">&#39;tables&#39;</span><span class="p">:</span> <span class="n">Tables</span><span class="p">,</span>
-        <span class="s">&#39;values&#39;</span><span class="p">:</span> <span class="n">MultipleValues</span><span class="p">,</span>
-        <span class="s">&#39;on_duplicate_key_update&#39;</span><span class="p">:</span> <span class="n">OnDuplicateKeyUpdate</span><span class="p">,</span>
+        <span class="s1">&#39;keyword&#39;</span><span class="p">:</span> <span class="n">InsertKeyword</span><span class="p">,</span>
+        <span class="s1">&#39;insert_options&#39;</span><span class="p">:</span> <span class="n">InsertOptions</span><span class="p">,</span>
+        <span class="s1">&#39;tables&#39;</span><span class="p">:</span> <span class="n">Tables</span><span class="p">,</span>
+        <span class="s1">&#39;values&#39;</span><span class="p">:</span> <span class="n">MultipleValues</span><span class="p">,</span>
+        <span class="s1">&#39;on_duplicate_key_update&#39;</span><span class="p">:</span> <span class="n">OnDuplicateKeyUpdate</span><span class="p">,</span>
+        <span class="s1">&#39;on_conflict_do_update&#39;</span><span class="p">:</span> <span class="n">OnConflictDoUpdate</span><span class="p">,</span>
     <span class="p">}</span>
-    <span class="n">_query_template</span> <span class="o">=</span> <span class="n">six</span><span class="o">.</span><span class="n">u</span><span class="p">(</span><span class="s">&#39;INSERT</span><span class="si">%(insert_options)s</span><span class="s"> INTO</span><span class="si">%(tables)s%(values)s%(on_duplicate_key_update)s</span><span class="s">&#39;</span><span class="p">)</span>
+    <span class="n">_query_template</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="s1">&#39;</span><span class="si">%(keyword)s%(insert_options)s</span><span class="s1"> INTO&#39;</span>
+        <span class="s1">&#39;</span><span class="si">%(tables)s%(values)s%(on_duplicate_key_update)s%(on_conflict_do_update)s</span><span class="s1">&#39;</span>
+    <span class="p">)</span>
 
 <div class="viewcode-block" id="Insert.into"><a class="viewcode-back" href="../../../index.html#sqlpuzzle._queries.insert.Insert.into">[docs]</a>    <span class="k">def</span> <span class="nf">into</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">table</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_tables</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">table</span><span class="p">)</span>
-        <span class="k">return</span> <span class="bp">self</span>
-</div>
+        <span class="k">return</span> <span class="bp">self</span></div>
+
 <div class="viewcode-block" id="Insert.values"><a class="viewcode-back" href="../../../index.html#sqlpuzzle._queries.insert.Insert.values">[docs]</a>    <span class="k">def</span> <span class="nf">values</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwds</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_values</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwds</span><span class="p">)</span>
-        <span class="k">return</span> <span class="bp">self</span>
-</div>
-<div class="viewcode-block" id="Insert.on_duplicate_key_update"><a class="viewcode-back" href="../../../index.html#sqlpuzzle._queries.insert.Insert.on_duplicate_key_update">[docs]</a>    <span class="k">def</span> <span class="nf">on_duplicate_key_update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwds</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_on_duplicate_key_update</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwds</span><span class="p">)</span>
-        <span class="k">return</span> <span class="bp">self</span>
+        <span class="k">return</span> <span class="bp">self</span></div>
 
-    <span class="c"># INSERT OPTIONS</span>
-</div>
-<div class="viewcode-block" id="Insert.ignore"><a class="viewcode-back" href="../../../index.html#sqlpuzzle._queries.insert.Insert.ignore">[docs]</a>    <span class="k">def</span> <span class="nf">ignore</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">allow</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+<div class="viewcode-block" id="Insert.on_duplicate_key_update"><a class="viewcode-back" href="../../../index.html#sqlpuzzle._queries.insert.Insert.on_duplicate_key_update">[docs]</a>    <span class="k">def</span> <span class="nf">on_duplicate_key_update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwds</span><span class="p">):</span>
+        <span class="n">backend</span> <span class="o">=</span> <span class="n">get_backend</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">backend</span><span class="o">.</span><span class="n">supports_on_duplicate_key_update</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_on_duplicate_key_update</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwds</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">backend</span><span class="o">.</span><span class="n">supports_on_conflict_do_update</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_on_conflict_do_update</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwds</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">backend</span><span class="o">.</span><span class="n">supports_replace_into</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">args</span> <span class="ow">or</span> <span class="n">kwds</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span>
+                    <span class="s1">&#39;No argument for on_duplicate_key_update for backend </span><span class="si">{}</span><span class="s1"> is supported&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                        <span class="n">backend</span><span class="o">.</span><span class="n">name</span>
+                    <span class="p">)</span>
+                <span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_queryparts</span><span class="p">[</span><span class="s1">&#39;keyword&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">replace</span><span class="p">()</span>
+        <span class="k">return</span> <span class="bp">self</span></div>
+
+    <span class="c1"># INSERT OPTIONS</span>
+
+<div class="viewcode-block" id="Insert.ignore"><a class="viewcode-back" href="../../../index.html#sqlpuzzle._queries.insert.Insert.ignore">[docs]</a>    <span class="k">def</span> <span class="nf">ignore</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">allow</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_insert_options</span><span class="o">.</span><span class="n">ignore</span><span class="p">(</span><span class="n">allow</span><span class="p">)</span>
         <span class="k">return</span> <span class="bp">self</span></div></div>
 </pre></div>
@@ -115,26 +132,25 @@
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-<div id="searchbox" style="display: none">
+<div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
+    <div class="searchformwrapper">
     <form class="search" action="../../../search.html" method="get">
       <input type="text" name="q" />
       <input type="submit" value="Go" />
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
+    </div>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -143,14 +159,14 @@
         <li class="right" >
           <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li><a href="../../../index.html">SQLPuzzle  documentation</a> &raquo;</li>
-          <li><a href="../../index.html" >Module code</a> &raquo;</li>
-          <li><a href="../../sqlpuzzle.html" >sqlpuzzle</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../../../index.html">SQLPuzzle  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../../sqlpuzzle.html" >sqlpuzzle</a> &#187;</li> 
       </ul>
     </div>
-    <div class="footer">
-        &copy; Copyright 2015, Michal Horejsek.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2015, Michal Horejsek.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.6.
     </div>
   </body>
 </html>

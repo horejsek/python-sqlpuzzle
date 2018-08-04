@@ -1,33 +1,22 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
-
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
-    <title>sqlpuzzle._queryparts.functions &mdash; SQLPuzzle  documentation</title>
-    
+    <title>sqlpuzzle._queryparts.functions &#8212; SQLPuzzle  documentation</title>
     <link rel="stylesheet" href="../../../static/nature.css" type="text/css" />
     <link rel="stylesheet" href="../../../static/pygments.css" type="text/css" />
-    
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../../../',
-        VERSION:     '',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
-      };
-    </script>
+    <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../static/documentation_options.js"></script>
     <script type="text/javascript" src="../../../static/jquery.js"></script>
     <script type="text/javascript" src="../../../static/underscore.js"></script>
     <script type="text/javascript" src="../../../static/doctools.js"></script>
-    <link rel="top" title="SQLPuzzle  documentation" href="../../../index.html" />
-    <link rel="up" title="sqlpuzzle" href="../../sqlpuzzle.html" /> 
-  </head>
-  <body>
-    <div class="related">
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -36,144 +25,139 @@
         <li class="right" >
           <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li><a href="../../../index.html">SQLPuzzle  documentation</a> &raquo;</li>
-          <li><a href="../../index.html" >Module code</a> &raquo;</li>
-          <li><a href="../../sqlpuzzle.html" accesskey="U">sqlpuzzle</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../../../index.html">SQLPuzzle  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../../sqlpuzzle.html" accesskey="U">sqlpuzzle</a> &#187;</li> 
       </ul>
     </div>  
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <h1>Source code for sqlpuzzle._queryparts.functions</h1><div class="highlight"><pre>
-<span class="c"># -*- coding: utf-8 -*-</span>
-
-<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">absolute_import</span>
-
-<span class="kn">import</span> <span class="nn">six</span>
-
-<span class="kn">from</span> <span class="nn">sqlpuzzle._common</span> <span class="kn">import</span> <span class="n">Object</span><span class="p">,</span> <span class="n">SqlReference</span><span class="p">,</span> <span class="n">SqlValue</span><span class="p">,</span> <span class="n">force_text</span>
-<span class="kn">from</span> <span class="nn">sqlpuzzle.exceptions</span> <span class="kn">import</span> <span class="n">InvalidArgumentException</span>
-<span class="kn">from</span> <span class="nn">.columns</span> <span class="kn">import</span> <span class="n">Columns</span>
-<span class="kn">from</span> <span class="nn">.orderby</span> <span class="kn">import</span> <span class="n">OrderBy</span>
+<span></span><span class="kn">from</span> <span class="nn">sqlpuzzle._common</span> <span class="k">import</span> <span class="n">Object</span><span class="p">,</span> <span class="n">SqlReference</span><span class="p">,</span> <span class="n">SqlValue</span><span class="p">,</span> <span class="n">force_text</span>
+<span class="kn">from</span> <span class="nn">sqlpuzzle.exceptions</span> <span class="k">import</span> <span class="n">InvalidArgumentException</span>
+<span class="kn">from</span> <span class="nn">.columns</span> <span class="k">import</span> <span class="n">Columns</span>
+<span class="kn">from</span> <span class="nn">.orderby</span> <span class="k">import</span> <span class="n">OrderBy</span>
 
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">(</span>
-    <span class="s">&#39;Avg&#39;</span><span class="p">,</span>
-    <span class="s">&#39;Count&#39;</span><span class="p">,</span>
-    <span class="s">&#39;Max&#39;</span><span class="p">,</span>
-    <span class="s">&#39;Min&#39;</span><span class="p">,</span>
-    <span class="s">&#39;Sum&#39;</span><span class="p">,</span>
-    <span class="s">&#39;Concat&#39;</span><span class="p">,</span>
-    <span class="s">&#39;GroupConcat&#39;</span><span class="p">,</span>
-    <span class="s">&#39;Convert&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;Avg&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;Count&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;Max&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;Min&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;Sum&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;Concat&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;GroupConcat&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;Convert&#39;</span><span class="p">,</span>
 <span class="p">)</span>
 
 
 <span class="k">class</span> <span class="nc">Function</span><span class="p">(</span><span class="n">Object</span><span class="p">):</span>
-    <span class="n">_function_name</span> <span class="o">=</span> <span class="bp">None</span>
+    <span class="n">_function_name</span> <span class="o">=</span> <span class="kc">None</span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">expr</span><span class="p">):</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">Function</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__init__</span><span class="p">()</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">expr</span> <span class="o">=</span> <span class="n">expr</span>
 
-    <span class="k">def</span> <span class="nf">__unicode__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_function_name</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">six</span><span class="o">.</span><span class="n">u</span><span class="p">(</span><span class="s">&#39;&lt;Function&gt;&#39;</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">six</span><span class="o">.</span><span class="n">u</span><span class="p">(</span><span class="s">&#39;</span><span class="si">%s</span><span class="s">(</span><span class="si">%s</span><span class="s">)&#39;</span><span class="p">)</span> <span class="o">%</span> <span class="p">(</span>
+            <span class="k">return</span> <span class="s1">&#39;&lt;Function&gt;&#39;</span>
+        <span class="k">return</span> <span class="s1">&#39;</span><span class="si">{}</span><span class="s1">(</span><span class="si">{}</span><span class="s1">)&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_function_name</span><span class="p">,</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_get_expr_as_string</span><span class="p">(),</span>
         <span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">_get_expr_as_string</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">expr</span><span class="p">,</span> <span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">)):</span>
-            <span class="k">return</span> <span class="n">six</span><span class="o">.</span><span class="n">u</span><span class="p">(</span><span class="s">&#39;, &#39;</span><span class="p">)</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">force_text</span><span class="p">(</span><span class="n">SqlReference</span><span class="p">(</span><span class="n">e</span><span class="p">))</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">expr</span><span class="p">)</span>
+            <span class="k">return</span> <span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">force_text</span><span class="p">(</span><span class="n">SqlReference</span><span class="p">(</span><span class="n">e</span><span class="p">))</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">expr</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">SqlReference</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">expr</span><span class="p">)</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">expr</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_expr</span>
 
-    <span class="nd">@expr.setter</span>
+    <span class="nd">@expr</span><span class="o">.</span><span class="n">setter</span>
     <span class="k">def</span> <span class="nf">expr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">expr</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_expr</span> <span class="o">=</span> <span class="n">expr</span>
 
 
 <span class="k">class</span> <span class="nc">FunctionWithDistinct</span><span class="p">(</span><span class="n">Function</span><span class="p">):</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">expr</span><span class="p">,</span> <span class="n">distinct</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">FunctionWithDistinct</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="n">expr</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">expr</span><span class="p">,</span> <span class="n">distinct</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">expr</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">distinct</span><span class="p">(</span><span class="n">distinct</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">distinct</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">distinct</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">distinct</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">distinct</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_distinct</span> <span class="o">=</span> <span class="nb">bool</span><span class="p">(</span><span class="n">distinct</span><span class="p">)</span>
         <span class="k">return</span> <span class="bp">self</span>
 
-    <span class="k">def</span> <span class="nf">__unicode__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_function_name</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">six</span><span class="o">.</span><span class="n">u</span><span class="p">(</span><span class="s">&#39;&lt;FunctionWithDistinct&gt;&#39;</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">six</span><span class="o">.</span><span class="n">u</span><span class="p">(</span><span class="s">&#39;</span><span class="si">%s</span><span class="s">(</span><span class="si">%s%s</span><span class="s">)&#39;</span><span class="p">)</span> <span class="o">%</span> <span class="p">(</span>
+            <span class="k">return</span> <span class="s1">&#39;&lt;FunctionWithDistinct&gt;&#39;</span>
+        <span class="k">return</span> <span class="s1">&#39;</span><span class="si">{}</span><span class="s1">(</span><span class="si">{}{}</span><span class="s1">)&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_function_name</span><span class="p">,</span>
-            <span class="s">&#39;DISTINCT &#39;</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_distinct</span> <span class="k">else</span> <span class="s">&#39;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;DISTINCT &#39;</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_distinct</span> <span class="k">else</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_get_expr_as_string</span><span class="p">(),</span>
         <span class="p">)</span>
 
 
 <span class="k">class</span> <span class="nc">Avg</span><span class="p">(</span><span class="n">FunctionWithDistinct</span><span class="p">):</span>
-    <span class="n">_function_name</span> <span class="o">=</span> <span class="s">&#39;AVG&#39;</span>
+    <span class="n">_function_name</span> <span class="o">=</span> <span class="s1">&#39;AVG&#39;</span>
 
 
 <span class="k">class</span> <span class="nc">Count</span><span class="p">(</span><span class="n">FunctionWithDistinct</span><span class="p">):</span>
-    <span class="n">_function_name</span> <span class="o">=</span> <span class="s">&#39;COUNT&#39;</span>
+    <span class="n">_function_name</span> <span class="o">=</span> <span class="s1">&#39;COUNT&#39;</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">expr</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">distinct</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">expr</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">distinct</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">expr</span><span class="p">:</span>
-            <span class="n">expr</span> <span class="o">=</span> <span class="s">&#39;*&#39;</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">Count</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="n">expr</span><span class="p">,</span> <span class="n">distinct</span><span class="p">)</span>
+            <span class="n">expr</span> <span class="o">=</span> <span class="s1">&#39;*&#39;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">expr</span><span class="p">,</span> <span class="n">distinct</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">_get_expr_as_string</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">expr</span> <span class="o">==</span> <span class="s">&#39;*&#39;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">expr</span> <span class="o">==</span> <span class="s1">&#39;*&#39;</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">expr</span>
-        <span class="k">return</span> <span class="nb">super</span><span class="p">(</span><span class="n">Count</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">_get_expr_as_string</span><span class="p">()</span>
+        <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">_get_expr_as_string</span><span class="p">()</span>
 
 
 <span class="k">class</span> <span class="nc">Max</span><span class="p">(</span><span class="n">FunctionWithDistinct</span><span class="p">):</span>
-    <span class="n">_function_name</span> <span class="o">=</span> <span class="s">&#39;MAX&#39;</span>
+    <span class="n">_function_name</span> <span class="o">=</span> <span class="s1">&#39;MAX&#39;</span>
 
 
 <span class="k">class</span> <span class="nc">Min</span><span class="p">(</span><span class="n">FunctionWithDistinct</span><span class="p">):</span>
-    <span class="n">_function_name</span> <span class="o">=</span> <span class="s">&#39;MIN&#39;</span>
+    <span class="n">_function_name</span> <span class="o">=</span> <span class="s1">&#39;MIN&#39;</span>
 
 
 <span class="k">class</span> <span class="nc">Sum</span><span class="p">(</span><span class="n">FunctionWithDistinct</span><span class="p">):</span>
-    <span class="n">_function_name</span> <span class="o">=</span> <span class="s">&#39;SUM&#39;</span>
+    <span class="n">_function_name</span> <span class="o">=</span> <span class="s1">&#39;SUM&#39;</span>
 
 
 <span class="k">class</span> <span class="nc">Concat</span><span class="p">(</span><span class="n">Function</span><span class="p">):</span>
-    <span class="n">_function_name</span> <span class="o">=</span> <span class="s">&#39;CONCAT&#39;</span>
+    <span class="n">_function_name</span> <span class="o">=</span> <span class="s1">&#39;CONCAT&#39;</span>
 
+    <span class="c1"># pylint: disable=super-init-not-called</span>
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">expr</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_columns</span> <span class="o">=</span> <span class="n">Columns</span><span class="p">()</span><span class="o">.</span><span class="n">columns</span><span class="p">(</span><span class="o">*</span><span class="n">expr</span><span class="p">)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_columns</span><span class="o">.</span><span class="n">is_set</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="n">InvalidArgumentException</span><span class="p">(</span><span class="s">&#39;You must specify columns for </span><span class="si">%s</span><span class="s">.&#39;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">_function_name</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="n">InvalidArgumentException</span><span class="p">(</span><span class="s1">&#39;You must specify columns for </span><span class="si">%s</span><span class="s1">.&#39;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">_function_name</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">__unicode__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">six</span><span class="o">.</span><span class="n">u</span><span class="p">(</span><span class="s">&#39;</span><span class="si">%s</span><span class="s">(</span><span class="si">%s</span><span class="s">)&#39;</span><span class="p">)</span> <span class="o">%</span> <span class="p">(</span>
+    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s1">&#39;</span><span class="si">{}</span><span class="s1">(</span><span class="si">{}</span><span class="s1">)&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_function_name</span><span class="p">,</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_columns</span><span class="p">,</span>
         <span class="p">)</span>
 
 
 <div class="viewcode-block" id="GroupConcat"><a class="viewcode-back" href="../../../index.html#sqlpuzzle._queryparts.functions.GroupConcat">[docs]</a><span class="k">class</span> <span class="nc">GroupConcat</span><span class="p">(</span><span class="n">Concat</span><span class="p">):</span>
-    <span class="n">_function_name</span> <span class="o">=</span> <span class="s">&#39;GROUP_CONCAT&#39;</span>
+    <span class="n">_function_name</span> <span class="o">=</span> <span class="s1">&#39;GROUP_CONCAT&#39;</span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">expr</span><span class="p">):</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">GroupConcat</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">expr</span><span class="p">)</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">expr</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_order_by</span> <span class="o">=</span> <span class="n">OrderBy</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_separator</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_separator</span> <span class="o">=</span> <span class="kc">None</span>
 
-    <span class="k">def</span> <span class="nf">__unicode__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">six</span><span class="o">.</span><span class="n">u</span><span class="p">(</span><span class="s">&#39;</span><span class="si">%s</span><span class="s">(</span><span class="si">%s%s%s</span><span class="s">)&#39;</span><span class="p">)</span> <span class="o">%</span> <span class="p">(</span>
+    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s1">&#39;</span><span class="si">{}</span><span class="s1">(</span><span class="si">{}{}{}</span><span class="s1">)&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_function_name</span><span class="p">,</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_columns</span><span class="p">,</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_str_order_by</span><span class="p">(),</span>
@@ -182,13 +166,13 @@
 
     <span class="k">def</span> <span class="nf">_str_order_by</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_order_by</span><span class="o">.</span><span class="n">is_set</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">six</span><span class="o">.</span><span class="n">u</span><span class="p">(</span><span class="s">&#39; </span><span class="si">%s</span><span class="s">&#39;</span><span class="p">)</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">_order_by</span>
-        <span class="k">return</span> <span class="s">&#39;&#39;</span>
+            <span class="k">return</span> <span class="s1">&#39; </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_order_by</span><span class="p">)</span>
+        <span class="k">return</span> <span class="s1">&#39;&#39;</span>
 
     <span class="k">def</span> <span class="nf">_str_separator</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_separator</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">six</span><span class="o">.</span><span class="n">u</span><span class="p">(</span><span class="s">&#39; SEPARATOR </span><span class="si">%s</span><span class="s">&#39;</span><span class="p">)</span> <span class="o">%</span> <span class="n">SqlValue</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_separator</span><span class="p">)</span>
-        <span class="k">return</span> <span class="s">&#39;&#39;</span>
+            <span class="k">return</span> <span class="s1">&#39; SEPARATOR </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">SqlValue</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_separator</span><span class="p">)</span>
+        <span class="k">return</span> <span class="s1">&#39;&#39;</span>
 
 <div class="viewcode-block" id="GroupConcat.order_by"><a class="viewcode-back" href="../../../index.html#sqlpuzzle._queryparts.functions.GroupConcat.order_by">[docs]</a>    <span class="k">def</span> <span class="nf">order_by</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -200,8 +184,8 @@
 <span class="sd">            &lt;GroupConcat: GROUP_CONCAT(&quot;col&quot; ORDER BY &quot;col&quot;)&gt;</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_order_by</span><span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">)</span>
-        <span class="k">return</span> <span class="bp">self</span>
-</div>
+        <span class="k">return</span> <span class="bp">self</span></div>
+
 <div class="viewcode-block" id="GroupConcat.separator"><a class="viewcode-back" href="../../../index.html#sqlpuzzle._queryparts.functions.GroupConcat.separator">[docs]</a>    <span class="k">def</span> <span class="nf">separator</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">separator</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Separator of values.</span>
@@ -212,20 +196,20 @@
 <span class="sd">            &lt;GroupConcat: GROUP_CONCAT(&quot;col&quot; SEPARATOR &#39;-&#39;)&gt;</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_separator</span> <span class="o">=</span> <span class="n">separator</span>
-        <span class="k">return</span> <span class="bp">self</span>
+        <span class="k">return</span> <span class="bp">self</span></div></div>
 
-</div></div>
+
 <div class="viewcode-block" id="Convert"><a class="viewcode-back" href="../../../index.html#sqlpuzzle._queryparts.functions.Convert">[docs]</a><span class="k">class</span> <span class="nc">Convert</span><span class="p">(</span><span class="n">Function</span><span class="p">):</span>
-    <span class="n">_function_name</span> <span class="o">=</span> <span class="s">&#39;CONVERT&#39;</span>
+    <span class="n">_function_name</span> <span class="o">=</span> <span class="s1">&#39;CONVERT&#39;</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">expr</span><span class="p">,</span> <span class="n">type_</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">Convert</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="n">expr</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_type</span> <span class="o">=</span> <span class="bp">None</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">expr</span><span class="p">,</span> <span class="n">type_</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">expr</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_type</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="k">if</span> <span class="n">type_</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">type_</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">__unicode__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">six</span><span class="o">.</span><span class="n">u</span><span class="p">(</span><span class="s">&#39;</span><span class="si">%s</span><span class="s">(</span><span class="si">%s</span><span class="s">, </span><span class="si">%s</span><span class="s">)&#39;</span><span class="p">)</span> <span class="o">%</span> <span class="p">(</span>
+    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s1">&#39;</span><span class="si">{}</span><span class="s1">(</span><span class="si">{}</span><span class="s1">, </span><span class="si">{}</span><span class="s1">)&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_function_name</span><span class="p">,</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_get_expr_as_string</span><span class="p">(),</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_type</span><span class="p">,</span>
@@ -250,26 +234,25 @@
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-<div id="searchbox" style="display: none">
+<div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
+    <div class="searchformwrapper">
     <form class="search" action="../../../search.html" method="get">
       <input type="text" name="q" />
       <input type="submit" value="Go" />
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
+    </div>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -278,14 +261,14 @@
         <li class="right" >
           <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li><a href="../../../index.html">SQLPuzzle  documentation</a> &raquo;</li>
-          <li><a href="../../index.html" >Module code</a> &raquo;</li>
-          <li><a href="../../sqlpuzzle.html" >sqlpuzzle</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../../../index.html">SQLPuzzle  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../../sqlpuzzle.html" >sqlpuzzle</a> &#187;</li> 
       </ul>
     </div>
-    <div class="footer">
-        &copy; Copyright 2015, Michal Horejsek.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2015, Michal Horejsek.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.6.
     </div>
   </body>
 </html>

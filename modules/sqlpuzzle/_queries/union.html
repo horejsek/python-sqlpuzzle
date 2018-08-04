@@ -1,33 +1,22 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
-
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
-    <title>sqlpuzzle._queries.union &mdash; SQLPuzzle  documentation</title>
-    
+    <title>sqlpuzzle._queries.union &#8212; SQLPuzzle  documentation</title>
     <link rel="stylesheet" href="../../../static/nature.css" type="text/css" />
     <link rel="stylesheet" href="../../../static/pygments.css" type="text/css" />
-    
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../../../',
-        VERSION:     '',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
-      };
-    </script>
+    <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../static/documentation_options.js"></script>
     <script type="text/javascript" src="../../../static/jquery.js"></script>
     <script type="text/javascript" src="../../../static/underscore.js"></script>
     <script type="text/javascript" src="../../../static/doctools.js"></script>
-    <link rel="top" title="SQLPuzzle  documentation" href="../../../index.html" />
-    <link rel="up" title="sqlpuzzle" href="../../sqlpuzzle.html" /> 
-  </head>
-  <body>
-    <div class="related">
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -36,33 +25,27 @@
         <li class="right" >
           <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li><a href="../../../index.html">SQLPuzzle  documentation</a> &raquo;</li>
-          <li><a href="../../index.html" >Module code</a> &raquo;</li>
-          <li><a href="../../sqlpuzzle.html" accesskey="U">sqlpuzzle</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../../../index.html">SQLPuzzle  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../../sqlpuzzle.html" accesskey="U">sqlpuzzle</a> &#187;</li> 
       </ul>
     </div>  
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <h1>Source code for sqlpuzzle._queries.union</h1><div class="highlight"><pre>
-<span class="c"># -*- coding: utf-8 -*-</span>
+<span></span><span class="kn">from</span> <span class="nn">sqlpuzzle.exceptions</span> <span class="k">import</span> <span class="n">InvalidArgumentException</span>
+<span class="kn">from</span> <span class="nn">sqlpuzzle._common</span> <span class="k">import</span> <span class="n">check_type_decorator</span>
+<span class="kn">from</span> <span class="nn">.query</span> <span class="k">import</span> <span class="n">Query</span>
 
-<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">absolute_import</span>
-
-<span class="kn">import</span> <span class="nn">six</span>
-
-<span class="kn">from</span> <span class="nn">sqlpuzzle.exceptions</span> <span class="kn">import</span> <span class="n">InvalidArgumentException</span>
-<span class="kn">from</span> <span class="nn">sqlpuzzle._common</span> <span class="kn">import</span> <span class="n">check_type_decorator</span>
-<span class="kn">from</span> <span class="nn">.query</span> <span class="kn">import</span> <span class="n">Query</span>
-
-<span class="n">__all__</span> <span class="o">=</span> <span class="p">(</span><span class="s">&#39;UNION&#39;</span><span class="p">,</span> <span class="s">&#39;UNION_ALL&#39;</span><span class="p">,</span> <span class="s">&#39;Union&#39;</span><span class="p">)</span>
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;UNION&#39;</span><span class="p">,</span> <span class="s1">&#39;UNION_ALL&#39;</span><span class="p">,</span> <span class="s1">&#39;Union&#39;</span><span class="p">)</span>
 
 
-<span class="n">UNION</span> <span class="o">=</span> <span class="s">&#39;UNION&#39;</span>
-<span class="n">UNION_ALL</span> <span class="o">=</span> <span class="s">&#39;UNION ALL&#39;</span>
+<span class="n">UNION</span> <span class="o">=</span> <span class="s1">&#39;UNION&#39;</span>
+<span class="n">UNION_ALL</span> <span class="o">=</span> <span class="s1">&#39;UNION ALL&#39;</span>
 <span class="n">UNION_TYPES</span> <span class="o">=</span> <span class="p">(</span><span class="n">UNION</span><span class="p">,</span> <span class="n">UNION_ALL</span><span class="p">)</span>
 
 
@@ -81,13 +64,13 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">query1</span><span class="p">,</span> <span class="n">query2</span><span class="p">,</span> <span class="n">union_type</span><span class="o">=</span><span class="n">UNION</span><span class="p">):</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">Union</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__init__</span><span class="p">()</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">query1</span> <span class="o">=</span> <span class="n">query1</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">query2</span> <span class="o">=</span> <span class="n">query2</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">union_type</span> <span class="o">=</span> <span class="n">union_type</span>
 
-    <span class="k">def</span> <span class="nf">__unicode__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">six</span><span class="o">.</span><span class="n">u</span><span class="p">(</span><span class="s">&#39;</span><span class="si">%s</span><span class="s"> </span><span class="si">%s</span><span class="s"> </span><span class="si">%s</span><span class="s">&#39;</span><span class="p">)</span> <span class="o">%</span> <span class="p">(</span>
+    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s1">&#39;</span><span class="si">{}</span><span class="s1"> </span><span class="si">{}</span><span class="s1"> </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">query1</span><span class="p">,</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">union_type</span><span class="p">,</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">query2</span><span class="p">,</span>
@@ -110,8 +93,8 @@
 <span class="sd">            &gt;&gt;&gt; sqlpuzzle.select(&#39;t&#39;) &amp; sqlpuzzle.select(&#39;u&#39;) &amp; sqlpuzzle.select(&#39;v&#39;)</span>
 <span class="sd">            &lt;Union: SELECT &quot;t&quot; UNION ALL SELECT &quot;u&quot; UNION ALL SELECT &quot;v&quot;&gt;</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="n">Union</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">,</span> <span class="n">UNION_ALL</span><span class="p">)</span>
-</div>
+        <span class="k">return</span> <span class="n">Union</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">,</span> <span class="n">UNION_ALL</span><span class="p">)</span></div>
+
 <div class="viewcode-block" id="Union.__or__"><a class="viewcode-back" href="../../../index.html#sqlpuzzle._queries.union.Union.__or__">[docs]</a>    <span class="k">def</span> <span class="nf">__or__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Returns :py:class:`sqlpuzzle._queries.union.Union` instance, ``UNION``.</span>
@@ -121,13 +104,13 @@
 <span class="sd">            &gt;&gt;&gt; sqlpuzzle.select(&#39;t&#39;) | sqlpuzzle.select(&#39;u&#39;) | sqlpuzzle.select(&#39;v&#39;)</span>
 <span class="sd">            &lt;Union: SELECT &quot;t&quot; UNION SELECT &quot;u&quot; UNION SELECT &quot;v&quot;&gt;</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="n">Union</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">,</span> <span class="n">UNION</span><span class="p">)</span>
-</div>
+        <span class="k">return</span> <span class="n">Union</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">,</span> <span class="n">UNION</span><span class="p">)</span></div>
+
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">query1</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_query1</span>
 
-    <span class="nd">@query1.setter</span>
+    <span class="nd">@query1</span><span class="o">.</span><span class="n">setter</span>
     <span class="nd">@check_type_decorator</span><span class="p">()</span>
     <span class="k">def</span> <span class="nf">query1</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">query</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_query1</span> <span class="o">=</span> <span class="n">query</span>
@@ -136,7 +119,7 @@
     <span class="k">def</span> <span class="nf">query2</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_query2</span>
 
-    <span class="nd">@query2.setter</span>
+    <span class="nd">@query2</span><span class="o">.</span><span class="n">setter</span>
     <span class="nd">@check_type_decorator</span><span class="p">()</span>
     <span class="k">def</span> <span class="nf">query2</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">query</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_query2</span> <span class="o">=</span> <span class="n">query</span>
@@ -145,37 +128,36 @@
     <span class="k">def</span> <span class="nf">union_type</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_union_type</span>
 
-    <span class="nd">@union_type.setter</span>
-    <span class="nd">@check_type_decorator</span><span class="p">(</span><span class="n">six</span><span class="o">.</span><span class="n">string_types</span><span class="p">)</span>
+    <span class="nd">@union_type</span><span class="o">.</span><span class="n">setter</span>
+    <span class="nd">@check_type_decorator</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">union_type</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">union_type</span><span class="p">):</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">union_type</span> <span class="ow">in</span> <span class="n">UNION_TYPES</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="n">InvalidArgumentException</span><span class="p">(</span><span class="s">&#39;Union type can not be </span><span class="si">%s</span><span class="s">.&#39;</span> <span class="o">%</span> <span class="n">union_type</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="n">InvalidArgumentException</span><span class="p">(</span><span class="s1">&#39;Union type can not be </span><span class="si">{}</span><span class="s1">.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">union_type</span><span class="p">))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_union_type</span> <span class="o">=</span> <span class="n">union_type</span></div>
 </pre></div>
 
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-<div id="searchbox" style="display: none">
+<div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
+    <div class="searchformwrapper">
     <form class="search" action="../../../search.html" method="get">
       <input type="text" name="q" />
       <input type="submit" value="Go" />
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
+    </div>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -184,14 +166,14 @@
         <li class="right" >
           <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li><a href="../../../index.html">SQLPuzzle  documentation</a> &raquo;</li>
-          <li><a href="../../index.html" >Module code</a> &raquo;</li>
-          <li><a href="../../sqlpuzzle.html" >sqlpuzzle</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../../../index.html">SQLPuzzle  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../../sqlpuzzle.html" >sqlpuzzle</a> &#187;</li> 
       </ul>
     </div>
-    <div class="footer">
-        &copy; Copyright 2015, Michal Horejsek.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2015, Michal Horejsek.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.6.
     </div>
   </body>
 </html>

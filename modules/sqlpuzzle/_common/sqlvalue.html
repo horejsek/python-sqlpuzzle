@@ -1,33 +1,22 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
-
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
-    <title>sqlpuzzle._common.sqlvalue &mdash; SQLPuzzle  documentation</title>
-    
+    <title>sqlpuzzle._common.sqlvalue &#8212; SQLPuzzle  documentation</title>
     <link rel="stylesheet" href="../../../static/nature.css" type="text/css" />
     <link rel="stylesheet" href="../../../static/pygments.css" type="text/css" />
-    
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../../../',
-        VERSION:     '',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
-      };
-    </script>
+    <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../static/documentation_options.js"></script>
     <script type="text/javascript" src="../../../static/jquery.js"></script>
     <script type="text/javascript" src="../../../static/underscore.js"></script>
     <script type="text/javascript" src="../../../static/doctools.js"></script>
-    <link rel="top" title="SQLPuzzle  documentation" href="../../../index.html" />
-    <link rel="up" title="sqlpuzzle" href="../../sqlpuzzle.html" /> 
-  </head>
-  <body>
-    <div class="related">
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -36,63 +25,62 @@
         <li class="right" >
           <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li><a href="../../../index.html">SQLPuzzle  documentation</a> &raquo;</li>
-          <li><a href="../../index.html" >Module code</a> &raquo;</li>
-          <li><a href="../../sqlpuzzle.html" accesskey="U">sqlpuzzle</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../../../index.html">SQLPuzzle  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../../sqlpuzzle.html" accesskey="U">sqlpuzzle</a> &#187;</li> 
       </ul>
     </div>  
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <h1>Source code for sqlpuzzle._common.sqlvalue</h1><div class="highlight"><pre>
-<span class="c"># -*- coding: utf-8 -*-</span>
-
-<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">absolute_import</span>
-
-<span class="kn">import</span> <span class="nn">six</span>
-<span class="kn">from</span> <span class="nn">six.moves</span> <span class="kn">import</span> <span class="nb">xrange</span>
-<span class="k">try</span><span class="p">:</span>
-    <span class="nb">long</span>
-<span class="k">except</span> <span class="ne">NameError</span><span class="p">:</span>
-    <span class="nb">long</span> <span class="o">=</span> <span class="nb">int</span>
-
-<span class="kn">import</span> <span class="nn">datetime</span>
+<span></span><span class="kn">import</span> <span class="nn">datetime</span>
 <span class="kn">import</span> <span class="nn">decimal</span>
 <span class="kn">import</span> <span class="nn">types</span>
 
-<span class="kn">from</span> <span class="nn">sqlpuzzle.exceptions</span> <span class="kn">import</span> <span class="n">InvalidArgumentException</span>
-<span class="kn">from</span> <span class="nn">sqlpuzzle._backends</span> <span class="kn">import</span> <span class="n">get_backend</span>
-<span class="kn">from</span> <span class="nn">.object</span> <span class="kn">import</span> <span class="n">Object</span>
-<span class="kn">from</span> <span class="nn">.utils</span> <span class="kn">import</span> <span class="n">force_text</span><span class="p">,</span> <span class="n">is_sql_instance</span>
+<span class="kn">from</span> <span class="nn">sqlpuzzle.exceptions</span> <span class="k">import</span> <span class="n">InvalidArgumentException</span>
+<span class="kn">from</span> <span class="nn">sqlpuzzle._backends</span> <span class="k">import</span> <span class="n">get_backend</span>
+<span class="kn">from</span> <span class="nn">.object</span> <span class="k">import</span> <span class="n">Object</span>
+<span class="kn">from</span> <span class="nn">.utils</span> <span class="k">import</span> <span class="n">force_text</span><span class="p">,</span> <span class="n">is_sql_instance</span>
 
-<span class="n">__all__</span> <span class="o">=</span> <span class="p">(</span><span class="s">&#39;SqlValue&#39;</span><span class="p">,</span> <span class="s">&#39;SqlReference&#39;</span><span class="p">)</span>
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;SqlValue&#39;</span><span class="p">,</span> <span class="s1">&#39;SqlReference&#39;</span><span class="p">)</span>
 
 
 <span class="k">def</span> <span class="nf">_escape_value</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
     <span class="n">replace_table</span> <span class="o">=</span> <span class="p">(</span>
-        <span class="p">(</span><span class="s">&quot;</span><span class="se">\\</span><span class="s">&quot;</span><span class="p">,</span> <span class="s">&quot;</span><span class="se">\\\\</span><span class="s">&quot;</span><span class="p">),</span>
-        <span class="p">(</span><span class="s">&quot;&#39;&quot;</span><span class="p">,</span> <span class="s">&quot;</span><span class="se">\\</span><span class="s">&#39;&quot;</span><span class="p">),</span>
-        <span class="p">(</span><span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="s">&quot;</span><span class="se">\\</span><span class="s">n&quot;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">&quot;</span><span class="p">,</span> <span class="s2">&quot;</span><span class="se">\\\\</span><span class="s2">&quot;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;&#39;&quot;</span><span class="p">,</span> <span class="s2">&quot;&#39;&#39;&quot;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="s2">&quot;</span><span class="se">\\</span><span class="s2">n&quot;</span><span class="p">),</span>
     <span class="p">)</span>
     <span class="k">for</span> <span class="n">old</span><span class="p">,</span> <span class="n">new</span> <span class="ow">in</span> <span class="n">replace_table</span><span class="p">:</span>
         <span class="n">value</span> <span class="o">=</span> <span class="n">value</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">old</span><span class="p">,</span> <span class="n">new</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">value</span>
 
 
-<div class="viewcode-block" id="SqlValue"><a class="viewcode-back" href="../../../index.html#sqlpuzzle._common.sqlvalue.SqlValue">[docs]</a><span class="k">class</span> <span class="nc">SqlValue</span><span class="p">(</span><span class="n">Object</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Object used for SQL values (e.g. value of column, for condition, ...).&quot;&quot;&quot;</span>
+<span class="k">class</span> <span class="nc">SqlValue</span><span class="p">(</span><span class="n">Object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Or ``sqlpuzzle.sqlvalue``.</span>
+
+<span class="sd">    SQL values which are escaped. Like values in conditions. SqlPuzzle by default</span>
+<span class="sd">    behave to some arguments automatically as SQL value and to some as SQL reference.</span>
+<span class="sd">    Use this when SqlPuzzle uses SQL reference instead of value.</span>
+
+<span class="sd">    .. code-block:: python</span>
+
+<span class="sd">        &gt;&gt;&gt; sqlpuzzle.select(&#39;a&#39;)</span>
+<span class="sd">        &lt;Select: SELECT `a`&gt;</span>
+<span class="sd">        &gt;&gt;&gt; sqlpuzzle.select(sqlpuzzle.V(&#39;a&#39;))</span>
+<span class="sd">        &lt;Select: SELECT &#39;a&#39;&gt;</span>
+<span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Object used for SQL values (e.g. value of column, for condition, ...).&quot;&quot;&quot;</span>
-        <span class="kn">from</span> <span class="nn">sqlpuzzle._queries</span> <span class="kn">import</span> <span class="n">Select</span><span class="p">,</span> <span class="n">Union</span>
+        <span class="kn">from</span> <span class="nn">sqlpuzzle._queries</span> <span class="k">import</span> <span class="n">Select</span><span class="p">,</span> <span class="n">Union</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_map</span> <span class="o">=</span> <span class="p">{</span>
             <span class="nb">str</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_string</span><span class="p">,</span>
-            <span class="n">six</span><span class="o">.</span><span class="n">text_type</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_string</span><span class="p">,</span>
             <span class="nb">int</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_integer</span><span class="p">,</span>
-            <span class="nb">long</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_integer</span><span class="p">,</span>
             <span class="nb">float</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_float</span><span class="p">,</span>
             <span class="n">decimal</span><span class="o">.</span><span class="n">Decimal</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_float</span><span class="p">,</span>
             <span class="nb">bool</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_boolean</span><span class="p">,</span>
@@ -102,8 +90,8 @@
             <span class="nb">tuple</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_list</span><span class="p">,</span>
             <span class="nb">set</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_list</span><span class="p">,</span>
             <span class="nb">frozenset</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_list</span><span class="p">,</span>
-            <span class="nb">type</span><span class="p">(</span><span class="bp">None</span><span class="p">):</span> <span class="bp">self</span><span class="o">.</span><span class="n">_null</span><span class="p">,</span>
-            <span class="nb">xrange</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_list</span><span class="p">,</span>
+            <span class="nb">type</span><span class="p">(</span><span class="kc">None</span><span class="p">):</span> <span class="bp">self</span><span class="o">.</span><span class="n">_null</span><span class="p">,</span>
+            <span class="nb">range</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_list</span><span class="p">,</span>
             <span class="n">types</span><span class="o">.</span><span class="n">GeneratorType</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_list</span><span class="p">,</span>
             <span class="n">Select</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_subselect</span><span class="p">,</span>
             <span class="n">Union</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_subselect</span><span class="p">,</span>
@@ -111,13 +99,15 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="n">value</span>
 
-    <span class="k">def</span> <span class="nf">__unicode__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">convert_method</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_convert_method</span><span class="p">()</span>
         <span class="k">return</span> <span class="n">convert_method</span><span class="p">()</span>
 
     <span class="k">def</span> <span class="nf">_get_convert_method</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Get right method to convert of the value.&quot;&quot;&quot;</span>
-        <span class="k">for</span> <span class="n">type_</span><span class="p">,</span> <span class="n">method</span> <span class="ow">in</span> <span class="n">six</span><span class="o">.</span><span class="n">iteritems</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_map</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get right method to convert of the value.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">type_</span><span class="p">,</span> <span class="n">method</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_map</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
             <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">value</span><span class="p">)</span> <span class="ow">is</span> <span class="nb">bool</span> <span class="ow">and</span> <span class="n">type_</span> <span class="ow">is</span> <span class="ow">not</span> <span class="nb">bool</span><span class="p">:</span>
                 <span class="k">continue</span>
             <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="n">type_</span><span class="p">):</span>
@@ -130,16 +120,16 @@
         <span class="k">return</span> <span class="n">force_text</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">_string</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="c"># Sometimes, e.g. in subselect, is needed reference to column instead of self.value.</span>
+        <span class="c1"># Sometimes, e.g. in subselect, is needed reference to column instead of self.value.</span>
         <span class="k">if</span> <span class="n">get_backend</span><span class="p">()</span><span class="o">.</span><span class="n">is_reference</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">value</span><span class="p">):</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_reference</span><span class="p">()</span>
-        <span class="k">return</span> <span class="n">six</span><span class="o">.</span><span class="n">u</span><span class="p">(</span><span class="s">&quot;&#39;</span><span class="si">%s</span><span class="s">&#39;&quot;</span><span class="p">)</span> <span class="o">%</span> <span class="n">_escape_value</span><span class="p">(</span><span class="n">force_text</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">value</span><span class="p">))</span>
+        <span class="k">return</span> <span class="s2">&quot;&#39;</span><span class="si">{}</span><span class="s2">&#39;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">_escape_value</span><span class="p">(</span><span class="n">force_text</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">value</span><span class="p">)))</span>
 
     <span class="k">def</span> <span class="nf">_integer</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">six</span><span class="o">.</span><span class="n">u</span><span class="p">(</span><span class="s">&#39;</span><span class="si">%d</span><span class="s">&#39;</span><span class="p">)</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">value</span>
+        <span class="k">return</span> <span class="s1">&#39;</span><span class="si">{:d}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">_float</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">six</span><span class="o">.</span><span class="n">u</span><span class="p">(</span><span class="s">&#39;</span><span class="si">%.5f</span><span class="s">&#39;</span><span class="p">)</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">value</span>
+        <span class="k">return</span> <span class="s1">&#39;</span><span class="si">{:.5f}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">_boolean</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">get_backend</span><span class="p">()</span><span class="o">.</span><span class="n">boolean</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
@@ -148,69 +138,81 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_datetime</span><span class="p">()</span>
 
     <span class="k">def</span> <span class="nf">_datetime</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">six</span><span class="o">.</span><span class="n">u</span><span class="p">(</span><span class="s">&quot;&#39;</span><span class="si">%s</span><span class="s">&#39;&quot;</span><span class="p">)</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">value</span><span class="o">.</span><span class="n">isoformat</span><span class="p">()</span>
+        <span class="k">return</span> <span class="s2">&quot;&#39;</span><span class="si">{}</span><span class="s2">&#39;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">value</span><span class="o">.</span><span class="n">isoformat</span><span class="p">())</span>
 
     <span class="k">def</span> <span class="nf">_list</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">value</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">six</span><span class="o">.</span><span class="n">u</span><span class="p">(</span><span class="s">&#39;(</span><span class="si">%s</span><span class="s">)&#39;</span><span class="p">)</span> <span class="o">%</span> <span class="n">six</span><span class="o">.</span><span class="n">u</span><span class="p">(</span><span class="s">&#39;, &#39;</span><span class="p">)</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">force_text</span><span class="p">(</span><span class="n">SqlValue</span><span class="p">(</span><span class="n">item</span><span class="p">))</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
-        <span class="k">raise</span> <span class="n">InvalidArgumentException</span><span class="p">(</span><span class="s">&#39;Empty list is not allowed.&#39;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="s1">&#39;(</span><span class="si">{}</span><span class="s1">)&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">force_text</span><span class="p">(</span><span class="n">SqlValue</span><span class="p">(</span><span class="n">item</span><span class="p">))</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">value</span><span class="p">))</span>
+        <span class="k">raise</span> <span class="n">InvalidArgumentException</span><span class="p">(</span><span class="s1">&#39;Empty list is not allowed.&#39;</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">_subselect</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">six</span><span class="o">.</span><span class="n">u</span><span class="p">(</span><span class="s">&#39;(</span><span class="si">%s</span><span class="s">)&#39;</span><span class="p">)</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">value</span>
+        <span class="k">return</span> <span class="s1">&#39;(</span><span class="si">{}</span><span class="s1">)&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
 
+    <span class="c1"># pylint: disable=no-self-use</span>
     <span class="k">def</span> <span class="nf">_null</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">six</span><span class="o">.</span><span class="n">u</span><span class="p">(</span><span class="s">&#39;NULL&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="s1">&#39;NULL&#39;</span>
 
     <span class="k">def</span> <span class="nf">_undefined</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">try</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">six</span><span class="o">.</span><span class="n">u</span><span class="p">(</span><span class="s">&#39;&lt;undefined value </span><span class="si">%s</span><span class="s">&gt;&#39;</span><span class="p">)</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">value</span>
-        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">six</span><span class="o">.</span><span class="n">u</span><span class="p">(</span><span class="s">&#39;&lt;undefined value&gt;&#39;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="s1">&#39;&lt;undefined value </span><span class="si">{}</span><span class="s1">&gt;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>  <span class="c1"># pylint: disable=broad-except</span>
+            <span class="k">return</span> <span class="s1">&#39;&lt;undefined value&gt;&#39;</span>
 
     <span class="k">def</span> <span class="nf">_reference</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">get_backend</span><span class="p">()</span><span class="o">.</span><span class="n">reference</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
 
-</div>
-<div class="viewcode-block" id="SqlReference"><a class="viewcode-back" href="../../../index.html#sqlpuzzle._common.sqlvalue.SqlReference">[docs]</a><span class="k">class</span> <span class="nc">SqlReference</span><span class="p">(</span><span class="n">SqlValue</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Object used for string for SQL reference (e.g. name of tables, columns, ...).&quot;&quot;&quot;</span>
 
+<span class="k">class</span> <span class="nc">SqlReference</span><span class="p">(</span><span class="n">SqlValue</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Or ``sqlpuzzle.sqlreference``.</span>
+
+<span class="sd">    SQL reference is some column. SqlPuzzle by default behave to some arguments</span>
+<span class="sd">    automatically as SQL value and to some as SQL reference. Use this when SqlPuzzle</span>
+<span class="sd">    uses SQL value instead of reference.</span>
+
+<span class="sd">    .. code-block:: python</span>
+
+<span class="sd">        &gt;&gt;&gt; sqlpuzzle.select_from(&#39;t&#39;).where(name=&#39;surname&#39;)</span>
+<span class="sd">        &lt;Select: SELECT * FROM `t` WHERE `name` = &#39;surname&#39;&gt;</span>
+<span class="sd">        &gt;&gt;&gt; sqlpuzzle.select_from(&#39;t&#39;).where(name=sqlpuzzle.R(&#39;surname&#39;))</span>
+<span class="sd">        &lt;Select: SELECT * FROM `t` WHERE `name` = `surname`&gt;</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># pylint: disable=super-init-not-called</span>
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Object used for string for SQL reference (e.g. name of tables, columns, ...).&quot;&quot;&quot;</span>
-        <span class="kn">from</span> <span class="nn">sqlpuzzle._queries</span> <span class="kn">import</span> <span class="n">Select</span><span class="p">,</span> <span class="n">Union</span>
+        <span class="kn">from</span> <span class="nn">sqlpuzzle._queries</span> <span class="k">import</span> <span class="n">Select</span><span class="p">,</span> <span class="n">Union</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_map</span> <span class="o">=</span> <span class="p">{</span>
             <span class="nb">str</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_reference</span><span class="p">,</span>
-            <span class="n">six</span><span class="o">.</span><span class="n">text_type</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_reference</span><span class="p">,</span>
             <span class="nb">int</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_integer</span><span class="p">,</span>
             <span class="n">Select</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_subselect</span><span class="p">,</span>
             <span class="n">Union</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_subselect</span><span class="p">,</span>
         <span class="p">}</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="n">value</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="n">value</span>
 </pre></div>
 
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-<div id="searchbox" style="display: none">
+<div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
+    <div class="searchformwrapper">
     <form class="search" action="../../../search.html" method="get">
       <input type="text" name="q" />
       <input type="submit" value="Go" />
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
+    </div>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -219,14 +221,14 @@
         <li class="right" >
           <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li><a href="../../../index.html">SQLPuzzle  documentation</a> &raquo;</li>
-          <li><a href="../../index.html" >Module code</a> &raquo;</li>
-          <li><a href="../../sqlpuzzle.html" >sqlpuzzle</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../../../index.html">SQLPuzzle  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../../sqlpuzzle.html" >sqlpuzzle</a> &#187;</li> 
       </ul>
     </div>
-    <div class="footer">
-        &copy; Copyright 2015, Michal Horejsek.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2015, Michal Horejsek.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.6.
     </div>
   </body>
 </html>

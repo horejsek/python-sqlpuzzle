@@ -1,33 +1,22 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
-
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
-    <title>sqlpuzzle &mdash; SQLPuzzle  documentation</title>
-    
+    <title>sqlpuzzle &#8212; SQLPuzzle  documentation</title>
     <link rel="stylesheet" href="../static/nature.css" type="text/css" />
     <link rel="stylesheet" href="../static/pygments.css" type="text/css" />
-    
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../',
-        VERSION:     '',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
-      };
-    </script>
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../static/documentation_options.js"></script>
     <script type="text/javascript" src="../static/jquery.js"></script>
     <script type="text/javascript" src="../static/underscore.js"></script>
     <script type="text/javascript" src="../static/doctools.js"></script>
-    <link rel="top" title="SQLPuzzle  documentation" href="../index.html" />
-    <link rel="up" title="Module code" href="index.html" /> 
-  </head>
-  <body>
-    <div class="related">
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -36,65 +25,66 @@
         <li class="right" >
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li><a href="../index.html">SQLPuzzle  documentation</a> &raquo;</li>
-          <li><a href="index.html" accesskey="U">Module code</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../index.html">SQLPuzzle  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Module code</a> &#187;</li> 
       </ul>
     </div>  
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <h1>Source code for sqlpuzzle</h1><div class="highlight"><pre>
-<span class="c"># -*- coding: utf-8 -*-</span>
-
-<span class="sd">&quot;&quot;&quot;</span>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">Library for ease of writing SQL queries. For now only for database MySQL &amp; PostgreSQL.</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
-<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">absolute_import</span>
+<span class="c1"># pylint: disable=redefined-builtin</span>
 
-<span class="kn">from</span> <span class="nn">.version</span> <span class="kn">import</span> <span class="n">VERSION</span>
-<span class="kn">from</span> <span class="nn">._backends</span> <span class="kn">import</span> <span class="n">set_backend</span>
-<span class="kn">from</span> <span class="nn">._common</span> <span class="kn">import</span> <span class="n">CustomSql</span> <span class="k">as</span> <span class="n">customsql</span><span class="p">,</span> <span class="n">SqlValue</span> <span class="k">as</span> <span class="n">sqlvalue</span><span class="p">,</span> <span class="n">SqlReference</span> <span class="k">as</span> <span class="n">sqlreference</span>
-<span class="kn">from</span> <span class="nn">._queryparts.functions</span> <span class="kn">import</span> <span class="n">Avg</span><span class="p">,</span> <span class="n">Concat</span><span class="p">,</span> <span class="n">Convert</span><span class="p">,</span> <span class="n">Count</span><span class="p">,</span> <span class="n">GroupConcat</span><span class="p">,</span> <span class="n">Max</span><span class="p">,</span> <span class="n">Min</span><span class="p">,</span> <span class="n">Sum</span>
-<span class="kn">from</span> <span class="nn">._queryparts.conditions</span> <span class="kn">import</span> <span class="n">Conditions</span>
-<span class="kn">from</span> <span class="nn">._queries</span> <span class="kn">import</span> <span class="n">Delete</span><span class="p">,</span> <span class="n">Insert</span><span class="p">,</span> <span class="n">Select</span><span class="p">,</span> <span class="n">Update</span>
+<span class="kn">from</span> <span class="nn">.version</span> <span class="k">import</span> <span class="n">VERSION</span>
+<span class="kn">from</span> <span class="nn">._backends</span> <span class="k">import</span> <span class="n">set_backend</span>
+<span class="kn">from</span> <span class="nn">._common</span> <span class="k">import</span> <span class="n">CustomSql</span> <span class="k">as</span> <span class="n">customsql</span><span class="p">,</span> <span class="n">SqlValue</span> <span class="k">as</span> <span class="n">sqlvalue</span><span class="p">,</span> <span class="n">SqlReference</span> <span class="k">as</span> <span class="n">sqlreference</span>
+<span class="kn">from</span> <span class="nn">._queryparts</span> <span class="k">import</span> <span class="n">Not</span><span class="p">,</span> <span class="n">Exists</span>
+<span class="kn">from</span> <span class="nn">._queryparts.functions</span> <span class="k">import</span> <span class="n">Avg</span><span class="p">,</span> <span class="n">Concat</span><span class="p">,</span> <span class="n">Convert</span><span class="p">,</span> <span class="n">Count</span><span class="p">,</span> <span class="n">GroupConcat</span><span class="p">,</span> <span class="n">Max</span><span class="p">,</span> <span class="n">Min</span><span class="p">,</span> <span class="n">Sum</span>
+<span class="kn">from</span> <span class="nn">._queryparts.conditions</span> <span class="k">import</span> <span class="n">Conditions</span>
+<span class="kn">from</span> <span class="nn">._queries</span> <span class="k">import</span> <span class="n">Delete</span><span class="p">,</span> <span class="n">Insert</span><span class="p">,</span> <span class="n">Select</span><span class="p">,</span> <span class="n">Update</span>
 
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">(</span>
-    <span class="s">&#39;configure&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;configure&#39;</span><span class="p">,</span>
 
-    <span class="s">&#39;select&#39;</span><span class="p">,</span>
-    <span class="s">&#39;select_from&#39;</span><span class="p">,</span>
-    <span class="s">&#39;insert&#39;</span><span class="p">,</span>
-    <span class="s">&#39;insert_into&#39;</span><span class="p">,</span>
-    <span class="s">&#39;update&#39;</span><span class="p">,</span>
-    <span class="s">&#39;delete&#39;</span><span class="p">,</span>
-    <span class="s">&#39;delete_from&#39;</span><span class="p">,</span>
-    <span class="s">&#39;customsql&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;select&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;select_from&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;insert&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;insert_into&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;update&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;delete&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;delete_from&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;customsql&#39;</span><span class="p">,</span>
 
-    <span class="s">&#39;Q&#39;</span><span class="p">,</span>
-    <span class="s">&#39;customsql&#39;</span><span class="p">,</span>
-    <span class="s">&#39;C&#39;</span><span class="p">,</span>
-    <span class="s">&#39;sqlvalue&#39;</span><span class="p">,</span>
-    <span class="s">&#39;V&#39;</span><span class="p">,</span>
-    <span class="s">&#39;sqlreference&#39;</span><span class="p">,</span>
-    <span class="s">&#39;R&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;Q&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;customsql&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;C&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;sqlvalue&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;V&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;sqlreference&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;R&#39;</span><span class="p">,</span>
 
-    <span class="s">&#39;avg&#39;</span><span class="p">,</span>
-    <span class="s">&#39;avg_distinct&#39;</span><span class="p">,</span>
-    <span class="s">&#39;count&#39;</span><span class="p">,</span>
-    <span class="s">&#39;count_distinct&#39;</span><span class="p">,</span>
-    <span class="s">&#39;max&#39;</span><span class="p">,</span>
-    <span class="s">&#39;max_distinct&#39;</span><span class="p">,</span>
-    <span class="s">&#39;min&#39;</span><span class="p">,</span>
-    <span class="s">&#39;min_distinct&#39;</span><span class="p">,</span>
-    <span class="s">&#39;sum&#39;</span><span class="p">,</span>
-    <span class="s">&#39;sum_distinct&#39;</span><span class="p">,</span>
-    <span class="s">&#39;concat&#39;</span><span class="p">,</span>
-    <span class="s">&#39;group_concat&#39;</span><span class="p">,</span>
-    <span class="s">&#39;convert&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;Not&#39;</span><span class="p">,</span>
+
+    <span class="s1">&#39;avg&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;avg_distinct&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;count&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;count_distinct&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;max&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;max_distinct&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;min&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;min_distinct&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;sum&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;sum_distinct&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;concat&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;group_concat&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;convert&#39;</span><span class="p">,</span>
 <span class="p">)</span>
 
 
@@ -102,72 +92,74 @@
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    By default sqlpuzzle generates syntax in plain SQL. If you want to change it,</span>
 <span class="sd">    you should call this method somewhere on start of your app. For now there is</span>
-<span class="sd">    only support of MySQL and PostgreSQL.</span>
+<span class="sd">    only support of SQLite, MySQL and PostgreSQL.</span>
 
 <span class="sd">    .. code-block:: python</span>
 
+<span class="sd">        configure(&#39;sqlite&#39;)</span>
+<span class="sd">        # or</span>
 <span class="sd">        configure(&#39;mysql&#39;)</span>
 <span class="sd">        # or</span>
 <span class="sd">        configure(&#39;postgresql&#39;)</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">set_backend</span><span class="p">(</span><span class="n">database</span><span class="p">)</span>
+    <span class="n">set_backend</span><span class="p">(</span><span class="n">database</span><span class="p">)</span></div>
 
-</div>
+
 <div class="viewcode-block" id="select"><a class="viewcode-back" href="../index.html#sqlpuzzle.select">[docs]</a><span class="k">def</span> <span class="nf">select</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwds</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Returns :py:class:`~.Select` instance and passed arguments are used for list</span>
 <span class="sd">    of columns.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">return</span> <span class="n">Select</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwds</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">Select</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwds</span><span class="p">)</span></div>
 
-</div>
+
 <div class="viewcode-block" id="select_from"><a class="viewcode-back" href="../index.html#sqlpuzzle.select_from">[docs]</a><span class="k">def</span> <span class="nf">select_from</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwds</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Returns :py:class:`~.Select` instance and passed arguments are used for list</span>
-<span class="sd">    of tables. Columns are set to \*.</span>
+<span class="sd">    of tables. Columns are set to `*`.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">return</span> <span class="n">Select</span><span class="p">()</span><span class="o">.</span><span class="n">from_</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwds</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">Select</span><span class="p">()</span><span class="o">.</span><span class="n">from_</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwds</span><span class="p">)</span></div>
 
-</div>
+
 <div class="viewcode-block" id="insert"><a class="viewcode-back" href="../index.html#sqlpuzzle.insert">[docs]</a><span class="k">def</span> <span class="nf">insert</span><span class="p">():</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Returns :py:class:`~.Insert` instance. But probably you want to use</span>
 <span class="sd">    :py:func:`~.insert_into` instead.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">return</span> <span class="n">Insert</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">Insert</span><span class="p">()</span></div>
 
-</div>
+
 <div class="viewcode-block" id="insert_into"><a class="viewcode-back" href="../index.html#sqlpuzzle.insert_into">[docs]</a><span class="k">def</span> <span class="nf">insert_into</span><span class="p">(</span><span class="n">table</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Returns :py:class:`~.Insert` instance and passed argument is used for table.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">return</span> <span class="n">Insert</span><span class="p">()</span><span class="o">.</span><span class="n">into</span><span class="p">(</span><span class="n">table</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">Insert</span><span class="p">()</span><span class="o">.</span><span class="n">into</span><span class="p">(</span><span class="n">table</span><span class="p">)</span></div>
 
-</div>
+
 <div class="viewcode-block" id="update"><a class="viewcode-back" href="../index.html#sqlpuzzle.update">[docs]</a><span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="n">table</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Returns :py:class:`~.Update` instance and passed argument is used for table.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">return</span> <span class="n">Update</span><span class="p">(</span><span class="n">table</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">Update</span><span class="p">(</span><span class="n">table</span><span class="p">)</span></div>
 
-</div>
+
 <div class="viewcode-block" id="delete"><a class="viewcode-back" href="../index.html#sqlpuzzle.delete">[docs]</a><span class="k">def</span> <span class="nf">delete</span><span class="p">(</span><span class="o">*</span><span class="n">tables</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Returns :py:class:`~.Delete` instance and passed arguments are used for list</span>
 <span class="sd">    of tables from which really data should be deleted. But probably you want</span>
 <span class="sd">    to use :py:func:`~.delete_from` instead.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">return</span> <span class="n">Delete</span><span class="p">(</span><span class="o">*</span><span class="n">tables</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">Delete</span><span class="p">(</span><span class="o">*</span><span class="n">tables</span><span class="p">)</span></div>
 
-</div>
+
 <div class="viewcode-block" id="delete_from"><a class="viewcode-back" href="../index.html#sqlpuzzle.delete_from">[docs]</a><span class="k">def</span> <span class="nf">delete_from</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwds</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Returns :py:class:`~.Delete` instance and passed arguments are used for list</span>
 <span class="sd">    of tables.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">return</span> <span class="n">Delete</span><span class="p">()</span><span class="o">.</span><span class="n">from_</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwds</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">Delete</span><span class="p">()</span><span class="o">.</span><span class="n">from_</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwds</span><span class="p">)</span></div>
 
-</div>
+
 <div class="viewcode-block" id="Q"><a class="viewcode-back" href="../index.html#sqlpuzzle.Q">[docs]</a><span class="k">def</span> <span class="nf">Q</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwds</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Use as condition (where, having, ...) and pass it to condition. Works like</span>
@@ -177,149 +169,134 @@
 
 <span class="sd">        sqlpuzzle.where(Q(name=&#39;Michael&#39;, country=None) | Q(name=&#39;Alan&#39;))</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">return</span> <span class="n">Conditions</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwds</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">Conditions</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwds</span><span class="p">)</span></div>
 
-</div>
+
 <div class="viewcode-block" id="avg"><a class="viewcode-back" href="../index.html#sqlpuzzle.avg">[docs]</a><span class="k">def</span> <span class="nf">avg</span><span class="p">(</span><span class="n">expr</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Function ``AVG(expr)``</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">return</span> <span class="n">Avg</span><span class="p">(</span><span class="n">expr</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">Avg</span><span class="p">(</span><span class="n">expr</span><span class="p">)</span></div>
 
-</div>
+
 <div class="viewcode-block" id="avg_distinct"><a class="viewcode-back" href="../index.html#sqlpuzzle.avg_distinct">[docs]</a><span class="k">def</span> <span class="nf">avg_distinct</span><span class="p">(</span><span class="n">expr</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Function ``AVG(DICTINCT expr)``</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">return</span> <span class="n">avg</span><span class="p">(</span><span class="n">expr</span><span class="p">)</span><span class="o">.</span><span class="n">distinct</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">avg</span><span class="p">(</span><span class="n">expr</span><span class="p">)</span><span class="o">.</span><span class="n">distinct</span><span class="p">()</span></div>
 
-</div>
-<div class="viewcode-block" id="count"><a class="viewcode-back" href="../index.html#sqlpuzzle.count">[docs]</a><span class="k">def</span> <span class="nf">count</span><span class="p">(</span><span class="n">expr</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+
+<div class="viewcode-block" id="count"><a class="viewcode-back" href="../index.html#sqlpuzzle.count">[docs]</a><span class="k">def</span> <span class="nf">count</span><span class="p">(</span><span class="n">expr</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Function ``COUNT(expr)``</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">return</span> <span class="n">Count</span><span class="p">(</span><span class="n">expr</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">Count</span><span class="p">(</span><span class="n">expr</span><span class="p">)</span></div>
 
-</div>
-<div class="viewcode-block" id="count_distinct"><a class="viewcode-back" href="../index.html#sqlpuzzle.count_distinct">[docs]</a><span class="k">def</span> <span class="nf">count_distinct</span><span class="p">(</span><span class="n">expr</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+
+<div class="viewcode-block" id="count_distinct"><a class="viewcode-back" href="../index.html#sqlpuzzle.count_distinct">[docs]</a><span class="k">def</span> <span class="nf">count_distinct</span><span class="p">(</span><span class="n">expr</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Function ``COUNT(DISTINCT expr)``</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">return</span> <span class="n">count</span><span class="p">(</span><span class="n">expr</span><span class="p">)</span><span class="o">.</span><span class="n">distinct</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">count</span><span class="p">(</span><span class="n">expr</span><span class="p">)</span><span class="o">.</span><span class="n">distinct</span><span class="p">()</span></div>
 
-</div>
+
 <div class="viewcode-block" id="max"><a class="viewcode-back" href="../index.html#sqlpuzzle.max">[docs]</a><span class="k">def</span> <span class="nf">max</span><span class="p">(</span><span class="n">expr</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Function ``MAX(expr)``</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">return</span> <span class="n">Max</span><span class="p">(</span><span class="n">expr</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">Max</span><span class="p">(</span><span class="n">expr</span><span class="p">)</span></div>
 
-</div>
+
 <div class="viewcode-block" id="max_distinct"><a class="viewcode-back" href="../index.html#sqlpuzzle.max_distinct">[docs]</a><span class="k">def</span> <span class="nf">max_distinct</span><span class="p">(</span><span class="n">expr</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Function ``MAX(DISTINCT expr)``</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">return</span> <span class="nb">max</span><span class="p">(</span><span class="n">expr</span><span class="p">)</span><span class="o">.</span><span class="n">distinct</span><span class="p">()</span>
+    <span class="k">return</span> <span class="nb">max</span><span class="p">(</span><span class="n">expr</span><span class="p">)</span><span class="o">.</span><span class="n">distinct</span><span class="p">()</span></div>
 
-</div>
+
 <div class="viewcode-block" id="min"><a class="viewcode-back" href="../index.html#sqlpuzzle.min">[docs]</a><span class="k">def</span> <span class="nf">min</span><span class="p">(</span><span class="n">expr</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Function ``MIN(expr)``</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">return</span> <span class="n">Min</span><span class="p">(</span><span class="n">expr</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">Min</span><span class="p">(</span><span class="n">expr</span><span class="p">)</span></div>
 
-</div>
+
 <div class="viewcode-block" id="min_distinct"><a class="viewcode-back" href="../index.html#sqlpuzzle.min_distinct">[docs]</a><span class="k">def</span> <span class="nf">min_distinct</span><span class="p">(</span><span class="n">expr</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Function ``MIN(DISTINCT expr)``</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">return</span> <span class="nb">min</span><span class="p">(</span><span class="n">expr</span><span class="p">)</span><span class="o">.</span><span class="n">distinct</span><span class="p">()</span>
+    <span class="k">return</span> <span class="nb">min</span><span class="p">(</span><span class="n">expr</span><span class="p">)</span><span class="o">.</span><span class="n">distinct</span><span class="p">()</span></div>
 
-</div>
+
 <div class="viewcode-block" id="sum"><a class="viewcode-back" href="../index.html#sqlpuzzle.sum">[docs]</a><span class="k">def</span> <span class="nf">sum</span><span class="p">(</span><span class="n">expr</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Function ``SUM(expr)``</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">return</span> <span class="n">Sum</span><span class="p">(</span><span class="n">expr</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">Sum</span><span class="p">(</span><span class="n">expr</span><span class="p">)</span></div>
 
-</div>
+
 <div class="viewcode-block" id="sum_distinct"><a class="viewcode-back" href="../index.html#sqlpuzzle.sum_distinct">[docs]</a><span class="k">def</span> <span class="nf">sum_distinct</span><span class="p">(</span><span class="n">expr</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Function ``SUM(DISTINCT expr)``</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">return</span> <span class="nb">sum</span><span class="p">(</span><span class="n">expr</span><span class="p">)</span><span class="o">.</span><span class="n">distinct</span><span class="p">()</span>
+    <span class="k">return</span> <span class="nb">sum</span><span class="p">(</span><span class="n">expr</span><span class="p">)</span><span class="o">.</span><span class="n">distinct</span><span class="p">()</span></div>
 
-</div>
+
 <div class="viewcode-block" id="concat"><a class="viewcode-back" href="../index.html#sqlpuzzle.concat">[docs]</a><span class="k">def</span> <span class="nf">concat</span><span class="p">(</span><span class="o">*</span><span class="n">expr</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Function ``CONCAT(expr)``</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">return</span> <span class="n">Concat</span><span class="p">(</span><span class="o">*</span><span class="n">expr</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">Concat</span><span class="p">(</span><span class="o">*</span><span class="n">expr</span><span class="p">)</span></div>
 
-</div>
+
 <div class="viewcode-block" id="group_concat"><a class="viewcode-back" href="../index.html#sqlpuzzle.group_concat">[docs]</a><span class="k">def</span> <span class="nf">group_concat</span><span class="p">(</span><span class="o">*</span><span class="n">expr</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Function ``GROUP_CONCAT(expr [ORDER BY [SEPARATOR]])``</span>
 
 <span class="sd">    :return: :py:class:`~.GroupConcat`</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">return</span> <span class="n">GroupConcat</span><span class="p">(</span><span class="o">*</span><span class="n">expr</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">GroupConcat</span><span class="p">(</span><span class="o">*</span><span class="n">expr</span><span class="p">)</span></div>
 
-</div>
-<div class="viewcode-block" id="convert"><a class="viewcode-back" href="../index.html#sqlpuzzle.convert">[docs]</a><span class="k">def</span> <span class="nf">convert</span><span class="p">(</span><span class="n">expr</span><span class="p">,</span> <span class="n">type_</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+
+<div class="viewcode-block" id="convert"><a class="viewcode-back" href="../index.html#sqlpuzzle.convert">[docs]</a><span class="k">def</span> <span class="nf">convert</span><span class="p">(</span><span class="n">expr</span><span class="p">,</span> <span class="n">type_</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Function ``CONVERT(expr, type)``</span>
 
 <span class="sd">    :return: :py:class:`~.Convert`</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">return</span> <span class="n">Convert</span><span class="p">(</span><span class="n">expr</span><span class="p">,</span> <span class="n">type_</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">Convert</span><span class="p">(</span><span class="n">expr</span><span class="p">,</span> <span class="n">type_</span><span class="p">)</span></div>
 
 
-<span class="c"># Shortcuts.</span>
+<span class="c1"># Shortcuts.</span>
 
-</div>
+
 <span class="n">C</span> <span class="o">=</span> <span class="n">customsql</span>
 <span class="n">V</span> <span class="o">=</span> <span class="n">sqlvalue</span>
 <span class="n">R</span> <span class="o">=</span> <span class="n">sqlreference</span>
-
-
-<span class="c"># Backward compatibility.</span>
-
-
-<span class="n">selectFrom</span> <span class="o">=</span> <span class="n">select_from</span>
-<span class="n">insertInto</span> <span class="o">=</span> <span class="n">insert_into</span>
-<span class="n">deleteFrom</span> <span class="o">=</span> <span class="n">delete_from</span>
-<span class="n">custom</span> <span class="o">=</span> <span class="n">customSql</span> <span class="o">=</span> <span class="n">customsql</span>
-<span class="n">avgDistinct</span> <span class="o">=</span> <span class="n">avg_distinct</span>
-<span class="n">countDistinct</span> <span class="o">=</span> <span class="n">count_distinct</span>
-<span class="n">minDistinct</span> <span class="o">=</span> <span class="n">min_distinct</span>
-<span class="n">sumDistinct</span> <span class="o">=</span> <span class="n">sum_distinct</span>
-<span class="n">groupConcat</span> <span class="o">=</span> <span class="n">group_concat</span>
 </pre></div>
 
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-<div id="searchbox" style="display: none">
+<div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
+    <div class="searchformwrapper">
     <form class="search" action="../search.html" method="get">
       <input type="text" name="q" />
       <input type="submit" value="Go" />
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
+    </div>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -328,13 +305,13 @@
         <li class="right" >
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li><a href="../index.html">SQLPuzzle  documentation</a> &raquo;</li>
-          <li><a href="index.html" >Module code</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../index.html">SQLPuzzle  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" >Module code</a> &#187;</li> 
       </ul>
     </div>
-    <div class="footer">
-        &copy; Copyright 2015, Michal Horejsek.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2015, Michal Horejsek.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.6.
     </div>
   </body>
 </html>
