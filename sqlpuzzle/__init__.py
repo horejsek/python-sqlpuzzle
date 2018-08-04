@@ -32,6 +32,7 @@ __all__ = (
     'sqlreference',
     'R',
 
+    'exists',
     'Not',
 
     'avg',
@@ -125,13 +126,20 @@ def delete_from(*args, **kwds):
 def Q(*args, **kwds):
     """
     Use as condition (where, having, ...) and pass it to condition. Works like
-    Q object in Django, so you can use it with logical operands (& and |).
+    Q object in Django, so you can use it with logical operands (& and \|).
 
     .. code-block:: python
 
         sqlpuzzle.where(Q(name='Michael', country=None) | Q(name='Alan'))
     """
     return Conditions(*args, **kwds)
+
+
+def exists(expr):
+    """
+    Function EXISTS(expr)
+    """
+    return Exists(expr)
 
 
 def avg(expr):
