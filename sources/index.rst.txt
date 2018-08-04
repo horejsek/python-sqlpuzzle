@@ -90,6 +90,7 @@ Helpers
 Functions
 =========
 
+.. autofunction:: sqlpuzzle.exists
 .. autofunction:: sqlpuzzle.avg
 .. autofunction:: sqlpuzzle.avg_distinct
 .. autofunction:: sqlpuzzle.count

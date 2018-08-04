@@ -70,6 +70,7 @@
     <span class="s1">&#39;sqlreference&#39;</span><span class="p">,</span>
     <span class="s1">&#39;R&#39;</span><span class="p">,</span>
 
+    <span class="s1">&#39;exists&#39;</span><span class="p">,</span>
     <span class="s1">&#39;Not&#39;</span><span class="p">,</span>
 
     <span class="s1">&#39;avg&#39;</span><span class="p">,</span>
@@ -170,6 +171,13 @@
 <span class="sd">        sqlpuzzle.where(Q(name=&#39;Michael&#39;, country=None) | Q(name=&#39;Alan&#39;))</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="n">Conditions</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwds</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="exists"><a class="viewcode-back" href="../index.html#sqlpuzzle.exists">[docs]</a><span class="k">def</span> <span class="nf">exists</span><span class="p">(</span><span class="n">expr</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Function EXISTS(expr)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">Exists</span><span class="p">(</span><span class="n">expr</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="avg"><a class="viewcode-back" href="../index.html#sqlpuzzle.avg">[docs]</a><span class="k">def</span> <span class="nf">avg</span><span class="p">(</span><span class="n">expr</span><span class="p">):</span>
