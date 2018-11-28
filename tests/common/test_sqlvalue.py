@@ -135,3 +135,13 @@ def test_new_line():
     value = """first line
 second line"""
     assert str(SqlValue(value)) == "'first line\\nsecond line'"
+
+
+def test_sqlreference_compare_to_str():
+    assert SqlReference('foo') == '"foo"'
+    assert SqlReference('foo') != 'foo'
+
+
+def test_sqlvalue_compare_to_str():
+    assert SqlValue('foo') == "'foo'"
+    assert SqlValue('foo') != 'foo'
