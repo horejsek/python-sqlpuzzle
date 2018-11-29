@@ -85,9 +85,15 @@ def test_value_as_decimal(values):
     values.set('col', decimal.Decimal('42.1'))
     assert str(values) == '"col" = 42.10000'
 
+
 def test_value_as_boolean(values):
     values.set('col', True)
     assert str(values) == '"col" = 1'
+
+
+def test_value_as_bytes(values):
+    values.set('col', b'data')
+    assert str(values) == '"col" = x\'64617461\''
 
 
 def test_copy(values):

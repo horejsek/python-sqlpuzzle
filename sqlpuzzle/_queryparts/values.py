@@ -38,7 +38,7 @@ class Value(QueryPart):
         return self._value
 
     @value.setter
-    @check_type_decorator((type(None), str, int, float, decimal.Decimal, bool, datetime.date))
+    @check_type_decorator((type(None), str, int, float, bytes, decimal.Decimal, bool, datetime.date))
     def value(self, value):
         self._value = value
 
