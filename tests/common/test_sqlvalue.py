@@ -145,3 +145,8 @@ def test_sqlreference_compare_to_str():
 def test_sqlvalue_compare_to_str():
     assert SqlValue('foo') == "'foo'"
     assert SqlValue('foo') != 'foo'
+
+
+def test_sqlvalue_compare_to_sqlvalue():
+    assert SqlValue('foo') == SqlValue('foo')
+    assert SqlValue('foo') != SqlValue('foo1')
