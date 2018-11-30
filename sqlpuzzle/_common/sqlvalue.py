@@ -43,6 +43,7 @@ class SqlValue(Object):
             str: self._string,
             int: self._integer,
             float: self._float,
+            bytes: self._bytes,
             decimal.Decimal: self._float,
             bool: self._boolean,
             datetime.date: self._date,
@@ -85,6 +86,9 @@ class SqlValue(Object):
         if get_backend().is_reference(self.value):
             return self._reference()
         return "'{}'".format(_escape_value(force_text(self.value)))
+
+    def _bytes(self):
+        return get_backend().bytes(self.value)
 
     def _integer(self):
         return '{:d}'.format(self.value)
