@@ -96,6 +96,11 @@ def test_value_as_bytes(values):
     assert str(values) == '"col" = x\'64617461\''
 
 
+def test_value_as_bytes_postgresql(values, postgresql):
+    values.set('col', b'data')
+    assert str(values) == '"col" = E\'\\\\x64617461\''
+
+
 def test_copy(values):
     values.set({'id': 42})
     copy = values.copy()

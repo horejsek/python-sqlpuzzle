@@ -38,3 +38,7 @@ class SqlBackend:
         parts = re.split(r'{quote}([^{quote}]+){quote}|\.'.format(quote=cls.reference_quote), value)
         parts = ('{quote}{i}{quote}'.format(quote=cls.reference_quote, i=i) if i != '*' else i for i in parts if i)
         return '.'.join(parts)
+
+    @classmethod
+    def bytes(cls, value):
+        return "x'{}'".format(value.hex())

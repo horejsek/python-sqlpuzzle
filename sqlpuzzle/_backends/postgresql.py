@@ -12,3 +12,7 @@ class PostgreSqlBackend(SqlBackend):
     @classmethod
     def boolean(cls, value):
         return 'true' if value else 'false'
+
+    @classmethod
+    def bytes(cls, value):
+        return "E'\\\\x{}'".format(value.hex())

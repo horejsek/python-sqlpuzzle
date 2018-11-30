@@ -88,7 +88,7 @@ class SqlValue(Object):
         return "'{}'".format(_escape_value(force_text(self.value)))
 
     def _bytes(self):
-        return "x'{}'".format(self.value.hex())
+        return get_backend().bytes(self.value)
 
     def _integer(self):
         return '{:d}'.format(self.value)
