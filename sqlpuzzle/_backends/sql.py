@@ -1,3 +1,4 @@
+import binascii
 import re
 
 __all__ = ('SqlBackend',)
@@ -41,4 +42,4 @@ class SqlBackend:
 
     @classmethod
     def bytes(cls, value):
-        return "x'{}'".format(value.hex())
+        return "x'{}'".format(binascii.hexlify(value).decode('ascii'))
