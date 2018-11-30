@@ -22,11 +22,15 @@ class Object:
         """
         if isinstance(other, str):
             return str(self) == other
+        elif isinstance(other, Object):
+            return str(self) == str(other)
         return super().__eq__(other)
 
     def __lt__(self, other):
         if isinstance(other, str):
             return str(self) < other
+        elif isinstance(other, Object):
+            return str(self) < str(other)
         return super().__lt__(other)
 
     def __hash__(self):
