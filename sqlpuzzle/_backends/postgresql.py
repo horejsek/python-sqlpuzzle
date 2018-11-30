@@ -1,3 +1,5 @@
+import binascii
+
 from .sql import SqlBackend
 
 __all__ = ('PostgreSqlBackend',)
@@ -15,4 +17,4 @@ class PostgreSqlBackend(SqlBackend):
 
     @classmethod
     def bytes(cls, value):
-        return "E'\\\\x{}'".format(value.hex())
+        return "E'\\\\x{}'".format(binascii.hexlify(value).decode('ascii'))
