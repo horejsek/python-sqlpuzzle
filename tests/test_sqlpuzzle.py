@@ -98,3 +98,10 @@ def test_sql_value():
 
 def test_sql_reference():
     assert isinstance(sqlpuzzle.R('table'), SqlReference)
+
+def test_injection_it_no_referenc():
+    sql = sqlpuzzle.select('id', 'name').from_('user').where(
+        'something',
+        sqlpuzzle.relations.IN('valid_value', '"user"id"); something_bad')
+    )
+    assert '"user"id"); something_bad' in str(sql)
