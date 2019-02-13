@@ -22,7 +22,12 @@ class SqlBackend:
         if not isinstance(value, str):
             return False
         value = value.strip()
-        return len(value) > 1 and value[0] == cls.reference_quote
+        return bool(
+            re.match(
+                '^((%(quote)s([^%(quote)s]|(%(quote)s%(quote)s))+%(quote)s))'
+                '(\.((%(quote)s([^%(quote)s]|(%(quote)s%(quote)s))+%(quote)s)|[^%(quote)s. ]+)){0,2}$'
+                    % {'quote': cls.reference_quote}
+                , value))
 
     @classmethod
     def reference(cls, value):
